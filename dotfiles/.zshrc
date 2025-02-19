@@ -166,7 +166,7 @@ alias vmclo='VBoxManage clonevm'     ## <UUID> --name "Ubuntu 18.04 C"
 alias vmreg='VBoxManage registervm'  ## ~/VirtualBox\ VMs/Ubuntu\ 18.04\ C/Ubuntu\ 18.04\ C.vbox
 alias grep='grep --color=auto'
 alias gck='git checkout'
-alias sublime='/Applications/Sublime.app/Contents/MacOS/sublime_text'
+alias sublime='/Applications/Sublime\ Text.app/Contents/MacOS/sublime_text'
 alias sl='sublime 2>/dev/null'
 alias eclipse='~/eclipse/cpp-2018-09/eclipse/eclipse'
 alias ec='eclipse  2>/dev/null'
@@ -178,6 +178,7 @@ alias ezo="edit ~/.oh-my-zsh"
 alias zz='. ~/.zshrc'
 # alias ifconfig='/sbin/ifconfig'
 source $DOTFILES/k8s/kubectl_helpers.sh
+source $DOTFILES/aws/aws_helpers.sh
 source $DOTFILES/tsh/tsh.zsh
 source $DOTFILES/py/py_helpers.sh
 
