@@ -117,7 +117,9 @@ esac
   # what font the user is viewing this source code in. Do not replace the
   # escape sequence with a single literal character.
   # Do not change this! Do not make it '\u2b80'; that is the old, wrong code point.
-  SEGMENT_SEPARATOR=$'\ue0b0'
+  # SEGMENT_SEPARATOR=$'\ue0b0'
+  SEGMENT_SEPARATOR=$'\u2656'
+  SEGMENT_SEPARATOR_MID=''
 }
 
 # Begin a segment
@@ -128,7 +130,7 @@ prompt_segment() {
   [[ -n $1 ]] && bg="%K{$1}" || bg="%k"
   [[ -n $2 ]] && fg="%F{$2}" || fg="%f"
   if [[ $CURRENT_BG != 'NONE' && $1 != $CURRENT_BG ]]; then
-    echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR%{$fg%} "
+    echo -n " %{$bg%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR_MID%{$fg%} "
   else
     echo -n "%{$bg%}%{$fg%} "
   fi
@@ -139,9 +141,9 @@ prompt_segment() {
 # End the prompt, closing any open segments
 prompt_end() {
   if [[ -n $CURRENT_BG ]]; then
-    echo -n " %{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
+    echo -n " \n%{%k%F{$CURRENT_BG}%}$SEGMENT_SEPARATOR"
   else
-    echo -n "%{%k%}"
+    echo -n "\n%{%k%}"
   fi
   echo -n "%{%f%}"
   CURRENT_BG=''
@@ -186,8 +188,17 @@ prompt_git() {
   local PL_BRANCH_CHAR
   () {
     local LC_ALL="" LC_CTYPE="en_US.UTF-8"
-    PL_BRANCH_CHAR=$'\ue0a0'         # 
+    #PL_BRANCH_CHAR=$'\ue0a0'         # 
+    PL_BRANCH_CHAR=$'\u2693'          # anchor
   }
+
+  if [[ ! -z "${USE_ZSH_GIT_PROMPT}" ]]; then
+    # just use zsh-git-prompt with our segment coloring
+    prompt_segment yellow red
+    echo -n ${PL_BRANCH_CHAR} $(git_super_status)
+    return
+  fi
+
   local ref dirty mode repo_path
 
    if [[ "$(command git rev-parse --is-inside-work-tree 2>/dev/null)" = "true" ]]; then
@@ -199,7 +210,8 @@ prompt_git() {
     if [[ -n $dirty ]]; then
       prompt_segment "$AGNOSTER_GIT_DIRTY_BG" "$AGNOSTER_GIT_DIRTY_FG"
     else
-      prompt_segment "$AGNOSTER_GIT_CLEAN_BG" "$AGNOSTER_GIT_CLEAN_FG"
+#      prompt_segment "$AGNOSTER_GIT_CLEAN_BG" "$AGNOSTER_GIT_CLEAN_FG"
+      prompt_segment yellow red
     fi
 
     if [[ $AGNOSTER_GIT_BRANCH_STATUS == 'true' ]]; then
@@ -213,14 +225,15 @@ prompt_git() {
       elif [[ -n "$behind" ]]; then
         PL_BRANCH_CHAR=$'\u21b0'
       fi
+      prompt_segment yellow red
     fi
 
     if [[ -e "${repo_path}/BISECT_LOG" ]]; then
-      mode=" <B>"
+      mode+=" <B>"
     elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
-      mode=" >M<"
+      mode+=" >M<"
     elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
-      mode=" >R>"
+      mode+=" >R\u2225"
     fi
 
     setopt promptsubst
@@ -234,9 +247,16 @@ prompt_git() {
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
-    echo -n "${${ref:gs/%/%%}/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
-    [[ $AGNOSTER_GIT_INLINE == 'true' ]] && prompt_git_relative
+#    echo -n "${${ref:gs/%/%%}/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+#    [[ $AGNOSTER_GIT_INLINE == 'true' ]] && prompt_git_relative
+
+    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
   fi
+}
+
+prompt_kubectl() {
+  prompt_segment magenta blue
+  echo -n ${ZSH_KUBECTL_PROMPT}
 }
 
 prompt_bzr() {
@@ -304,12 +324,15 @@ prompt_hg() {
 
 # Dir: current working directory
 prompt_dir() {
-  if [[ $AGNOSTER_GIT_INLINE == 'true' ]] && $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
-    # Git repo and inline path enabled, hence only show the git root
-    prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" "$(git_toplevel | sed "s:^$HOME:~:")"
-  else
-    prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" '%~'
-  fi
+
+#  if [[ $AGNOSTER_GIT_INLINE == 'true' ]] && $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+#   # Git repo and inline path enabled, hence only show the git root
+#    prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" "$(git_toplevel | sed "s:^$HOME:~:")"
+#  else
+#    prompt_segment "$AGNOSTER_DIR_BG" "$AGNOSTER_DIR_FG" '%~'
+#  fi
+#  prompt_segment blue black '%~'
+  prompt_segment  grey cyan '%3~'
 }
 
 # Virtualenv: current working virtualenv
@@ -323,16 +346,26 @@ prompt_virtualenv() {
 # - was there an error
 # - am I root
 # - are there background jobs?
+# - time
 prompt_status() {
   local -a symbols
 
-  if [[ $AGNOSTER_STATUS_RETVAL_NUMERIC == 'true' ]]; then
-    [[ $RETVAL -ne 0 ]] && symbols+="%{%F{$AGNOSTER_STATUS_RETVAL_FG}%}$RETVAL"
+#  if [[ $AGNOSTER_STATUS_RETVAL_NUMERIC == 'true' ]]; then
+#    [[ $RETVAL -ne 0 ]] && symbols+="%{%F{$AGNOSTER_STATUS_RETVAL_FG}%}$RETVAL"
+#  else
+#    [[ $RETVAL -ne 0 ]] && symbols+="%{%F{$AGNOSTER_STATUS_RETVAL_FG}%}✘"
+#  fi
+#  [[ $UID -eq 0 ]] && symbols+="%{%F{$AGNOSTER_STATUS_ROOT_FG}%}⚡"
+#  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{$AGNOSTER_STATUS_JOB_FG}%}⚙"
+  symbols=()
+  if [[ $RETVAL -ne 0 ]]; then
+    symbols+="%{%F{red}%}($RETVAL)✘"
   else
-    [[ $RETVAL -ne 0 ]] && symbols+="%{%F{$AGNOSTER_STATUS_RETVAL_FG}%}✘"
+    symbols+="%{%F{green}%}✓"
   fi
-  [[ $UID -eq 0 ]] && symbols+="%{%F{$AGNOSTER_STATUS_ROOT_FG}%}⚡"
-  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{$AGNOSTER_STATUS_JOB_FG}%}⚙"
+  [[ $UID -eq 0 ]] && symbols+="%{%F{yellow}%}⚡"
+  [[ $(jobs -l | wc -l) -gt 0 ]] && symbols+="%{%F{cyan}%}⚙"
+  symbols+="%{%F{white}[%T]%}"
 
   [[ -n "$symbols" ]] && prompt_segment "$AGNOSTER_STATUS_BG" "$AGNOSTER_STATUS_FG" "$symbols"
 }
@@ -356,9 +389,10 @@ build_prompt() {
   prompt_status
   prompt_virtualenv
   prompt_aws
-  prompt_context
+#  prompt_context
   prompt_dir
-  prompt_git
+#  prompt_git
+  prompt_kubectl
   prompt_bzr
   prompt_hg
   prompt_end

@@ -302,22 +302,30 @@ setup_ohmyzsh() {
     exit 1
   fi
 
+
   # Manual clone with git config options to support git < v1.7.2
-  git init --quiet "$ZSH" && cd "$ZSH" \
-  && git config core.eol lf \
-  && git config core.autocrlf false \
-  && git config fsck.zeroPaddedFilemode ignore \
-  && git config fetch.fsck.zeroPaddedFilemode ignore \
-  && git config receive.fsck.zeroPaddedFilemode ignore \
-  && git config oh-my-zsh.remote origin \
-  && git config oh-my-zsh.branch "$BRANCH" \
-  && git remote add origin "$REMOTE" \
-  && git fetch --depth=1 origin \
-  && git checkout -b "$BRANCH" "origin/$BRANCH" || {
-    [ ! -d "$ZSH" ] || {
-      cd -
-      rm -rf "$ZSH" 2>/dev/null
-    }
+#  git init --quiet "$ZSH" && cd "$ZSH" \
+#  && git config core.eol lf \
+#  && git config core.autocrlf false \
+#  && git config fsck.zeroPaddedFilemode ignore \
+#  && git config fetch.fsck.zeroPaddedFilemode ignore \
+#  && git config receive.fsck.zeroPaddedFilemode ignore \
+#  && git config oh-my-zsh.remote origin \
+#  && git config oh-my-zsh.branch "$BRANCH" \
+#  && git remote add origin "$REMOTE" \
+#  && git fetch --depth=1 origin \
+#  && git checkout -b "$BRANCH" "origin/$BRANCH" || {
+#    [ ! -d "$ZSH" ] || {
+#      cd -
+#      rm -rf "$ZSH" 2>/dev/null
+#    }
+
+  git clone -c core.eol=lf -c core.autocrlf=false \
+    -c fsck.zeroPaddedFilemode=ignore \
+    -c fetch.fsck.zeroPaddedFilemode=ignore \
+    -c receive.fsck.zeroPaddedFilemode=ignore \
+    "$REMOTE" "$ZSH" && \
+    pushd $ZSH && git checkout $BRANCH && popd || {
     fmt_error "git clone of oh-my-zsh repo failed"
     exit 1
   }
@@ -357,7 +365,11 @@ setup_zshrc() {
     mv "$zdot/.zshrc" "$OLD_ZSHRC"
   fi
 
-  echo "${FMT_GREEN}Using the Oh My Zsh template file and adding it to $zdot/.zshrc.${FMT_RESET}"
+#  echo "${FMT_GREEN}Using the Oh My Zsh template file and adding it to $zdot/.zshrc.${FMT_RESET}"
+  ln -s ${ZSH}/dotfiles/.zshrc ~/.zshrc
+  return
+
+  echo "${GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${RESET}"
 
   # Modify $ZSH variable in .zshrc directory to use the literal $ZDOTDIR or $HOME
   omz="$ZSH"
@@ -488,6 +500,17 @@ print_success() {
   printf '%s\n' $FMT_RESET
 }
 
+dl_custom_plugins() {
+  git clone https://github.com/zdharma/fast-syntax-highlighting.git \
+    ${ZSH}/custom/plugins/fast-syntax-highlighting
+
+  git clone https://github.com/ghasemnaddaf/zsh-git-prompt --branch plugin \
+    ${ZSH}/custom/plugins/zsh-git-prompt
+
+  git clone https://github.com/superbrothers/zsh-kubectl-prompt.git \
+    ${ZSH}/custom/plugins/zsh-kubectl-prompt
+}
+
 main() {
   # Run as unattended if stdin is not a tty
   if [ ! -t 0 ]; then
@@ -542,6 +565,7 @@ EOF
   setup_ohmyzsh
   setup_zshrc
   setup_shell
+  dl_custom_plugins
 
   print_success
 
