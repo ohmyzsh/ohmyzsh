@@ -35,8 +35,14 @@
 CURRENT_BG='NONE'
 
 case ${SOLARIZED_THEME:-dark} in
-    light) CURRENT_FG='white';;
-    *)     CURRENT_FG='black';;
+    light)
+      CURRENT_FG='white'
+      CURRENT_DEFAULT_FG='white'
+      ;;
+    *)
+      CURRENT_FG='black'
+      CURRENT_DEFAULT_FG='default'
+      ;;
 esac
 
 ### Theme Configuration Initialization
@@ -48,7 +54,7 @@ esac
 : ${AGNOSTER_DIR_BG:=blue}
 
 # user@host
-: ${AGNOSTER_CONTEXT_FG:=white}
+: ${AGNOSTER_CONTEXT_FG:=${CURRENT_DEFAULT_FG}}
 : ${AGNOSTER_CONTEXT_BG:=black}
 
 # Git related
@@ -85,7 +91,7 @@ esac
 : ${AGNOSTER_STATUS_RETVAL_FG:=red}
 : ${AGNOSTER_STATUS_ROOT_FG:=yellow}
 : ${AGNOSTER_STATUS_JOB_FG:=cyan}
-: ${AGNOSTER_STATUS_FG:=white}
+: ${AGNOSTER_STATUS_FG:=${CURRENT_DEFAULT_FG}}
 : ${AGNOSTER_STATUS_BG:=black}
 
 ## Non-Color settings - set to 'true' to enable
