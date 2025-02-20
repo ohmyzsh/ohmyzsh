@@ -29,6 +29,7 @@ Available search contexts are:
 | `bing`                | `https://www.bing.com/search?q=`                |
 | `google`              | `https://www.google.com/search?q=`              |
 | `brs` or `brave`      | `https://search.brave.com/search?q=`            |
+| `braveai`             | `https://search.brave.com/search?summary=1&q=`  |
 | `yahoo`               | `https://search.yahoo.com/search?p=`            |
 | `ddg` or `duckduckgo` | `https://www.duckduckgo.com/?q=`                |
 | `sp` or `startpage`   | `https://www.startpage.com/do/search?q=`        |
@@ -53,6 +54,12 @@ Available search contexts are:
 | `chatgpt`             | `https://chatgpt.com/?q=`                       |
 | `reddit`              | `https://www.reddit.com/search/?q=`             |
 | `ppai`                | `https://www.perplexity.ai/search/new?q=`       |
+| `claude`              | `https://claude.ai/new?q=`                      |
+| `mistral`             | `https://chat.mistral.ai/chat?q=`              |
+| `mscop`               | `https://www.bing.com/search?showconv=1&sendquery=1&q=` |
+| `you`                 | `https://you.com/search?q=`                     |
+| `youchat`             | `https://you.com/search?tbm=youchat&q=`        |
+| `gmaps`               | `https://www.google.com/maps/search/?api=1&query=` |
 
 Also there are aliases for bang-searching DuckDuckGo:
 
