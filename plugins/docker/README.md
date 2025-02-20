@@ -42,11 +42,23 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 ## Aliases
 
 | Alias   | Command                       | Description                                                                              |
-| :------ | :---------------------------- | :--------------------------------------------------------------------------------------- |
+|:--------|:------------------------------|:-----------------------------------------------------------------------------------------|
 | dbl     | `docker build`                | Build an image from a Dockerfile                                                         |
+| dlo     | `docker container logs`       | Fetch the logs of a docker container                                                     |
 | dcin    | `docker container inspect`    | Display detailed information on one or more containers                                   |
 | dcls    | `docker container ls`         | List all the running docker containers                                                   |
 | dclsa   | `docker container ls -a`      | List all running and stopped containers                                                  |
+| dr      | `docker container run`        | Create a new container and start it using the specified command                          |
+| drit    | `docker container run -it`    | Create a new container and start it in an interactive shell                              |
+| drm     | `docker container rm`         | Remove the specified container(s)                                                        |
+| drm!    | `docker container rm -f`      | Force the removal of a running container (uses SIGKILL)                                  |
+| dst     | `docker container start`      | Start one or more stopped containers                                                     |
+| drs     | `docker container restart`    | Restart one or more containers                                                           |
+| dxc     | `docker container exec`       | Run a new command in a running container                                                 |
+| dxcit   | `docker container exec -it`   | Run a new command in a running container in an interactive shell                         |
+| dcprune | `docker container prune`      | Remove all stopped containers                                                            |
+| dpo     | `docker container port`       | List port mappings or a specific mapping for the container                               |
+| dstp    | `docker container stop`       | Stop one or more running containers                                                      |
 | dib     | `docker image build`          | Build an image from a Dockerfile (same as docker build)                                  |
 | dii     | `docker image inspect`        | Display detailed information on one or more images                                       |
 | dils    | `docker image ls`             | List docker images                                                                       |
@@ -54,28 +66,19 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 | dipru   | `docker image prune -a`       | Remove all images not referenced by any container                                        |
 | dirm    | `docker image rm`             | Remove one or more images                                                                |
 | dit     | `docker image tag`            | Add a name and tag to a particular image                                                 |
-| dlo     | `docker container logs`       | Fetch the logs of a docker container                                                     |
 | dnc     | `docker network create`       | Create a new network                                                                     |
 | dncn    | `docker network connect`      | Connect a container to a network                                                         |
 | dndcn   | `docker network disconnect`   | Disconnect a container from a network                                                    |
 | dni     | `docker network inspect`      | Return information about one or more networks                                            |
 | dnls    | `docker network ls`           | List all networks the engine daemon knows about, including those spanning multiple hosts |
 | dnrm    | `docker network rm`           | Remove one or more networks                                                              |
-| dpo     | `docker container port`       | List port mappings or a specific mapping for the container                               |
+| dnprune | `docker network prune`        | Remove all unused networks                                                               |
 | dps     | `docker ps`                   | List all the running docker containers                                                   |
 | dpsa    | `docker ps -a`                | List all running and stopped containers                                                  |
 | dpu     | `docker pull`                 | Pull an image or a repository from a registry                                            |
-| dr      | `docker container run`        | Create a new container and start it using the specified command                          |
-| drit    | `docker container run -it`    | Create a new container and start it in an interactive shell                              |
-| drm     | `docker container rm`         | Remove the specified container(s)                                                        |
-| drm!    | `docker container rm -f`      | Force the removal of a running container (uses SIGKILL)                                  |
-| dst     | `docker container start`      | Start one or more stopped containers                                                     |
-| drs     | `docker container restart`    | Restart one or more containers                                                           |
 | dsta    | `docker stop $(docker ps -q)` | Stop all running containers                                                              |
-| dstp    | `docker container stop`       | Stop one or more running containers                                                      |
+| dprune  | `docker system prune -a`      | Remove all unused containers, networks, images (dangling or unused) and volumes          |
 | dtop    | `docker top`                  | Display the running processes of a container                                             |
 | dvi     | `docker volume inspect`       | Display detailed information about one or more volumes                                   |
 | dvls    | `docker volume ls`            | List all the volumes known to docker                                                     |
-| dvprune | `docker volume prune`         | Cleanup dangling volumes                                                                 |
-| dxc     | `docker container exec`       | Run a new command in a running container                                                 |
-| dxcit   | `docker container exec -it`   | Run a new command in a running container in an interactive shell                         |
+| dvprune | `docker volume prune`         | Remove all unused local volumes                                                          |
