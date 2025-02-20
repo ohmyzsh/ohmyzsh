@@ -5,6 +5,7 @@ local -a _1st_arguments
 _1st_arguments=(
   'new:create a new issue'
   'mine:open my issues'
+  'project:open the project'
   'dashboard:open the dashboard'
   'tempo:open the tempo'
   'reported:search for issues reported by a user'
