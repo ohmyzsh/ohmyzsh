@@ -2,45 +2,67 @@
 
 This plugin searches the defined aliases and outputs any that match the command inputted. This makes learning new aliases easier.
 
+## Setup
+
 To use it, add `alias-finder` to the `plugins` array of your zshrc file:
 ```
 plugins=(... alias-finder)
 ```
 
+To enable it for every single command, set zstyle in your `~/.zshrc`.
+
+```zsh
+# ~/.zshrc
+
+zstyle ':omz:plugins:alias-finder' autoload yes # disabled by default
+zstyle ':omz:plugins:alias-finder' longer yes # disabled by default
+zstyle ':omz:plugins:alias-finder' exact yes # disabled by default
+zstyle ':omz:plugins:alias-finder' cheaper yes # disabled by default
+```
+
+As you can see, options are also available with zstyle.
+
 ## Usage
-To see if there is an alias defined for the command, pass it as an argument to `alias-finder`. This can also run automatically before each command you input - add `ZSH_ALIAS_FINDER_AUTOMATIC=true` to your zshrc if you want this.
 
-## Options
+When you execute a command alias finder will look at your defined aliases and suggest shorter aliases you could have used, for example:
 
-- Use `--longer` or `-l` to allow the aliases to be longer than the input (match aliases if they contain the input).
-- Use `--exact` or `-e` to avoid matching aliases that are shorter than the input.
+Running the un-aliased `git status` command:
+```sh
+╭─tim@fox ~/repo/gitopolis ‹main› 
+╰─$ git status
 
-## Examples
+gst='git status'         # <=== shorter suggestion from alias-finder
+
+On branch main
+Your branch is up-to-date with 'origin/main'.
+nothing to commit, working tree clean
 ```
-$ alias-finder "git pull"
-gl='git pull'
-g=git
+
+Running a shorter `git st` alias from `.gitconfig` that it suggested :
+```sh
+╭─tim@fox ~/repo/gitopolis ‹main› 
+╰─$ git st
+gs='git st'         # <=== shorter suggestion from alias-finder
+## main...origin/main
 ```
+
+Running the shortest `gs` shell alias that it found:
+```sh
+╭─tim@fox ~/repo/gitopolis ‹main› 
+╰─$ gs
+         # <=== no suggestions alias-finder because this is the shortest
+## main...origin/main
 ```
-$ alias-finder "web_search google oh my zsh"
-google='web_search google'
-```
-```
-$ alias-finder "git commit -v"
-gc="git commit -v"
-g=git
-```
-```
-$ alias-finder -e "git commit -v"
-gc='git commit -v'
-```
-```
-$ alias-finder -l "git commit -v"
-gc='git commit -v'
-'gc!'='git commit -v --amend'
-gca='git commit -v -a'
-'gca!'='git commit -v -a --amend'
-'gcan!'='git commit -v -a --no-edit --amend'
-'gcans!'='git commit -v -a -s --no-edit --amend'
-'gcn!'='git commit -v --no-edit --amend'
-```
+
+![image](https://github.com/ohmyzsh/ohmyzsh/assets/19378/39642750-fb10-4f1a-b7f9-f36789eeb01b)
+
+
+### Options
+
+> In order to clarify, let's say `alias a=abc` has source 'abc' and destination 'a'.
+
+- Use `--longer` or `-l` to include aliases where the source is longer than the input (in other words, the source could contain the whole input).
+- Use `--exact` or `-e` to avoid aliases where the source is shorter than the input (in other words, the source must be the same with the input).
+- Use `--cheaper` or `-c` to avoid aliases where the destination is longer than the input (in other words, the destination must be the shorter than the input).
+
+

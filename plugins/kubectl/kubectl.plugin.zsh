@@ -1,14 +1,16 @@
-if (( $+commands[kubectl] )); then
-  # If the completion file does not exist, generate it and then source it
-  # Otherwise, source it and regenerate in the background
-  if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
-    kubectl completion zsh | tee "$ZSH_CACHE_DIR/completions/_kubectl" >/dev/null
-    source "$ZSH_CACHE_DIR/completions/_kubectl"
-  else
-    source "$ZSH_CACHE_DIR/completions/_kubectl"
-    kubectl completion zsh | tee "$ZSH_CACHE_DIR/completions/_kubectl" >/dev/null &|
-  fi
+if (( ! $+commands[kubectl] )); then
+  return
 fi
+
+# If the completion file doesn't exist yet, we need to autoload it and
+# bind it to `kubectl`. Otherwise, compinit will have already done that.
+if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
+  typeset -g -A _comps
+  autoload -Uz _kubectl
+  _comps[kubectl]=_kubectl
+fi
+
+kubectl completion zsh 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_kubectl" &|
 
 # This command is used a LOT both below and in daily life
 alias k=kubectl
@@ -37,6 +39,9 @@ alias kdelf='kubectl delete -f'
 
 # Pod management.
 alias kgp='kubectl get pods'
+alias kgpl='kgp -l'
+alias kgpn='kgp -n'
+alias kgpsl='kubectl get pods --show-labels'
 alias kgpa='kubectl get pods --all-namespaces'
 alias kgpw='kgp --watch'
 alias kgpwide='kgp -o wide'
@@ -44,12 +49,6 @@ alias kep='kubectl edit pods'
 alias kdp='kubectl describe pods'
 alias kdelp='kubectl delete pods'
 alias kgpall='kubectl get pods --all-namespaces -o wide'
-
-# get pod by label: kgpl "app=myapp" -n myns
-alias kgpl='kgp -l'
-
-# get pod by namespace: kgpn kube-system"
-alias kgpn='kgp -n'
 
 # Service management.
 alias kgs='kubectl get svc'
@@ -142,6 +141,7 @@ alias kcp='kubectl cp'
 
 # Node Management
 alias kgno='kubectl get nodes'
+alias kgnosl='kubectl get nodes --show-labels'
 alias keno='kubectl edit node'
 alias kdno='kubectl describe node'
 alias kdelno='kubectl delete node'
@@ -160,6 +160,7 @@ alias kdelsa="kubectl delete sa"
 
 # DaemonSet management.
 alias kgds='kubectl get daemonset'
+alias kgdsa='kubectl get daemonset --all-namespaces'
 alias kgdsw='kgds --watch'
 alias keds='kubectl edit daemonset'
 alias kdds='kubectl describe daemonset'
@@ -177,13 +178,23 @@ alias kej='kubectl edit job'
 alias kdj='kubectl describe job'
 alias kdelj='kubectl delete job'
 
-# Only run if the user actually has kubectl installed
-if (( ${+_comps[kubectl]} )); then
-  function kj() { kubectl "$@" -o json | jq; }
-  function kjx() { kubectl "$@" -o json | fx; }
-  function ky() { kubectl "$@" -o yaml | yh; }
+# Utility print functions (json / yaml)
+function _build_kubectl_out_alias {
+  setopt localoptions norcexpandparam
 
-  compdef kj=kubectl
-  compdef kjx=kubectl
-  compdef ky=kubectl
-fi
+  # alias function
+  eval "function $1 { $2 }"
+
+  # completion function
+  eval "function _$1 {
+    words=(kubectl \"\${words[@]:1}\")
+    _kubectl
+  }"
+
+  compdef _$1 $1
+}
+
+_build_kubectl_out_alias "kj"  'kubectl "$@" -o json | jq'
+_build_kubectl_out_alias "kjx" 'kubectl "$@" -o json | fx'
+_build_kubectl_out_alias "ky"  'kubectl "$@" -o yaml | yh'
+unfunction _build_kubectl_out_alias

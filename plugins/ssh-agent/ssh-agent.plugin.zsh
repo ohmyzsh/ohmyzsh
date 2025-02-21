@@ -13,6 +13,11 @@ function _start_agent() {
     fi
   fi
 
+  if [[ ! -d "$HOME/.ssh" ]]; then
+    echo "[oh-my-zsh] ssh-agent plugin requires ~/.ssh directory"
+    return 1
+  fi
+
   # Set a maximum lifetime for identities added to ssh-agent
   local lifetime
   zstyle -s :omz:plugins:ssh-agent lifetime lifetime
@@ -38,7 +43,7 @@ function _add_identities() {
   # this is to mimic the call to ssh-add with no identities
   if [[ ${#identities} -eq 0 ]]; then
     # key list found on `ssh-add` man page's DESCRIPTION section
-    for id in id_rsa id_dsa id_ecdsa id_ed25519 identity; do
+    for id in id_rsa id_dsa id_ecdsa id_ed25519 id_ed25519_sk identity; do
       # check if file exists
       [[ -f "$HOME/.ssh/$id" ]] && identities+=($id)
     done
@@ -57,7 +62,7 @@ function _add_identities() {
     # if id is an absolute path, make file equal to id
     [[ "$id" = /* ]] && file="$id" || file="$HOME/.ssh/$id"
     # check for filename match, otherwise try for signature match
-    if [[ ${loaded_ids[(I)$file]} -le 0 ]]; then
+    if [[ -f $file && ${loaded_ids[(I)$file]} -le 0 ]]; then
       sig="$(ssh-keygen -lf "$file" | awk '{print $2}')"
       [[ ${loaded_sigs[(I)$sig]} -le 0 ]] && not_loaded+=("$file")
     fi
@@ -71,6 +76,9 @@ function _add_identities() {
   # pass extra arguments to ssh-add
   local args
   zstyle -a :omz:plugins:ssh-agent ssh-add-args args
+
+  # if ssh-agent quiet mode, pass -q to ssh-add
+  zstyle -t :omz:plugins:ssh-agent quiet && args=(-q $args)
 
   # use user specified helper to ask for password (ksshaskpass, etc)
   local helper
@@ -90,8 +98,14 @@ function _add_identities() {
 
 # Add a nifty symlink for screen/tmux if agent forwarding is enabled
 if zstyle -t :omz:plugins:ssh-agent agent-forwarding \
-   && [[ -n "$SSH_AUTH_SOCK" && ! -L "$SSH_AUTH_SOCK" ]]; then
-  ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+   && [[ -n "$SSH_AUTH_SOCK" ]]; then
+  if [[ ! -L "$SSH_AUTH_SOCK" ]]; then
+    if [[ -n "$TERMUX_VERSION" ]]; then
+      ln -sf "$SSH_AUTH_SOCK" "$PREFIX"/tmp/ssh-agent-$USERNAME-screen
+    else
+      ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+    fi
+  fi
 else
   _start_agent
 fi

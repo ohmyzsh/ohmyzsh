@@ -1,16 +1,233 @@
-#!/bin/zsh -f
 #compdef pm2
-#autoload
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for pm2 5.2.2 (https://pm2.keymetrics.io/).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Myoungdo Park <mdo.park@gmail.com>
+#  * Shohei Yoshida <https://github.com/syohex>
+#
+# ------------------------------------------------------------------------------
 
-local -a _1st_arguments
+_pm2() {
+  typeset -A opt_args
+  local context state line
 
-_1st_arguments=(
+  local curcontext="$curcontext"
+
+  local ret=1
+
+  _arguments -C \
+    '(- *)'{-v,-V,--version}'[print pm2 version]' \
+    '(-s --silent)'{-s,--silent}'[hide all messages]' \
+    '--ext[watch only this file extension]:extension' \
+    '(-n --name)'{-n,--name}'[set a name for the process in the process list]:name' \
+    '(-m --mini-list)'{-m,--mini-list}'[display a compacted list without formatting]' \
+    '--interpreter[set a specific interpreter to use for executing app(default: node)]:prog' \
+    '(--interpreter-args --node-args)'{--interpreter-args,--node-args}'[set arguments to pass to the interpreter]:args' \
+    '(-o --output)'{-o,--output}'[specify log file for stdout]: :_files' \
+    '(-e --error)'{-e,--error}'[specify log file for stderr]: :_files' \
+    '(-l --log)'{-l,--log}'[specify log file which gathers both stdout and stderr]' \
+    '--filter-env[filter out outgoing global values that contain provided strings]:envs' \
+    '--log-type[specify log output style]: :(raw json)' \
+    '--log-date-format[specify log output style]:format' \
+    '--time[enable time logging]' \
+    '--disable-logs[disable all logs storage]' \
+    '*--env[specify which set of environment variables from ecosystem file must be injected]:env' \
+    '(-a --update-env)'{-a,--update-env}'[force and update of the environment with restart/reload]' \
+    '(-f --force)'{-f,--force}'[force actions]' \
+    '(-i --instances)'{-i,--instances}'[launch number instances]:num' \
+    '--parallel[number of parallel actions]:num' \
+    '--shutdown-with-message[shutdown an application with process.send("shutdown") instead of process.kill(pid, SIGINT)]' \
+    '(-p --pid)'{-p,--pid}'[specify pid file]: :_files' \
+    '(-k --kill-timeout)'{-k,--kill-timeout}'[delay before sending final SIGKILL signal to process]:delay' \
+    '--listen-timeout[listen timeout an application reload]:delay' \
+    '--max-memory-restart[restart the app if an amount of memory is exceeded (in bytes)]:bytes' \
+    '--restart-delay[specify a delay between restarts(in milliseconds)]:delay' \
+    '--exp-backoff-restart-delay[specify a delay between restarts(in milliseconds)]:delay' \
+    '(-x --execute-command)'{-e,--execute-command}'[execute a program using fork system]' \
+    '--max-restarts[only start the script COUNT times]:count' \
+    '(-u --user)'{-u,--user}'[define user when generating startup script]:username' \
+    '--uid[run target script with <uid> rights]:uid' \
+    '--gid[run target script with <gid> rights]:gui' \
+    '--namespace[start application within specified namespace]:namespace' \
+    '--cwd[run target script from path <cwd>]:cwd:_paths -/' \
+    '--hp[define home path when generating startup script]: :_paths -/' \
+    '--wait-ip[override systemd script to wait for full internet connectivity to launch pm2]' \
+    '--service-name[define service name when generating startup script]' \
+    '(-c --cron --cron-restart)'{-c,--cron,--cron-restart}'[restart a running process based on a cron pattern]:pattern' \
+    '(-w --write)'{-w,--write}'[write configuration in local folder]' \
+    '--no-daemon[run pm2 daemon in the foreground if it does not exist already]' \
+    '(--disable-source-map-support --source-map-support)--source-map-support[force source map support]' \
+    '--only[with json declaration, allow to only act on one application]:app' \
+    '(--disable-source-map-support --source-map-support)--disable-source-map-support[force disable source map support]' \
+    '--wait-ready[ask pm2 to wait for ready event from your app]' \
+    '--merge-logs[merge logs from different instances but keep error and out separated]' \
+    '*--watch[watch application folder for changes]: :_files -/' \
+    '*--ignore-watch[list of paths to ignore]: :_files' \
+    '--no-color[skip colors]' \
+    '--no-vizion[start an app without vizion feature]' \
+    '--np-autorestart[start an app without automatic restart]' \
+    '--no-treekill[Only kill the main process, not detached children]' \
+    '--no-pmx[start an app without pmx]' \
+    '--no-automation[start an app without automation]' \
+    '(--disable-trace --trace)--trace[enable transaction tracing with km]' \
+    '(--disable-trace --trace)--disable-trace[disable transaction tracing with km]' \
+    "--sort[sort process according to field's]:field_name" \
+    '--attach[attach logging after your start/restart/stop/reload]' \
+    '--v8[enable v8 data collecting]' \
+    '--event-loop-inspector[enable event-loop-inspector dump in pmx]' \
+    '--deep-monitoring[enable all monitoring tools]' \
+    '(- *)'{-h,--help}'[output usage information]' \
+    '1: :_pm2_subcommands' \
+    '*:: :->subcmds' && return 0
+
+  case "$state" in
+    (subcmds)
+      case $words[1] in
+        (start)
+          _arguments \
+            '--watch[watch folder for changes]' \
+            '--fresh[Rebuild Dockerfile]' \
+            '--daemon[Run container in Daemon mode(debug purposes)]' \
+            '--container[Start application in container mode]' \
+            '--dist[--with-container; change local Dockerfile to containerize all files in current directory]' \
+            '--image-name[with --dist; set the exported image name]:name' \
+            '--node-version[with --container, set a specific major Node.js version]:version' \
+            '--dockerdaemon[for debugging purpose]' \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '*: :_pm2_id_namespace_file' \
+            && ret=0
+          ;;
+        (trigger)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '1: :_pm2_id_names' \
+            && ret=0
+          ;;
+        (deploy|startOrRestart|startOrReload|startOrGracefulReload)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '1: :_files -g "*.json"' \
+            && ret=0
+          ;;
+        (stop|restart)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '--watch[Stop watching folder for changes]' \
+            '*: :_pm2_id_namespace_all' \
+            && ret=0
+          ;;
+        (reload|delete|reset)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '*: :_pm2_id_namespace_all' \
+            && ret=0
+          ;;
+        (module:install)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '--tarball[is local tarball]' \
+            '--install[run yarn install before starting module]' \
+            '--docker[is docker container]' \
+            '--v1[install module in v1 manner(do not use it)]' \
+            '--safe[keep module backup, if new module fail = restore with previous]:time' \
+            && ret=0
+          ;;
+        (publish|module:publish)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '--npm[publish on npm]' \
+            '*: :_files -/' \
+            && ret=0
+          ;;
+        (link)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '--info-node[set url info node]:url' \
+            && ret=0
+          ;;
+        (plus)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '--info-node[set url info node]:url' \
+            '(-d --discrete)'{-d,--discrete}'[silent mode]' \
+            '(-a --install-all)'{-a,--install-all}'[install all modules (force yes)]' \
+            && ret=0
+          ;;
+        (dump|save)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '--force[force deletion of dump file even if empty]' \
+            && ret=0
+          ;;
+        (send|attach|describe|env)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '1: :_pm2_id_names' \
+            && ret=0
+          ;;
+        (slist|sysinfos)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '--tree[show as tree]' \
+            && ret=0
+          ;;
+        (logs)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '--json[json log output]' \
+            '--format[formatted log output]' \
+            '--raw[raw output]' \
+            '--err[only shows error output]' \
+            '--out[only shows standard output]' \
+            '--line[output the last N lines, instead of the last 15 by default]:lines' \
+            '--timestamp[add timestamps(default format YYYY-MM-DD-HH:mm:ss)]:format' \
+            '--nostream[print logs without launching the log stream]' \
+            '*--highlight[highlights the given value]' \
+            '1: :_pm2_id_namespace' \
+            && ret=0
+          ;;
+        (serve)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '--port[specify port to listen to]:port' \
+            '--spa[always serving index.html on inexistent sub path]' \
+            '--basic-auth-username[set basic auth username]:username' \
+            '--basic-auth-password[set basic auth password]:password' \
+            '--monitor[frontend app monitoring]:app' \
+            '*: :_files -/' \
+            && ret=0
+          ;;
+        (*)
+          _arguments \
+            '(- *)'{-h,--help}'[output usage information]' \
+            '*: :_files' \
+            && ret=0
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+(( $+functions[_pm2_subcommands] )) ||
+_pm2_subcommands() {
+  local -a subcommands=(
     "start:start and daemonize an app"
     "trigger:trigger process action"
     "deploy:deploy your json"
     "startOrRestart:start or restart JSON file"
     "startOrReload:start or gracefully reload JSON file"
     "pid:return pid of [app_name] or all"
+    "create:return pid of [app_name] or all"
+    "startOrGracefulReload:start or gracefully reload JSON file"
     "stop:stop a process"
     "restart:restart a process"
     "scale:scale up/down a process in cluster mode depending on total_number param"
@@ -23,18 +240,23 @@ _1st_arguments=(
     "sendSignal:send a system signal to the target process"
     "ping:ping pm2 daemon - if not up it will launch it"
     "updatePM2:update in-memory PM2 with local PM2"
+    "update:update in-memory PM2 with local PM2"
     "install:install or update a module and run it forever"
+    "module\:install:install or update a module and run it forever"
     "module\:update:update a module and run it forever"
     "module\:generate:Generate a sample module in current folder"
     "uninstall:stop and uninstall a module"
+    "module\:uninstall:stop and uninstall a module"
     "package:Check & Package TAR type module"
     "publish:Publish the module you are currently on"
+    "module\:publish:Publish the module you are currently on"
     "set:sets the specified config <key> <value>"
     "multiset:multiset eg \"key1 val1 key2 val2\""
     "get:get value for <key>"
+    "conf:get / set module config values"
     "config:get / set module config values"
     "unset:clears the specified config <key>"
-    "report:give a full pm2 report for https\://github.com/Unitech/pm2/issues"
+    "report:give a full pm2 report for https://github.com/Unitech/pm2/issues"
     "link:link with the pm2 monitoring dashboard"
     "unlink:unlink with the pm2 monitoring dashboard"
     "monitor:monitor target process"
@@ -43,8 +265,8 @@ _1st_arguments=(
     "plus:enable pm2 plus"
     "login:Login to pm2 plus"
     "logout:Logout from pm2 plus"
-    "web:launch a health API on 0.0.0.0\:9615"
     "dump:dump all processes for resurrecting them later"
+    "save:dump all processes for resurrecting them later"
     "cleardump:Create empty dump file"
     "send:send stdin to <pm_id>"
     "attach:attach stdin/stdout to application identified by <pm_id>"
@@ -52,15 +274,27 @@ _1st_arguments=(
     "unstartup:disable the pm2 startup hook"
     "startup:enable the pm2 startup hook"
     "logrotate:copy default logrotate configuration"
-    "ecosystem:generate a process conf file. (mode = null or simple)"
+    "ecosystem:generate a process conf file"
+    "init:generate a process conf file"
     "reset:reset counters for process"
-    "describe:describe all parameters of a process id"
+    "describe:describe all parameters of a process"
+    "desc:describe all parameters of a process"
+    "info:describe all parameters of a process"
+    "show:describe all parameters of a process"
+    "env:list all environment variables of a process id"
     "list:list all processes"
+    "l:list all processes"
+    "ps:list all processes"
+    "status:list all processes"
     "jlist:list all processes in JSON format"
+    "sysmonit:start system monitoring daemon"
+    "slist:list system infos in JSON"
+    "sysinfos:list system infos in JSON"
     "prettylist:print json in a prettified JSON"
     "monit:launch termcaps monitoring"
     "imonit:launch legacy termcaps monitoring"
     "dashboard:launch dashboard with monitoring and logs"
+    "dash:launch dashboard with monitoring and logs"
     "flush:flush logs"
     "reloadLogs:reload all logs"
     "logs:stream logs file. Default stream all logs"
@@ -70,99 +304,71 @@ _1st_arguments=(
     "backward:downgrades repository to the previous commit for a given app"
     "deepUpdate:performs a deep update of PM2"
     "serve:serve a directory over http via port"
+    "autoinstall:auto install"
     "examples:display pm2 usage examples"
-)
+  )
 
-local -a id_names
-
-_id_names() {
-    local app_list
-    app_list=`pm2 list -m`
-
-    local -a names ids 
-    names=(`echo $app_list | grep '+---' | awk '{print $2}'`)
-    ids=(`echo $app_list | grep 'pm2 id' | awk '{print $4}'`)
-
-    if (( ${#ids} > 0 )); then
-        for i in {1..${#ids}}; do
-            id_names+=( "${ids[i]}:${names[i]}" )
-        done
-    fi
+  _describe -t subcommands 'subcommand' subcommands "$@"
 }
 
-_arguments \
-    '(-v --version)'{-v,--version}'[output version]' \
-    '(-h --help)'{-h,--help}'[output usage information]' \
-    '*:: :->subcmds' && return 0
+(( $+functions[_pm2_id_names] )) ||
+_pm2_id_names() {
+  local app_list=$(pm2 list -m)
+  local -a names=(${(@f)"$(echo $app_list | awk '/^\+---/{sub("+--- ", ""); print}')"})
+  local -a ids=(${(@f)"$(echo $app_list | awk '/^pm2 id/{sub("pm2 id :", ""); print}')"})
 
-if (( CURRENT == 1 )); then
-    _describe "command" _1st_arguments
-    return
+  if (( ${#ids} > 0 )); then
+    local -a id_names
+    for i in {1..${#ids}}; do
+      id_names+=( "${ids[i]}:${names[i]}" )
+    done
+
+    _describe 'id' id_names
+  fi
+}
+
+(( $+functions[_pm2_namespaces] )) ||
+_pm2_namespaces() {
+  local -a namespaces=(${(@f)"$(pm2 list -m | awk '/^namespace :/{ print $3 }')"})
+  if (( ${#namespaces} > 0 )); then
+    _values 'namespace' $namespaces
+  fi
+}
+
+(( $+functions[_pm2_id_namespace] )) ||
+_pm2_id_namespace() {
+  _alternative \
+    'ids:id:_pm2_id_names' \
+    'namespaces:namespace:_pm2_namespaces'
+}
+
+(( $+functions[_pm2_id_namespace_all] )) ||
+_pm2_id_namespace_all() {
+  _alternative \
+    'ids:id:_pm2_id_names' \
+    'namespaces:namespace:_pm2_namespaces' \
+    'all:all:(all)'
+}
+
+(( $+functions[_pm2_id_namespace_file] )) ||
+_pm2_id_namespace_file() {
+  _alternative \
+    'ids:id:_pm2_id_names' \
+    'namespaces:namespace:_pm2_namespaces' \
+    'files:file:_files'
+}
+
+if [ "$funcstack[1]" = "_pm2" ]; then
+    _pm2 "$@"
+else
+    compdef _pm2 pm2
 fi
 
-local -a id_comp id_all_comp id_all_files_comp start_options logs_options
-id_comp=('1: :->id_comp')
-id_all_comp=('1: :->id_all_comp')
-id_all_files_comp=('1: :->id_all_files_comp')
-start_options=(
-    '--watch[Watch folder for changes]'
-    '--fresh[Rebuild Dockerfile]'
-    '--daemon[Run container in Daemon mode (debug purposes)]'
-    '--container[Start application in container mode]'
-    '--dist[with --container; change local Dockerfile to containerize all files in current directory]'
-    '--image-name[with --dist; set the exported image name]'
-    '--node-version[with --container, set a specific major Node.js version]'
-    '--dockerdaemon[for debugging purpose]'
-    '(-h --help)'{-h,--help}'[output usage information]'
-    $id_all_files_comp
-)
-logs_options=(
-    '--json[json log output]'
-    '--format[formated log output]'
-    '--raw[raw output]'
-    '--err[only shows error output]'
-    '--out[only shows standard output]'
-    '--lines[output the last N lines, instead of the last 15 by default]'
-    '--timestamp[add timestamps (default format YYYY-MM-DD-HH:mm:ss)]'
-    '--nostream[print logs without launching the log stream]'
-    '(-h --help)'{-h,--help}'[output usage information]'
-    $id_all_comp
-)
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
 
-case "$words[1]" in
-    start)
-        _arguments $start_options && return 0
-        ;;
-    logs)
-        _arguments $logs_options && return 0
-        ;;
-    stop|restart|delete|reload|reset)
-        _arguments $id_all_comp && return 0
-        ;;
-    env|inspect|monitor|unmonitor|describe)
-        _arguments $id_comp && return 0
-        ;;
-    deploy|startOrRestart|startOrReload)
-        _files ;;
-esac
-
-case "$state" in
-    id_comp)
-        _id_names
-        _alternative \
-            'args:app args:(($id_names))'
-        ;;
-    id_all_comp)
-        _id_names
-        id_names+=(all)
-        _alternative \
-            'args:app args:(($id_names))'
-        ;;
-    id_all_files_comp)
-        _id_names
-        id_names+=(all)
-        _alternative \
-            'args:app args:(($id_names))' \
-            'files:filename:_files'
-        ;;
-esac
+# vim: ft=zsh sw=2 ts=2 et

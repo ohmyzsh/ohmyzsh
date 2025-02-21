@@ -2,7 +2,7 @@
 
 _source-from-omz-settings() {
   local _chruby_path _chruby_auto
-  
+
   zstyle -s :omz:plugins:chruby path _chruby_path || return 1
   zstyle -s :omz:plugins:chruby auto _chruby_auto || return 1
 
@@ -22,8 +22,10 @@ _source-from-homebrew() {
   # check default brew prefix
   if [[ -h /usr/local/opt/chruby ]];then
     _brew_prefix="/usr/local/opt/chruby"
+  elif [[ -h /opt/homebrew/opt/chruby ]]; then
+    _brew_prefix="/opt/homebrew/opt/chruby"
   else
-    # ok , it is not default prefix 
+    # ok , it is not default prefix
     # this call to brew is expensive ( about 400 ms ), so at least let's make it only once
     _brew_prefix=$(brew --prefix chruby)
   fi

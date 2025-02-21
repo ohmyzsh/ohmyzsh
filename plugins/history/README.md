@@ -13,5 +13,6 @@ plugins=(... history)
 | Alias | Command              | Description                                                      |
 |-------|----------------------|------------------------------------------------------------------|
 | `h`   | `history`            | Prints your command history                                      |
+| `hl`  | `history \| less`    | Pipe history output to less to search and navigate it easily     |
 | `hs`  | `history \| grep`    | Use grep to search your command history                          |
 | `hsi` | `history \| grep -i` | Use grep to do a case-insensitive search of your command history |

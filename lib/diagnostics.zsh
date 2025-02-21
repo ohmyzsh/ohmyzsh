@@ -30,7 +30,7 @@
 #
 # This is written in a defensive style so it still works (and can detect) cases when
 # basic functionality like echo and which have been redefined. In particular, almost
-# everything is invoked with "builtin" or "command", to work in the face of user 
+# everything is invoked with "builtin" or "command", to work in the face of user
 # redefinitions.
 #
 # OPTIONS
@@ -59,7 +59,7 @@ function omz_diagnostic_dump() {
   emulate -L zsh
 
   builtin echo "Generating diagnostic dump; please be patient..."
-  
+
   local thisfcn=omz_diagnostic_dump
   local -A opts
   local opt_verbose opt_noverbose opt_outfile
@@ -90,7 +90,7 @@ function omz_diagnostic_dump() {
   builtin echo
   builtin echo Diagnostic dump file created at: "$outfile"
   builtin echo
-  builtin echo To share this with OMZ developers, post it as a gist on GitHub 
+  builtin echo To share this with OMZ developers, post it as a gist on GitHub
   builtin echo at "https://gist.github.com" and share the link to the gist.
   builtin echo
   builtin echo "WARNING: This dump file contains all your zsh and omz configuration files,"
@@ -105,8 +105,8 @@ function _omz_diag_dump_one_big_text() {
   builtin echo oh-my-zsh diagnostic dump
   builtin echo
   builtin echo $outfile
-  builtin echo 
-  
+  builtin echo
+
   # Basic system and zsh information
   command date
   command uname -a
@@ -151,7 +151,7 @@ function _omz_diag_dump_one_big_text() {
 
   # Core command definitions
   _omz_diag_dump_check_core_commands || return 1
-  builtin echo  
+  builtin echo
 
   # ZSH Process state
   builtin echo Process state:
@@ -167,7 +167,7 @@ function _omz_diag_dump_one_big_text() {
   #TODO: Should this include `env` instead of or in addition to `export`?
   builtin echo Exported:
   builtin echo $(builtin export | command sed 's/=.*//')
-  builtin echo 
+  builtin echo
   builtin echo Locale:
   command locale
   builtin echo
@@ -181,7 +181,7 @@ function _omz_diag_dump_one_big_text() {
   builtin echo
   builtin echo 'compaudit output:'
   compaudit
-  builtin echo 
+  builtin echo
   builtin echo '$fpath directories:'
   command ls -lad $fpath
   builtin echo
@@ -224,7 +224,7 @@ function _omz_diag_dump_one_big_text() {
   local cfgfile cfgfiles
   # Some files for bash that zsh does not use are intentionally included
   # to help with diagnosing behavior differences between bash and zsh
-  cfgfiles=( /etc/zshenv /etc/zprofile /etc/zshrc /etc/zlogin /etc/zlogout 
+  cfgfiles=( /etc/zshenv /etc/zprofile /etc/zshrc /etc/zlogin /etc/zlogout
     $zdotdir/.zshenv $zdotdir/.zprofile $zdotdir/.zshrc $zdotdir/.zlogin $zdotdir/.zlogout
     ~/.zsh.pre-oh-my-zsh
     /etc/bashrc /etc/profile ~/.bashrc ~/.profile ~/.bash_profile ~/.bash_logout )
@@ -258,8 +258,8 @@ function _omz_diag_dump_check_core_commands() {
   # (For back-compatibility, if any of these are newish, they should be removed,
   # or at least made conditional on the version of the current running zsh.)
   # "history" is also excluded because OMZ is known to redefine that
-  reserved_words=( do done esac then elif else fi for case if while function 
-    repeat time until select coproc nocorrect foreach end '!' '[[' '{' '}' 
+  reserved_words=( do done esac then elif else fi for case if while function
+    repeat time until select coproc nocorrect foreach end '!' '[[' '{' '}'
     )
   builtins=( alias autoload bg bindkey break builtin bye cd chdir command
     comparguments compcall compctl compdescribe compfiles compgroups compquote comptags
@@ -331,7 +331,7 @@ function _omz_diag_dump_os_specific_version() {
   case "$OSTYPE" in
     darwin*)
       osname=$(command sw_vers -productName)
-      osver=$(command sw_vers -productVersion)      
+      osver=$(command sw_vers -productVersion)
       builtin echo "OS Version: $osname $osver build $(sw_vers -buildVersion)"
       ;;
     cygwin)

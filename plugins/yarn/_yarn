@@ -86,7 +86,7 @@ _global_commands=(
 )
 
 _yarn_find_package_json() {
-  local dir=$(cd "$1" && pwd)
+  local dir=$(builtin cd "$1" && pwd)
 
   while true
   do
@@ -109,7 +109,7 @@ _yarn_commands_scripts() {
 
   if [[ -n $opt_args[--cwd] ]]; then
     packageJson=$(_yarn_find_package_json $opt_args[--cwd])
-    binaries=($(cd $opt_args[--cwd] && echo node_modules/.bin/*(x:t)))
+    binaries=($(builtin cd $opt_args[--cwd] && echo node_modules/.bin/*(x:t)))
   else
     packageJson=$(_yarn_find_package_json $pwd)
     binaries=($(echo node_modules/.bin/*(x:t)))
@@ -130,9 +130,9 @@ _yarn_scripts() {
   if [[ -n $_yarn_run_cwd ]]; then
     packageJson=$(_yarn_find_package_json $_yarn_run_cwd)
     if [[ -d "${_yarn_run_cwd}/node_modules" ]]; then
-      binaries=($(cd $_yarn_run_cwd && echo node_modules/.bin/*(x:t)))
+      binaries=($(builtin cd $_yarn_run_cwd && echo node_modules/.bin/*(x:t)))
     else
-      binaries=($(cd $_yarn_run_cwd && yarn bin | perl -wln -e 'm{^[^:]+: (\S+)$} and print $1'))
+      binaries=($(builtin cd $_yarn_run_cwd && yarn bin | perl -wln -e 'm{^[^:]+: (\S+)$} and print $1'))
     fi
   else
     packageJson=$(_yarn_find_package_json $pwd)
@@ -144,7 +144,7 @@ _yarn_scripts() {
   fi
 
   if [[ -n $packageJson ]]; then
-    scripts=("${(@f)$(cat ${packageJson} | perl -0777 -MJSON::PP -n -E '%r=%{decode_json($_)->{scripts}}; do{$k=$_;($e=$k)=~s/:/\\:/g; printf "$e:$r{$k}\n"} for sort keys %r')}")
+    scripts=("${(@f)$(cat ${packageJson} | perl -0777 -MJSON::PP -n -E 'binmode(STDOUT, ":encoding(UTF-8)"); %r=%{decode_json($_)->{scripts}}; do{$k=$_;($e=$k)=~s/:/\\:/g; printf "$e:$r{$k}\n"} for sort keys %r')}")
   fi
 
   commands=('env' $scripts $binaries)

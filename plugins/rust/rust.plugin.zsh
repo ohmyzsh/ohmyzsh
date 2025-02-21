@@ -22,5 +22,5 @@ fi
 rustup completions zsh >| "$ZSH_CACHE_DIR/completions/_rustup" &|
 cat >| "$ZSH_CACHE_DIR/completions/_cargo" <<'EOF'
 #compdef cargo
-source "$(rustc +${${(z)$(rustup default)}[1]} --print sysroot)"/share/zsh/site-functions/_cargo
+source "$(rustup run ${${(z)$(rustup default)}[1]} rustc --print sysroot)"/share/zsh/site-functions/_cargo
 EOF

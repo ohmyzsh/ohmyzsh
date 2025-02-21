@@ -78,7 +78,7 @@ _lpass() {
                 has_sync=1
             ;;
             status)
-               _arguments : '(-q --quiet)'{-q,--quiet}'[Supress output to stdout]'
+               _arguments : '(-q --quiet)'{-q,--quiet}'[Suppress output to stdout]'
                 has_color=1
             ;;
             sync)
@@ -106,7 +106,7 @@ _lpass() {
                 generic_options+=('--color=[Color: auto | never | always]')
             fi
             if [ "$has_interactive" -eq 1 ]; then
-                generic_options+=("--non-interactive[Use stardard input instead of $EDITOR]")
+                generic_options+=("--non-interactive[Use standard input instead of $EDITOR]")
             fi
             _arguments $generic_options
         fi

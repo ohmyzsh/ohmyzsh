@@ -1,7 +1,7 @@
 # Systemadmin plugin
 
 This plugin adds a series of aliases and functions which make a System Administrator's life easier.
- 
+
 To use it, add `systemadmin` to the plugins array in your zshrc file:
 
 ```zsh
@@ -13,6 +13,7 @@ plugins=(... systemadmin)
 | Alias   | Command                                                                    | Description                                                        |
 |---------|----------------------------------------------------------------------------|--------------------------------------------------------------------|
 | ping    | `ping -c 5`                                                                | Sends only 5 ICMP Messages                                         |
+| ping6   | `ping6 -c 5`                                                               | Sends only 5 ICMPv6 Messages                                       |
 | clr     | `clear; echo Currently logged in on $TTY, as $USERNAME in directory $PWD.` | Clears the screen and prints the current user, TTY, and directory  |
 | path    | `print -l $path`                                                           | Displays PATH with each entry on a separate line                   |
 | mkdir   | `mkdir -pv`                                                                | Automatically create parent directories and display verbose output |
@@ -41,7 +42,7 @@ plugins=(... systemadmin)
 | accessip10  | List the top 10 accesses to the ip address in the nginx/access.log file or another log file if specified              |
 | visitpage20 | List the top 20 most visited files or pages in the nginx/access.log file or another log file if specified             |
 | consume100  | List the 100 most time-consuming Page lists (more than 60 seconds) as well as the corresponding number of occurrences |
-| webtraffic  | List website traffic statistics in GB from tne nginx/access.log file or another log file if specified                 |
+| webtraffic  | List website traffic statistics in GB from the nginx/access.log file or another log file if specified                 |
 | c404        | List statistics on 404 connections in the nginx/access.log file or another log file if specified                      |
 | httpstatus  | List statistics based on http status in the nginx/access.log file or another log file if specified                    |
 | d0          | Delete 0 byte files recursively in the current directory or another if specified                                      |

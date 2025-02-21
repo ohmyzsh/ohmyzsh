@@ -1,11 +1,19 @@
 # Plugin owners
 plugins/archlinux/                  @ratijas
-plugins/aws/                        @maksyms
+plugins/dbt/                        @msempere
+plugins/eza/                        @pepoluan
 plugins/genpass/                    @atoponce
 plugins/git-lfs/                    @hellovietduc
 plugins/gitfast/                    @felipec
+plugins/kube-ps1/                   @mcornella
+plugins/kubectl/                    @mcornella
+plugins/kubectx/                    @mcornella
+plugins/opentofu/                   @mcornella
+plugins/react-native                @esthor
 plugins/sdk/                        @rgoldberg
 plugins/shell-proxy/                @septs
+plugins/starship/                   @axieax
+plugins/terraform/                  @mcornella
 plugins/universalarchive/           @Konfekt
 plugins/wp-cli/                     @joshmedeski
 plugins/zoxide/                     @ajeetdsouza

@@ -2,6 +2,45 @@
 #
 # See README.md for details
 
+function _jira_usage() {
+cat <<EOF
+jira                            Performs the default action
+jira new                        Opens a new Jira issue dialogue
+jira ABC-123                    Opens an existing issue
+jira ABC-123 m                  Opens an existing issue for adding a comment
+jira dashboard [rapid_view]     Opens your JIRA dashboard
+jira mine                       Queries for your own issues
+jira tempo                      Opens your JIRA Tempo
+jira reported [username]        Queries for issues reported by a user
+jira assigned [username]        Queries for issues assigned to a user
+jira branch                     Opens an existing issue matching the current branch name
+EOF
+}
+
+# If your branch naming convention deviates, you can partially override this plugin function
+# to determine the jira issue key based on your formatting.
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Customization#partially-overriding-an-existing-plugin
+function jira_branch() {
+  # Get name of the branch
+  issue_arg=$(git rev-parse --abbrev-ref HEAD)
+  # Strip prefixes like feature/ or bugfix/
+  issue_arg=${issue_arg##*/}
+  # Strip suffixes starting with _
+  issue_arg=(${(s:_:)issue_arg})
+  # If there is only one part, it means that there is a different delimiter. Try with -
+  if [[ ${#issue_arg[@]} = 1 && ${issue_arg} == *-* ]]; then
+    issue_arg=(${(s:-:)issue_arg})
+    issue_arg="${issue_arg[1]}-${issue_arg[2]}"
+  else
+    issue_arg=${issue_arg[1]}
+  fi
+  if [[ "${issue_arg:l}" = ${jira_prefix:l}* ]]; then
+    echo "${issue_arg}"
+  else
+    echo "${jira_prefix}${issue_arg}"
+  fi
+}
+
 function jira() {
   emulate -L zsh
   local action jira_url jira_prefix
@@ -44,42 +83,39 @@ function jira() {
     open_command "${jira_url}/secure/CreateIssue!default.jspa"
   elif [[ "$action" == "assigned" || "$action" == "reported" ]]; then
     _jira_query ${@:-$action}
-  elif [[ "$action" == "myissues" ]]; then
+  elif [[ "$action" == "help" || "$action" == "usage" ]]; then
+    _jira_usage
+  elif [[ "$action" == "mine" ]]; then
     echo "Opening my issues"
     open_command "${jira_url}/issues/?filter=-1"
   elif [[ "$action" == "dashboard" ]]; then
     echo "Opening dashboard"
     if [[ "$JIRA_RAPID_BOARD" == "true" ]]; then
-      open_command "${jira_url}/secure/RapidBoard.jspa"
+      _jira_rapid_board ${@}
     else
       open_command "${jira_url}/secure/Dashboard.jspa"
     fi
   elif [[ "$action" == "tempo" ]]; then
     echo "Opening tempo"
-    open_command "${jira_url}/secure/Tempo.jspa"
+    if [[ -n "$JIRA_TEMPO_PATH" ]]; then
+      open_command "${jira_url}${JIRA_TEMPO_PATH}"
+    else
+      open_command "${jira_url}/secure/Tempo.jspa"
+    fi
   elif [[ "$action" == "dumpconfig" ]]; then
     echo "JIRA_URL=$jira_url"
     echo "JIRA_PREFIX=$jira_prefix"
     echo "JIRA_NAME=$JIRA_NAME"
+    echo "JIRA_RAPID_VIEW=$JIRA_RAPID_VIEW"
     echo "JIRA_RAPID_BOARD=$JIRA_RAPID_BOARD"
     echo "JIRA_DEFAULT_ACTION=$JIRA_DEFAULT_ACTION"
+    echo "JIRA_TEMPO_PATH=$JIRA_TEMPO_PATH"
   else
     # Anything that doesn't match a special action is considered an issue name
     # but `branch` is a special case that will parse the current git branch
     local issue_arg issue
     if [[ "$action" == "branch" ]]; then
-      # Get name of the branch
-      issue_arg=$(git rev-parse --abbrev-ref HEAD)
-      # Strip prefixes like feature/ or bugfix/
-      issue_arg=${issue_arg##*/}
-      # Strip suffixes starting with _
-      issue_arg=(${(s:_:)issue_arg})
-      issue_arg=${issue_arg[1]}
-      if [[ "$issue_arg" = ${jira_prefix}* ]]; then
-        issue="${issue_arg}"
-      else
-        issue="${jira_prefix}${issue_arg}"
-      fi
+      issue=$(jira_branch)
     else
       issue_arg=${(U)action}
       issue="${jira_prefix}${issue_arg}"
@@ -105,6 +141,16 @@ Valid options, in order of precedence:
   \$HOME/.jira-url file
   \$JIRA_URL environment variable
 EOF
+}
+
+function _jira_rapid_board() {
+  rapid_view=${2:=$JIRA_RAPID_VIEW}
+
+  if [[ -z $rapid_view ]]; then
+    open_command "${jira_url}/secure/RapidBoard.jspa"
+  else
+    open_command "${jira_url}/secure/RapidBoard.jspa?rapidView=$rapid_view"
+  fi
 }
 
 function _jira_query() {

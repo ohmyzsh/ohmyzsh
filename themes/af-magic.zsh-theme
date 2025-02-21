@@ -6,12 +6,15 @@
 # dashed separator size
 function afmagic_dashes {
   # check either virtualenv or condaenv variables
-  local python_env="${VIRTUAL_ENV:-$CONDA_DEFAULT_ENV}"
+  local python_env_dir="${VIRTUAL_ENV:-$CONDA_DEFAULT_ENV}"
+  local python_env="${python_env_dir##*/}"
 
   # if there is a python virtual environment and it is displayed in
   # the prompt, account for it when returning the number of dashes
-  if [[ -n "$python_env" && "$PS1" = \(* ]]; then
+  if [[ -n "$python_env" && "$PS1" = *\(${python_env}\)* ]]; then
     echo $(( COLUMNS - ${#python_env} - 3 ))
+  elif [[ -n "$VIRTUAL_ENV_PROMPT" && "$PS1" = *${VIRTUAL_ENV_PROMPT}* ]]; then
+    echo $(( COLUMNS - ${#VIRTUAL_ENV_PROMPT} ))
   else
     echo $COLUMNS
   fi

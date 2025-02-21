@@ -1,3 +1,7 @@
+# if there is a virtualenv already loaded pyenv should not be loaded
+# see https://github.com/ohmyzsh/ohmyzsh/issues/12589
+[[ -n ${VIRTUAL_ENV:-} ]] && return
+
 pyenv_config_warning() {
   [[ "$ZSH_PYENV_QUIET" != true ]] || return 0
 
@@ -78,19 +82,25 @@ if [[ $FOUND_PYENV -eq 1 ]]; then
   eval "$(pyenv init - --no-rehash zsh)"
 
   # If pyenv-virtualenv exists, load it
-  if [[ "$(pyenv commands)" =~ "virtualenv-init" && "$ZSH_PYENV_VIRTUALENV" != false ]]; then
+  if [[ "$ZSH_PYENV_VIRTUALENV" != false && "$(pyenv commands)" =~ "virtualenv-init" ]]; then
     eval "$(pyenv virtualenv-init - zsh)"
   fi
 
   function pyenv_prompt_info() {
     local version="$(pyenv version-name)"
-    echo "${version:gs/%/%%}"
+    if [[ "$ZSH_THEME_PYENV_NO_SYSTEM" == "true" ]] && [[ "${version}" == "system" ]]; then
+      return
+    fi
+    echo "${ZSH_THEME_PYENV_PREFIX=}${version:gs/%/%%}${ZSH_THEME_PYENV_SUFFIX=}"
   }
 else
   # Fall back to system python
   function pyenv_prompt_info() {
+    if [[ "$ZSH_THEME_PYENV_NO_SYSTEM" == "true" ]]; then
+      return
+    fi
     local version="$(python3 -V 2>&1 | cut -d' ' -f2)"
-    echo "system: ${version:gs/%/%%}"
+    echo "${ZSH_THEME_PYENV_PREFIX=}system: ${version:gs/%/%%}${ZSH_THEME_PYENV_SUFFIX=}"
   }
 fi
 
