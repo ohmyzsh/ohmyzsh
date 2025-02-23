@@ -76,6 +76,7 @@ plugins=(... git)
 | `gcn`                  | `git commit --verbose --no-edit`                                                                                                |
 | `gcn!`                 | `git commit --verbose --no-edit --amend`                                                                                        |
 | `gcs`                  | `git commit -S`                                                                                                                 |
+| `gcsm`                 | `git commit -S -m`                                                                                                              |
 | `gcss`                 | `git commit -S -s`                                                                                                              |
 | `gcssm`                | `git commit -S -s -m`                                                                                                           |
 | `gcf`                  | `git config --list`                                                                                                             |
