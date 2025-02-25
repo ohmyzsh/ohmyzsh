@@ -5,6 +5,9 @@ local action = wezterm.action
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
+-- disable bell
+config.audible_bell = "Disabled"
+
 -- This is where you actually apply your config choices
 
 -- For example, changing the color scheme:
@@ -14,17 +17,29 @@ local config = wezterm.config_builder()
 
 config.ssh_domains = {
   {
-    -- This name identifies the domain
-    name = 'devbox',
-    -- The hostname or address to connect to. Will be used to match settings
-    -- from your ssh config file
+    name = 'universe2',
     remote_address = 'devbox.databricks.com',
-    -- The username to use on the remote host
     username = 'ahirreddy',
   },
 }
 
 config.window_decorations = 'RESIZE|INTEGRATED_BUTTONS'
+
+wezterm.on('spawn-new-tab-in-devbox', function(window, pane)
+  wezterm.log_info('Spawning new tab in devbox')
+  wezterm.log_info('Current pane domain: ' .. pane:get_domain_name())
+  local cwd = pane:get_current_working_dir().file_path;
+  wezterm.log_info('Spawning from devbox pane')
+  wezterm.log_info('Current working directory: ' .. cwd)
+  -- Spawn a new tab in devbox using the current working directory
+  window:perform_action(
+    wezterm.action.SpawnCommandInNewTab {
+      domain = { DomainName = pane:get_domain_name() },
+      cwd = cwd,
+    },
+    pane
+  )
+end)
 
 config.keys = {
   { key = 'd', mods = 'CMD|SHIFT', action = action.SplitVertical { domain = 'CurrentPaneDomain' } },
@@ -35,6 +50,20 @@ config.keys = {
   { key = 'LeftArrow', mods = 'CMD', action = action.SendKey { key = 'Home' } },
   { key = 'RightArrow', mods = 'CMD', action = action.SendKey { key = 'End' } },
   { key = 'p', mods = 'CMD|SHIFT', action = action.ActivateCommandPalette },
+  {
+    key = 't',
+    mods = 'CMD',
+    action = action.SpawnCommandInNewTab {
+      domain = 'DefaultDomain', -- DefaultDomain is "local"
+    },
+  },
+  {
+    key = 'T',
+    mods = 'CMD|SHIFT',
+    action = wezterm.action_callback(function(window, pane)
+      wezterm.emit('spawn-new-tab-in-devbox', window, pane)
+    end),
+  }
 }
 
 -- Font settings
@@ -122,6 +151,40 @@ config.tab_max_width = 200 -- Ensure tabs expand proportionally and are visible
 
 -- Other settings
 config.enable_tab_bar = true
+
+config.enable_scroll_bar = true
+config.min_scroll_bar_height = '2cell'
+config.colors.scrollbar_thumb = 'gray'
+config.tab_max_width = 10000
+
+config.scrollback_lines = 1000000
+
+wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
+  local domain_name = tab.active_pane.domain_name
+
+  -- Default colors
+  local bg_color = "#586E75"
+  local fg_color = "#FDF6E3"
+
+  -- Calculate tab width
+  local total_tabs = #tabs
+  local tab_width = math.floor(10000 / total_tabs)
+
+  -- Truncate and pad title based on tab width
+  local title = wezterm.truncate_right(tab.active_pane.title, tab_width - 2)
+  title = wezterm.pad_right(title, tab_width - 2)
+
+  -- Customize for devbox domain
+  if domain_name ~= 'local' then
+    title = '⚡' .. domain_name .. ': ' .. title
+  end
+
+  return {
+    { Text = ' ' .. title .. ' ' },
+    Background = bg_color,
+    Foreground = fg_color,
+  }
+end)
 
 -- and finally, return the configuration to wezterm
 return config
