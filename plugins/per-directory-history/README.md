@@ -35,6 +35,7 @@ toggle set the `PER_DIRECTORY_HISTORY_TOGGLE` environment variable.
   function above (default `^G`)
 * `PER_DIRECTORY_HISTORY_PRINT_MODE_CHANGE` is a variable which toggles whether
   the current mode is printed to the screen following a mode change (default `true`)
+* `HISTORY_START_WITH_GLOBAL` is a global variable that defines how to start the plugin: global or local (default `false`)
 
 ## History
 

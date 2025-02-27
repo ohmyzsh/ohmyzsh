@@ -4,7 +4,7 @@
 #
 # https://github.com/agkozak/zsh-z
 #
-# Copyright (c) 2018-2023 Alexandros Kozak
+# Copyright (c) 2018-2024 Alexandros Kozak
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -119,7 +119,6 @@ fi
 [[ ${builtins[zf_chown]-} == 'defined' ]] && ZSHZ[CHOWN]='zf_chown'
 [[ ${builtins[zf_mv]-} == 'defined' ]] && ZSHZ[MV]='zf_mv'
 [[ ${builtins[zf_rm]-} == 'defined' ]] && ZSHZ[RM]='zf_rm'
-
 
 # Load zsh/system, if necessary
 [[ ${modules[zsh/system]-} == 'loaded' ]] || zmodload zsh/system &> /dev/null

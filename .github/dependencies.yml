@@ -2,11 +2,13 @@ dependencies:
   plugins/gitfast:
     repo: felipec/git-completion
     branch: master
-    version: tag:v2.1
+    version: tag:v2.2
     postcopy: |
       set -e
-      rm -rf git-completion.plugin.zsh Makefile README.adoc t tools
-      test -e git-completion.zsh && mv -f git-completion.zsh _git
+      rm -rf git-completion.plugin.zsh Makefile t tools
+      mv README.adoc MANUAL.adoc
+      mv -f src/* .
+      rmdir src
   plugins/gradle:
     repo: gradle/gradle-completion
     branch: master
@@ -28,7 +30,7 @@ dependencies:
   plugins/wd:
     repo: mfaerevaag/wd
     branch: master
-    version: tag:v0.9.0
+    version: tag:v0.9.3
     precopy: |
       set -e
       rm -r test
@@ -36,7 +38,7 @@ dependencies:
   plugins/z:
     branch: master
     repo: agkozak/zsh-z
-    version: afaf2965b41fdc6ca66066e09382726aa0b6aa04
+    version: dd94ef04acc41748ba171eb219971cb455e0040b
     precopy: |
       set -e
       test -e README.md && mv -f README.md MANUAL.md

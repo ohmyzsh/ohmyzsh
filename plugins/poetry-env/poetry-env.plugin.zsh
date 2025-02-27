@@ -6,8 +6,7 @@ _togglePoetryShell() {
   fi
 
   # Deactivate the current environment if moving out of a Poetry directory or into a different Poetry directory
-  if [[ $poetry_active -eq 1 ]] && [[ $in_poetry_dir -eq 0 ]] \
-    && [[ "$PWD" != "$poetry_dir"* ]]; then
+  if [[ $poetry_active -eq 1 ]] && { [[ $in_poetry_dir -eq 0 ]] || [[ "$PWD" != "$poetry_dir"* ]]; }; then
     export poetry_active=0
     unset poetry_dir
     (( $+functions[deactivate] )) && deactivate

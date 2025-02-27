@@ -101,8 +101,14 @@ function listMavenCompletions {
       new_file="../pom.xml"
     fi
 
-    # if file doesn't exist break
     file="${file:h}/${new_file}"
+
+    # if the file points to a directory, assume it is a pom.xml in that directory
+    if [[ -d "$file" ]]; then
+      file="${file}/pom.xml"
+    fi
+
+    # if file doesn't exist break
     if ! [[ -e "$file" ]]; then
       break
     fi
