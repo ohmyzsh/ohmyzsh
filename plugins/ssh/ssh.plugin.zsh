@@ -78,8 +78,9 @@ function ssh_fingerprint() {
   local f
   for f in "${keyfiles[@]}"; do
     if [[ $quiet != "-q" ]]; then printf "${ansi[1]}$f:${ansi[2]}\n"; fi
-    ssh-keygen -l -E "$fptype" -f "$f"
+    if ! ssh-keygen -l -E "$fptype" -f "$f"; then return $?; fi
   done
+  return 0
 }
 alias ssh_fp='ssh_fingerprint'
 
