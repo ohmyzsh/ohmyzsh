@@ -20,7 +20,7 @@ unset _ssh_configfile
 ############################################################
 # Remove host key from known hosts based on a host section
 # name from .ssh/config
-function ssh_rmhkey {
+function ssh_rmhkey() {
   local ssh_configfile="$HOME/.ssh/config"
   local ssh_host="$1"
   if [[ -z "$ssh_host" ]]; then return; fi
@@ -42,7 +42,7 @@ function ssh_load_key() {
 
 ############################################################
 # Remove SSH key from agent
-function ssh_unload_key {
+function ssh_unload_key() {
   local key="$1"
   if [[ -z "$key" ]]; then return; fi
   local keyfile="$HOME/.ssh/$key"
@@ -54,7 +54,7 @@ function ssh_unload_key {
 
 ############################################################
 # Calculate SSH key fingerprint
-function ssh_fingerprint {
+function ssh_fingerprint() {
   local fptype
   local quiet
   local ansi
