@@ -32,7 +32,7 @@ function web_search() {
     packagist       "https://packagist.org/?query="
     gopkg           "https://pkg.go.dev/search?m=package&q="
     chatgpt         "https://chatgpt.com/?q="
-    reddit          "https://www.reddit.com/search/?q="
+    # for the new reddit search go below at row 67
     ppai            "https://www.perplexity.ai/search/new?q="
   )
 
@@ -61,6 +61,50 @@ function web_search() {
   open_command "$url"
 }
 
+# example usage: reddit swaywm (search all subreddits for swaywm)
+# example usage: reddit --sr unixporn swaywm (search only unixporn subreddit for swaywm) -> https://www.reddit.com/r/unixporn/search?q=swaywm
+
+function reddit_search() {
+    emulate -L zsh
+    local url="https://www.reddit.com"
+    local query=""
+    local subreddit=""
+    
+    # if the user pass "--sr <subreddit name>" as first argument
+    # then the second argument is the subreddit name
+    if [[ "$1" == "--sr" ]]; then
+        subreddit="$2"
+        query="${@[3,-1]}"
+    else
+        query="${@[1,-1]}"
+    fi
+    
+    # if query is empty, remove the search query
+    if [[ -z "$query" ]]; then
+        query=""
+    fi
+    
+    # if subreddit is empty, search all subreddits
+    # but if query is empty, remove the search query
+    if [[ -z "$subreddit" ]]; then
+        if [[ -z "$query" ]]; then
+            url="$url"
+        else
+            url="$url/search?q=$(omz_urlencode -P $query)"
+        fi
+        
+    else
+        # if subreddit is not empty, search only that subreddit
+        if [[ -z "$query" ]]; then
+            url="$url/r/$subreddit"
+        else
+            url="$url/r/$subreddit/search?q=$(omz_urlencode -P $query)"
+        fi
+    fi
+    
+    open_command "$url"
+}
+
 
 alias bing='web_search bing'
 alias brs='web_search brave'
@@ -87,7 +131,7 @@ alias npmpkg='web_search npmpkg'
 alias packagist='web_search packagist'
 alias gopkg='web_search gopkg'
 alias chatgpt='web_search chatgpt'
-alias reddit='web_search reddit'
+alias reddit='reddit_search'
 alias ppai='web_search ppai'
 
 #add your own !bang searches here
