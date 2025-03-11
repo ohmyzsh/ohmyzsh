@@ -19,6 +19,7 @@ plugins=(... uv)
 | uvlu  | `uv lock --upgrade`                                                     | Lock the dependencies to the newest compatible versions              |
 | uvp   | `uv pip`                                                                | Manage pip packages                                                  |
 | uvpy  | `uv python`                                                             | Manage Python installs                                               |
+| uvpp  | `uv python pin`                                                         | Pin the current project to use a specific Python version             |
 | uvr   | `uv run`                                                                | Run commands within the project's environment                        |
 | uvrm  | `uv remove`                                                             | Remove packages from the project                                     |
 | uvs   | `uv sync`                                                               | Sync the environment with the lock file                              |
