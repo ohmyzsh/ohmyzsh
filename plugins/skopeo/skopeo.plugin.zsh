@@ -11,14 +11,14 @@ __skopeo_debug() {
 }
 
 _skopeo() {
-  local shellCompDirectiveError=1
-  local shellCompDirectiveNoSpace=2
-  local shellCompDirectiveNoFileComp=4
-  local shellCompDirectiveFilterFileExt=8
-  local shellCompDirectiveFilterDirs=16
-  local shellCompDirectiveKeepOrder=32
+  local shell_comp_directive_error=1
+  local shell_comp_directive_no_space=2
+  local shell_comp_directive_no_file_comp=4
+  local shell_comp_directive_filter_file_ext=8
+  local shell_comp_directive_filter_dirs=16
+  local shell_comp_directive_keep_order=32
 
-  local lastParam lastChar flagPrefix requestComp out directive comp lastComp noSpace keepOrder
+  local last_param last_char flag_prefix request_comp out directive comp last_comp no_space keep_order
   local -a completions
 
   __skopeo_debug "\n========= starting completion logic =========="
@@ -31,45 +31,45 @@ _skopeo() {
   words=("${=words[1,CURRENT]}")
   __skopeo_debug "Truncated words[*]: ${words[*]},"
 
-  lastParam=${words[-1]}
-  lastChar=${lastParam[-1]}
-  __skopeo_debug "lastParam: ${lastParam}, lastChar: ${lastChar}"
+  last_param=${words[-1]}
+  last_char=${last_param[-1]}
+  __skopeo_debug "last_param: ${last_param}, last_char: ${last_char}"
 
   # For zsh, when completing a flag with an = (e.g., skopeo -n=<TAB>)
   # completions must be prefixed with the flag
   setopt local_options BASH_REMATCH
-  if [[ "${lastParam}" =~ '-.*=' ]]; then
+  if [[ "${last_param}" =~ '-.*=' ]]; then
     # We are dealing with a flag with an =
-    flagPrefix="-P ${BASH_REMATCH}"
+    flag_prefix="-P ${BASH_REMATCH}"
   fi
 
   # Prepare the command to obtain completions
-  requestComp="${words[1]} __complete ${words[2,-1]}"
-  if [ "${lastChar}" = "" ]; then
+  request_comp="${words[1]} __complete ${words[2,-1]}"
+  if [ "${last_char}" = "" ]; then
     # If the last parameter is complete (there is a space following it)
     # We add an extra empty parameter so we can indicate this to the go completion code.
     __skopeo_debug "Adding extra empty parameter"
-    requestComp="${requestComp} \"\""
+    request_comp="${request_comp} \"\""
   fi
 
-  __skopeo_debug "About to call: eval ${requestComp}"
+  __skopeo_debug "About to call: eval ${request_comp}"
 
   # Use eval to handle any environment variables and such
-  out=$(eval ${requestComp} 2>/dev/null)
+  out=$(eval ${request_comp} 2>/dev/null)
   __skopeo_debug "completion output: ${out}"
 
   # Extract the directive integer following a : from the last line
-  local lastLine
+  local last_line
   while IFS='\n' read -r line; do
-    lastLine=${line}
+    last_line=${line}
   done < <(printf "%s\n" "${out[@]}")
-  __skopeo_debug "last line: ${lastLine}"
+  __skopeo_debug "last line: ${last_line}"
 
-  if [ "${lastLine[1]}" = : ]; then
-    directive=${lastLine[2,-1]}
+  if [ "${last_line[1]}" = : ]; then
+    directive=${last_line[2,-1]}
     # Remove the directive including the : and the newline
     local suffix
-    (( suffix=${#lastLine}+2))
+    (( suffix=${#last_line}+2))
     out=${out[1,-$suffix]}
   else
     # There is no directive specified.  Leave $out as is.
@@ -79,26 +79,26 @@ _skopeo() {
 
   __skopeo_debug "directive: ${directive}"
   __skopeo_debug "completions: ${out}"
-  __skopeo_debug "flagPrefix: ${flagPrefix}"
+  __skopeo_debug "flag_prefix: ${flag_prefix}"
 
-  if [ $((directive & shellCompDirectiveError)) -ne 0 ]; then
+  if [ $((directive & shell_comp_directive_error)) -ne 0 ]; then
     __skopeo_debug "Completion received error. Ignoring completions."
     return
   fi
 
-  local activeHelpMarker="_activeHelp_ "
-  local endIndex=${#activeHelpMarker}
-  local startIndex=$((${#activeHelpMarker}+1))
-  local hasActiveHelp=0
+  local active_help_marker="_active_help_ "
+  local end_index=${#active_help_marker}
+  local start_index=$((${#active_help_marker}+1))
+  local has_active_help=0
   while IFS='\n' read -r comp; do
-    # Check if this is an activeHelp statement (i.e., prefixed with $activeHelpMarker)
-    if [ "${comp[1,$endIndex]}" = "$activeHelpMarker" ];then
-      __skopeo_debug "ActiveHelp found: $comp"
-      comp="${comp[$startIndex,-1]}"
+    # Check if this is an active_help statement (i.e., prefixed with $active_help_marker)
+    if [ "${comp[1,$end_index]}" = "$active_help_marker" ];then
+      __skopeo_debug "Active_help found: $comp"
+      comp="${comp[$start_index,-1]}"
       if [ -n "$comp" ]; then
         compadd -x "${comp}"
-        __skopeo_debug "ActiveHelp will need delimiter"
-        hasActiveHelp=1
+        __skopeo_debug "Active_help will need delimiter"
+        has_active_help=1
       fi
 
       continue
@@ -116,47 +116,47 @@ _skopeo() {
 
       __skopeo_debug "Adding completion: ${comp}"
       completions+=${comp}
-      lastComp=$comp
+      last_comp=$comp
     fi
   done < <(printf "%s\n" "${out[@]}")
 
-  # Add a delimiter after the activeHelp statements, but only if:
-  # - there are completions following the activeHelp statements, or
-  # - file completion will be performed (so there will be choices after the activeHelp)
-  if [ $hasActiveHelp -eq 1 ]; then
-    if [ ${#completions} -ne 0 ] || [ $((directive & shellCompDirectiveNoFileComp)) -eq 0 ]; then
-      __skopeo_debug "Adding activeHelp delimiter"
+  # Add a delimiter after the active_help statements, but only if:
+  # - there are completions following the active_help statements, or
+  # - file completion will be performed (so there will be choices after the active_help)
+  if [ $has_active_help -eq 1 ]; then
+    if [ ${#completions} -ne 0 ] || [ $((directive & shell_comp_directive_no_file_comp)) -eq 0 ]; then
+      __skopeo_debug "Adding active_help delimiter"
       compadd -x "--"
-      hasActiveHelp=0
+      has_active_help=0
     fi
   fi
 
-  if [ $((directive & shellCompDirectiveNoSpace)) -ne 0 ]; then
+  if [ $((directive & shell_comp_directive_no_space)) -ne 0 ]; then
     __skopeo_debug "Activating nospace."
-    noSpace="-S ''"
+    no_space="-S ''"
   fi
 
-  if [ $((directive & shellCompDirectiveKeepOrder)) -ne 0 ]; then
+  if [ $((directive & shell_comp_directive_keep_order)) -ne 0 ]; then
     __skopeo_debug "Activating keep order."
-    keepOrder="-V"
+    keep_order="-V"
   fi
 
-  if [ $((directive & shellCompDirectiveFilterFileExt)) -ne 0 ]; then
+  if [ $((directive & shell_comp_directive_filter_file_ext)) -ne 0 ]; then
     # File extension filtering
-    local filteringCmd
-    filteringCmd='_files'
+    local filtering_cmd
+    filtering_cmd='_files'
     for filter in ${completions[@]}; do
       if [ ${filter[1]} != '*' ]; then
         # zsh requires a glob pattern to do file filtering
         filter="\*.$filter"
       fi
-      filteringCmd+=" -g $filter"
+      filtering_cmd+=" -g $filter"
     done
-    filteringCmd+=" ${flagPrefix}"
+    filtering_cmd+=" ${flag_prefix}"
 
-    __skopeo_debug "File filtering command: $filteringCmd"
-    _arguments '*:filename:'"$filteringCmd"
-  elif [ $((directive & shellCompDirectiveFilterDirs)) -ne 0 ]; then
+    __skopeo_debug "File filtering command: $filtering_cmd"
+    _arguments '*:filename:'"$filtering_cmd"
+  elif [ $((directive & shell_comp_directive_filter_dirs)) -ne 0 ]; then
     # File completion for directories only
     local subdir
     subdir="${completions[1]}"
@@ -168,7 +168,7 @@ _skopeo() {
     fi
 
     local result
-    _arguments '*:dirname:_files -/'" ${flagPrefix}"
+    _arguments '*:dirname:_files -/'" ${flag_prefix}"
     result=$?
     if [ -n "$subdir" ]; then
       popd >/dev/null 2>&1
@@ -176,7 +176,7 @@ _skopeo() {
     return $result
   else
     __skopeo_debug "Calling _describe"
-    if eval _describe $keepOrder "completions" completions $flagPrefix $noSpace; then
+    if eval _describe $keep_order "completions" completions $flag_prefix $no_space; then
       __skopeo_debug "_describe found some completions"
 
       # Return the success of having called _describe
@@ -184,7 +184,7 @@ _skopeo() {
     else
       __skopeo_debug "_describe did not find completions."
       __skopeo_debug "Checking if we should do file completion."
-      if [ $((directive & shellCompDirectiveNoFileComp)) -ne 0 ]; then
+      if [ $((directive & shell_comp_directive_no_file_comp)) -ne 0 ]; then
         __skopeo_debug "deactivating file completion"
 
         # We must return an error code here to let zsh know that there were no
@@ -198,7 +198,7 @@ _skopeo() {
 
         # We must return the result of this command, so it must be the
         # last command, or else we must store its result to return it.
-        _arguments '*:filename:_files'" ${flagPrefix}"
+        _arguments '*:filename:_files'" ${flag_prefix}"
       fi
     fi
   fi
@@ -208,3 +208,4 @@ _skopeo() {
 if [ "$funcstack[1]" = "_skopeo" ]; then
   _skopeo
 fi
+
