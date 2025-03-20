@@ -136,8 +136,11 @@ for keymap in emacs vicmd viins; do
 
   case "$TERM_PROGRAM" in
   Apple_Terminal) bindkey -M $keymap "^[b" dirhistory_zle_dirhistory_back ;; # Terminal.app
-  iTerm.app) bindkey -M $keymap "^[^[[D" dirhistory_zle_dirhistory_back ;;   # iTerm2
   ghostty) bindkey -M $keymap "^[b" dirhistory_zle_dirhistory_back ;;        # ghostty
+  iTerm.app)
+    bindkey -M $keymap "^[^[[D" dirhistory_zle_dirhistory_back
+    bindkey -M $keymap "^[b" dirhistory_zle_dirhistory_back
+    ;;
   esac
 
   if (( ${+terminfo[kcub1]} )); then
@@ -152,8 +155,11 @@ for keymap in emacs vicmd viins; do
 
   case "$TERM_PROGRAM" in
   Apple_Terminal) bindkey -M $keymap "^[f" dirhistory_zle_dirhistory_future ;; # Terminal.app
-  iTerm.app) bindkey -M $keymap "^[^[[C" dirhistory_zle_dirhistory_future ;;   # iTerm2
   ghostty) bindkey -M $keymap "^[f" dirhistory_zle_dirhistory_future ;;        # ghostty
+  iTerm.app)
+    bindkey -M $keymap "^[^[[C" dirhistory_zle_dirhistory_future
+    bindkey -M $keymap "^[f" dirhistory_zle_dirhistory_future
+    ;;
   esac
 
   if (( ${+terminfo[kcuf1]} )); then
