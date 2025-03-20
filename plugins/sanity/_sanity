@@ -1,0 +1,42 @@
+#compdef sanity
+#autoload
+
+# In order to make this work, you will need to have Sanity installed.
+# https://www.sanity.io/
+
+local -a _1st_arguments
+_1st_arguments=(
+'build:Builds the current Sanity configuration to a static bundle.'
+'check:Performs a Sanity check.'
+'configcheck:Checks if the required configuration files for plugins exists and are up to date.'
+'cors:Interact with CORS-entries for your project.'
+'dataset:Interact with datasets in your project.'
+'debug:Gathers information on Sanity environment.'
+'deploy:Deploys a statically built Sanity studio.'
+'docs:Opens the Sanity documentation.'
+'documents:Interact with documents in your project.'
+'exec:Runs a script in Sanity context.'
+'graphql:Interact with GraphQL APIs.'
+'help:Displays help information about Sanity.'
+'hook:Interact with hooks in your project.'
+'init:Initialize a new Sanity project or plugin.'
+'install:Installs a Sanity plugin to the current Sanity configuration.'
+'login:Authenticates against the Sanity.io API.'
+'logout:Logs out of the Sanity.io session.'
+'manage:Opens the Sanity project management UI.'
+'projects:Interact with projects connected to your logged in user.'
+'start:Starts a web server for the Content Studio.'
+'undeploy:Removes the deployed studio from <hostname>.sanity.studio.'
+'uninstall:Removes a Sanity plugin from the current Sanity configuration.'
+'upgrade:Upgrades all (or some) Sanity modules to their latest versions.'
+'users:Manage users of your project.'
+'versions:Shows the installed versions of Sanity CLI and core components.'
+)
+
+_arguments -C '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+    _describe -t commands "sanity subcommand" _1st_arguments
+    return
+fi
+
