@@ -137,6 +137,7 @@ for keymap in emacs vicmd viins; do
   case "$TERM_PROGRAM" in
   Apple_Terminal) bindkey -M $keymap "^[b" dirhistory_zle_dirhistory_back ;; # Terminal.app
   iTerm.app) bindkey -M $keymap "^[^[[D" dirhistory_zle_dirhistory_back ;;   # iTerm2
+  ghostty) bindkey -M $keymap "^[b" dirhistory_zle_dirhistory_back ;;        # ghostty
   esac
 
   if (( ${+terminfo[kcub1]} )); then
@@ -152,6 +153,7 @@ for keymap in emacs vicmd viins; do
   case "$TERM_PROGRAM" in
   Apple_Terminal) bindkey -M $keymap "^[f" dirhistory_zle_dirhistory_future ;; # Terminal.app
   iTerm.app) bindkey -M $keymap "^[^[[C" dirhistory_zle_dirhistory_future ;;   # iTerm2
+  ghostty) bindkey -M $keymap "^[f" dirhistory_zle_dirhistory_future ;;        # ghostty
   esac
 
   if (( ${+terminfo[kcuf1]} )); then
@@ -200,6 +202,7 @@ for keymap in emacs vicmd viins; do
   case "$TERM_PROGRAM" in
   Apple_Terminal) bindkey -M $keymap "^[[A" dirhistory_zle_dirhistory_up ;;  # Terminal.app
   iTerm.app) bindkey -M $keymap "^[^[[A" dirhistory_zle_dirhistory_up ;;     # iTerm2
+  ghostty) bindkey -M $keymap "^[[1;3A" dirhistory_zle_dirhistory_up ;;      # ghostty
   esac
 
   if (( ${+terminfo[kcuu1]} )); then
@@ -215,6 +218,7 @@ for keymap in emacs vicmd viins; do
   case "$TERM_PROGRAM" in
   Apple_Terminal) bindkey -M $keymap "^[[B" dirhistory_zle_dirhistory_down ;;  # Terminal.app
   iTerm.app) bindkey -M $keymap "^[^[[B" dirhistory_zle_dirhistory_down ;;     # iTerm2
+  ghostty) bindkey -M $keymap "^[[1;3B" dirhistory_zle_dirhistory_down ;;      # ghostty
   esac
 
   if (( ${+terminfo[kcud1]} )); then
