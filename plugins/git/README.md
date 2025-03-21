@@ -78,7 +78,7 @@ plugins=(... git)
 | `gcs`                  | `git commit -S`                                                                                                                 |
 | `gcss`                 | `git commit -S -s`                                                                                                              |
 | `gcssm`                | `git commit -S -s -m`                                                                                                           |
-| `gcf`                  | `git config --list`                                                                                                             |
+| `gcfls`                | `git config --list`                                                                                                             |
 | `gdct`                 | `git describe --tags $(git rev-list --tags --max-count=1)`                                                                      |
 | `gd`                   | `git diff`                                                                                                                      |
 | `gdca`                 | `git diff --cached`                                                                                                             |
@@ -236,7 +236,7 @@ receive further support.
 | Alias    | Command                                                   | Modification                                              |
 | :------- | :-------------------------------------------------------- | :-------------------------------------------------------- |
 | `gap`    | `git add --patch`                                         | New alias: `gapa`.                                        |
-| `gcl`    | `git config --list`                                       | New alias: `gcf`.                                         |
+| `gcl`    | `git config --list`                                       | New alias: ~~`gcf`~~ `gcfls`.                             |
 | `gdc`    | `git diff --cached`                                       | New alias: `gdca`.                                        |
 | `gdt`    | `git difftool`                                            | No replacement.                                           |
 | `ggpull` | `git pull origin $(current_branch)`                       | New alias: `ggl`. (`ggpull` still exists for now though.) |
