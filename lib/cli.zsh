@@ -228,7 +228,7 @@ function _omz::plugin::view {
   fi
 
   local plugin_source
-  for plugin_source in "$ZSH_CUSTOM/plugins/$1/$1.plugin.zsh" "$ZSH/plugins/$1/$1.plugin.zsh"; do
+  for plugin_source in "$ZSH_CUSTOM/plugins/$1/$1.plugin.zsh" "$ZSH_CUSTOM/plugins/$1/_$1" "$ZSH/plugins/$1/$1.plugin.zsh" "$ZSH/plugins/$1/_$1"; do
     if [[ -f "$plugin_source" ]]; then
       # If being piped, just cat the source
       if [[ ! -t 1 ]]; then
