@@ -41,12 +41,12 @@ function _omz {
         refs=("${(@f)$(builtin cd -q "$ZSH"; command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
       plugin) subcmds=(
-        'cat:Show plugin source'
         'disable:Disable plugin(s)'
         'enable:Enable plugin(s)'
         'info:Get plugin information'
         'list:List plugins'
         'load:Load plugin(s)'
+        'view:Show plugin source'
       )
         _describe 'command' subcmds ;;
       pr) subcmds=('clean:Delete all Pull Request branches' 'test:Test a Pull Request')
@@ -204,12 +204,12 @@ Usage: ${(j: :)${(s.::.)0#_}} <command> [options]
 
 Available commands:
 
-  cat <plugin>     Show the source of a plugin
   disable <plugin> Disable plugin(s)
   enable <plugin>  Enable plugin(s)
   info <plugin>    Get information of a plugin
   list             List all available Oh My Zsh plugins
   load <plugin>    Load plugin(s)
+  view <plugin>    Show the source of a plugin
 
 EOF
     return 1
@@ -221,7 +221,7 @@ EOF
   $0::$command "$@"
 }
 
-function _omz::plugin::cat {
+function _omz::plugin::view {
   if [[ -z "$1" ]]; then
     echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <plugin>"
     return 1
