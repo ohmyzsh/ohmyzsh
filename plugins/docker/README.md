@@ -39,6 +39,10 @@ following setting. See https://github.com/ohmyzsh/ohmyzsh/issues/11789 for more 
 zstyle ':omz:plugins:docker' legacy-completion yes
 ```
 
+### For Podman's Docker wrapper users
+
+If you use Podman's Docker wrapper, you need to enable legacy completion. See above section.
+
 ## Aliases
 
 | Alias   | Command                       | Description                                                                              |
