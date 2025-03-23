@@ -51,12 +51,14 @@ alias-finder() {
   done
 }
 
+# add hook to run alias-finder before each command
 preexec_alias-finder() {
-  # TODO: Remove backward compatibility (other than zstyle form)
-  zstyle -t ':omz:plugins:alias-finder' autoload && alias-finder $1 || if [[ $ZSH_ALIAS_FINDER_AUTOMATIC = true ]]; then
-    alias-finder $1
-  fi
+  alias-finder "$1"
 }
-
-autoload -U add-zsh-hook
-add-zsh-hook preexec preexec_alias-finder
+if zstyle -t ':omz:plugins:alias-finder' autoload ; then
+  autoload -Uz alias-finder
+  add-zsh-hook preexec preexec_alias-finder
+elif [[ $ZSH_ALIAS_FINDER_AUTOMATIC = true ]]; then # TODO: remove this legacy style support
+  autoload -Uz alias-finder
+  add-zsh-hook preexec preexec_alias-finder
+fi
