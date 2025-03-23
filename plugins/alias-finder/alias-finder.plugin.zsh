@@ -1,19 +1,18 @@
 alias-finder() {
-  local cmd=" " exact="" longer="" cheaper="" wordEnd="'{0,1}$" finder="" filter=""
+  local cmd=" " exact=false longer=false cheaper=false wordEnd="'?$" finder="" filter=""
 
-  # build command and options
+  # setup options
+  # XXX: This logic has flaw. If user enable options with zstyle, there's no way to disable it.
+  #      It's because same function is used for autoload hook and manual execution.
+  #      I believe manual execution is very minor in use, so I'll keep it as is for now.
   for c in "$@"; do
     case $c in
-      # TODO: Remove backward compatibility (other than zstyle form)
-      # set options if exist
       -e|--exact) exact=true;;
       -l|--longer) longer=true;;
       -c|--cheaper) cheaper=true;;
-      # concatenate cmd
       *) cmd="$cmd$c " ;;
     esac
   done
-
   zstyle -t ':omz:plugins:alias-finder' longer && longer=true
   zstyle -t ':omz:plugins:alias-finder' exact && exact=true
   zstyle -t ':omz:plugins:alias-finder' cheaper && cheaper=true
