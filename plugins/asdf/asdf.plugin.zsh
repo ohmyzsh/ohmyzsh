@@ -10,5 +10,4 @@ if (( $+commands[asdf] )); then
   autoload -Uz _asdf
   compdef _asdf asdf
 
-  return
 fi
