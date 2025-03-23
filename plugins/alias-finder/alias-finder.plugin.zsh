@@ -38,9 +38,9 @@ alias-finder() {
 
     alias | grep -E "$filter" | grep -E "=$finder"
 
-    if [[ $exact == true ]]; then
-      break # because exact case is only one
-    elif [[ $longer = true ]]; then
+    $exact && break # because exact case is only one
+
+    if [[ $longer = true ]]; then
       break # because above grep command already found every longer aliases during first cycle
     fi
 
