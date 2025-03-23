@@ -24,9 +24,7 @@ alias-finder() {
   ## - add escaping character to special characters
   cmd=$(echo -n "$cmd" | tr '\n' ' ' | xargs | tr -s '[:space:]' | sed 's/[].\|$(){}?+*^[]/\\&/g')
 
-  if [[ $longer == true ]]; then
-    wordEnd="" # remove wordEnd to find longer aliases
-  fi
+  $longer && wordEnd=".*$"
 
   # find with alias and grep, removing last word each time until no more words
   while [[ $cmd != "" ]]; do
