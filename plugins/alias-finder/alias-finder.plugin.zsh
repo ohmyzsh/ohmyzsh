@@ -36,7 +36,11 @@ alias-finder() {
     # make filter to find only shorter results than current cmd
     if [[ $cheaper == true ]]; then
       cmdLen=$(echo -n "$cmd" | wc -c)
-      filter="^'{0,1}.{0,$((cmdLen - 1))}="
+      if [[ $cmdLen -le 1 ]]; then
+        return
+      fi
+
+      filter="^'?.{1,$((cmdLen - 1))}'?=" # some aliases is surrounded by single quotes
     fi
 
     alias | grep -E "$filter" | grep -E "=$finder"
