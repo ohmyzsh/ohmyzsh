@@ -39,10 +39,7 @@ alias-finder() {
     alias | grep -E "$filter" | grep -E "=$finder"
 
     $exact && break # because exact case is only one
-
-    if [[ $longer = true ]]; then
-      break # because above grep command already found every longer aliases during first cycle
-    fi
+    $longer && break # because above grep command already found every longer aliases during first cycle
 
     cmd=$(sed -E 's/ {0,}[^ ]*$//' <<< "$cmd") # remove last word
   done
