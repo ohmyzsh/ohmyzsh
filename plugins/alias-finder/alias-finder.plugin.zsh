@@ -1,5 +1,5 @@
 alias-finder() {
-  local cmd=" " exact=false longer=false cheaper=false wordEnd="'?$" finder="" filter=""
+  local cmd=" " exact=false longer=false cheaper=false wordStart="^'?" wordEnd="'?$" finder="" filter=""
 
   # setup options
   # XXX: This logic has flaw. If user enable options with zstyle, there's no way to disable it.
@@ -28,7 +28,7 @@ alias-finder() {
 
   # find with alias and grep, removing last word each time until no more words
   while [[ $cmd != "" ]]; do
-    finder="'{0,1}$cmd$wordEnd"
+    finder="$wordStart$cmd$wordEnd"
 
     # make filter to find only shorter results than current cmd
     if [[ $cheaper == true ]]; then
