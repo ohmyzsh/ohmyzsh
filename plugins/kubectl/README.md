@@ -27,6 +27,7 @@ plugins=(... kubectl)
 |          |                                                    | **General aliases**                                                                              |
 | kdel     | `kubectl delete`                                   | Delete resources by filenames, stdin, resources and names, or by resources and label selector    |
 | kdelf    | `kubectl delete -f`                                | Delete a pod using the type and name specified in -f argument                                    |
+| kdelk    | `kubectl delete -k`                                | Delete all resources defined in the kustomization                                                |
 |          |                                                    | **Pod management**                                                                               |
 | kgp      | `kubectl get pods`                                 | List all pods in ps output format                                                                |
 | kgpl     | `kgp -l`                                           | Get pods by label. Example: `kgpl "app=myapp" -n myns`                                           |
