@@ -129,6 +129,11 @@ plugins=(... kubectl)
 | kej      | `kubectl edit job`                                 | Edit a Job in details                                                                            |
 | kdj      | `kubectl describe job`                             | Describe the Job                                                                                 |
 | kdelj    | `kubectl delete job`                               | Delete the Job                                                                                   |
+|          |                                                    | **Certificate management**                                                                               |
+| kgcert   | `kubectl get certificate`                          | List Certificate in the namespace                                                          |
+| kgcerta  | `kubectl get certificate --all-namespaces`         | List Certificates in all namespaces                                                                            |
+| kdcert   | `kubectl describe certificate`                     | Describe the Certificate                                                                                 |
+| kdelcert | `kubectl delete certificate`                       | Delete the Certificate                                                                                   |
 
 ## Wrappers
 
