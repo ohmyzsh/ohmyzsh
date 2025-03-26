@@ -31,7 +31,7 @@ The plugin also supports the following:
 
 | Variable                            | Description                                                                                                                    |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `ZSH_TMUX_AUTOREFRESH`              | Automatically refresh global environments (default: `true`)                                                                    |
+| `ZSH_TMUX_AUTOREFRESH`              | Automatically refresh global environments (default: `false`)                                                                   |
 | `ZSH_TMUX_AUTOSTART`                | Automatically starts tmux (default: `false`)                                                                                   |
 | `ZSH_TMUX_AUTOSTART_ONCE`           | Autostart only if tmux hasn't been started previously (default: `true`)                                                        |
 | `ZSH_TMUX_AUTOCONNECT`              | Automatically connect to a previous session if it exits (default: `true`)                                                      |
