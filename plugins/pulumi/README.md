@@ -3,26 +3,16 @@
 This is an **Oh My Zsh plugin** for the **Pulumi CLI**, providing:
 - 🚀 Short, intuitive aliases for common Pulumi commands
 - 🎯 Auto-completion support for Pulumi
-- 🔥 A **fuzzy stack selector** using `fzf`
 
 ## 📦 Installation
 
-### **Option 1: Manual Installation**
-1. Clone this repository into your Oh My Zsh custom plugins folder:
-   ```bash
-   git clone https://github.com/YOUR_GITHUB_USERNAME/zsh-pulumi ~/.oh-my-zsh/custom/plugins/pulumi
-   ```
-2. Enable the plugin in `~/.zshrc` by adding `pulumi` to your plugins list:
-   ```zsh
-   plugins=(... pulumi)
-   ```
-3. Restart your shell or run:
-   ```bash
-   source ~/.zshrc
-   ```
+To use this plugin, add `pulumi` to the plugins array in your `.zshrc` file:  
 
-### **Option 2: Submit to Oh My Zsh**
-(Once merged into Oh My Zsh, users can just add `pulumi` to their `.zshrc` plugins list.)
+```zsh
+plugins=(... pulumi)
+```
+Then run ```source ~/.zshrc```
+
 
 ---
 
