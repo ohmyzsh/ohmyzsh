@@ -47,7 +47,7 @@ alias-finder() {
 
     if [[ $exact == true ]]; then
       break # because exact case is only one
-    elif [[ $longer = true ]]; then
+    elif [[ $longer == true ]]; then
       break # because above grep command already found every longer aliases during first cycle
     fi
 
