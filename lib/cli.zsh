@@ -193,7 +193,7 @@ EOF
     return 1
   fi
 
-  "$ZSH/tools/changelog.sh" "$version" "${2:-}" "$format"
+  ZSH="$ZSH" command zsh -f "$ZSH/tools/changelog.sh" "$version" "${2:-}" "$format"
 }
 
 function _omz::plugin {

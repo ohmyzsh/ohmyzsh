@@ -254,7 +254,7 @@ if LANG= git pull --quiet --rebase $remote $branch; then
 
     # Print changelog to the terminal
     if [[ $interactive == true && $verbose_mode == default ]]; then
-      "$ZSH/tools/changelog.sh" HEAD "$last_commit"
+      ZSH="$ZSH" command zsh -f "$ZSH/tools/changelog.sh" HEAD "$last_commit"
     fi
 
     if [[ $verbose_mode != silent ]]; then
