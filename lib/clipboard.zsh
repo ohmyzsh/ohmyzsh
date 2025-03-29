@@ -84,6 +84,17 @@ function detect-clipboard() {
   elif [ -n "${TMUX:-}" ] && (( ${+commands[tmux]} )); then
     function clipcopy() { tmux load-buffer "${1:--}"; }
     function clippaste() { tmux save-buffer -; }
+  elif [[ "$TERM" == "xterm"* || "$TERM" == "screen"* || "$TERM" == "tmux"* ]]; then
+    # OSC 52 support
+    function clipcopy() {
+      local content_tocopy
+      content_tocopy=$(cat "${1:-/dev/stdin}" | base64 | tr -d '\n')
+      printf "\033]52;c;%s\a" "$content_tocopy" > /dev/tty
+    }
+    function clippaste() {
+      echo "OSC 52 does not support pasting from the clipboard."
+      return 1
+    }
   else
     function _retry_clipboard_detection_or_fail() {
       local clipcmd="${1}"; shift
