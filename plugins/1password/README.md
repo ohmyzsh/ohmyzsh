@@ -33,6 +33,30 @@ service you want to get.
 > - [Get started with 1Password CLI 2: Sign in](https://developer.1password.com/docs/cli/get-started#sign-in)
 > - [Sign in to your 1Password account manually](https://developer.1password.com/docs/cli/sign-in-manually)
 
+## Secrets Injection
+
+This plugin wraps specific commands (e.g., terraform, env) with the op run command from 1Password, automatically injecting any relevant secrets already defined in your environment variables. This ensures seamless integration with 1Password to manage sensitive information without needing .env files.
+
+### Key Features
+
+- Automatic 1Password Integration: The plugin automatically loads secrets from your 1Password vaults into the environment for supported commands.
+- Toggle Activation: Easily enable or disable the wrapper with a keybinding (Ctrl+O by default).
+- Command-Specific Behavior: Each supported command (e.g., terraform, env) is wrapped with `op run`, and any secrets defined in your environment are automatically passed into the subprocess.
+
+### Basic Setup
+
+```zsh
+# setup any commands you wish to wrap
+➜  ~ export OP_RUN_WRAPPER_CMDS=(env)
+# define a secret and it's path inside your 1Password vault
+➜  ~ export AWS_ACCESS_KEY_ID="op://vault/secret/atrribute" 
+# enabled injection mode with Ctrl+O, call wrapped command `env` and see result
+(🔑) ➜  ~ env | grep AWS_ACCESS_KEY_ID                      
+AWS_ACCESS_KEY_ID=<concealed by 1Password>
+```
+
+For more information on the `op run` command, check out the official [1Password CLI documentation](https://developer.1password.com/docs/cli/secrets-environment-variables).
+
 ## Requirements
 
 - [1Password CLI 2](https://developer.1password.com/docs/cli/get-started#install)
