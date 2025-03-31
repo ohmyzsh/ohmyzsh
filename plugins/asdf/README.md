@@ -34,6 +34,11 @@ asdf set nodejs latest
 asdf set -u nodejs 16.5.0
 ```
 
+## Backward Compatibility
+
+`asdf` has significantly changed since 0.16.0. The current implementation doesn't along with older versions. **If you're using 0.15.0 or older version, please follow upgrade guide in official page**: https://asdf-vm.com/guide/upgrading-to-v0-16.html.
+
+
 ## Maintainer
 
 - [@RobLoach](https://github.com/RobLoach)
