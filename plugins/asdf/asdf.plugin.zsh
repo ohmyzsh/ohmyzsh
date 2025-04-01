@@ -1,7 +1,7 @@
 (( ! $+commands[asdf] )) && return
 
 # TODO(roeniss): 2025-03-31 - remove this warning and related README section after enough grace period.
-if [[ -d "$HOME/.asdf" ]]; then
+if ! asdf --version 2>/dev/null | grep -q "asdf version"; then
   echo "[omz] You have enabled asdf plugin, but your asdf version seems too low. Please upgrade to at least 0.16.0 to use completion. See omz asdf plugin README for more details."
 fi
 
