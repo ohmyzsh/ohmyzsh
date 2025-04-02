@@ -226,7 +226,23 @@ if [[ -n "$ZSH_THEME" ]]; then
   elif is_theme "$ZSH/themes" "$ZSH_THEME"; then
     source "$ZSH/themes/$ZSH_THEME.zsh-theme"
   else
-    echo "[oh-my-zsh] theme '$ZSH_THEME' not found"
+    echo "[oh-my-zsh] Theme '$ZSH_THEME' was not found, using default theme!"
+    if is_theme "$ZSH_CUSTOM"; then
+      source "$ZSH_CUSTOM/robbyrussell.zsh-theme"
+    elif is_theme "$ZSH_CUSTOM/themes"; then
+      source "$ZSH_CUSTOM/themes/robbyrussell.zsh-theme"
+    elif is_theme "$ZSH/themes"; then
+      source "$ZSH/themes/robbyrussell.zsh-theme"
+    else
+      echo "oh-my-zsh] The default theme (robbyrussell) was not found, redownloading it!"
+      if ! command -v curl &> /dev/null; then
+        sudo wget -qO $ZSH/themes/robbyrussell.zsh-theme https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/refs/heads/master/themes/robbyrussell.zsh-theme
+        source "$ZSH/themes/robbyrussell.zsh-theme"
+      else
+        sudo curl -s -o $ZSH/themes/robbyrussell.zsh-theme https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/refs/heads/master/themes/robbyrussell.zsh-theme
+        source "$ZSH/themes/robbyrussell.zsh-theme"
+      fi
+    fi
   fi
 fi
 
