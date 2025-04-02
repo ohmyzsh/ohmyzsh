@@ -239,7 +239,7 @@ if [[ -n "$ZSH_THEME" ]]; then
     elif is_default_theme "$ZSH/themes"; then
       source "$ZSH/themes/robbyrussell.zsh-theme"
     else
-      echo "oh-my-zsh] The default theme (robbyrussell) was not found, redownloading it!"
+      echo "[oh-my-zsh] The default theme (robbyrussell) was not found, redownloading it!"
       if ! command -v curl &> /dev/null; then
         wget -qO $ZSH/themes/robbyrussell.zsh-theme https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/refs/heads/master/themes/robbyrussell.zsh-theme
         source "$ZSH/themes/robbyrussell.zsh-theme"
