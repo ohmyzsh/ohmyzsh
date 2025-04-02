@@ -220,7 +220,7 @@ is_theme() {
 
 is_default_theme() {
   local base_dir=$1
-  builtin test -f $base_dir
+  builtin test -d $base_dir
 }
 
 if [[ -n "$ZSH_THEME" ]]; then
@@ -232,10 +232,19 @@ if [[ -n "$ZSH_THEME" ]]; then
     source "$ZSH/themes/$ZSH_THEME.zsh-theme"
   else
     echo "[oh-my-zsh] Theme '$ZSH_THEME' was not found, using default theme!"
-    if is_default_theme "$ZSH_CUSTOM"; then
-      source "$ZSH_CUSTOM/robbyrussell.zsh-theme"
-    elif is_default_theme "$ZSH_CUSTOM/themes"; then
-      source "$ZSH_CUSTOM/themes/robbyrussell.zsh-theme"
+    if is_default_theme "$ZSH_CUSTOM" && ! is_theme "$ZSH_THEME" "robbyrussell"; then
+      if is_theme "$ZSH_CUSTOM/themes/" "robbyrussell"; then
+        source "$ZSH_CUSTOM/themes/robbyrussell.zsh-theme"
+      else
+        echo "[oh-my-zsh] The default theme (robbyrussell) was not found, redownloading it!"
+        if ! command -v curl &> /dev/null; then
+          wget -qO $ZSH_CUSTOM/themes/robbyrussell.zsh-theme https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/refs/heads/master/themes/robbyrussell.zsh-theme
+          source "$ZSH_CUSTOM/robbyrussell.zsh-theme"
+        else
+          curl -s -o $ZSH_CUSTOM/themes/robbyrussell.zsh-theme https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/refs/heads/master/themes/robbyrussell.zsh-theme
+          source "$ZSH_CUSTOM/themes/robbyrussell.zsh-theme"
+        fi
+    fi
     elif is_default_theme "$ZSH/themes"; then
       source "$ZSH/themes/robbyrussell.zsh-theme"
     else
