@@ -16,7 +16,7 @@ function theme {
         elif [[ -f "$ZSH/themes/robbyrussell.zsh-theme" ]]; then
             source "$ZSH/themes/robbyrussell.zsh-theme"
         else
-        echo "$0: The default theme (robbyrussell) also does not exist!
+        echo "$0: The default theme (robbyrussell) also does not exist!"
         return 1
     fi
 }
