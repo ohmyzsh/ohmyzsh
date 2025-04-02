@@ -8,15 +8,7 @@ function theme {
     elif [[ -f "$ZSH/themes/$1.zsh-theme" ]]; then
         source "$ZSH/themes/$1.zsh-theme"
     else
-        echo "$0: Theme '$1' not found, using default theme!"
-        if [[ -f "$ZSH_CUSTOM/robbyrussell.zsh-theme" ]]; then
-            source "$ZSH_CUSTOM/robbyrussell.zsh-theme"
-        elif [[ -f "$ZSH_CUSTOM/themes/robbyrussell.zsh-theme" ]]; then
-            source "$ZSH_CUSTOM/themes/robbyrussell.zsh-theme"
-        elif [[ -f "$ZSH/themes/robbyrussell.zsh-theme" ]]; then
-            source "$ZSH/themes/robbyrussell.zsh-theme"
-        else
-        echo "$0: The default theme (robbyrussell) also does not exist!"
+        echo "$0: Theme '$1' not found"
         return 1
     fi
 }
