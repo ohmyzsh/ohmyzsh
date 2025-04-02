@@ -218,6 +218,11 @@ is_theme() {
   builtin test -f $base_dir/$name.zsh-theme
 }
 
+is_default_theme() {
+  local base_dir=$1
+  builtin test -f $base_dir
+}
+
 if [[ -n "$ZSH_THEME" ]]; then
   if is_theme "$ZSH_CUSTOM" "$ZSH_THEME"; then
     source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
@@ -227,11 +232,11 @@ if [[ -n "$ZSH_THEME" ]]; then
     source "$ZSH/themes/$ZSH_THEME.zsh-theme"
   else
     echo "[oh-my-zsh] Theme '$ZSH_THEME' was not found, using default theme!"
-    if is_theme "$ZSH_CUSTOM"; then
+    if is_default_theme "$ZSH_CUSTOM"; then
       source "$ZSH_CUSTOM/robbyrussell.zsh-theme"
-    elif is_theme "$ZSH_CUSTOM/themes"; then
+    elif is_default_theme "$ZSH_CUSTOM/themes"; then
       source "$ZSH_CUSTOM/themes/robbyrussell.zsh-theme"
-    elif is_theme "$ZSH/themes"; then
+    elif is_default_theme "$ZSH/themes"; then
       source "$ZSH/themes/robbyrussell.zsh-theme"
     else
       echo "oh-my-zsh] The default theme (robbyrussell) was not found, redownloading it!"
