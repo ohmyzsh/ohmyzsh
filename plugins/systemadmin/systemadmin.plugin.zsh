@@ -94,7 +94,13 @@ function req20() {
 
 # top20 of Using tcpdump port 80 access to view
 function http20() {
-  sudo tcpdump -i eth0 -tnn dst port 80 -c 1000 | awk -F"." '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -nr | head -n 20
+  sudo tcpdump -i $(ip route get 1.1.1.1 \
+    | awk '/^1.1.1.1 via / {print $5}') -tnn dst port 80 -c 1000 \
+    | awk -F"." '{print $1"."$2"."$3"."$4}' \
+    | sort \
+    | uniq -c \
+    | sort -nr \
+    | head -n 20
 }
 
 # top20 of Find time_wait connection
