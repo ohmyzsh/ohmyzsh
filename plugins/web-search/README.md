@@ -53,6 +53,7 @@ Available search contexts are:
 | `chatgpt`             | `https://chatgpt.com/?q=`                       |
 | `reddit`              | `https://www.reddit.com/search/?q=`             |
 | `ppai`                | `https://www.perplexity.ai/search/new?q=`       |
+| `mdn`                 | `https://developer.mozilla.org/search?q=`       |
 
 Also there are aliases for bang-searching DuckDuckGo:
 
