@@ -1,4 +1,7 @@
-(( ! $+commands[asdf] )) && return
+# Only continue if .asdf directory exists (manual install) or fallback logic can apply
+if [[ ! -d "$HOME/.asdf" ]]; then
+  return
+fi
 
 export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
 path=("$ASDF_DATA_DIR/shims" $path)
