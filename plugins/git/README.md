@@ -90,7 +90,7 @@ plugins=(... git)
 | `gdnolock`             | `git diff $@ ":(exclude)package-lock.json" ":(exclude)\*.lock"`                                                                 |
 | `gdt`                  | `git diff-tree --no-commit-id --name-only -r`                                                                                   |
 | `gf`                   | `git fetch`                                                                                                                     |
-| `gfa`                  | `git fetch --all --tags --prune`                                                                                                       |
+| `gfa`                  | `git fetch --all --tags --prune --prune-tags --jobs=10`                                                                         |
 | `gfo`                  | `git fetch origin`                                                                                                              |
 | `gg`                   | `git gui citool`                                                                                                                |
 | `gga`                  | `git gui citool --amend`                                                                                                        |

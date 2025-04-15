@@ -219,10 +219,17 @@ compdef _git gdnolock=git-diff
 
 alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gf='git fetch'
+
+# --prune-tags was added in git 2.17
 # --jobs=<n> was added in git 2.8
-is-at-least 2.8 "$git_version" \
-  && alias gfa='git fetch --all --tags --prune --jobs=10' \
-  || alias gfa='git fetch --all --tags --prune'
+if is-at-least 2.17 "$git_version"; then
+  alias gfa='git fetch --all --tags --prune --prune-tags --jobs=10'
+elif is-at-least 2.8 "$git_version"; then
+  alias gfa='git fetch --all --tags --prune --jobs=10'
+else
+  alias gfa='git fetch --all --tags --prune'
+fi
+
 alias gfo='git fetch origin'
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
