@@ -58,7 +58,7 @@ fi
   # docker version returns `Docker version 24.0.2, build cb74dfcd85`
   # with `s:,:` remove the comma after the version, and select third word of it
   if zstyle -t ':omz:plugins:docker' legacy-completion || \
-    ! is-at-least 23.0.0 ${${(s:,:z)"$(command docker --version)"}[3]}; then
+    ! is-at-least 23.0.0 ${${(s:,:z)"$(command docker --version 2>/dev/null)"}[3]}; then
         command cp "${0:h}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
       else
         command docker completion zsh | tee "$ZSH_CACHE_DIR/completions/_docker" > /dev/null
