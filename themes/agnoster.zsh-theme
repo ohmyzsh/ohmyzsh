@@ -40,7 +40,7 @@ case ${SOLARIZED_THEME:-dark} in
       CURRENT_DEFAULT_FG=${CURRENT_DEFAULT_FG:-'white'}
       ;;
     *)
-      CURRENT_FG=${CURRENT_FG:-black}
+      CURRENT_FG=${CURRENT_FG:-'black'}
       CURRENT_DEFAULT_FG=${CURRENT_DEFAULT_FG:-'default'}
       ;;
 esac
