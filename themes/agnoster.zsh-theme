@@ -34,7 +34,6 @@
 
 CURRENT_BG='NONE'
 
-# Set CURRENT_FG unless already set in .zshenv
 case ${SOLARIZED_THEME:-dark} in
     light)
       CURRENT_FG=${CURRENT_FG:-white}
