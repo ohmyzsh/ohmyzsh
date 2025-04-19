@@ -10,9 +10,12 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_procs" ]]; then
   _comps[procs]=_procs
 fi
 
-# Check which flag is supported by the installed version of procs
-if procs --help 2>&1 | grep -q -- "--gen-completion-out"; then
-  procs --gen-completion-out zsh >| "$ZSH_CACHE_DIR/completions/_procs" &|
-else
-  procs --completion-out zsh >| "$ZSH_CACHE_DIR/completions/_procs" &|
-fi
+{
+  autoload -Uz is-at-least
+  local _version=$(procs --version)
+  if is-at-least "0.14" "${_version#procs }"; then
+    procs --gen-completion-out zsh >| "$ZSH_CACHE_DIR/completions/_procs"
+  else
+    procs --completion-out zsh >| "$ZSH_CACHE_DIR/completions/_procs"
+  fi
+} &|
