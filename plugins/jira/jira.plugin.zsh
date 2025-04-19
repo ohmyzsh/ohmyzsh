@@ -8,6 +8,7 @@ jira                            Performs the default action
 jira new                        Opens a new Jira issue dialogue
 jira ABC-123                    Opens an existing issue
 jira ABC-123 m                  Opens an existing issue for adding a comment
+jira project ABC                Opens JIRA project summary
 jira dashboard [rapid_view]     Opens your JIRA dashboard
 jira mine                       Queries for your own issues
 jira tempo                      Opens your JIRA Tempo
@@ -15,6 +16,30 @@ jira reported [username]        Queries for issues reported by a user
 jira assigned [username]        Queries for issues assigned to a user
 jira branch                     Opens an existing issue matching the current branch name
 EOF
+}
+
+# If your branch naming convention deviates, you can partially override this plugin function
+# to determine the jira issue key based on your formatting.
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Customization#partially-overriding-an-existing-plugin
+function jira_branch() {
+  # Get name of the branch
+  issue_arg=$(git rev-parse --abbrev-ref HEAD)
+  # Strip prefixes like feature/ or bugfix/
+  issue_arg=${issue_arg##*/}
+  # Strip suffixes starting with _
+  issue_arg=(${(s:_:)issue_arg})
+  # If there is only one part, it means that there is a different delimiter. Try with -
+  if [[ ${#issue_arg[@]} = 1 && ${issue_arg} == *-* ]]; then
+    issue_arg=(${(s:-:)issue_arg})
+    issue_arg="${issue_arg[1]}-${issue_arg[2]}"
+  else
+    issue_arg=${issue_arg[1]}
+  fi
+  if [[ "${issue_arg:l}" = ${jira_prefix:l}* ]]; then
+    echo "${issue_arg}"
+  else
+    echo "${jira_prefix}${issue_arg}"
+  fi
 }
 
 function jira() {
@@ -64,6 +89,9 @@ function jira() {
   elif [[ "$action" == "mine" ]]; then
     echo "Opening my issues"
     open_command "${jira_url}/issues/?filter=-1"
+  elif [[ "$action" == "project" ]]; then
+    echo "Opening project"
+    open_command "${jira_url}/jira/software/c/projects/${2}/summary"
   elif [[ "$action" == "dashboard" ]]; then
     echo "Opening dashboard"
     if [[ "$JIRA_RAPID_BOARD" == "true" ]]; then
@@ -91,24 +119,7 @@ function jira() {
     # but `branch` is a special case that will parse the current git branch
     local issue_arg issue
     if [[ "$action" == "branch" ]]; then
-      # Get name of the branch
-      issue_arg=$(git rev-parse --abbrev-ref HEAD)
-      # Strip prefixes like feature/ or bugfix/
-      issue_arg=${issue_arg##*/}
-      # Strip suffixes starting with _
-      issue_arg=(${(s:_:)issue_arg})
-      # If there is only one part, it means that there is a different delimiter. Try with -
-      if [[ ${#issue_arg[@]} = 1 && ${issue_arg} == *-* ]]; then
-        issue_arg=(${(s:-:)issue_arg})
-        issue_arg="${issue_arg[1]}-${issue_arg[2]}"
-      else
-        issue_arg=${issue_arg[1]}
-      fi
-      if [[ "${issue_arg:l}" = ${jira_prefix:l}* ]]; then
-        issue="${issue_arg}"
-      else
-        issue="${jira_prefix}${issue_arg}"
-      fi
+      issue=$(jira_branch)
     else
       issue_arg=${(U)action}
       issue="${jira_prefix}${issue_arg}"

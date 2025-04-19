@@ -26,7 +26,7 @@ autoload -Uz is-at-least
 # This API is subject to change and optimization. Rely on it at your own risk.
 
 function _omz_register_handler {
-  setopt localoptions noksharrays
+  setopt localoptions noksharrays unset
   typeset -ga _omz_async_functions
   # we want to do nothing if there's no $1 function or we already set it up
   if [[ -z "$1" ]] || (( ! ${+functions[$1]} )) \
@@ -44,6 +44,7 @@ function _omz_register_handler {
 
 # Set up async handlers and callbacks
 function _omz_async_request {
+  setopt localoptions noksharrays unset
   local -i ret=$?
   typeset -gA _OMZ_ASYNC_FDS _OMZ_ASYNC_PIDS _OMZ_ASYNC_OUTPUT
 

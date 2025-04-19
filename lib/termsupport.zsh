@@ -47,7 +47,7 @@ fi
 
 # Runs before showing the prompt
 function omz_termsupport_precmd {
-  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return
+  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return 0
   title "$ZSH_THEME_TERM_TAB_TITLE_IDLE" "$ZSH_THEME_TERM_TITLE_IDLE"
 }
 
@@ -145,6 +145,7 @@ esac
 # Identifies the directory using a file: URI scheme, including
 # the host name to disambiguate local vs. remote paths.
 function omz_termsupport_cwd {
+  setopt localoptions unset
   # Percent-encode the host and path names.
   local URL_HOST URL_PATH
   URL_HOST="$(omz_urlencode -P $HOST)" || return 1

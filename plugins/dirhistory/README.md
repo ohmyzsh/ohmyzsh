@@ -60,3 +60,46 @@ to `/usr` again.
 After that, <kbd>Alt</kbd> + <kbd>Down</kbd> will probably go to `/usr/bin` if `bin` is the first directory in alphabetical
 order (depends on your `/usr` folder structure). <kbd>Alt</kbd> + <kbd>Up</kbd> will return to `/usr`, and once more will get
 you to the root folder (`/`).
+
+### cde
+
+This plugin also provides a `cde` alias that allows you to change to a directory without clearing the next directory stack.
+This changes the default behavior of `dirhistory`, which is to clear the next directory stack when changing directories.
+
+For example, if the shell was started, and the following commands were entered:
+
+```shell
+cd ~
+cd /usr
+cd share
+cd doc
+
+# <Alt + Left>
+# <Alt + Left>
+```
+
+The directory stack would look like this:
+
+```sh
+➜  /usr typeset -pm dirhistory_\*
+typeset -ax dirhistory_past=( /home/user /usr )
+typeset -ax dirhistory_future=( /usr/share/doc /usr/share )
+```
+
+This means that pressing <kbd>Alt</kbd> + <kbd>Right</kbd>, you'd go to `/usr/share` and `/usr/share/doc` (the "future" directories).
+
+If you run `cd /usr/bin`, the "future" directories will be removed, and you won't be able to access them with <kbd>Alt</kbd> + <kbd>Right</kbd>:
+
+```sh
+➜  /u/bin typeset -pm dirhistory_\*
+typeset -ax dirhistory_past=( /home/user /usr )
+typeset -ax dirhistory_future=( /usr/bin )
+```
+
+If you instead run `cde /usr/bin`, the "future" directories will be preserved:
+
+```sh
+➜  /u/bin typeset -pm dirhistory_\*
+typeset -ax dirhistory_past=( /home/user /usr /usr/bin )
+typeset -ax dirhistory_future=( /usr/share/doc /usr/share )
+```
