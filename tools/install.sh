@@ -341,6 +341,15 @@ setup_zshrc() {
       echo "${FMT_YELLOW}Found ${zdot}/.zshrc.${FMT_RESET} ${FMT_GREEN}Keeping...${FMT_RESET}"
       return
     fi
+    # Ask user for confirmation before backing up and overwriting
+    echo "${FMT_YELLOW}Found ${zdot}/.zshrc."
+    echo "The existing .zshrc will be backed up to .zshrc.pre-oh-my-zsh if overwritten."
+    read -p "Do you want to overwrite it with the Oh My Zsh template? [Y/n]${FMT_RESET} " response
+    response="$(printf '%s' "$response" | tr '[:upper:]' '[:lower:]')" # Convert to lowercase
+    if [ "$response" = "n" ]; then
+      echo "${FMT_GREEN}Skipping overwrite. Existing .zshrc will be kept.${FMT_RESET}"
+      return
+    fi
     if [ -e "$OLD_ZSHRC" ]; then
       OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
       if [ -e "$OLD_OLD_ZSHRC" ]; then
@@ -353,7 +362,7 @@ setup_zshrc() {
       echo "${FMT_YELLOW}Found old .zshrc.pre-oh-my-zsh." \
         "${FMT_GREEN}Backing up to ${OLD_OLD_ZSHRC}${FMT_RESET}"
     fi
-    echo "${FMT_YELLOW}Found ${zdot}/.zshrc.${FMT_RESET} ${FMT_GREEN}Backing up to ${OLD_ZSHRC}${FMT_RESET}"
+    echo "${FMT_GREEN}Backing up to ${OLD_ZSHRC}${FMT_RESET}"
     mv "$zdot/.zshrc" "$OLD_ZSHRC"
   fi
 
