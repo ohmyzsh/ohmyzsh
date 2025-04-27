@@ -8,7 +8,7 @@
 # @github.com/mfaerevaag/wd
 
 # version
-readonly WD_VERSION=0.9.3
+readonly WD_VERSION=0.10.0
 
 # colors
 readonly WD_BLUE="\033[96m"
@@ -86,6 +86,7 @@ Commands:
     show                 Print warp points to current directory
     list                 Print all stored warp points
     ls  <point>          Show files from given warp point (ls)
+    open <point>         Open the warp point in the default file explorer (open / xdg-open)
     path <point>         Show the path to given warp point (pwd)
     clean                Remove points warping to nonexistent directories (will prompt unless --force is used)
 
@@ -377,6 +378,21 @@ wd_ls()
     ls "${dir/#\~/$HOME}"
 }
 
+wd_open()
+{
+    wd_getdir "$1"
+    if command -v open >/dev/null 2>&1; then
+        # MacOS, Ubuntu (alias)
+        open "${dir/#\~/$HOME}"
+    elif command -v xdg-open >/dev/null 2>&1; then
+        # Most Linux desktops
+        xdg-open "${dir/#\~/$HOME}"
+    else
+        echo "No known file opener found (need 'open' or 'xdg-open')." >&2
+        exit 1
+    fi
+}
+
 wd_path()
 {
     wd_getdir "$1"
@@ -521,7 +537,7 @@ do
 done < "$wd_config_file"
 
 # get opts
-args=$(getopt -o a:r:c:lhs -l add:,rm:,clean,list,ls:,path:,help,show -- $*)
+args=$(getopt -o a:r:c:lhs -l add:,rm:,clean,list,ls:,open:,path:,help,show -- $*)
 
 # check if no arguments were given, and that version is not set
 if [[ ($? -ne 0 || $#* -eq 0) && -z $wd_print_version ]]
@@ -569,6 +585,10 @@ else
                 ;;
             "-ls"|"ls")
                 wd_ls "$2"
+                break
+                ;;
+            "-o"|"--open"|"open")
+                wd_open "$2"
                 break
                 ;;
             "-p"|"--path"|"path")
