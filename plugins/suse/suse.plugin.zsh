@@ -38,7 +38,7 @@ alias zwp='zypper --no-refresh wp'
 
 #Repositories commands
 alias zar='sudo zypper ar'
-alias zcl='sudo zypper clean'
+alias zcc='sudo zypper clean'
 alias zlr='zypper lr'
 alias zmr='sudo zypper mr'
 alias znr='sudo zypper nr'
