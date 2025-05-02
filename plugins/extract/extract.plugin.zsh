@@ -32,7 +32,7 @@ EOF
       shift
       if [[ ! -d "$1" ]]; then
         echo "extract: specified output directory $1 is not a valid directory." >&2
-        return
+        return 1
       fi
       extract_dir="$1"
       shift
