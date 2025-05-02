@@ -37,6 +37,10 @@ alias kcgc='kubectl config get-contexts'
 alias kdel='kubectl delete'
 alias kdelf='kubectl delete -f'
 
+# Dry runs
+alias kdr='kubectl --dry-run=client'
+alias kdrs='kubectl --dry-run=server'
+
 # Pod management.
 alias kgp='kubectl get pods'
 alias kgpl='kgp -l'
