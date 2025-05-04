@@ -120,3 +120,8 @@ if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
   add-zsh-hook chpwd auto_vrun
   auto_vrun
 fi
+
+# Activate the local environment
+alias act='source venv/bin/activate'
+# run main.py 
+alias runpy='python main.py'
