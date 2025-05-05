@@ -122,6 +122,6 @@ if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
 fi
 
 # Activate the local environment
-alias act='source venv/bin/activate'
+alias pya='source venv/bin/activate'
 # run main.py 
 alias pyr='python main.py'
