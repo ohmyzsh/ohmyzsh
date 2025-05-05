@@ -124,4 +124,4 @@ fi
 # Activate the local environment
 alias act='source venv/bin/activate'
 # run main.py 
-alias runpy='python main.py'
+alias pyr='python main.py'
