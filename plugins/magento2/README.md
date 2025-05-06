@@ -1,4 +1,4 @@
-# Magento 2 Oh My Zsh Plugin
+# Magento 2 plugin
 
 This plugin provides a powerful set of shortcuts, aliases, and utilities to simplify and enhance your Magento 2 development workflow in the command line.
 
