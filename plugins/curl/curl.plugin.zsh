@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-# easy-curl - an Oh My Zsh plugin to simplify working with curl
+# curl - an Oh My Zsh plugin to simplify working with curl
 
 # Basic curl aliases
 alias cl='curl -L' # follow redirects

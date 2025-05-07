@@ -1,13 +1,13 @@
-# easy-curl plugin
+# curl plugin
 
 This plugin provides a comprehensive set of aliases and functions to simplify working with `curl` command-line tool, making API testing and HTTP requests more convenient.
 
 ## Installation
 
-To use it, add `easy-curl` to the plugins array in your zshrc file:
+To use it, add `curl` to the plugins array in your zshrc file:
 
 ```zsh
-plugins=(... easy-curl)
+plugins=(... curl)
 ```
 
 ## Requirements
