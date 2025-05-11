@@ -38,7 +38,7 @@ dependencies:
   plugins/z:
     branch: master
     repo: agkozak/zsh-z
-    version: dd94ef04acc41748ba171eb219971cb455e0040b
+    version: cf9225feebfae55e557e103e95ce20eca5eff270
     precopy: |
       set -e
       test -e README.md && mv -f README.md MANUAL.md
