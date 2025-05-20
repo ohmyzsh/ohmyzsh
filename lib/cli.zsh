@@ -206,7 +206,7 @@ Available commands:
   disable <plugin> Disable plugin(s)
   enable <plugin>  Enable plugin(s)
   info <plugin>    Get information of a plugin
-  list             List all available Oh My Zsh plugins
+  list [--enabled] List Oh My Zsh plugins
   load <plugin>    Load plugin(s)
 
 EOF
@@ -451,6 +451,29 @@ function _omz::plugin::list {
   local -a custom_plugins builtin_plugins
   custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
   builtin_plugins=("$ZSH"/plugins/*(-/N:t))
+
+  # If --enabled is provided, filter plugins by what's enabled
+  if [[ "$1" == "--enabled" ]]; then
+    # echo $plugins[@]
+    local plugin
+    local -a new_custom_plugins new_builtin_plugins
+    for plugin in "${custom_plugins[@]}"; do
+      # Spaces are to ensure we don't match substrings of other plugins
+      # This avoids the need for a second, inner loop
+      if [[ "${plugins[@]}" =~ $plugin ]]; then
+        new_custom_plugins+=("$plugin")
+      fi
+    done
+    custom_plugins=(${new_custom_plugins[@]})
+    for plugin in "${builtin_plugins[@]}"; do
+      # Spaces are to ensure we don't match substrings of other plugins
+      # This avoids the need for a second, inner loop
+      if [[ "${plugins[@]}" =~ $plugin ]]; then
+        new_builtin_plugins+=("$plugin")
+      fi
+    done
+    builtin_plugins=(${new_builtin_plugins[@]})
+  fi
 
   # If the command is being piped, print all found line by line
   if [[ ! -t 1 ]]; then
