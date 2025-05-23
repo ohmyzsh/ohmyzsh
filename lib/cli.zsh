@@ -72,6 +72,10 @@ function _omz {
         local -aU plugins
         plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t))
         _describe 'plugin' plugins ;;
+      plugin::list)
+        local -a opts
+        opts=('--enabled:List enabled plugins only')
+        _describe -o 'options' opts ;;
       theme::(set|use))
         local -aU themes
         themes=("$ZSH"/themes/*.zsh-theme(-.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(-.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
