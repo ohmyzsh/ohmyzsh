@@ -449,30 +449,22 @@ function _omz::plugin::info {
 
 function _omz::plugin::list {
   local -a custom_plugins builtin_plugins
-  custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
-  builtin_plugins=("$ZSH"/plugins/*(-/N:t))
 
-  # If --enabled is provided, filter plugins by what's enabled
+  # If --enabled is provided, only list what's enabled
   if [[ "$1" == "--enabled" ]]; then
-    # echo $plugins[@]
     local plugin
-    local -a new_custom_plugins new_builtin_plugins
-    for plugin in "${custom_plugins[@]}"; do
-      # Spaces are to ensure we don't match substrings of other plugins
-      # This avoids the need for a second, inner loop
-      if [[ "${plugins[@]}" =~ $plugin ]]; then
-        new_custom_plugins+=("$plugin")
+    for plugin in "${plugins[@]}"; do
+      if [[ -d "${ZSH_CUSTOM}/plugins/${plugin}" ]]; then
+        custom_plugins+=("${plugin}")
+      elif [[ -d "${ZSH}/plugins/${plugin}" ]]; then
+        builtin_plugins+=("${plugin}")
       fi
     done
-    custom_plugins=(${new_custom_plugins[@]})
-    for plugin in "${builtin_plugins[@]}"; do
-      # Spaces are to ensure we don't match substrings of other plugins
-      # This avoids the need for a second, inner loop
-      if [[ "${plugins[@]}" =~ $plugin ]]; then
-        new_builtin_plugins+=("$plugin")
-      fi
-    done
-    builtin_plugins=(${new_builtin_plugins[@]})
+  elif [[ -n "$1" ]]; then
+    has_completion=1
+  else
+    custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
+    builtin_plugins=("$ZSH"/plugins/*(-/N:t))
   fi
 
   # If the command is being piped, print all found line by line
