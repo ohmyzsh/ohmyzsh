@@ -344,12 +344,14 @@ setup_zshrc() {
     # Ask user for confirmation before backing up and overwriting
     echo "${FMT_YELLOW}Found ${zdot}/.zshrc."
     echo "The existing .zshrc will be backed up to .zshrc.pre-oh-my-zsh if overwritten."
-    read -p "Do you want to overwrite it with the Oh My Zsh template? [Y/n]${FMT_RESET} " response
-    response="$(printf '%s' "$response" | tr '[:upper:]' '[:lower:]')" # Convert to lowercase
-    if [ "$response" = "n" ]; then
-      echo "${FMT_GREEN}Skipping overwrite. Existing .zshrc will be kept.${FMT_RESET}"
-      return
-    fi
+    printf '%sDo you want to overwrite it with the Oh My Zsh template? [Y/n]%s ' \
+      "$FMT_YELLOW" "$FMT_RESET"
+    read -r opt
+    case $opt in
+      [Yy]*|"") ;;
+      [Nn]*) echo "Overwrite skipped. Existing .zshrc will be kept."; return ;;
+      *) echo "Invalid choice. Overwrite skipped. Existing .zshrc will be kept."; return ;;
+    esac
     if [ -e "$OLD_ZSHRC" ]; then
       OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
       if [ -e "$OLD_OLD_ZSHRC" ]; then
