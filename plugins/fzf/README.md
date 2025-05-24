@@ -1,52 +1,112 @@
 # fzf
 
-This plugin tries to find [junegunn's fzf](https://github.com/junegunn/fzf) based on where
-it's been installed, and enables its fuzzy auto-completion and key bindings.
+The `fzf` plugin automatically configures [fzf](https://github.com/hunegunn/fzf), a general-purpose command-line fuzzy finder. This plugin enables interactive fuzzy search, auto-completion, and key bindings for a more efficient shell experience.
+It detects your platform and attempts to automatically source the necessart `fzf` scripts, enabling features like `CTRL-T`, `CTRL-R`, and `ALT-C`.
 
-To use it, add `fzf` to the plugins array in your zshrc file:
+To use it, add `fzf` to the plugins array in your `.zshrc` file:
 
 ```zsh
 plugins=(... fzf)
 ```
+ > Make sure you have `fzf` installed before enabling this plugin.
 
-## Settings
+## Configuration Options
 
-All these settings should go in your zshrc file, before Oh My Zsh is sourced.
+All variables should be defined before Oh My Zsh is sourced in your `.zshrc` file.
 
 ### `FZF_BASE`
 
-Set to fzf installation directory path:
+If `fzf` is installed in a non-standard location, you can manually specift the base installation directory by setting:
 
 ```zsh
-export FZF_BASE=/path/to/fzf/install/dir
+export FZF_BASE=/path/to/fzf
 ```
+
+The plugin will look for shell integration files under `$FZF_BASE/shell`, or `$FZF_BASE` directly.
 
 ### `FZF_DEFAULT_COMMAND`
 
-Set default command to use when input is tty:
+This variable defines the default command used by `fzf` when there is no piped input (e.g., when used with `CTRL-T`).
+
+You can cutomize it:
 
 ```zsh
-export FZF_DEFAULT_COMMAND='<your fzf default command>'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exlude .git'
 ```
 
-If not set, the plugin will try to set it to these, in the order in which they're found:
+If not defined, the plugin will automatically set it to the first available tool in the following priority:
 
 - [`fd`](https://github.com/sharkdp/fd)
 - [`rg`](https://github.com/BurntSushi/ripgrep)
 - [`ag`](https://github.com/ggreer/the_silver_searcher)
 
+These tools allow for fast, filesystem-aware searches and greatly improve `fzf` performance.
+
 ### `DISABLE_FZF_AUTO_COMPLETION`
 
-Set whether to load fzf auto-completion:
+If you do not want `fzf` to override or enchance Zsh's auto-completion, disable it by setting:
 
 ```zsh
 DISABLE_FZF_AUTO_COMPLETION="true"
 ```
 
+Auto-completion provides fuzzy matches for commands, files, and directories.
+
 ### `DISABLE_FZF_KEY_BINDINGS`
 
-Set whether to disable key bindings (CTRL-T, CTRL-R, ALT-C):
+To disable the key bindings provided by `fzf`, set:
 
 ```zsh
 DISABLE_FZF_KEY_BINDINGS="true"
+```
+
+Key bindings enabled by default:
+ - `CTRL-T`: Paste selected file path(s)
+ - `CTRL-R`: Search command history
+ - `ALT-C`: Change to selected directory
+
+## Detection Logic
+
+The plugin tries to detect and configure `fzf` from a variety of environments. It tries these in order:
+1. Using `fzf --zsh` if `fzf` is a recent version (`>= 0.48.0`)
+2. OpenBSD default paths
+3. Debian-based distributions
+4. OpenSUSE
+5. Fedora
+6. Cygwin
+7. MacPorts
+8. Manual fallback search paths:
+    - `~/.fzf`
+    - `~/.nix-profile/share/fzf`
+    - `$XDG_DATA_HOME/fzf` (or `~/.local/share/fzf`)
+    - `/usr/share/fzf`, `/usr/local/share/examples/fzf`, etc
+    - Results of `fzf-share` or `brew --prefix fzf`
+If none of these are successful, the plugin shows an error prompting you to set `FZF_BASE`.
+
+## Example `.zshrc` Setup
+
+```zsh
+# Set variables before sourcing Oh My Zsh
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_BASE="$HOME/.fzf"
+# export DISABLE_FZF_AUTO_COMPLETION="true"
+# export DISABLE_FZF_KEY_BINDINGS="true"
+
+# Enable plugin
+plugins=(git fzf)
+
+source $ZSH/oh-my-zsh.sh
+```
+
+## Troubleshooting
+
+If the plugin cannot locate `fzf` or fails silently:
+ - Ensure `fzf` is installed and available in your `PATH`.
+ - Set `FZF_BASE` manually if `fzf` is installed in a custom location.
+ - Try running `fzf --version` and verify it's `>= 0.48.0`.
+
+The plugin will print this message if configuration fails:
+```text
+[oh-my-zsh] fzf plugin: Cannot find fzf installation directory.
+Please add `export FZF_BASE=/path/to/fzf/install/dir` to your .zshrc
 ```
