@@ -1,13 +1,14 @@
 # fzf
 
-This plugin tries to find [junegunn's fzf](https://github.com/junegunn/fzf) based on where
-it's been installed, and enables its fuzzy auto-completion and key bindings.
+The `fzf` plugin automatically configures [fzf](https://github.com/hunegunn/fzf), a general-purpose command-line fuzzy finder. This plugin enables interactive fuzzy search, auto-completion, and key bindings for a more efficient shell experience.
+It detects your platform and attempts to automatically source the necessart `fzf` scripts, enabling features like `CTRL-T`, `CTRL-R`, and `ALT-C`.
 
-To use it, add `fzf` to the plugins array in your zshrc file:
+To use it, add `fzf` to the plugins array in your `.zshrc` file:
 
 ```zsh
 plugins=(... fzf)
 ```
+ > Make sure you have `fzf` installed before enabling this plugin.
 
 ## Settings
 
