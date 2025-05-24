@@ -5,8 +5,14 @@ __GREP_ALIAS_CACHES=("$__GREP_CACHE_FILE"(Nm-1))
 if [[ -n "$__GREP_ALIAS_CACHES" ]]; then
     source "$__GREP_CACHE_FILE"
 else
+    # If ggrep via Homebrew is not available, use system grep
+    if [[ -n "$HOMEBREW_PREFIX" && -x "$HOMEBREW_PREFIX/bin/ggrep" ]]; then
+        GREP="ggrep"
+    else
+        GREP="grep"
+    fi
     grep-flags-available() {
-        command grep "$@" "" &>/dev/null <<< ""
+        command $GREP "$@" "" &>/dev/null <<< ""
     }
 
     # Ignore these folders (if the necessary grep flags are available)
@@ -23,9 +29,9 @@ else
 
     if [[ -n "$GREP_OPTIONS" ]]; then
         # export grep, egrep and fgrep settings
-        alias grep="grep $GREP_OPTIONS"
-        alias egrep="grep -E"
-        alias fgrep="grep -F"
+        alias grep="$GREP $GREP_OPTIONS"
+        alias egrep="$GREP -E"
+        alias fgrep="$GREP -F"
 
         # write to cache file if cache directory is writable
         if [[ -w "$ZSH_CACHE_DIR" ]]; then
@@ -34,7 +40,7 @@ else
     fi
 
     # Clean up
-    unset GREP_OPTIONS EXC_FOLDERS
+    unset GREP GREP_OPTIONS EXC_FOLDERS
     unfunction grep-flags-available
 fi
 
