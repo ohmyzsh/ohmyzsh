@@ -97,3 +97,16 @@ plugins=(git fzf)
 
 source $ZSH/oh-my-zsh.sh
 ```
+
+## Troubleshooting
+
+If the plugin cannot locate `fzf` or fails silently:
+ - Ensure `fzf` is installed and available in your `PATH`.
+ - Set `FZF_BASE` manually if `fzf` is installed in a custom location.
+ - Try running `fzf --version` and verify it's `>= 0.48.0`.
+
+The plugin will print this message if configuration fails:
+```text
+[oh-my-zsh] fzf plugin: Cannot find fzf installation directory.
+Please add `export FZF_BASE=/path/to/fzf/install/dir` to your .zshrc
+```
