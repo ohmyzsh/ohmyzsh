@@ -464,8 +464,6 @@ function _omz::plugin::list {
         builtin_plugins+=("${plugin}")
       fi
     done
-  elif [[ -n "$1" ]]; then
-    has_completion=1
   else
     custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
     builtin_plugins=("$ZSH"/plugins/*(-/N:t))
