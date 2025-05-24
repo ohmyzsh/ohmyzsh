@@ -10,7 +10,7 @@ plugins=(... fzf)
 ```
  > Make sure you have `fzf` installed before enabling this plugin.
 
-## Settings
+## Configuration Options
 
 All variables should be defined before Oh My Zsh is sourced in your `.zshrc` file.
 
@@ -64,3 +64,21 @@ Key bindings enabled by default:
  - `CTRL-T`: Paste selected file path(s)
  - `CTRL-R`: Search command history
  - `ALT-C`: Change to selected directory
+
+## Detection Logic
+
+The plugin tries to detect and configure `fzf` from a variety of environments. It tries these in order:
+1. Using `fzf --zsh` if `fzf` is a recent version (`>= 0.48.0`)
+2. OpenBSD default paths
+3. Debian-based distributions
+4. OpenSUSE
+5. Fedora
+6. Cygwin
+7. MacPorts
+8. Manual fallback search paths:
+    - `~/.fzf`
+    - `~/.nix-profile/share/fzf`
+    - `$XDG_DATA_HOME/fzf` (or `~/.local/share/fzf`)
+    - `/usr/share/fzf`, `/usr/local/share/examples/fzf`, etc
+    - Results of `fzf-share` or `brew --prefix fzf`
+If none of these are successful, the plugin shows an error prompting you to set `FZF_BASE`.
