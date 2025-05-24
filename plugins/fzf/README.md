@@ -12,42 +12,55 @@ plugins=(... fzf)
 
 ## Settings
 
-All these settings should go in your zshrc file, before Oh My Zsh is sourced.
+All variables should be defined before Oh My Zsh is sourced in your `.zshrc` file.
 
 ### `FZF_BASE`
 
-Set to fzf installation directory path:
+If `fzf` is installed in a non-standard location, you can manually specift the base installation directory by setting:
 
 ```zsh
-export FZF_BASE=/path/to/fzf/install/dir
+export FZF_BASE=/path/to/fzf
 ```
+
+The plugin will look for shell integration files under `$FZF_BASE/shell`, or `$FZF_BASE` directly.
 
 ### `FZF_DEFAULT_COMMAND`
 
-Set default command to use when input is tty:
+This variable defines the default command used by `fzf` when there is no piped input (e.g., when used with `CTRL-T`).
+
+You can cutomize it:
 
 ```zsh
-export FZF_DEFAULT_COMMAND='<your fzf default command>'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exlude .git'
 ```
 
-If not set, the plugin will try to set it to these, in the order in which they're found:
+If not defined, the plugin will automatically set it to the first available tool in the following priority:
 
 - [`fd`](https://github.com/sharkdp/fd)
 - [`rg`](https://github.com/BurntSushi/ripgrep)
 - [`ag`](https://github.com/ggreer/the_silver_searcher)
 
+These tools allow for fast, filesystem-aware searches and greatly improve `fzf` performance.
+
 ### `DISABLE_FZF_AUTO_COMPLETION`
 
-Set whether to load fzf auto-completion:
+If you do not want `fzf` to override or enchance Zsh's auto-completion, disable it by setting:
 
 ```zsh
 DISABLE_FZF_AUTO_COMPLETION="true"
 ```
 
+Auto-completion provides fuzzy matches for commands, files, and directories.
+
 ### `DISABLE_FZF_KEY_BINDINGS`
 
-Set whether to disable key bindings (CTRL-T, CTRL-R, ALT-C):
+To disable the key bindings provided by `fzf`, set:
 
 ```zsh
 DISABLE_FZF_KEY_BINDINGS="true"
 ```
+
+Key bindings enabled by default:
+ - `CTRL-T`: Paste selected file path(s)
+ - `CTRL-R`: Search command history
+ - `ALT-C`: Change to selected directory
