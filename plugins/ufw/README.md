@@ -16,3 +16,4 @@ Some of the commands include:
 * `deny <port>/<optional: protocol>` add deny rule
 * `disable` disables the firewall
 * `enable` enables the firewall
+* `ufw-lockdown` full reset firewall and allow SSH only
