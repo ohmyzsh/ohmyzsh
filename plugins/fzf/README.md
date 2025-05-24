@@ -82,3 +82,18 @@ The plugin tries to detect and configure `fzf` from a variety of environments. I
     - `/usr/share/fzf`, `/usr/local/share/examples/fzf`, etc
     - Results of `fzf-share` or `brew --prefix fzf`
 If none of these are successful, the plugin shows an error prompting you to set `FZF_BASE`.
+
+## Example `.zshrc` Setup
+
+```zsh
+# Set variables before sourcing Oh My Zsh
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_BASE="$HOME/.fzf"
+# export DISABLE_FZF_AUTO_COMPLETION="true"
+# export DISABLE_FZF_KEY_BINDINGS="true"
+
+# Enable plugin
+plugins=(git fzf)
+
+source $ZSH/oh-my-zsh.sh
+```
