@@ -16,6 +16,7 @@ function fwl () {
   sudo firewall-cmd --direct --get-all-rules
 }
 
+# backup
 function fwbackup() {
   sudo firewall-cmd --runtime-to-permanent
   mkdir -p ~/firewall-backup
