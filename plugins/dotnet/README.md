@@ -23,3 +23,4 @@ plugins=(... dotnet)
 | dp    | dotnet pack      | Create a NuGet package.                                           |
 | dng   | dotnet nuget     | Provides additional NuGet commands.                               |
 | db    | dotnet build     | Build a .NET project                                              |
+| dres  | dotnet restore   | Restore dependencies and project-specific tools for a project.    |

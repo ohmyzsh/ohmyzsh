@@ -192,7 +192,7 @@ _omz_source() {
   fi
 }
 
-# Load all of the lib files in ~/oh-my-zsh/lib that end in .zsh
+# Load all of the lib files in ~/.oh-my-zsh/lib that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
 for lib_file ("$ZSH"/lib/*.zsh); do
   _omz_source "lib/${lib_file:t}"
