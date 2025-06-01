@@ -247,12 +247,6 @@ receive further support.
 | `glg`    | `git log --stat --max-count=10`                           | Now aliased to `git log --stat --color`.                  |
 | `glgg`   | `git log --graph --max-count=10`                          | Now aliased to `git log --graph --color`.                 |
 | `gwc`    | `git whatchanged -p --abbrev-commit --pretty = medium`    | New alias: `gwch`.                                        |
-| `gup`    | `git pull --rebase`                                       | now alias `gpr`                                           |
-| `gupv`   | `git pull --rebase -v`                                    | now alias `gprv`                                          |
-| `gupa`   | `git pull --rebase --autostash`                           | now alias `gpra`                                          |
-| `gupav`  | `git pull --rebase --autostash -v`                        | now alias `gprav`                                         |
-| `gupom`  | `git pull --rebase origin $(git_main_branch)`             | now alias `gprom`                                         |
-| `gupomi` | `git pull --rebase=interactive origin $(git_main_branch)` | now alias `gpromi`                                        |
 
 ## Functions
 
