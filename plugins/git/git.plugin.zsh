@@ -8,14 +8,6 @@ git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
 # (order should follow README)
 #
 
-# The name of the current branch
-# Back-compatibility wrapper for when this function was defined here in
-# the plugin, before being pulled in to core lib/git.zsh as git_current_branch()
-# to fix the core -> git plugin dependency.
-function current_branch() {
-  git_current_branch
-}
-
 # Check for develop and similarly named branches
 function git_develop_branch() {
   command git rev-parse --git-dir &>/dev/null || return
@@ -409,15 +401,16 @@ alias gke='\gitk --all $(git log --walk-reflogs --pretty=%h) &!'
 
 unset git_version
 
-# Logic for adding warnings on deprecated aliases
-local old_alias new_alias
-for old_alias new_alias (
+# Logic for adding warnings on deprecated aliases or functions
+local old_name new_name
+for old_name new_name (
+  current_branch  git_current_branch
   ggpull          ggl
   ggpur           ggu
   ggpush          ggp
 ); do
-  aliases[$old_alias]="
-    print -Pu2 \"%F{yellow}[oh-my-zsh] '%F{red}${old_alias}%F{yellow}' is a deprecated alias, using '%F{green}${new_alias}%F{yellow}' instead.%f\"
-    $new_alias"
+  aliases[$old_name]="
+    print -Pu2 \"%F{yellow}[oh-my-zsh] '%F{red}${old_name}%F{yellow}' is deprecated, using '%F{green}${new_name}%F{yellow}' instead.%f\"
+    $new_name"
 done
-unset old_alias new_alias
+unset old_name new_name
