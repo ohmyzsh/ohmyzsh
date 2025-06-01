@@ -91,7 +91,7 @@ plugins=(... git)
 | `gdnolock`             | `git diff $@ ":(exclude)package-lock.json" ":(exclude)\*.lock"`                                                                 |
 | `gdt`                  | `git diff-tree --no-commit-id --name-only -r`                                                                                   |
 | `gf`                   | `git fetch`                                                                                                                     |
-| `gfa`                  | `git fetch --all --tags --prune`                                                                                                       |
+| `gfa`                  | `git fetch --all --tags --prune`                                                                                                |
 | `gfo`                  | `git fetch origin`                                                                                                              |
 | `gg`                   | `git gui citool`                                                                                                                |
 | `gga`                  | `git gui citool --amend`                                                                                                        |
@@ -234,34 +234,31 @@ branch exists. We do this via the function `git_main_branch`.
 These are aliases that have been removed, renamed, or otherwise modified in a way that may, or may not,
 receive further support.
 
-| Alias    | Command                                                   | Modification                                              |
-| :------- | :-------------------------------------------------------- | :-------------------------------------------------------- |
-| `gap`    | `git add --patch`                                         | New alias: `gapa`.                                        |
-| `gcl`    | `git config --list`                                       | New alias: `gcf`.                                         |
-| `gdc`    | `git diff --cached`                                       | New alias: `gdca`.                                        |
-| `gdt`    | `git difftool`                                            | No replacement.                                           |
-| `gk`     | `gitk --all --branches`                                   | Now aliased to `gitk --all --branches`.                   |
-| `glg`    | `git log --stat --max-count=10`                           | Now aliased to `git log --stat --color`.                  |
-| `glgg`   | `git log --graph --max-count=10`                          | Now aliased to `git log --graph --color`.                 |
-| `gwc`    | `git whatchanged -p --abbrev-commit --pretty = medium`    | New alias: `gwch`.                                        |
+| Alias    | Command                                                   | Modification                                          |
+| :------- | :-------------------------------------------------------- | :-----------------------------------------------------|
+| `gap`    | `git add --patch`                                         | New alias: `gapa`                                     |
+| `gcl`    | `git config --list`                                       | New alias: `gcf`                                      |
+| `gdc`    | `git diff --cached`                                       | New alias: `gdca`                                     |
+| `gdt`    | `git difftool`                                            | No replacement                                        |
 | `ggpull` | `git pull origin $(git_current_branch)`                   | New function: `ggl` (`ggpull` is now aliased to this) |
 | `ggpur`  | `git pull --rebase origin $(git_current_branch)`          | New function: `ggu` (`ggpur` is now aliased to this)  |
 | `ggpush` | `git push origin $(git_current_branch)`                   | New function: `ggp` (`ggpush` is now aliased to this) |
+| `gwc`    | `git whatchanged -p --abbrev-commit --pretty=medium`      | New alias: `gwch`                                     |
 
 ## Functions
 
 ### Current
 
-| Command                  | Description                                                                                                     |
-| :----------------------- | :-------------------------------------------------------------------------------------------------------------- |
-| `git_current_user_email` | Returns the `user.email` config value. (Lives in `lib/git.zsh`.)                                                |
-| `git_current_user_name`  | Returns the `user.name` config value. (Lives in `lib/git.zsh`.)                                                 |
-| `git_develop_branch`     | Returns the name of the “development” branch: `dev`, `devel`, `development` if they exist, `develop` otherwise. |
-| `git_main_branch`        | Returns the name of the main branch: `main` if it exists, `master` otherwise.                                   |
-| `grename <old> <new>`    | Renames branch `<old>` to `<new>`, including on the origin remote.                                              |
-| `gbda`                   | Deletes all merged branches                                                                                     |
-| `gbds`                   | Deletes all squash-merged branches (**Note: performance degrades with number of branches**)                     |
+| Command                  | Description                                                                                                    |
+| :----------------------- | :------------------------------------------------------------------------------------------------------------- |
 | `git_current_branch`     | Returns the name of the current branch (Lives in `lib/git.zsh`)                                                |
+| `git_current_user_email` | Returns the `user.email` config value (Lives in `lib/git.zsh`)                                                 |
+| `git_current_user_name`  | Returns the `user.name` config value (Lives in `lib/git.zsh`)                                                  |
+| `git_develop_branch`     | Returns the name of the “development” branch: `dev`, `devel`, `development` if they exist, `develop` otherwise |
+| `git_main_branch`        | Returns the name of the main branch: `main` if it exists, `master` otherwise                                   |
+| `grename <old> <new>`    | Renames branch `<old>` to `<new>`, including on the origin remote                                              |
+| `gbda`                   | Deletes all merged branches                                                                                    |
+| `gbds`                   | Deletes all squash-merged branches (**Note: performance degrades with number of branches**)                    |
 
 ### Work in Progress (WIP)
 
@@ -281,4 +278,3 @@ Note that `gwip` and `gunwip` are aliases, but are also documented here to group
 
 | Command              | Description                             | Reason                                                           |
 | :------------------- | :-------------------------------------- | :--------------------------------------------------------------- |
-| `current_repository` | Return the names of the current remotes | Didn't work properly. Use `git remote -v` instead (`grv` alias). |
