@@ -238,12 +238,10 @@ receive further support.
 | :------- | :-------------------------------------------------------- | :-----------------------------------------------------|
 | `gap`    | `git add --patch`                                         | New alias: `gapa`                                     |
 | `gcl`    | `git config --list`                                       | New alias: `gcf`                                      |
-| `gdc`    | `git diff --cached`                                       | New alias: `gdca`                                     |
 | `gdt`    | `git difftool`                                            | No replacement                                        |
 | `ggpull` | `git pull origin $(git_current_branch)`                   | New function: `ggl` (`ggpull` is now aliased to this) |
 | `ggpur`  | `git pull --rebase origin $(git_current_branch)`          | New function: `ggu` (`ggpur` is now aliased to this)  |
 | `ggpush` | `git push origin $(git_current_branch)`                   | New function: `ggp` (`ggpush` is now aliased to this) |
-| `gwc`    | `git whatchanged -p --abbrev-commit --pretty=medium`      | New alias: `gwch`                                     |
 
 ## Functions
 
