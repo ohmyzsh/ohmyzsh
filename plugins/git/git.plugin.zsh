@@ -415,13 +415,6 @@ unset git_version
 # Logic for adding warnings on deprecated aliases
 local old_alias new_alias
 for old_alias new_alias (
-  # TODO(2023-10-19): remove deprecated `git pull --rebase` aliases
-  gup     gpr
-  gupv    gprv
-  gupa    gpra
-  gupav   gprav
-  gupom   gprom
-  gupomi  gpromi
 ); do
   aliases[$old_alias]="
     print -Pu2 \"%F{yellow}[oh-my-zsh] '%F{red}${old_alias}%F{yellow}' is a deprecated alias, using '%F{green}${new_alias}%F{yellow}' instead.%f\"
