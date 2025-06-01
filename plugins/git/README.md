@@ -254,7 +254,6 @@ receive further support.
 
 | Command                  | Description                                                                                                     |
 | :----------------------- | :-------------------------------------------------------------------------------------------------------------- |
-| `current_branch`         | Returns the name of the current branch.                                                                         |
 | `git_current_user_email` | Returns the `user.email` config value. (Lives in `lib/git.zsh`.)                                                |
 | `git_current_user_name`  | Returns the `user.name` config value. (Lives in `lib/git.zsh`.)                                                 |
 | `git_develop_branch`     | Returns the name of the “development” branch: `dev`, `devel`, `development` if they exist, `develop` otherwise. |
@@ -262,6 +261,7 @@ receive further support.
 | `grename <old> <new>`    | Renames branch `<old>` to `<new>`, including on the origin remote.                                              |
 | `gbda`                   | Deletes all merged branches                                                                                     |
 | `gbds`                   | Deletes all squash-merged branches (**Note: performance degrades with number of branches**)                     |
+| `git_current_branch`     | Returns the name of the current branch (Lives in `lib/git.zsh`)                                                |
 
 ### Work in Progress (WIP)
 
