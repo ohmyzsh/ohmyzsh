@@ -51,3 +51,22 @@ function ssh_unload_key {
     ssh-add -d "$keyfile"
   fi
 }
+
+# Custom SSH hosts completion: include both /etc/hosts and ~/.ssh/config
+_zsh_ssh_hosts() {
+  local hosts=()
+  # Read hosts from /etc/hosts
+  while read -r ip name _; do
+    [[ -n $name ]] && hosts+=($name)
+  done < /etc/hosts
+
+  # Read Host aliases from ~/.ssh/config
+  local cfg_hosts=(${(f)"$(awk '/^Host[[:space:]]/ { for (i=2; i<=NF; i++) print \$i }' ~/.ssh/config 2>/dev/null)"})
+  hosts+=(${cfg_hosts[@]})
+
+  # Output combined list
+  echo "${hosts[@]}"
+}
+
+# Apply the custom hosts completion function
+zstyle ':completion:*:ssh:*' hosts zsh_ssh_hosts
