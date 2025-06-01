@@ -240,13 +240,13 @@ receive further support.
 | `gcl`    | `git config --list`                                       | New alias: `gcf`.                                         |
 | `gdc`    | `git diff --cached`                                       | New alias: `gdca`.                                        |
 | `gdt`    | `git difftool`                                            | No replacement.                                           |
-| `ggpull` | `git pull origin $(current_branch)`                       | New alias: `ggl`. (`ggpull` still exists for now though.) |
-| `ggpur`  | `git pull --rebase origin $(current_branch)`              | New alias: `ggu`. (`ggpur` still exists for now though.)  |
-| `ggpush` | `git push origin $(current_branch)`                       | New alias: `ggp`. (`ggpush` still exists for now though.) |
 | `gk`     | `gitk --all --branches`                                   | Now aliased to `gitk --all --branches`.                   |
 | `glg`    | `git log --stat --max-count=10`                           | Now aliased to `git log --stat --color`.                  |
 | `glgg`   | `git log --graph --max-count=10`                          | Now aliased to `git log --graph --color`.                 |
 | `gwc`    | `git whatchanged -p --abbrev-commit --pretty = medium`    | New alias: `gwch`.                                        |
+| `ggpull` | `git pull origin $(git_current_branch)`                   | New function: `ggl` (`ggpull` is now aliased to this) |
+| `ggpur`  | `git pull --rebase origin $(git_current_branch)`          | New function: `ggu` (`ggpur` is now aliased to this)  |
+| `ggpush` | `git push origin $(git_current_branch)`                   | New function: `ggp` (`ggpush` is now aliased to this) |
 
 ## Functions
 
