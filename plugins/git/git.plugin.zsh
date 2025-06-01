@@ -100,7 +100,6 @@ function ggpnp() {
 }
 compdef _git ggpnp=git-checkout
 
-alias ggpur='ggu'
 alias g='git'
 alias ga='git add'
 alias gaa='git add --all'
@@ -279,7 +278,6 @@ alias gprom='git pull --rebase origin $(git_main_branch)'
 alias gpromi='git pull --rebase=interactive origin $(git_main_branch)'
 alias gprum='git pull --rebase upstream $(git_main_branch)'
 alias gprumi='git pull --rebase=interactive upstream $(git_main_branch)'
-alias ggpull='git pull origin "$(git_current_branch)"'
 
 function ggl() {
   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
@@ -320,7 +318,6 @@ is-at-least 2.30 "$git_version" \
 alias gpv='git push --verbose'
 alias gpoat='git push origin --all && git push origin --tags'
 alias gpod='git push origin --delete'
-alias ggpush='git push origin "$(git_current_branch)"'
 
 function ggp() {
   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
@@ -415,6 +412,9 @@ unset git_version
 # Logic for adding warnings on deprecated aliases
 local old_alias new_alias
 for old_alias new_alias (
+  ggpull          ggl
+  ggpur           ggu
+  ggpush          ggp
 ); do
   aliases[$old_alias]="
     print -Pu2 \"%F{yellow}[oh-my-zsh] '%F{red}${old_alias}%F{yellow}' is a deprecated alias, using '%F{green}${new_alias}%F{yellow}' instead.%f\"
