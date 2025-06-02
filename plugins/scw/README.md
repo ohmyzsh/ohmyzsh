@@ -1,7 +1,9 @@
-## Scaleway CLI autocomplete plugin
+## Scaleway CLI plugin
 
-[scw](https://github.com/scaleway/scaleway-cli): Manage Bare Metal servers from Command Line (as easily as with Docker)
+This plugin adds completion for [scw](https://github.com/scaleway/scaleway-cli), the command line interface for Scaleway.
 
-- Adds autocomplete options for all `scw` commands.
+To use it, add `scw` to the plugins array in your zshrc file:
 
-Maintainer : Manfred Touron ([@moul](https://github.com/moul))
+```zsh
+plugins=(... scw)
+```

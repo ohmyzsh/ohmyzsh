@@ -3,6 +3,7 @@
 #   https://github.com/MarsiBarsi (original author)
 #   https://github.com/babakks
 #   https://github.com/SteelShot
+#   https://github.com/AliSajid
 
 # Verify if any manual user choice of VS Code exists first.
 if [[ -n "$VSCODE" ]] && ! which $VSCODE &>/dev/null; then
@@ -38,6 +39,7 @@ alias vscn="$VSCODE --new-window"
 alias vscr="$VSCODE --reuse-window"
 alias vscw="$VSCODE --wait"
 alias vscu="$VSCODE --user-data-dir"
+alias vscp="$VSCODE --profile"
 
 alias vsced="$VSCODE --extensions-dir"
 alias vscie="$VSCODE --install-extension"

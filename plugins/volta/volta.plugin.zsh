@@ -4,7 +4,7 @@ if (( ! $+commands[volta] )); then
 fi
 
 # If the completion file doesn't exist yet, we need to autoload it and
-# bind it to `deno`. Otherwise, compinit will have already done that.
+# bind it to `volta`. Otherwise, compinit will have already done that.
 if [[ ! -f "$ZSH_CACHE_DIR/completions/_volta" ]]; then
   typeset -g -A _comps
   autoload -Uz _volta

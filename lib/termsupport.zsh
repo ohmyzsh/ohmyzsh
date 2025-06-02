@@ -17,7 +17,7 @@ function title {
   : ${2=$1}
 
   case "$TERM" in
-    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty|st*|foot*|contour*)
+    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty*|st*|foot*|contour*|wezterm*)
       print -Pn "\e]2;${2:q}\a" # set window name
       print -Pn "\e]1;${1:q}\a" # set tab name
       ;;
@@ -47,7 +47,7 @@ fi
 
 # Runs before showing the prompt
 function omz_termsupport_precmd {
-  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return
+  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return 0
   title "$ZSH_THEME_TERM_TAB_TITLE_IDLE" "$ZSH_THEME_TERM_TITLE_IDLE"
 }
 
@@ -129,7 +129,7 @@ fi
 # Don't define the function if we're in an unsupported terminal
 case "$TERM" in
   # all of these either process OSC 7 correctly or ignore entirely
-  xterm*|putty*|rxvt*|konsole*|mlterm*|alacritty|screen*|tmux*) ;;
+  xterm*|putty*|rxvt*|konsole*|mlterm*|alacritty*|screen*|tmux*) ;;
   contour*|foot*) ;;
   *)
     # Terminal.app and iTerm2 process OSC 7 correctly
@@ -145,6 +145,7 @@ esac
 # Identifies the directory using a file: URI scheme, including
 # the host name to disambiguate local vs. remote paths.
 function omz_termsupport_cwd {
+  setopt localoptions unset
   # Percent-encode the host and path names.
   local URL_HOST URL_PATH
   URL_HOST="$(omz_urlencode -P $HOST)" || return 1

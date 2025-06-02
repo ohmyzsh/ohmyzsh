@@ -26,7 +26,7 @@ jobs:
           - macos-latest
     steps:
       - name: Set up git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install zsh
         if: runner.os == 'Linux'
         run: sudo apt-get update; sudo apt-get install zsh
@@ -42,7 +42,7 @@ jobs:
       - test
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install Vercel CLI
         run: npm install -g vercel
       - name: Setup project and deploy

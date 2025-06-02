@@ -1,6 +1,6 @@
 # Pipenv
 
-## Installation
+This plugin provides some features to simplify the use of [Pipenv](https://pipenv.pypa.io/) while working on ZSH.
 
 In your `.zshrc` file, add `pipenv` to the plugins section
 
@@ -9,8 +9,6 @@ plugins=(... pipenv ...)
 ```
 
 ## Features
-
-This plugin provides some features to simplify the use of Pipenv while working on ZSH.
 
 - Adds completion for pipenv
 - Auto activates and deactivates pipenv shell

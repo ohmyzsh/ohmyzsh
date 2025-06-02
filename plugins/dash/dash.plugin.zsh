@@ -1,5 +1,5 @@
 # Usage: dash [keyword:]query
-dash() { open -a Dash.app dash://"$*" }
+dash() { open -a Dash.app "dash://$(omz_urlencode -r $*)" }
 compdef _dash dash
 
 _dash() {

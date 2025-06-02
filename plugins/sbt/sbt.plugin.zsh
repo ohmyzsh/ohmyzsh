@@ -4,7 +4,7 @@
 #        AUTHOR:  Mirko Caserta (mirko.caserta@gmail.com)
 #       VERSION:  1.0.2
 # ------------------------------------------------------------------------------
- 
+
 # aliases - mnemonic: prefix is 'sb'
 alias sbc='sbt compile'
 alias sbcc='sbt clean compile'

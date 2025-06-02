@@ -9,6 +9,7 @@ if [[ -z "${CLOUDSDK_HOME}" ]]; then
     "/usr/local/share/google-cloud-sdk"
     "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk"
     "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk"
+    "/opt/homebrew/share/google-cloud-sdk"
     "/usr/share/google-cloud-sdk"
     "/snap/google-cloud-sdk/current"
     "/snap/google-cloud-cli/current"
@@ -17,6 +18,7 @@ if [[ -z "${CLOUDSDK_HOME}" ]]; then
     "/opt/google-cloud-sdk"
     "/opt/google-cloud-cli"
     "/opt/local/libexec/google-cloud-sdk"
+    "$HOME/.asdf/installs/gcloud/*/"
   )
 
   for gcloud_sdk_location in $search_locations; do

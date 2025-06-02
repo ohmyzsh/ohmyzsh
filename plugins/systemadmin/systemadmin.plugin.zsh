@@ -21,6 +21,7 @@ function retlog() {
 }
 
 alias ping='ping -c 5'
+alias ping6='ping6 -c 5'
 alias clr='clear; echo Currently logged in on $TTY, as $USERNAME in directory $PWD.'
 alias path='print -l $path'
 alias mkdir='mkdir -pv'

@@ -29,5 +29,5 @@ plugins=(... ember-cli)
 
 - [BilalBudhani](https://github.com/BilalBudhani)
 - [eubenesa](https://github.com/eubenesa)
-- [scottkidder](https://github.com/scottkidder]
+- [scottkidder](https://github.com/scottkidder)
 - [t-sauer](https://www.github.com/t-sauer)
