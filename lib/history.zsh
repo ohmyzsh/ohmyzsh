@@ -18,10 +18,10 @@ function omz_history {
     print -u2 History file deleted.
   elif [[ $# -eq 0 ]]; then
     # if no arguments provided, show full history starting from 1
-    builtin fc $stamp -l 1
+    builtin fc "${stamp[@]}" -l 1
   else
     # otherwise, run `fc -l` with a custom format
-    builtin fc $stamp -l "$@"
+    builtin fc "${stamp[@]}" -l "$@"
   fi
 }
 

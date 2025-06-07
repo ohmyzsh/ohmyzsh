@@ -38,7 +38,7 @@ _dnf5_rpm_files() {
 
 _dnf5_packages_or_rpms() {
   if [[ "$words[CURRENT]" = (*/*|\~*) ]]; then # if looks like a path name
-    _dnf_rpm_files
+    _dnf5_rpm_files
   else
     _dnf5_packages "$@"
   fi

@@ -4,7 +4,7 @@
 #
 # https://github.com/agkozak/zsh-z
 #
-# Copyright (c) 2018-2024 Alexandros Kozak
+# Copyright (c) 2018-2025 Alexandros Kozak
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -294,7 +294,16 @@ zshz() {
     owner=${ZSHZ_OWNER:-${_Z_OWNER}}
 
     if (( ZSHZ[USE_FLOCK] )); then
-      ${ZSHZ[MV]} "$tempfile" "$datafile" 2> /dev/null || ${ZSHZ[RM]} -f "$tempfile"
+      # An unsual case: if inside Docker container where datafile could be bind
+      # mounted
+      if [[ -r '/proc/1/cgroup' && "$(< '/proc/1/cgroup')" == *docker* ]]; then
+        print "$(< "$tempfile")" > "$datafile" 2> /dev/null
+        ${ZSHZ[RM]} -f "$tempfile"
+      # All other cases
+      else
+        ${ZSHZ[MV]} "$tempfile" "$datafile" 2> /dev/null ||
+            ${ZSHZ[RM]} -f "$tempfile"
+      fi
 
       if [[ -n $owner ]]; then
         ${ZSHZ[CHOWN]} ${owner}:"$(id -ng ${owner})" "$datafile"
