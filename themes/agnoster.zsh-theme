@@ -357,9 +357,9 @@ prompt_aws() {
 build_prompt() {
   RETVAL=$?
   prompt_status
+  prompt_virtualenv
   prompt_aws
   prompt_context
-  prompt_virtualenv
   prompt_dir
   prompt_git
   prompt_bzr
