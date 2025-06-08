@@ -19,19 +19,20 @@ passwords in a script:
 ## genpass-apple
 
 Generates a pronounceable pseudoword passphrase of the "cvccvc" consonant/vowel
-syntax, inspired by [Apple's iCloud Keychain password generator][1]. Each
-password has exactly 1 digit placed at the edge of a "word" and exactly 1
-capital letter to satisfy most password security requirements.
+syntax based on [Apple Passwords’ Generated Strong Password Format][1]. Each
+password has exactly 1 digit placed on other either side of the hyphen or at the
+end of the password and exactly 1 capital letter to satisfy most password security
+requirements.
 
     % genpass-apple
-    gelcyv-foqtam-fotqoh-viMleb-lexduv-6ixfuk
+    nyvtyv-mYhmob-xyqby4
 
     % genpass-apple 3
-    japvyz-qyjti4-kajrod-nubxaW-hukkan-dijcaf
-    vydpig-fucnul-3ukpog-voggom-zygNad-jepgad
-    zocmez-byznis-hegTaj-jecdyq-qiqmiq-5enwom
+    kedfu4-nowryn-gezjeR
+    qoJsoh-fikgon-nugfa8
+    fecvos-kiCliv-byvhi1
 
-[1]: https://developer.apple.com/password-rules/
+[1]: https://rmondello.com/2024/10/07/apple-passwords-generated-strong-password-format/
 
 ## genpass-monkey
 

@@ -2,10 +2,10 @@
 #
 # Usage: genpass-apple [NUM]
 #
-# Generate a password made of 6 pseudowords of 6 characters each
-# with the security margin of at least 128 bits.
+# Generate a password made of 6 syllables of 3 characters each
+# with the security margin of at least 71 bits.
 #
-# Example password: xudmec-4ambyj-tavric-mumpub-mydVop-bypjyp
+# Example password: nukci1-zochob-Werfip
 #
 # If given a numerical argument, generate that many passwords.
 
@@ -20,7 +20,7 @@ zmodload zsh/system zsh/mathfunc || return
 
 {
   local -r vowels=aeiouy
-  local -r consonants=bcdfghjklmnpqrstvwxz
+  local -r consonants=bcdfghjkmnpqrstvwxz
   local -r digits=0123456789
 
   # Sets REPLY to a uniformly distributed random number in [1, $1].
@@ -35,34 +35,55 @@ zmodload zsh/system zsh/mathfunc || return
     typeset -g REPLY=$((#c % $1 + 1))
   }
 
-  local REPLY chars
+  local REPLY chars i
 
   repeat ${1-1}; do
-    # Generate 6 pseudowords of the form cvccvc where c and v
+    # Generate 6 syllables of the form cvc where c and v
     # denote random consonants and vowels respectively.
-    local words=()
+    local syllables=()
     repeat 6; do
-      words+=('')
-      repeat 2; do
-        for chars in $consonants $vowels $consonants; do
-          -$0-rand $#chars || return
-          words[-1]+=$chars[REPLY]
-        done
+      syllables+=('')
+      for chars in $consonants $vowels $consonants; do
+        -$0-rand $#chars || return
+        syllables[-1]+=$chars[REPLY]
       done
     done
 
-    local pwd=${(j:-:)words}
+    # First concatenate all syllables without hyphens
+    local pwd_chars=${(j::)syllables}
 
-    # Replace either the first or the last character in one of
-    # the words with a random digit.
+    # Valid positions for digit in the 18-char string: 5, 6, 11, 12, 17 (0-indexed)
+    # In 1-indexed: 6, 7, 12, 13, 18
+    local -a digit_positions=(6 7 12 13 18)
+    -$0-rand $#digit_positions || return
+    local digit_pos=$digit_positions[REPLY]
+    
+    # Generate random digit
     -$0-rand $#digits || return
     local digit=$digits[REPLY]
-    -$0-rand $((2 * $#words)) || return
-    pwd[REPLY/2*7+2*(REPLY%2)-1]=$digit
+    
+    # Special handling for positions 7 and 13 (start of syllable pair)
+    if [[ $digit_pos == 7 || $digit_pos == 13 ]]; then
+      # Shift characters backwards to maintain cvcv pattern
+      for (( i = digit_pos + 5; i > digit_pos; i-- )); do
+        pwd_chars[i]=$pwd_chars[i-1]
+      done
+    fi
+    
+    # Place the digit
+    pwd_chars[digit_pos]=$digit
+    
+    # Now add hyphens to create the final password
+    local pwd="${pwd_chars[1,6]}-${pwd_chars[7,12]}-${pwd_chars[13,18]}"
 
-    # Convert one lower-case character to upper case.
+    # Convert one lower-case character to upper case (excluding digit position)
+    # Calculate digit position in final string (with hyphens)
+    local final_digit_pos=$((digit_pos + (digit_pos - 1) / 6))
+    
     while true; do
       -$0-rand $#pwd || return
+      # Skip if it's the digit position or a hyphen
+      [[ REPLY == $final_digit_pos || $pwd[REPLY] == '-' ]] && continue
       [[ $vowels$consonants == *$pwd[REPLY]* ]] && break
     done
     # NOTE: We aren't using ${(U)c} here because its results are
