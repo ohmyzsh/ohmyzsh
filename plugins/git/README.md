@@ -90,6 +90,7 @@ plugins=(... git)
 | `gdup`                 | `git diff @{upstream}`                                                                                                          |
 | `gdnolock`             | `git diff $@ ":(exclude)package-lock.json" ":(exclude)\*.lock"`                                                                 |
 | `gdt`                  | `git diff-tree --no-commit-id --name-only -r`                                                                                   |
+| `gdss`                 | `git diff --shortstat $(git_main_branch)..$(git_current_branch)`                                                                |
 | `gf`                   | `git fetch`                                                                                                                     |
 | `gfa`                  | `git fetch --all --tags --prune`                                                                                                       |
 | `gfo`                  | `git fetch origin`                                                                                                              |
