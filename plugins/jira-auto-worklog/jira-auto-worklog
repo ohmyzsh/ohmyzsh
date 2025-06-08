@@ -1,0 +1,108 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'net/http'
+require 'json'
+require 'yaml'
+require 'date'
+
+JIRA_REGEX = /([A-Z]+-\d+)/.freeze
+CONFIG_PATH = "#{Dir.home}/.jira-auto-worklog"
+
+def jira_url
+  ENV.fetch('JIRA_URL', nil) ||
+    (File.read('./.jira-url').chomp if File.exist?('./.jira-url')) ||
+    (File.read("#{Dir.home}/.jira-url").chomp if File.exist?("#{Dir.home}/.jira-url")) ||
+    nil
+end
+
+def jira_pat
+  (File.read('./.jira-pat').chomp if File.exist?('./.jira-pat')) ||
+    (File.read("#{Dir.home}/.jira-pat").chomp if File.exist?("#{Dir.home}/.jira-pat")) ||
+    nil
+end
+
+def afk_threshold
+  ENV.fetch('JIRA_AUTO_WORKLOG_AFK_THRESHOLD', 30).to_i
+end
+
+def comment
+  ENV.fetch('JIRA_AUTO_WORKLOG_COMMENT', '')
+end
+
+def precision
+  ENV.fetch('JIRA_AUTO_WORKLOG_PRECISION', 1).to_i
+end
+
+unless jira_url
+  puts 'JIRA URL not found.'
+  puts
+  puts 'Valid Locations are, in order of precedence:'
+  puts '  1. JIRA_URL environment variable'
+  puts '  2. ./.jira-url'
+  puts '  3. ~/.jira-url'
+  exit(1)
+end
+
+unless jira_pat
+  puts 'JIRA Personal Access Token not found.'
+  puts
+  puts 'Valid Locations are, in order of precedence:'
+  puts '  1. ./.jira-pat'
+  puts '  2. ~/.jira-pat'
+  exit(1)
+end
+
+unless precision > 0
+  puts 'Precision must be a positive integer.'
+  exit(1)
+end
+
+branch = `command git rev-parse --abbrev-ref --symbolic-full-name HEAD 2> /dev/null`
+exit(0) unless (match = branch.match(JIRA_REGEX))
+
+ticket = match[1]
+
+# load the config
+data = {}
+if File.exist?(CONFIG_PATH)
+  data = YAML.safe_load(File.read(CONFIG_PATH), permitted_classes: [Time])
+end
+data['overflow'] ||= 0
+data['last_updated'] ||= Time.now
+
+# Calculate the delta
+delta_s = Time.now.utc.to_i - data['last_updated'].to_i
+data['last_updated'] = Time.now.utc
+
+if (delta_s / 60) > afk_threshold
+  File.write(CONFIG_PATH, YAML.dump(data))
+  exit(0)
+end
+
+time_spent = delta_s + data['overflow']
+precision_s = precision * 60
+minutes = (time_spent / precision_s)
+data['overflow'] = (time_spent % precision_s)
+File.write(CONFIG_PATH, YAML.dump(data))
+
+exit(0) if minutes.zero?
+
+uri = URI("#{jira_url}/rest/api/2/issue/#{ticket}/worklog")
+
+request = Net::HTTP::Post.new(uri)
+request['Authorization'] = format('Bearer %s', jira_pat)
+request['Content-Type'] = 'application/json'
+request.body = JSON.generate({
+                               'timeSpent' => minutes,
+                               'comment' => comment
+                             })
+
+Net::HTTP.start(uri.host, uri.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_PEER) do |http|
+  res = http.request(request)
+  if res.is_a?(Net::HTTPSuccess)
+    puts "Logged #{minutes} minutes to #{ticket}"
+  else
+    puts "Failed to log time to #{ticket}"
+  end
+end

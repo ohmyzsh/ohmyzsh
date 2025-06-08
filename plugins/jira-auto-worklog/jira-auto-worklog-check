@@ -1,0 +1,65 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'net/http'
+require 'json'
+require 'yaml'
+require 'date'
+
+JIRA_REGEX = /([A-Z]+-\d+)/.freeze
+
+def jira_url
+  ENV.fetch('JIRA_URL', nil) ||
+    (File.read('./.jira-url').chomp if File.exist?('./.jira-url')) ||
+    (File.read("#{Dir.home}/.jira-url").chomp if File.exist?("#{Dir.home}/.jira-url")) ||
+    nil
+end
+
+def jira_pat
+  (File.read('./.jira-pat').chomp if File.exist?('./.jira-pat')) ||
+    (File.read("#{Dir.home}/.jira-pat").chomp if File.exist?("#{Dir.home}/.jira-pat")) ||
+    nil
+end
+
+def precision
+  ENV.fetch('JIRA_AUTO_WORKLOG_PRECISION', 1).to_i
+end
+
+unless jira_url
+  puts 'JIRA URL not found.'
+  puts
+  puts 'Valid Locations are, in order of precedence:'
+  puts '  1. JIRA_URL environment variable'
+  puts '  2. ./.jira-url'
+  puts '  3. ~/.jira-url'
+  exit(1)
+end
+
+unless jira_pat
+  puts 'JIRA Personal Access Token not found.'
+  puts
+  puts 'Valid Locations are, in order of precedence:'
+  puts '  1. ./.jira-pat'
+  puts '  2. ~/.jira-pat'
+  exit(1)
+end
+
+unless precision > 0
+  puts 'Precision must be a positive integer.'
+  exit(1)
+end
+
+uri = URI("#{jira_url}/rest/api/2/myself")
+
+request = Net::HTTP::Get.new(uri)
+request['Authorization'] = format('Bearer %s', jira_pat)
+request['Content-Type'] = 'application/json'
+
+Net::HTTP.start(uri.host, uri.port, use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_PEER) do |http|
+  res = http.request(request)
+  if res.is_a?(Net::HTTPSuccess)
+    puts "Jira auto-worklog is configured correctly. Time will be logged."
+  else
+    puts "Jira auto-worklog is not configured correctly. Please check your JIRA URL and Personal Access Token."
+  end
+end
