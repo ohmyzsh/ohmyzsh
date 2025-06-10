@@ -80,6 +80,8 @@ esac
 # VirtualEnv colors
 : ${AGNOSTER_VENV_FG:=black}
 : ${AGNOSTER_VENV_BG:=blue}
+: ${AGNOSTER_CONDA_FG:=${CURRENT_FG}}
+: ${AGNOSTER_CONDA_BG:=magenta}
 
 # AWS Profile colors
 : ${AGNOSTER_AWS_PROD_FG:=yellow}
@@ -314,9 +316,15 @@ prompt_dir() {
 
 # Virtualenv: current working virtualenv
 prompt_virtualenv() {
-  if [ -n "$CONDA_DEFAULT_ENV" ]; then
-    prompt_segment magenta $CURRENT_FG "🐍 $CONDA_DEFAULT_ENV"
+  if [[ -n $CONDA_DEFAULT_ENV && -z $CONDA_ENV_DISABLE_PROMPT ]]; then
+    # You can execute this command to disable conda native prompt.
+    # `conda config --set changeps1 False`
+  
+    local conda_prompt_prefix=${CONDA_PROMPT_PREFIX:-"🐍 "}
+    # local conda_prompt_prefix="$CONDA_PROMPT_PREFIX"
+    prompt_segment "$AGNOSTER_CONDA_BG" "$AGNOSTER_CONDA_FG" "$conda_prompt_prefix$CONDA_DEFAULT_ENV"
   fi
+
   if [[ -n "$VIRTUAL_ENV" && -n "$VIRTUAL_ENV_DISABLE_PROMPT" ]]; then
     prompt_segment "$AGNOSTER_VENV_BG" "$AGNOSTER_VENV_FG" "(${VIRTUAL_ENV:t:gs/%/%%})"
   fi
