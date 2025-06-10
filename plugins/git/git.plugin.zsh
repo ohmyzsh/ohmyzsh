@@ -31,19 +31,25 @@ function git_develop_branch() {
   return 1
 }
 
-# Check if main exists and use instead of master
-function git_main_branch() {
+unction git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
+
   local ref
-  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,stable,master}; do
-    if command git show-ref -q --verify $ref; then
-      echo ${ref:t}
-      return 0
+  ref=$(git symbolic-ref --quiet refs/remotes/origin/HEAD 2>/dev/null)
+  if [[ $? -eq 0 && -n "$ref" ]]; then
+    echo "${ref##*/}"
+    return
+  fi
+
+  # Fallback if origin/HEAD is not set
+  for branch in main master trunk default stable; do
+    if git show-ref -q --verify "refs/heads/$branch"; then
+      echo "$branch"
+      return
     fi
   done
 
-  # If no main branch was found, fall back to master but return error
-  echo master
+  echo "master" # Default fallback
   return 1
 }
 
