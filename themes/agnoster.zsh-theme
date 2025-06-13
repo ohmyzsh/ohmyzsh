@@ -353,12 +353,19 @@ prompt_aws() {
   esac
 }
 
+prompt_terraform() {
+  local terraform_info=$(tf_prompt_info)
+  [[ -z "$terraform_info" ]] && return
+  prompt_segment magenta yellow "TF: $terraform_info"
+}
+
 ## Main prompt
 build_prompt() {
   RETVAL=$?
   prompt_status
   prompt_virtualenv
   prompt_aws
+  prompt_terraform
   prompt_context
   prompt_dir
   prompt_git
