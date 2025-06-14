@@ -163,7 +163,7 @@ adds any) and extra goodies that are included in that particular plugin.
 
 ### Themes
 
-We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme happy. We have over one
+We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme-happy. We have over one
 hundred and fifty themes now bundled. Most of them have
 [screenshots](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes) on the wiki (We are working on updating this!).
 Check them out!
@@ -218,7 +218,7 @@ terminal window.
 ZSH_THEME="random" # (...please let it be pie... please be some pie..)
 ```
 
-And if you want to pick random theme from a list of your favorite themes:
+And if you want to pick a random theme from a list of your favorite themes:
 
 ```sh
 ZSH_THEME_RANDOM_CANDIDATES=(
@@ -426,7 +426,7 @@ turn it off by setting the following in your .zshrc file, before Oh My Zsh is so
 zstyle ':omz:alpha:lib:git' async-prompt no
 ```
 
-If your problem is that the git prompt just stopped appearing, you can try to force it setting the following
+If your problem is that the git prompt just stopped appearing, you can try to force it by setting the following
 configuration before `oh-my-zsh.sh` is sourced. If it still does not work, please open an issue with your
 case.
 
@@ -486,6 +486,17 @@ wait a week?) you just need to run:
 ```sh
 omz update
 ```
+
+> [!NOTE]
+> If you want to automate this process in a script, you should call directly the `upgrade` script, like this:
+>
+> ```sh
+> $ZSH/tools/upgrade.sh
+> ```
+>
+> See more options in the [FAQ: How do I update Oh My Zsh?](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#how-do-i-update-oh-my-zsh).
+>
+> **USE OF `omz update --unattended` HAS BEEN REMOVED, AS IT HAS SIDE EFFECTS**.
 
 Magic! 🎉
 

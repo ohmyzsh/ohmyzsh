@@ -3,6 +3,8 @@ if (( ! ${+commands[uv]} )); then
   return
 fi
 
+alias uv="noglob uv"
+
 alias uva='uv add'
 alias uvexp='uv export --format requirements-txt --no-hashes --output-file requirements.txt --quiet'
 alias uvl='uv lock'

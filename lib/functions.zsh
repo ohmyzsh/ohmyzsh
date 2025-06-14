@@ -23,6 +23,9 @@ function open_command() {
     linux*)   [[ "$(uname -r)" != *icrosoft* ]] && open_cmd='nohup xdg-open' || {
                 open_cmd='cmd.exe /c start ""'
                 [[ -e "$1" ]] && { 1="$(wslpath -w "${1:a}")" || return 1 }
+                [[ "$1" = (http|https)://* ]] && {
+                  1="$(echo "$1" | sed -E 's/([&|()<>^])/^\1/g')" || return 1
+                }
               } ;;
     msys*)    open_cmd='start ""' ;;
     *)        echo "Platform $OSTYPE not supported"

@@ -62,7 +62,7 @@ function bgnotify_formatted {
 function bgnotify_appid {
   if (( ${+commands[osascript]} )); then
     osascript -e "tell application id \"$(bgnotify_programid)\"  to get the {id, frontmost, id of front window, visible of front window}" 2>/dev/null
-  elif [[ -n $WAYLAND_DISPLAY ]] && (( ${+commands[swaymsg]} )); then # wayland+sway
+  elif [[ -n $WAYLAND_DISPLAY ]] && ([[ -n $SWAYSOCK ]] || [[ -n $I3SOCK ]]) && (( ${+commands[swaymsg]} )); then # wayland+sway
     local app_id=$(bgnotify_find_sway_appid)
     [[ -n "$app_id" ]] && echo "$app_id" || echo $EPOCHSECONDS
   elif [[ -z $WAYLAND_DISPLAY ]] && [[ -n $DISPLAY ]] && (( ${+commands[xprop]} )); then
