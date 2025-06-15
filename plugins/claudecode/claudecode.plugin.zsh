@@ -123,7 +123,6 @@ _claude_tools() {
   _describe 'tools' tools
 }
 
-_claude "$@"
 EOF
 
   # Save current version to cache
@@ -241,6 +240,10 @@ _claude_quick() {
     'debug:Debug the given code or error'
     'review:Review the given code'
     'fix:Fix the given issue'
+    'optimize:Optimize the given code'
+    'refactor:Refactor the given code'
+    'test:Write tests for the given code'
+    'docs:Write documentation for the given code'
   )
 
   _describe 'actions' actions
@@ -439,23 +442,6 @@ _claude_pipe_enhanced() {
     'json:Analyze as JSON data'
   )
   _describe 'input formats' formats
-}
-
-# Update claude-quick completion
-_claude_quick() {
-  local -a actions
-  actions=(
-    'explain:Explain the given content'
-    'debug:Debug the given code or error'
-    'review:Review the given code'
-    'fix:Fix the given issue'
-    'optimize:Optimize the given code'
-    'refactor:Refactor the given code'
-    'test:Write tests for the given code'
-    'docs:Write documentation for the given code'
-  )
-
-  _describe 'actions' actions
 }
 
 compdef _claude_quick claude-quick
