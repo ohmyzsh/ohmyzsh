@@ -1,286 +1,219 @@
-# taskman
+# Taskman v2.0 - Oh My Zsh Plugin
 
-A powerful terminal task manager plugin for Oh-My-Zsh. Manage your daily tasks without leaving the command line!
+A modern, feature-rich terminal task manager plugin for Oh My Zsh. Taskman provides an intuitive sidebar-style interface for managing your tasks with advanced features like priority-based coloring, humanized timers, and even a fun running cat animation!
 
-![Task Manager Demo](https://via.placeholder.com/600x400/1e1e1e/00ff00?text=Terminal+Task+Manager+Demo)
+## ✨ Features
 
-## Features
+### Core Functionality
+- **Sidebar Interface**: Clean, terminal-based UI that doesn't interfere with your workflow
+- **Persistent Storage**: Tasks are automatically saved to JSON format
+- **Priority System**: Three priority levels (high, normal, low) with visual indicators
+- **Task Operations**: Add, complete, delete, and navigate tasks with keyboard shortcuts
 
-- 📝 **Dual Interface**: Both interactive TUI and CLI operations
-- ⌨️ **Vim-like Keybindings**: Navigate with `j`/`k`, `Space` to toggle
-- 🎯 **Priority System**: High, normal, and low priority with color coding
-- 💾 **Persistent Storage**: Tasks saved in `~/.taskman/tasks.json`
-- 🎨 **Rich Colors**: Visual indicators for task status and priority
-- ⚡ **Zero Config**: Works immediately after installation
-- 🔧 **Shell Integration**: Aliases, completion, and sidebar workflow
+### Advanced Features
+- **Smart Sorting**: Multiple sort modes (creation order, priority, alphabetical) with completed tasks always at bottom
+- **Priority-Based Colors**: Task text colored by priority (red=high, yellow=normal, cyan=low)
+- **Humanized Timers**: Shows task age in human-readable format ([5m], [2h], [3d]) using local timezone
+- **Visual Separation**: Horizontal line separates active and completed tasks
+- **Configurable Storage**: Set custom task file location via `TASKMAN_DATA_FILE` environment variable
+- **Completed Task Dimming**: Completed tasks retain priority colors but are visually dimmed
+- **Fun Animation**: Optional Chrome dino-style mini-game for entertainment (toggle with 'x')
 
-## Installation
+### Display Format
+```
+Taskman v2.0                                    [Sort: default]
+Pending: 3, Completed: 1                Press 'h' for help, 'q' to quit
 
-1. Add `taskman` to your plugins list in `~/.zshrc`:
+[  5m] ○ [!] Fix critical bug in authentication system
+[ 2h] ○ [-] Review pull request #123
+[now] ○ [·] Update documentation
 
+─────────────────────────────────────────────────────────────────
+
+[ 1d] ✓ [!] Complete project setup
+
+        ◆
+. . . ● . . . | . . . ▌ . . . █ . . . ┃ . . . ▐ . . .
+
+n: New | Space: Toggle | d: Delete | s: Sort | ↑↓: Navigate | h: Help | q: Quit
+```
+
+## 🚀 Installation
+
+### Manual Installation
    ```bash
-   plugins=(git taskman)
-   ```
+# Clone or copy the plugin to your Oh My Zsh plugins directory
+cp -r taskman ~/.oh-my-zsh/plugins/
 
-2. Reload your shell:
+# Add to your .zshrc plugins list
+plugins=(... taskman)
 
-   ```bash
+# Reload your shell
    source ~/.zshrc
    ```
 
-3. Start using!
-
+### Using Oh My Zsh Plugin Manager
+If you're using a plugin manager like `oh-my-zsh-plugins`:
    ```bash
-   tasks add "My first task"
+# Add to your plugin list
+plugins=(... taskman)
    ```
 
-## Requirements
-
-- **Python 3.6+** (for interactive UI and CLI operations)
-- **Terminal with color support** (most modern terminals)
-
-## Usage
+## 🎮 Usage
 
 ### Interactive UI
-
-Launch the full-screen task manager:
-
+Launch the interactive task manager:
 ```bash
-tasks           # Launch interactive UI
-tasks ui        # Same as above
-task-sidebar    # Launch with sidebar usage tips
+taskman
+# or use aliases
+tasks
+tm
+todo
 ```
 
-#### Keyboard Shortcuts
+### Keyboard Shortcuts
 
-| Key | Action |
-|-----|--------|
-| `↑`/`k` | Move up |
-| `↓`/`j` | Move down |
-| `n` | Create new task |
-| `Space` | Toggle task completion |
-| `d` | Delete selected task |
-| `Tab` | Cycle priority when creating tasks |
-| `h` | Toggle help panel |
-| `q` | Quit |
+#### Navigation
+- `↑/k` - Move selection up
+- `↓/j` - Move selection down
+
+#### Task Operations
+- `n` - Create new task
+- `Space` - Toggle task completion
+- `d` - Delete selected task
+
+#### Sorting
+- `s` - Cycle through sort modes (default → priority → alphabetical)
+- `p` - Sort by priority (high → normal → low)
+- `a` - Sort alphabetically
+
+#### Other
+- `h` - Toggle help panel
+- `x` - Toggle animation on/off
+- `q` - Quit application
 
 ### Command Line Interface
-
-#### Adding Tasks
-
 ```bash
-tasks add "Fix login bug"                    # Normal priority
-tasks add "Deploy to production" high        # High priority
-tasks add "Update documentation" low         # Low priority
+# Add a new task
+tasks add "Complete project documentation"
+tasks add "Fix bug in login system" high
+
+# List tasks
+tasks list
+tasks list pending
+tasks list completed
+
+# Mark task as completed
+tasks done 1
+
+# Delete a task
+tasks delete 2
+
+# Sort tasks
+tasks sort priority
+tasks sort alphabetical
+tasks sort default
+
+# Show help
+tasks help
 ```
 
-#### Listing Tasks
+## ⚙️ Configuration
 
+### Custom Storage Location
+Set a custom location for your task file:
 ```bash
-tasks list           # All tasks
-tasks list pending   # Only pending tasks
-tasks list completed # Only completed tasks
-tasks ls            # Short alias
+export TASKMAN_DATA_FILE="$HOME/my-tasks.json"
 ```
 
-#### Managing Tasks
+### Priority Levels
+- **High Priority** (`!`): Red text - urgent tasks
+- **Normal Priority** (`-`): Yellow text - regular tasks
+- **Low Priority** (`·`): Cyan text - nice-to-have tasks
 
-```bash
-tasks done 3         # Mark task ID 3 as completed
-tasks delete 5       # Delete task ID 5
-tasks help          # Show help
+## 🎨 Visual Features
+
+### Color System
+- **Active Tasks**: Text colored by priority (red/yellow/cyan)
+- **Completed Tasks**: Same priority colors but dimmed for subtle indication
+- **Status Bullets**: Green checkmarks for completed, colored circles for active
+- **Selection**: Reverse highlighting for currently selected task
+
+### Timer Display
+- Shows how long ago each task was created
+- Updates in real-time for active tasks
+- Uses local timezone for accurate time calculation
+- Formats: `[now]`, `[5m]`, `[2h]`, `[3d]`
+
+### Mini-Game Animation
+- Chrome dino-style side-scrolling game with jumping player and obstacles
+- Press 'x' to toggle animation on/off
+- Automatic jumping and varied obstacles for entertainment
+- Runs alongside task management without interference
+
+## 📁 File Structure
+```
+~/.taskman/
+└── tasks.json          # Task storage (default location)
 ```
 
-### Aliases
-
-The plugin provides convenient aliases:
-
-```bash
-tm add "Buy groceries"    # Same as 'tasks add'
-task list               # Same as 'tasks list'
-todo done 1             # Same as 'tasks done 1'
-```
-
-## Priority Levels
-
-Tasks support three priority levels with color coding:
-
-- **High Priority** (`!`) - 🔴 Red, for urgent tasks
-- **Normal Priority** (`-`) - 🟡 Yellow, default priority
-- **Low Priority** (`·`) - 🔵 Cyan, for less urgent tasks
-
-## Task Display
-
-Tasks are displayed with visual indicators:
-
-```
- ✓ [!] Completed high priority task     (green)
- ○ [-] Pending normal priority task     (yellow)
- ○ [·] Pending low priority task        (cyan)
-```
-
-## Sidebar Workflow
-
-Perfect for split-terminal development workflow:
-
-1. **Split your terminal** horizontally or vertically
-2. **Run `tasks ui`** in one pane for persistent task view
-3. **Work in the other pane** while keeping tasks visible
-4. **Quick updates** with keyboard shortcuts
-
-## Auto-completion
-
-The plugin provides intelligent tab completion:
-
-```bash
-tasks <TAB>              # Shows: add, list, done, delete, etc.
-tasks add "task" <TAB>   # Shows: high, normal, low
-tasks done <TAB>        # Shows available task IDs
-```
-
-## Configuration
-
-### Optional Startup Summary
-
-To show task summary when opening terminal, uncomment this line in the plugin:
-
-```bash
-# In ~/.oh-my-zsh/plugins/taskman/taskman.plugin.zsh
-_taskman_startup_summary  # Uncomment this line
-```
-
-This shows:
-```
-📋 Task Summary: 3 pending, 2 completed
-   Type 'tasks' to manage your tasks
-```
-
-## Data Storage
-
-Tasks are stored in `~/.taskman/tasks.json`:
-
+### Task Data Format
 ```json
 {
   "tasks": [
     {
       "id": 1,
-      "text": "Fix login bug",
-      "completed": false,
+      "text": "Complete project setup",
+      "completed": true,
       "priority": "high",
       "created_at": "2024-01-15T10:30:00"
     }
   ],
-  "next_id": 2
+  "next_id": 2,
+  "sort_mode": "default"
 }
 ```
 
-## Examples
+## 🔧 Technical Details
 
-### Daily Developer Workflow
+- **Language**: Python 3.6+
+- **Dependencies**: Built-in libraries only (curses, json, datetime)
+- **Storage**: JSON format for human-readable task data
+- **Cross-platform**: Works on macOS, Linux, and other Unix-like systems
+- **Performance**: Efficient curses-based rendering with 100ms refresh rate
 
+## 🎯 Tips & Tricks
+
+1. **Quick Task Entry**: Use Tab in input mode to cycle through priority levels
+2. **Efficient Navigation**: Use `k`/`j` (vim-style) or arrow keys for navigation
+3. **Sort Persistence**: Your preferred sort mode is remembered between sessions
+4. **Bulk Operations**: Use CLI commands for scripting and automation
+5. **Custom Storage**: Set `TASKMAN_DATA_FILE` to sync tasks across different setups
+6. **Visual Cues**: Completed tasks are automatically moved to bottom with visual separator
+7. **Time Awareness**: Timer shows local time, perfect for tracking task age across time zones
+
+## 🐛 Troubleshooting
+
+### Common Issues
+- **Unicode Display**: Ensure your terminal supports Unicode for proper emoji display
+- **Color Issues**: Some terminals may not support all color combinations
+- **Permission Errors**: Check write permissions for the task storage directory
+
+### Debug Mode
 ```bash
-# Morning planning
-tasks add "Review PR #123" high
-tasks add "Fix login bug" high  
-tasks add "Update docs" low
-
-# Check current tasks
-tasks list pending
-
-# Work in interactive mode (split terminal)
-tasks ui
-
-# Quick CLI updates
-tm done 1
-tm add "Deploy hotfix" high
-
-# End of day review
-tasks list completed
+# Run with Python directly for debugging
+python3 ~/.oh-my-zsh/plugins/taskman/task_manager.py
 ```
 
-### Project Management
+## 🤝 Contributing
 
-```bash
-# Sprint planning
-tasks add "Implement user auth" high
-tasks add "Add unit tests" normal
-tasks add "Update README" low
+This is an Oh My Zsh version of the Taskman plugin. For contributions and bug reports, please refer to the original osh framework repository.
 
-# Track progress
-tasks list
+## 📄 License
 
-# Mark completed
-tasks done 1
-tasks done 2
-
-# Cleanup
-tasks delete 3  # Remove completed/outdated tasks
-```
-
-## Comparison with Alternatives
-
-| Feature | taskman | taskwarrior | todo.txt | Todoist |
-|---------|---------|-------------|----------|----------|
-| Interactive TUI | ✅ | ❌ | ❌ | ❌ |
-| CLI Interface | ✅ | ✅ | ✅ | ✅ |
-| Zero Setup | ✅ | ❌ | ✅ | ❌ |
-| No External Deps | ✅ | ❌ | ✅ | ❌ |
-| Rich Visual UI | ✅ | ❌ | ❌ | ❌ |
-| Vim Keybindings | ✅ | ❌ | ❌ | ❌ |
-| Local Data | ✅ | ✅ | ✅ | ❌ |
-
-## Troubleshooting
-
-### Python Not Found
-
-```bash
-# Install Python 3 (macOS)
-brew install python3
-
-# Install Python 3 (Ubuntu/Debian)
-sudo apt-get install python3
-
-# Verify installation
-python3 --version
-```
-
-### Plugin Not Loading
-
-1. Check that `taskman` is in your plugins list:
-   ```bash
-   echo $plugins
-   ```
-
-2. Reload your shell:
-   ```bash
-   source ~/.zshrc
-   ```
-
-3. Test plugin function:
-   ```bash
-   tasks help
-   ```
-
-### File Permissions
-
-```bash
-# Make Python files executable
-chmod +x ~/.oh-my-zsh/plugins/taskman/bin/*.py
-```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-MIT License - see the [Oh-My-Zsh license](https://github.com/ohmyzsh/ohmyzsh/blob/master/LICENSE.txt) for details.
-
-## Author
-
-Created by [@oiahoon](https://github.com/oiahoon)
+Part of the Oh My Zsh ecosystem. See individual license files for details.
 
 ---
 
-**Happy task managing! 🚀**
+**Enjoy managing your tasks with style! 🐱✨**
 

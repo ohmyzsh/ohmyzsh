@@ -47,10 +47,10 @@ _taskman() {
                     if command -v python3 >/dev/null 2>&1; then
                         local plugin_dir="${0:h}"
                         local -a task_ids
-                        
+
                         # Try to get task IDs from the CLI
-                        task_ids=($(python3 "$plugin_dir/bin/task_cli.py" list all 2>/dev/null | grep -o '(ID: [0-9]\+)' | grep -o '[0-9]\+' 2>/dev/null))
-                        
+                        task_ids=($(python3 "$plugin_dir/task_cli.py" list all 2>/dev/null | grep -o '(ID: [0-9]\+)' | grep -o '[0-9]\+' 2>/dev/null))
+
                         if [[ ${#task_ids[@]} -gt 0 ]]; then
                             _describe 'task IDs' task_ids
                         else
