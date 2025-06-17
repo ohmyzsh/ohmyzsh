@@ -1,6 +1,6 @@
-# 🐳 dockolor.zsh – Colorized `docker ps` Output for Zsh
+# 🐳 dockolor – Colorized `docker ps` Output
 
-**dockolor** is a lightweight Zsh plugin that enhances your `docker ps` experience with color-coded output based on container status. It also replaces common aliases like `dps` and `dpsa` if defined.
+**dockolor** is a lightweight plugin that enhances your `docker ps` experience with color-coded output based on container status. It also replaces common aliases like `dps` and `dpsa` if defined.
 
 ## Features
 
@@ -33,7 +33,13 @@ source ~/.zshrc
 - Copy or clone the `dockolor.plugin.zsh` file
 - Source it in your `.zshrc` or `.bashrc`
 - Use the `dockolor` command in place of the `docker ps` command
-- You can also add an alias, something like `alias dps = dockolor`
+- You can also add an alias, something like:
+
+```
+myalias() {
+  dockolor "$@"
+}
+```
 
 Reload your shell:
 
