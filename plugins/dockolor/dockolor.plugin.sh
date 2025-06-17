@@ -7,7 +7,7 @@ dockolor_has_awk() {
 }
 
 dockolor_colorize() {
-docker ps "$@" --no-trunc | awk '
+docker ps "$@" | awk '
   BEGIN {
     RED = "\033[0;31m"
     GREEN = "\033[0;32m"
@@ -42,7 +42,7 @@ docker ps "$@" --no-trunc | awk '
 dockolor_dps() {
   if [ "$(dockolor_has_awk)" = false ]; then
     echo "You have installed dockolor but you don't have awk installed"
-    docker ps "$@" --no-trunc
+    docker ps "$@"
   else
     dockolor_colorize "$@"
   fi

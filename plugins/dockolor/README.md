@@ -49,7 +49,7 @@ source ~/.zshrc
 
 ## Usage
 
-- `dockolor` — Same as `docker ps --no-trunc`, but colorized.
-- `dps` — Replaced with `dockolor_dps`, with color.
-- `dpsa` — Replaced with `dockolor_dps -a`, showing all containers, with color.
+- `dockolor` — Same as `docker ps`, but colorized.
+- `dps` — Replaced with `dockolor_dps`, same as `dockolor` or `docker ps`.
+- `dpsa` — Replaced with `dockolor_dps -a`, same as `dockolor -a` or `docker ps -a`.
 
