@@ -38,8 +38,6 @@ Example usage:
 
 ### Oh my Zsh
 
-Git clone this repository to the Oh my Zsh custom plugins folder.
-
 Add plugin to plugins directive in `~/.zshrc`
 ```zsh
 plugins=(
@@ -48,13 +46,13 @@ plugins=(
 )
 
 source $HOME/.oh-my-zsh/oh-my-zsh.sh
-``` 
+```
 
 ### Antigen
 It is recommended to use a `.antigenrc` file. Then add the following to it:
 
 ```zsh
-antigen bundle DanielAtKrypton/viper-env
+antigen bundle viper-env
 
 # Apply changes
 antigen apply
