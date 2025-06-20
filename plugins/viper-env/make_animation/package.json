@@ -1,0 +1,33 @@
+{
+  "name": "make-animation",
+  "version": "1.0.0",
+  "description": "Makes viper-env README.md animation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "phase_one": "svg-term --cast=1J6AsLVqynFFX5JcTLxFDLYh3 --out assets/usage.svg --profile DanielAtKrypton --window --term konsole",
+    "phase_two": "svgembed -i assets/usage.svg -o assets/final.svg -f assets/FiraCodeRetinaNF.ttf -t \"viper-env is cool\" --hover",
+    "all_phases": "yarn phase_one && yarn phase_two && rm assets/usage.svg",
+    "postinstall": "yarn all_phases"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanielAtKrypton/viper-env.git"
+  },
+  "keywords": [
+    "Virtualenv",
+    "Python",
+    "Direnv",
+    "Zsh"
+  ],
+  "author": "Daniel Kaminski de Souza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DanielAtKrypton/viper-env/issues"
+  },
+  "homepage": "https://github.com/DanielAtKrypton/viper-env#readme",
+  "devDependencies": {
+    "svg-term-cli": "^2.1.1",
+    "svgembed": "https://github.com/miraclx/svgembed.git"
+  }
+}
