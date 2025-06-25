@@ -29,9 +29,11 @@ function rbwpw {
     echo "$service not found"
     return 1
   fi
+  local _random="$RANDOM"
+  echo -n $_random > $ZSH_CACHE_DIR/rbwpw_cache
   echo -n $pw | clipcopy
   echo "password for $service copied!"
-  {sleep 20 && clipcopy </dev/null 2>/dev/null} &|
+  {sleep 20 && [[ $(<$ZSH_CACHE_DIR/rbwpw_cache) == $_random ]] && clipcopy </dev/null 2>/dev/null} &|
 }
 
 function _rbwpw {
