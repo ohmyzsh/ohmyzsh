@@ -15,6 +15,13 @@ _source-from-omz-settings() {
   fi
 }
 
+_source-from-default-location() {
+  [[ -r /usr/local/share/chruby/chruby.sh ]] || return 1
+
+  source /usr/local/share/chruby/chruby.sh
+  source /usr/local/share/chruby/auto.sh
+}
+
 _source-from-homebrew() {
   (( $+commands[brew] )) || return 1
 
@@ -36,27 +43,14 @@ _source-from-homebrew() {
   source $_brew_prefix/share/chruby/auto.sh
 }
 
-_load-chruby-dirs() {
-  local dir
-  for dir in "$HOME/.rubies" "$PREFIX/opt/rubies"; do
-    if [[ -d "$dir" ]]; then
-      RUBIES+=("$dir")
-    fi
-  done
-}
-
 # Load chruby
-if _source-from-omz-settings; then
-  _load-chruby-dirs
-elif [[ -r "/usr/local/share/chruby/chruby.sh" ]] ; then
-  source /usr/local/share/chruby/chruby.sh
-  source /usr/local/share/chruby/auto.sh
-  _load-chruby-dirs
-elif _source-from-homebrew; then
-  _load-chruby-dirs
-fi
+_source-from-omz-settings || \
+  _source-from-default-location || \
+  _source-from-homebrew
 
-unfunction _source-from-homebrew _source-from-omz-settings _load-chruby-dirs
+unfunction _source-from-homebrew \
+           _source-from-default-location \
+           _source-from-omz-settings
 
 
 ## chruby utility functions and aliases
