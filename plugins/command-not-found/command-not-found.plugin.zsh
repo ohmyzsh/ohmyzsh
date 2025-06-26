@@ -1,8 +1,18 @@
 ## Platforms with a built-in command-not-found handler init file
 
+# Arch Linux: required 'pkgfile'
+if [[ -f /etc/arch-release ]]; then
+  if command -v pkgfile >/dev/null 2>&1; then
+    if [[ -f /usr/share/doc/pkgfile/command-not-found.zsh ]]; then
+      source /usr/share/doc/pkgfile/command-not-found.zsh
+      return 0
+    fi
+  else
+    printf "Warning: 'pkgfile' is not installed,\nYou can install it via: sudo pacman -S pkgfile\n" >&2
+  fi
+fi
+
 for file (
-  # Arch Linux. Must have pkgfile installed: https://wiki.archlinux.org/index.php/Pkgfile#Command_not_found
-  /usr/share/doc/pkgfile/command-not-found.zsh
   # Homebrew: https://github.com/Homebrew/homebrew-command-not-found
   /opt/homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh
   /usr/local/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh
