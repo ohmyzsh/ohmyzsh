@@ -13,6 +13,8 @@ function afmagic_dashes {
   # the prompt, account for it when returning the number of dashes
   if [[ -n "$python_env" && "$PS1" = *\(${python_env}\)* ]]; then
     echo $(( COLUMNS - ${#python_env} - 3 ))
+  elif [[ -n "$VIRTUAL_ENV_PROMPT" && "$PS1" = *${VIRTUAL_ENV_PROMPT}* ]]; then
+    echo $(( COLUMNS - ${#VIRTUAL_ENV_PROMPT} ))
   else
     echo $COLUMNS
   fi

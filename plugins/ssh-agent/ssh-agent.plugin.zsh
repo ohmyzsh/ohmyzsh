@@ -43,7 +43,7 @@ function _add_identities() {
   # this is to mimic the call to ssh-add with no identities
   if [[ ${#identities} -eq 0 ]]; then
     # key list found on `ssh-add` man page's DESCRIPTION section
-    for id in id_rsa id_dsa id_ecdsa id_ed25519 identity; do
+    for id in id_rsa id_dsa id_ecdsa id_ed25519 id_ed25519_sk identity; do
       # check if file exists
       [[ -f "$HOME/.ssh/$id" ]] && identities+=($id)
     done
@@ -100,7 +100,11 @@ function _add_identities() {
 if zstyle -t :omz:plugins:ssh-agent agent-forwarding \
    && [[ -n "$SSH_AUTH_SOCK" ]]; then
   if [[ ! -L "$SSH_AUTH_SOCK" ]]; then
-    ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+    if [[ -n "$TERMUX_VERSION" ]]; then
+      ln -sf "$SSH_AUTH_SOCK" "$PREFIX"/tmp/ssh-agent-$USERNAME-screen
+    else
+      ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+    fi
   fi
 else
   _start_agent

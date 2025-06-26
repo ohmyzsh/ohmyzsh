@@ -21,6 +21,7 @@ plugins=(... laravel)
 | `pamfs`  |  `php artisan migrate:fresh --seed` |
 | `pamr`  |  `php artisan migrate:rollback` |
 | `pads`  |  `php artisan db:seed` |
+| `padw`  |  `php artisan db:wipe` |
 
 ## Makers
 
@@ -36,6 +37,10 @@ plugins=(... laravel)
 | `pamj`  |  `php artisan make:job` |
 | `paml`  |  `php artisan make:listener` |
 | `pamn`  |  `php artisan make:notification` |
+| `pamcl` | `php artisan make:class` |
+| `pamen` | `php artisan make:enum` |
+| `pami`  | `php artisan make:interface` |
+| `pamtr` | `php artisan make:trait` |
 
 ## Clears
 
@@ -45,6 +50,7 @@ plugins=(... laravel)
 | `pacoc`  |  `php artisan config:clear` |
 | `pavic`  |  `php artisan view:clear` |
 | `paroc`  |  `php artisan route:clear` |
+| `paopc`  |  `php artisan optimize:clear` |
 
 ## Queues
 

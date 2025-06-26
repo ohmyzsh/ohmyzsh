@@ -48,13 +48,15 @@ omz_f() {
 unset -f omz_f
 
 # If ZSH is not defined, use the current script's directory.
-[[ -z "$ZSH" ]] && export ZSH="${${(%):-%x}:a:h}"
+[[ -n "$ZSH" ]] || export ZSH="${${(%):-%x}:a:h}"
+
+# Set ZSH_CUSTOM to the path where your custom config files
+# and plugins exists, or else we will use the default custom/
+[[ -n "$ZSH_CUSTOM" ]] || ZSH_CUSTOM="$ZSH/custom"
 
 # Set ZSH_CACHE_DIR to the path where cache files should be created
 # or else we will use the default cache/
-if [[ -z "$ZSH_CACHE_DIR" ]]; then
-  ZSH_CACHE_DIR="$ZSH/cache"
-fi
+[[ -n "$ZSH_CACHE_DIR" ]] || ZSH_CACHE_DIR="$ZSH/cache"
 
 # Make sure $ZSH_CACHE_DIR is writable, otherwise use a directory in $HOME
 if [[ ! -w "$ZSH_CACHE_DIR" ]]; then
@@ -63,7 +65,7 @@ fi
 
 # Create cache and completions dir and add to $fpath
 mkdir -p "$ZSH_CACHE_DIR/completions"
-(( ${fpath[(Ie)"$ZSH_CACHE_DIR/completions"]} )) || fpath=("$ZSH_CACHE_DIR/completions" $fpath)
+(( ${fpath[(Ie)$ZSH_CACHE_DIR/completions]} )) || fpath=("$ZSH_CACHE_DIR/completions" $fpath)
 
 # Check for updates on initial load...
 source "$ZSH/tools/check_for_upgrade.sh"
@@ -71,16 +73,10 @@ source "$ZSH/tools/check_for_upgrade.sh"
 # Initializes Oh My Zsh
 
 # add a function path
-fpath=("$ZSH/functions" "$ZSH/completions" $fpath)
+fpath=($ZSH/{functions,completions} $ZSH_CUSTOM/{functions,completions} $fpath)
 
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit zrecompile
-
-# Set ZSH_CUSTOM to the path where your custom config files
-# and plugins exists, or else we will use the default custom/
-if [[ -z "$ZSH_CUSTOM" ]]; then
-    ZSH_CUSTOM="$ZSH/custom"
-fi
 
 is_plugin() {
   local base_dir=$1
@@ -103,8 +99,8 @@ done
 
 # Figure out the SHORT hostname
 if [[ "$OSTYPE" = darwin* ]]; then
-  # macOS's $HOST changes with dhcp, etc. Use ComputerName if possible.
-  SHORT_HOST=$(scutil --get ComputerName 2>/dev/null) || SHORT_HOST="${HOST/.*/}"
+  # macOS's $HOST changes with dhcp, etc. Use LocalHostName if possible.
+  SHORT_HOST=$(scutil --get LocalHostName 2>/dev/null) || SHORT_HOST="${HOST/.*/}"
 else
   SHORT_HOST="${HOST/.*/}"
 fi
@@ -196,7 +192,7 @@ _omz_source() {
   fi
 }
 
-# Load all of the lib files in ~/oh-my-zsh/lib that end in .zsh
+# Load all of the lib files in ~/.oh-my-zsh/lib that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
 for lib_file ("$ZSH"/lib/*.zsh); do
   _omz_source "lib/${lib_file:t}"

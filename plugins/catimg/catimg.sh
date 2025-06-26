@@ -7,6 +7,10 @@
 # GitHub: https://github.com/posva/catimg                                      #
 ################################################################################
 
+# this should come from outside, either `magick` or `convert`
+# from imagemagick v7 and ahead `convert` is deprecated
+: ${CONVERT_CMD:=convert}
+
 function help() {
   echo "Usage catimg [-h] [-w width] [-c char] img"
   echo "By default char is \"  \" and w is the terminal width"
@@ -43,23 +47,23 @@ if [ ! "$WIDTH" ]; then
 else
   COLS=$(expr $WIDTH "/" $(echo -n "$CHAR" | wc -c))
 fi
-WIDTH=$(convert "$IMG" -print "%w\n" /dev/null)
+WIDTH=$($CONVERT_CMD "$IMG" -print "%w\n" /dev/null)
 if [ "$WIDTH" -gt "$COLS" ]; then
   WIDTH=$COLS
 fi
 
 REMAP=""
-if convert "$IMG" -resize $COLS\> +dither -remap $COLOR_FILE /dev/null ; then
+if $CONVERT_CMD "$IMG" -resize $COLS\> +dither -remap $COLOR_FILE /dev/null ; then
   REMAP="-remap $COLOR_FILE"
 else
   echo "The version of convert is too old, don't expect good results :(" >&2
-  #convert "$IMG" -colors 256 PNG8:tmp.png
-  #IMG="tmp.png"
+  # $CONVERT_CMD "$IMG" -colors 256 PNG8:tmp.png
+  # IMG="tmp.png"
 fi
 
 # Display the image
 I=0
-convert "$IMG" -resize $COLS\> +dither `echo $REMAP` txt:- 2>/dev/null |
+$CONVERT_CMD "$IMG" -resize $COLS\> +dither `echo $REMAP` txt:- 2>/dev/null |
 sed -e 's/.*none.*/NO NO NO/g' -e '1d;s/^.*(\(.*\)[,)].*$/\1/g;y/,/ /' |
 while read R G B f; do
   if [ ! "$R" = "NO" ]; then

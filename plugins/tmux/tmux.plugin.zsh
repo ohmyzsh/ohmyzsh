@@ -15,6 +15,8 @@ fi
 : ${ZSH_TMUX_AUTOQUIT:=$ZSH_TMUX_AUTOSTART}
 # Automatically name the new session based on the basename of PWD
 : ${ZSH_TMUX_AUTONAME_SESSION:=false}
+# Automatically pick up tmux environments
+: ${ZSH_TMUX_AUTOREFRESH:=false}
 # Set term to screen or screen-256color based on current terminal support
 : ${ZSH_TMUX_DETACHED:=false}
 # Set detached mode
@@ -50,6 +52,7 @@ fi
 
 # ALIASES
 function _build_tmux_alias {
+  setopt localoptions no_rc_expand_param
   eval "function $1 {
     if [[ -z \$1 ]] || [[ \${1:0:1} == '-' ]]; then
       tmux $2 \"\$@\"
@@ -57,6 +60,19 @@ function _build_tmux_alias {
       tmux $2 $3 \"\$@\"
     fi
   }"
+
+  local f s
+  f="_omz_tmux_alias_${1}"
+  s=(${(z)2})
+
+  eval "function ${f}() {
+    shift words;
+    words=(tmux ${@:2} \$words);
+    ((CURRENT+=${#s[@]}+1))
+    _tmux
+  }"
+
+  compdef "$f" "$1"
 }
 
 alias tksv='tmux kill-server'
@@ -144,6 +160,15 @@ function _zsh_tmux_plugin_run() {
   fi
 }
 
+# Refresh tmux environment variables.
+function _zsh_tmux_plugin_preexec()
+{
+  local -a tmux_cmd
+  tmux_cmd=(command tmux)
+
+  eval $($tmux_cmd show-environment -s)
+}
+
 # Use the completions for tmux for our function
 compdef _tmux _zsh_tmux_plugin_run
 # Alias tmux to our wrapper function.
@@ -169,4 +194,10 @@ if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z 
     export ZSH_TMUX_AUTOSTARTED=true
     _zsh_tmux_plugin_run
   fi
+fi
+
+# Automatically refresh tmux environments if tmux is running.
+if [[ -n "$TMUX" && "$ZSH_TMUX_AUTOREFRESH" == "true" ]] && tmux ls >/dev/null 2>/dev/null; then
+  autoload -U add-zsh-hook
+  add-zsh-hook preexec _zsh_tmux_plugin_preexec
 fi

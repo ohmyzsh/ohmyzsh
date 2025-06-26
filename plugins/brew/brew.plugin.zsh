@@ -24,7 +24,7 @@ if (( ! $+commands[brew] )); then
 fi
 
 if [[ -z "$HOMEBREW_PREFIX" ]]; then
-  # Maintain compatability with potential custom user profiles, where we had
+  # Maintain compatibility with potential custom user profiles, where we had
   # previously relied on always sourcing shellenv. OMZ plugins should not rely
   # on this to be defined due to out of order processing.
   export HOMEBREW_PREFIX="$(brew --prefix)"
@@ -34,16 +34,35 @@ if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
   fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
 fi
 
+alias ba='brew autoremove'
+alias bci='brew info --cask'
+alias bcin='brew install --cask'
+alias bcl='brew list --cask'
+alias bcn='brew cleanup'
+alias bco='brew outdated --cask'
+alias bcrin='brew reinstall --cask'
 alias bcubc='brew upgrade --cask && brew cleanup'
 alias bcubo='brew update && brew outdated --cask'
+alias bcup='brew upgrade --cask'
+alias bfu='brew upgrade --formula'
+alias bi='brew install'
+alias bl='brew list'
+alias bo='brew outdated'
 alias brewp='brew pin'
 alias brewsp='brew list --pinned'
-alias bubc='brew upgrade && brew cleanup'
-alias bugbc='brew upgrade --greedy && brew cleanup'
+alias bsl='brew services list'
+alias bsoff='brew services stop'
+alias bsoffa='bsoff --all'
+alias bson='brew services start'
+alias bsona='bson --all'
+alias bsr='brew services run'
+alias bsra='bsr --all'
+alias bu='brew update'
 alias bubo='brew update && brew outdated'
-alias bubu='bubo && bubc'
+alias bubu='bubo && bup'
 alias bubug='bubo && bugbc'
-alias bfu='brew upgrade --formula'
+alias bugbc='brew upgrade --greedy && brew cleanup'
+alias bup='brew upgrade'
 alias buz='brew uninstall --zap'
 
 function brews() {

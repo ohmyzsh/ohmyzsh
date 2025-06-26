@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 function omz {
+  setopt localoptions noksharrays
   [[ $# -gt 0 ]] || {
     _omz::help
     return 1
@@ -71,6 +72,10 @@ function _omz {
         local -aU plugins
         plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t))
         _describe 'plugin' plugins ;;
+      plugin::list)
+        local -a opts
+        opts=('--enabled:List enabled plugins only')
+        _describe -o 'options' opts ;;
       theme::(set|use))
         local -aU themes
         themes=("$ZSH"/themes/*.zsh-theme(-.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(-.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
@@ -192,7 +197,7 @@ EOF
     return 1
   fi
 
-  "$ZSH/tools/changelog.sh" "$version" "${2:-}" "$format"
+  ZSH="$ZSH" command zsh -f "$ZSH/tools/changelog.sh" "$version" "${2:-}" "$format"
 }
 
 function _omz::plugin {
@@ -205,7 +210,7 @@ Available commands:
   disable <plugin> Disable plugin(s)
   enable <plugin>  Enable plugin(s)
   info <plugin>    Get information of a plugin
-  list             List all available Oh My Zsh plugins
+  list [--enabled] List Oh My Zsh plugins
   load <plugin>    Load plugin(s)
 
 EOF
@@ -344,18 +349,38 @@ function _omz::plugin::enable {
   next
 }
 
-# if plugins=() is in multiline form, enable multi flag
+# if plugins=() is in multiline form, enable multi flag and indent by default with 2 spaces
 /^[ \t]*plugins=\(/ {
   multi=1
+  indent=\"  \"
+  print \$0
+  next
 }
 
 # if multi flag is enabled and we find a valid closing parenthesis,
-# add new plugins and disable multi flag
+# add new plugins with proper indent and disable multi flag
 multi == 1 && /^[^#]*\)/ {
   multi=0
-  sub(/\)/, \" $add_plugins&\")
+  split(\"$add_plugins\",p,\" \")
+  for (i in p) {
+    print indent p[i]
+  }
   print \$0
   next
+}
+
+# if multi flag is enabled and we didnt find a closing parenthesis,
+# get the indentation level to match when adding plugins
+multi == 1 && /^[^#]*/ {
+  indent=\"\"
+  for (i = 1; i <= length(\$0); i++) {
+    char=substr(\$0, i, 1)
+    if (char == \" \" || char == \"\t\") {
+      indent = indent char
+    } else {
+      break
+    }
+  }
 }
 
 { print \$0 }
@@ -397,8 +422,23 @@ function _omz::plugin::info {
   local readme
   for readme in "$ZSH_CUSTOM/plugins/$1/README.md" "$ZSH/plugins/$1/README.md"; do
     if [[ -f "$readme" ]]; then
-      (( ${+commands[less]} )) && less "$readme" || cat "$readme"
-      return 0
+      # If being piped, just cat the README
+      if [[ ! -t 1 ]]; then
+        cat "$readme"
+        return $?
+      fi
+
+      # Enrich the README display depending on the tools we have
+      # - glow: https://github.com/charmbracelet/glow
+      # - bat: https://github.com/sharkdp/bat
+      # - less: typical pager command
+      case 1 in
+        ${+commands[glow]}) glow -p "$readme" ;;
+        ${+commands[bat]}) bat -l md --style plain "$readme" ;;
+        ${+commands[less]}) less "$readme" ;;
+        *) cat "$readme" ;;
+      esac
+      return $?
     fi
   done
 
@@ -413,8 +453,21 @@ function _omz::plugin::info {
 
 function _omz::plugin::list {
   local -a custom_plugins builtin_plugins
-  custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
-  builtin_plugins=("$ZSH"/plugins/*(-/N:t))
+
+  # If --enabled is provided, only list what's enabled
+  if [[ "$1" == "--enabled" ]]; then
+    local plugin
+    for plugin in "${plugins[@]}"; do
+      if [[ -d "${ZSH_CUSTOM}/plugins/${plugin}" ]]; then
+        custom_plugins+=("${plugin}")
+      elif [[ -d "${ZSH}/plugins/${plugin}" ]]; then
+        builtin_plugins+=("${plugin}")
+      fi
+    done
+  else
+    custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
+    builtin_plugins=("$ZSH"/plugins/*(-/N:t))
+  fi
 
   # If the command is being piped, print all found line by line
   if [[ ! -t 1 ]]; then
@@ -787,6 +840,13 @@ function _omz::update {
     return 1
   }
 
+  # Check if --unattended was passed
+  [[ "$1" != --unattended ]] || {
+    _omz::log error "the \`\e[2m--unattended\e[0m\` flag is no longer supported, use the \`\e[2mupgrade.sh\e[0m\` script instead."
+    _omz::log error "for more information see https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#how-do-i-update-oh-my-zsh"
+    return 1
+  }
+
   local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)
   [[ $? -eq 0 ]] || {
     _omz::log error "\`$ZSH\` is not a git directory. Aborting..."
@@ -795,11 +855,7 @@ function _omz::update {
 
   # Run update script
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
-  if [[ "$1" != --unattended ]]; then
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode || return $?
-  else
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -v $verbose_mode || return $?
-  fi
+  ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode || return $?
 
   # Update last updated file
   zmodload zsh/datetime
@@ -808,7 +864,7 @@ function _omz::update {
   command rm -rf "$ZSH/log/update.lock"
 
   # Restart the zsh session if there were changes
-  if [[ "$1" != --unattended && "$(builtin cd -q "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
+  if [[ "$(builtin cd -q "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
     # Old zsh versions don't have ZSH_ARGZERO
     local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
     # Check whether to run a login shell

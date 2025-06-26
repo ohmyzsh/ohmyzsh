@@ -1,4 +1,14 @@
-# Use Ctrl-Z to switch back to Vim
+# fancy-ctrl-z
+
+Allows pressing Ctrl-Z again to switch back to a background job.
+
+To use it, add `fancy-ctrl-z` to the plugins array in your zshrc file:
+
+```zsh
+plugins=(... fancy-ctrl-z)
+```
+
+## Motivation
 
 I frequently need to execute random commands in my shell. To achieve it I pause
 Vim by pressing Ctrl-z, type command and press fg<Enter> to switch back to Vim.

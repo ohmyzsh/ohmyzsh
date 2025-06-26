@@ -35,7 +35,7 @@ function git_develop_branch() {
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   local ref
-  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,master}; do
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,stable,master}; do
     if command git show-ref -q --verify $ref; then
       echo ${ref:t}
       return 0
@@ -147,8 +147,8 @@ function gbds() {
     done
 }
 
-alias gbgd='LANG=C git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -d'
-alias gbgD='LANG=C git branch --no-color -vv | grep ": gone\]" | awk '"'"'{print $1}'"'"' | xargs git branch -D'
+alias gbgd='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk '"'"'{print $1}'"'"' | xargs git branch -d'
+alias gbgD='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk '"'"'{print $1}'"'"' | xargs git branch -D'
 alias gbm='git branch --move'
 alias gbnm='git branch --no-merged'
 alias gbr='git branch --remote'
@@ -165,6 +165,7 @@ alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
 alias gclean='git clean --interactive -d'
 alias gcl='git clone --recurse-submodules'
+alias gclf='git clone --recursive --shallow-submodules --filter=blob:none --also-filter-submodules'
 
 function gccd() {
   setopt localoptions extendedglob
@@ -196,8 +197,10 @@ alias gcan!='git commit --verbose --all --no-edit --amend'
 alias gcans!='git commit --verbose --all --signoff --no-edit --amend'
 alias gcann!='git commit --verbose --all --date=now --no-edit --amend'
 alias gc!='git commit --verbose --amend'
+alias gcn='git commit --verbose --no-edit'
 alias gcn!='git commit --verbose --no-edit --amend'
 alias gcf='git config --list'
+alias gcfu='git commit --fixup'
 alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
 alias gd='git diff'
 alias gdca='git diff --cached'
@@ -219,8 +222,8 @@ alias gdt='git diff-tree --no-commit-id --name-only -r'
 alias gf='git fetch'
 # --jobs=<n> was added in git 2.8
 is-at-least 2.8 "$git_version" \
-  && alias gfa='git fetch --all --prune --jobs=10' \
-  || alias gfa='git fetch --all --prune'
+  && alias gfa='git fetch --all --tags --prune --jobs=10' \
+  || alias gfa='git fetch --all --tags --prune'
 alias gfo='git fetch origin'
 alias gg='git gui citool'
 alias gga='git gui citool --amend'
@@ -254,6 +257,7 @@ alias gm='git merge'
 alias gma='git merge --abort'
 alias gmc='git merge --continue'
 alias gms="git merge --squash"
+alias gmff="git merge --ff-only"
 alias gmom='git merge origin/$(git_main_branch)'
 alias gmum='git merge upstream/$(git_main_branch)'
 alias gmtl='git mergetool --no-prompt'
@@ -273,6 +277,8 @@ compdef _git ggu=git-checkout
 
 alias gprom='git pull --rebase origin $(git_main_branch)'
 alias gpromi='git pull --rebase=interactive origin $(git_main_branch)'
+alias gprum='git pull --rebase upstream $(git_main_branch)'
+alias gprumi='git pull --rebase=interactive upstream $(git_main_branch)'
 alias ggpull='git pull origin "$(git_current_branch)"'
 
 function ggl() {
@@ -336,6 +342,7 @@ alias grbs='git rebase --skip'
 alias grbd='git rebase $(git_develop_branch)'
 alias grbm='git rebase $(git_main_branch)'
 alias grbom='git rebase origin/$(git_main_branch)'
+alias grbum='git rebase upstream/$(git_main_branch)'
 alias grf='git reflog'
 alias gr='git remote'
 alias grv='git remote --verbose'

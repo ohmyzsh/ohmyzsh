@@ -79,6 +79,19 @@ EOF
         key code 36  #(presses enter)
       end tell
 EOF
+
+  elif [[ "$the_app" == 'Tabby' ]]; then
+    osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Tabby" to keystroke "t" using command down
+      end tell
+EOF
+  elif [[ "$the_app" == 'ghostty' ]]; then
+    osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Ghostty" to keystroke "t" using command down
+      end tell
+EOF
   else
     echo "$0: unsupported terminal app: $the_app" >&2
     return 1
@@ -126,6 +139,18 @@ EOF
       delay 1
       keystroke "${command} \n"
     end tell
+EOF
+  elif [[ "$the_app" == 'Tabby' ]]; then
+    osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Tabby" to keystroke "D" using command down
+      end tell
+EOF
+  elif [[ "$the_app" == 'ghostty' ]]; then
+    osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Ghostty" to keystroke "D" using command down
+      end tell
 EOF
   else
     echo "$0: unsupported terminal app: $the_app" >&2
@@ -175,6 +200,18 @@ EOF
       delay 1
       keystroke "${command} \n"
     end tell
+EOF
+  elif [[ "$the_app" == 'Tabby' ]]; then
+    osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Tabby" to keystroke "d" using command down
+      end tell
+EOF
+  elif [[ "$the_app" == 'ghostty' ]]; then
+    osascript >/dev/null <<EOF
+      tell application "System Events"
+        tell process "Ghostty" to keystroke "d" using command down
+      end tell
 EOF
   else
     echo "$0: unsupported terminal app: $the_app" >&2
@@ -234,7 +271,7 @@ function man-preview() {
   [[ $# -eq 0 ]] && >&2 echo "Usage: $0 command1 [command2 ...]" && return 1
 
   local page
-  for page in "${(@f)"$(man -w $@)"}"; do
+  for page in "${(@f)"$(command man -w $@)"}"; do
     command mandoc -Tpdf $page | open -f -a Preview
   done
 }

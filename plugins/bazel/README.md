@@ -1,6 +1,7 @@
 # Bazel plugin
 
-This plugin adds completion and aliases for [bazel](https://bazel.build), an open-source build and test tool that scalably supports multi-language and multi-platform projects.
+This plugin adds completion and aliases for [bazel](https://bazel.build), an open-source build and test tool
+that scalably supports multi-language and multi-platform projects.
 
 To use it, add `bazel` to the plugins array in your zshrc file:
 
@@ -14,9 +15,15 @@ The plugin has a copy of [the completion script from the git repository][1].
 
 ## Aliases
 
-| Alias   | Command                                | Description                                            |
-| ------- | -------------------------------------- | ------------------------------------------------------ |
-| bzb      | `bazel build`                          | The `bazel build` command                              |
-| bzt      | `bazel test`                           | The `bazel test` command                               |
-| bzr      | `bazel run`                            | The `bazel run` command                                |
-| bzq      | `bazel query`                          | The `bazel query` command                              |
+| Alias | Command       | Description               |
+| ----- | ------------- | ------------------------- |
+| bzb   | `bazel build` | The `bazel build` command |
+| bzt   | `bazel test`  | The `bazel test` command  |
+| bzr   | `bazel run`   | The `bazel run` command   |
+| bzq   | `bazel query` | The `bazel query` command |
+
+## Functions
+
+| Function | Description                      |
+| -------- | -------------------------------- |
+| sri-hash | Generate SRI hash used by bzlmod |
