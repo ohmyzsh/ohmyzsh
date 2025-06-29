@@ -8,7 +8,7 @@
 # @github.com/mfaerevaag/wd
 
 # version
-readonly WD_VERSION=0.10.0
+readonly WD_VERSION=0.10.1
 
 # colors
 readonly WD_BLUE="\033[96m"
@@ -174,6 +174,11 @@ wd_add()
         point=$(basename "$PWD")
     fi
 
+    if [ ! -w "$wd_config_file" ]; then
+        wd_exit_fail "\'$wd_config_file\' is not writeable."
+        return
+    fi
+
     if [[ $point =~ "^[\.]+$" ]]
     then
         wd_exit_fail "Warp point cannot be just dots"
@@ -237,6 +242,11 @@ wd_remove()
     if [[ "$point_list" == "" ]]
     then
         point_list=$(basename "$PWD")
+    fi
+
+    if [ ! -w "$wd_config_file" ]; then
+        wd_exit_fail "\'$wd_config_file\' is not writeable."
+        return
     fi
 
     for point_name in $point_list ; do
@@ -440,6 +450,11 @@ wd_clean() {
     local count=0
     local wd_tmp=""
 
+    if [ ! -w "$wd_config_file" ]; then
+        wd_exit_fail "\'$wd_config_file\' is not writeable."
+        return
+    fi
+
     while read -r line
     do
         if [[ $line != "" ]]
@@ -543,14 +558,6 @@ args=$(getopt -o a:r:c:lhs -l add:,rm:,clean,list,ls:,open:,path:,help,show -- $
 if [[ ($? -ne 0 || $#* -eq 0) && -z $wd_print_version ]]
 then
     wd_print_usage
-
-# check if config file is writeable
-elif [ ! -w "$wd_config_file" ]
-then
-    # do nothing
-    # can't run `exit`, as this would exit the executing shell
-    wd_exit_fail "\'$wd_config_file\' is not writeable."
-
 else
     # parse rest of options
     local wd_o
