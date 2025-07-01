@@ -147,6 +147,19 @@ function gbds() {
     done
 }
 
+function gbdsdry() {
+  local default_branch=$(git_main_branch)
+  (( ! $? )) || default_branch=$(git_develop_branch)
+
+  git for-each-ref refs/heads/ "--format=%(refname:short)" | \
+    while read branch; do
+      local merge_base=$(git merge-base $default_branch $branch)
+      if [[ $(git cherry $default_branch $(git commit-tree $(git rev-parse $branch\^{tree}) -p $merge_base -m _)) = -* ]]; then
+        echo $branch
+      fi
+    done
+}
+
 alias gbgd='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk '"'"'{print $1}'"'"' | xargs git branch -d'
 alias gbgD='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk '"'"'{print $1}'"'"' | xargs git branch -D'
 alias gbm='git branch --move'
@@ -165,7 +178,6 @@ alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
 alias gclean='git clean --interactive -d'
 alias gcl='git clone --recurse-submodules'
-alias gclf='git clone --recursive --shallow-submodules --filter=blob:none --also-filter-submodules'
 
 function gccd() {
   setopt localoptions extendedglob
