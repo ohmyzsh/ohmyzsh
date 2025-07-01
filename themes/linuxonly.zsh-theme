@@ -32,27 +32,32 @@ zstyle ':vcs_info:*' enable git
 
 add-zsh-hook precmd prompt_jnrowe_precmd
 
+: ${ZSH_THEME_PYENV_NO_SYSTEM:=true}
+: ${ZSH_THEME_PYENV_PREFIX:='(py '}
+: ${ZSH_THEME_PYENV_SUFFIX:=')'}
+
+
 prompt_jnrowe_precmd () {
     vcs_info
 
     if [ "${vcs_info_msg_0_}" = "" ]; then
         dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$c4%}%/ %{$c0%}(%{$c5%}%?%{$c0%})"
-        PROMPT='${dir_status} ${ret_status}%{$reset_color%}
+        PROMPT='${dir_status}%{$fg[blue]%}$(pyenv_prompt_info)%{$fg[green]%}$(virtualenv_prompt_info)%{$reset_color%}% ${ret_status}%{$reset_color%}
 > '
     elif [[ $(git diff --cached --name-status 2>/dev/null ) != "" ]]; then
         dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$c4%}%/ %{$c0%}(%{$c5%}%?%{$c0%})"
         PROMPT='${vcs_info_msg_0_}
-${dir_status} ${vcs_info_msg_0_}%{$reset_color%}
+${dir_status}%{$fg[blue]%}$(pyenv_prompt_info)%{$fg[green]%}$(virtualenv_prompt_info)%{$reset_color%}% ${vcs_info_msg_0_}%{$reset_color%}
 > '
     elif [[ $(git diff --name-status 2>/dev/null ) != "" ]]; then
         dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$c4%}%/ %{$c0%}(%{$c5%}%?%{$c0%})"
         PROMPT='${vcs_info_msg_0_}
-${dir_status}%{$reset_color%}
+${dir_status}%{$reset_color%} %{$fg[blue]%}$(pyenv_prompt_info)%{$fg[green]%}$(virtualenv_prompt_info)%{$reset_color%}%
 %{$c9%}·>%{$c0%} '
     else
         dir_status="%{$c1%}%n%{$c4%}@%{$c2%}%m%{$c0%}:%{$c3%}%l%{$c6%}->%{$c4%}%/ %{$c0%}(%{$c5%}%?%{$c0%})"
         PROMPT='${vcs_info_msg_0_}
-${dir_status} ${vcs_info_msg_0_}%{$reset_color%}
+${dir_status}%{$fg[blue]%}$(pyenv_prompt_info)%{$fg[green]%}$(virtualenv_prompt_info)%{$reset_color%}% ${vcs_info_msg_0_}%{$reset_color%}
 > '
     fi
 }
