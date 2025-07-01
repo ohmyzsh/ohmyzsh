@@ -7,6 +7,11 @@ if (( ! $+commands[gh] )); then
   return
 fi
 
+# Standardized $0 handling
+# https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+
 # ============================================
 # Completions Setup
 # ============================================
@@ -19,8 +24,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_gh" ]]; then
   _comps[gh]=_gh
 fi
 
-# Generate completion file in background
-gh completion --shell zsh >| "$ZSH_CACHE_DIR/completions/_gh" &|
+# Generate completion file in background with error handling
+gh completion --shell zsh 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_gh" &|
 
 # ============================================
 # Authentication Commands (gh auth)
@@ -256,19 +261,37 @@ alias ghrcpu='gh repo create --public' # Create public repo
 # Clone a repo and cd into it
 function ghrc-cd() {
     if [[ -z "$1" ]]; then
-        echo "Usage: ghrc-cd <repo>"
+        echo "Usage: ghrc-cd <repo>" >&2
         return 1
     fi
-    gh repo clone "$1" && cd "$(basename "$1" .git)"
+    
+    local repo_name="$(basename "$1" .git)"
+    if gh repo clone "$1"; then
+        cd "$repo_name" || return 1
+    else
+        echo "Failed to clone repository: $1" >&2
+        return 1
+    fi
 }
 
 # Create a new repo and clone it
 function ghrn-cd() {
     if [[ -z "$1" ]]; then
-        echo "Usage: ghrn-cd <repo-name>"
+        echo "Usage: ghrn-cd <repo-name>" >&2
         return 1
     fi
-    gh repo create "$1" && gh repo clone "$1" && cd "$1"
+    
+    if gh repo create "$1"; then
+        if gh repo clone "$1"; then
+            cd "$1" || return 1
+        else
+            echo "Failed to clone repository: $1" >&2
+            return 1
+        fi
+    else
+        echo "Failed to create repository: $1" >&2
+        return 1
+    fi
 }
 
 # View PR in browser
@@ -301,11 +324,17 @@ function gh-status() {
 
 # Create PR from current branch
 function ghpc-current() {
-    local branch=$(git branch --show-current)
-    if [[ "$branch" == "main" ]] || [[ "$branch" == "master" ]]; then
-        echo "Cannot create PR from default branch"
+    local branch=$(git branch --show-current 2>/dev/null)
+    if [[ -z "$branch" ]]; then
+        echo "Error: Not in a git repository or no current branch" >&2
         return 1
     fi
+    
+    if [[ "$branch" == "main" ]] || [[ "$branch" == "master" ]]; then
+        echo "Cannot create PR from default branch ($branch)" >&2
+        return 1
+    fi
+    
     gh pr create
 }
 
