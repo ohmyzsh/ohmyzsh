@@ -37,19 +37,19 @@ Please see [the latest guidelines](https://github.com/ohmyzsh/ohmyzsh/blob/maste
 
 4. What's the impact of the vulnerability?
 
-Assess using the *CIA* triad:
+  Assess using the *CIA* triad:
 
-- **Confidentiality**: example: report or sharing of secrets.
-- **Integrity**: affects the integrity of the system (deletion, corruption or encryption of data, OS file corruption, etc.).
-- **Availability**: denial of login, deletion of required files to boot / login, etc.
+  - **Confidentiality**: example: report or sharing of secrets.
+  - **Integrity**: affects the integrity of the system (deletion, corruption or encryption of data, OS file corruption, etc.).
+  - **Availability**: denial of login, deletion of required files to boot / login, etc.
 
-1. What's the exploitability of the vulnerability?
+5. What's the exploitability of the vulnerability?
 
-Consider how easy it is to exploit, and if it affects all users or requires specific configurations.
+  Consider how easy it is to exploit, and if it affects all users or requires specific configurations.
 
 6. What's the severity of the vulnerability?
 
-You can use the [CVSS v3.1](https://www.first.org/cvss/specification-document) to assess the severity of the vulnerability.
+  You can use the [CVSS v3.1](https://www.first.org/cvss/specification-document) to assess the severity of the vulnerability.
 
 7. When was the vulnerability introduced?
 
@@ -58,16 +58,17 @@ You can use the [CVSS v3.1](https://www.first.org/cvss/specification-document) t
 
 8. Who are our security contacts?
 
-Assess upstream or downstream contacts, and their desired channels of security.
+  Assess upstream or downstream contacts, and their desired channels of security.
 
-> TODO: add a list of contacts.
+  > TODO: add a list of contacts.
 
 ### Mitigation
 
 - **Primary focus:** removing possibility of exploitation fast.
 - **Secondary focus:** addressing the root cause.
 
-> [!IMPORTANT] Make sure to test that the mitigation works as expected, and does not introduce new vulnerabilities.
+> [!IMPORTANT]
+> Make sure to test that the mitigation works as expected, and does not introduce new vulnerabilities.
 > When deploying a patch, make sure not to disclose the vulnerability in the commit message or PR description.
 
 > TODO: introduce a fast-track update process for security patches.
