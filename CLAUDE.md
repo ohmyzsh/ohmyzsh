@@ -27,6 +27,7 @@ This is the Oh My Zsh repository - a popular open-source framework for managing 
 - Library files in `lib/` directory
 - Tools and utilities in `tools/` directory
 - Custom plugins/themes go in `custom/` directory
+- **New plugin**: `eternalhist` plugin added to `plugins/eternalhist/` for advanced persistent command history with multi-remote sync
 
 ## Testing
 - No specific test commands found - check individual plugin READMEs
