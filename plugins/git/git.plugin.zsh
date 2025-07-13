@@ -31,25 +31,29 @@ function git_develop_branch() {
   return 1
 }
 
-unction git_main_branch() {
+# Get the default branch name from remote HEAD or fallback to common branch names
+function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
-
-  local ref
-  ref=$(git symbolic-ref --quiet refs/remotes/origin/HEAD 2>/dev/null)
-  if [[ $? -eq 0 && -n "$ref" ]]; then
-    echo "${ref##*/}"
-    return
-  fi
-
-  # Fallback if origin/HEAD is not set
-  for branch in main master trunk default stable; do
-    if git show-ref -q --verify "refs/heads/$branch"; then
-      echo "$branch"
-      return
+  
+  local remote ref
+  for remote in origin upstream; do
+    ref=$(command git symbolic-ref --quiet refs/remotes/$remote/HEAD 2>/dev/null)
+    if [[ -n $ref ]]; then
+      echo ${ref#refs/remotes/$remote/}
+      return 0
+    fi
+  done
+  
+  # Fallback: search for common main branch names in order of preference
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,stable,master}; do
+    if command git show-ref -q --verify $ref; then
+      echo ${ref:t}
+      return 0
     fi
   done
 
-  echo "master" # Default fallback
+  # If no main branch was found, fall back to master but return error
+  echo master
   return 1
 }
 
