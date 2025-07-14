@@ -36,18 +36,19 @@ function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   
   local remote ref
-  for remote in origin upstream; do
-    ref=$(command git symbolic-ref --quiet refs/remotes/$remote/HEAD 2>/dev/null)
-    if [[ -n $ref ]]; then
-      echo ${ref#refs/remotes/$remote/}
+  
+  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,stable,master}; do
+    if command git show-ref -q --verify $ref; then
+      echo ${ref:t}
       return 0
     fi
   done
   
-  # Fallback: search for common main branch names in order of preference
-  for ref in refs/{heads,remotes/{origin,upstream}}/{main,trunk,mainline,default,stable,master}; do
-    if command git show-ref -q --verify $ref; then
-      echo ${ref:t}
+  # Fallback: try to get the default branch from remote HEAD symbolic refs
+  for remote in origin upstream; do
+    ref=$(command git symbolic-ref --quiet refs/remotes/$remote/HEAD 2>/dev/null)
+    if [[ -n $ref ]]; then
+      echo ${ref#refs/remotes/$remote/}
       return 0
     fi
   done
