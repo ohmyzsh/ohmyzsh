@@ -28,6 +28,7 @@ function web_search() {
     youtube         "https://www.youtube.com/results?search_query="
     deepl           "https://www.deepl.com/translator#auto/auto/"
     dockerhub       "https://hub.docker.com/search?q="
+    gems            "https://rubygems.org/search?query="
     npmpkg          "https://www.npmjs.com/search?q="
     packagist       "https://packagist.org/?query="
     gopkg           "https://pkg.go.dev/search?m=package&q="
@@ -83,6 +84,7 @@ alias ask='web_search ask'
 alias youtube='web_search youtube'
 alias deepl='web_search deepl'
 alias dockerhub='web_search dockerhub'
+alias gems='web_search gems'
 alias npmpkg='web_search npmpkg'
 alias packagist='web_search packagist'
 alias gopkg='web_search gopkg'
