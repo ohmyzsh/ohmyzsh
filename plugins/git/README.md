@@ -57,6 +57,7 @@ plugins=(... git)
 | `gcp`                  | `git cherry-pick`                                                                                                               |
 | `gcpa`                 | `git cherry-pick --abort`                                                                                                       |
 | `gcpc`                 | `git cherry-pick --continue`                                                                                                    |
+| `gcpq`                 | `git cherry-pick --quit`                                                                                                        |
 | `gclean`               | `git clean --interactive -d`                                                                                                    |
 | `gcl`                  | `git clone --recurse-submodules`                                                                                                |
 | `gclf`                 | `git clone --recursive --shallow-submodules --filter=blob:none --also-filter-submodules`                                        |
@@ -91,7 +92,7 @@ plugins=(... git)
 | `gdnolock`             | `git diff $@ ":(exclude)package-lock.json" ":(exclude)\*.lock"`                                                                 |
 | `gdt`                  | `git diff-tree --no-commit-id --name-only -r`                                                                                   |
 | `gf`                   | `git fetch`                                                                                                                     |
-| `gfa`                  | `git fetch --all --tags --prune`                                                                                                       |
+| `gfa`                  | `git fetch --all --tags --prune`                                                                                                |
 | `gfo`                  | `git fetch origin`                                                                                                              |
 | `gg`                   | `git gui citool`                                                                                                                |
 | `gga`                  | `git gui citool --amend`                                                                                                        |
