@@ -24,9 +24,9 @@ function {
   # start keychain, only use --agents for versions below 2.9.0
 	autoload -Uz is-at-least
 	if is-at-least 2.9 "$version_string"; then
-		keychain ${^options:-} --agents ${agents:-gpg} ${^identities} --host $SHORT_HOST
-	else
 		keychain ${^options:-} ${^identities} --host $SHORT_HOST
+	else
+		keychain ${^options:-} --agents ${agents:-gpg} ${^identities} --host $SHORT_HOST
 	fi
 
 	# Get the filenames to store/lookup the environment from
