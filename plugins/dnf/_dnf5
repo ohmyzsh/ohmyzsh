@@ -272,7 +272,7 @@ _dnf5-repoquery() {
   for v in enhance obsolete provide recommend require suggest supplement; do
     opts+=( "--what${v}s=[limit to packages that $v specified capabilities]:list of capability: ")
   done
-  # mutually exclusive formating options
+  # mutually exclusive formatting options
   opts+=(
     + '(format)'
     '--conflicts[display capabilities that the package conflicts with]'
