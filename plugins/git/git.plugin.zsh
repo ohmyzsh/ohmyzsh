@@ -86,7 +86,7 @@ function work_in_progress() {
 # Aliases
 # (sorted alphabetically by command)
 # (order should follow README)
-# (in some cases force the alisas order to match README, like for example gke and gk)
+# (in some cases force the alias order to match README, like for example gke and gk)
 #
 
 alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
