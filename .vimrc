@@ -47,7 +47,7 @@ Bundle 'derekwyatt/vim-scala'
 Bundle 'wincent/Command-T'
 " Bundle 'fholgado/minibufexpl.vim'
 Bundle 'vim-scripts/EasyGrep'
-Bundle 'vim-scripts/LustyExplorer'
+" Bundle 'vim-scripts/LustyExplorer'
 Bundle 'vim-scripts/yavdb'
 Bundle 'junkblocker/patchreview-vim'
 Bundle 'codegram/vim-codereview'
@@ -61,6 +61,11 @@ Bundle 'bazelbuild/vim-bazel'
 Bundle 'chr4/nginx.vim'
 Bundle 'spwhitt/vim-nix'
 Bundle 'airblade/vim-gitgutter'
+Bundle 'junegunn/fzf'
+Bundle 'junegunn/fzf.vim'
+Bundle 'github/copilot.vim'
+Bundle 'jfo/hound.vim'
+Bundle 'mattn/webapi-vim'
 " Bundle 'ensime/ensime-vim'
 
 " Scala Bundles
@@ -278,3 +283,70 @@ function! DiffBase(...)
     " Open the quickfix list
     vertical topleft cwindow
 endfunction
+
+map <F3> :GFiles<CR>
+nnoremap ,t :GFiles<CR>
+
+function! GgrepRegister()
+    let l:register_content = getreg('a')
+    execute "Ggrep " l:register_content
+endfunction
+
+nnoremap ,x :call GgrepRegister()<CR>
+
+source ~/.vim/searchfold_0.9.vim
+
+function! CopyRelativePathToGitRoot()
+    " Find the git root directory
+    let l:git_root = system('git rev-parse --show-toplevel')
+    " Remove newline at the end
+    let l:git_root = substitute(l:git_root, '\n\+$', '', '')
+
+    " Get the full path of the current file
+    let l:full_path = expand('%:p')
+
+    " Calculate the relative path
+    let l:relative_path = substitute(l:full_path, '^' . l:git_root . '/', '', '')
+
+    " Copy the relative path to the + register (system clipboard)
+    let @+ = l:relative_path
+endfunction
+
+function! DiffBaseDiff(...)
+    " Get the commit hash if it was specified
+    let commit = a:0 == 0 ? 'databricks/master' : a:1
+
+    " Get the merge base
+    let merge_base = system('git merge-base HEAD ' . commit)
+    let merge_base = substitute(merge_base, '\n', '', 'g')
+
+    " Get the list of changed files
+    let flist = system('git diff --name-only ' . commit . '...HEAD | grep -v zzz')
+    let flist = split(flist, '\n')
+
+    " Open each file in a new tab with Gvdiff against merge base
+    for f in flist
+        " Skip empty filenames
+        if empty(f)
+            continue
+        endif
+
+        " Open file in new tab
+        execute 'tabnew ' . f
+
+        " Run Gvdiff against the merge base
+        execute 'Gvdiff ' . merge_base
+    endfor
+endfunction
+
+" Map the function to a command for easy execution
+command! CopyGitRelativePath call CopyRelativePathToGitRoot()
+
+" Map the command to ,c
+nnoremap ,c :CopyGitRelativePath<CR>
+
+set nobackup
+set nowritebackup
+set noswapfile
+set backupdir=/dev/null
+set directory=/dev/null
