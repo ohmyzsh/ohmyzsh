@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "0 6 * * 0"
 
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
 jobs:
   check:
     name: Check for updates
