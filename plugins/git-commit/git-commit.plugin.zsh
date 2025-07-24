@@ -11,6 +11,7 @@ _git_commit_aliases=(
   'ci'
   'docs'
   'feat'
+  'feat'
   'fix'
   'perf'
   'refactor'
@@ -18,6 +19,8 @@ _git_commit_aliases=(
   'style'
   'test'
   'wip'
+  'ops'
+  'test'
 )
 
 local _alias _type
