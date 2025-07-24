@@ -92,7 +92,7 @@ alias packagist='web_search packagist'
 alias gopkg='web_search gopkg'
 alias chatgpt='web_search chatgpt'
 alias grok='web_search grok'
-alias claude='web_search claude'
+alias claudeai='web_search claudeai'
 alias reddit='web_search reddit'
 alias ppai='web_search ppai'
 
