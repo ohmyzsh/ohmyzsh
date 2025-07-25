@@ -180,6 +180,9 @@ alias kej='kubectl edit job'
 alias kdj='kubectl describe job'
 alias kdelj='kubectl delete job'
 
+# Check allowed action
+alias kacil='kubectl auth can-i --list'
+
 # Utility print functions (json / yaml)
 function _build_kubectl_out_alias {
   setopt localoptions norcexpandparam
