@@ -35,8 +35,12 @@ function web_search() {
     chatgpt         "https://chatgpt.com/?q="
     grok            "https://grok.com/?q="
     claudeai        "https://claude.ai/new?q="
+    gpt             "https://chatgpt.com/?q="
     reddit          "https://www.reddit.com/search/?q="
     ppai            "https://www.perplexity.ai/search/new?q="
+    amazon          "https://www.amazon.com/s?k="
+    flipkart        "https://www.flipkart.com/search?q="
+    pypi            "https://pypi.org/search/?q="
   )
 
   # check whether the search engine is supported
@@ -95,6 +99,12 @@ alias grok='web_search grok'
 alias claudeai='web_search claudeai'
 alias reddit='web_search reddit'
 alias ppai='web_search ppai'
+alias amazon='web_search amazon'
+alias amzn='web_search amazon'
+alias fkart='web_search flipkart'
+alias flipkart='web_search flipkart'
+alias gpt='web_search gpt'
+alias pypi='web_search pypi'
 
 #add your own !bang searches here
 alias wiki='web_search duckduckgo \!w'
