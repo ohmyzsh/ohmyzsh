@@ -20,7 +20,7 @@ export COLOR_NC=$'\033[0m' # No Color
 
 # Configuration file for persistent settings.
 _VIPER_ENV_CONFIG_FILE="$HOME/.viper-env.conf"
-_VIPER_ENV_VERSION="v1.1.0"
+_VIPER_ENV_VERSION="v1.1.1"
 
 # This variable will hold the path of the environment managed by this script.
 # This prevents us from deactivating environments managed by other tools (e.g., conda, poetry).
@@ -38,27 +38,25 @@ __viper-env_discover_venv() {
   # Use `emulate` to ensure a predictable environment and `dotglob` to find hidden venvs.
   emulate -L zsh
   setopt local_options dotglob
-  local search_dir="$PWD"
+  local search_dir="${PWD%/}"  # Removes trailing slash, if any
   # Loop upwards from the current directory to the root.
   while :; do
-    # Mode 1: Semi-automatic via `.viper-env` file
-    # This allows using virtual environments located outside the project directory.
-    if [[ -f "$search_dir/.viper-env" ]]; then
+    # Mode 1: Check for .viper-env file
+    if [[ -s "$search_dir/.viper-env" ]]; then
       local external_venv_path
       # Read the path from the file, handling potential trailing newlines.
       # Using 'read -r' is more robust for reading a single line from a file.
       read -r external_venv_path < "$search_dir/.viper-env"
       # Remove trailing carriage return if file has Windows line endings.
-      external_venv_path=${external_venv_path%$'\r'}
       # Perform tilde expansion on the path to support paths like ~/.virtualenvs/...
-      external_venv_path=${(~)external_venv_path}
+      external_venv_path=${(~)external_venv_path%$'\r'}
 
       # The path in the file can be either the venv root or the full path to the activate script.
       # This logic handles both cases robustly.
       local venv_root_path=""
       if [[ "$external_venv_path" == */bin/activate && -f "$external_venv_path" ]]; then
         # Case 1: Path is the full path to the activate script.
-        venv_root_path="$(dirname "$(dirname "$external_venv_path")")"
+        venv_root_path="${external_venv_path%/*/*}"
       elif [[ -f "$external_venv_path/bin/activate" ]]; then
         # Case 2: Path is the root of the virtual environment.
         venv_root_path="$external_venv_path"
@@ -78,7 +76,7 @@ __viper-env_discover_venv() {
       fi
     fi
 
-    # Pattern 1: Check if the search_dir itself is a venv root.
+    # Pattern 1: Check if current dir is a venv root
     if [[ -f "$search_dir/bin/activate" ]]; then
       echo "$search_dir"
       return 0
@@ -88,13 +86,13 @@ __viper-env_discover_venv() {
     # The `(N[1])` glob qualifier finds the first match and prevents errors if none exist.
     local activate_script=($search_dir/*/bin/activate(N[1]))
     if [[ -n "$activate_script" ]]; then
-      echo "$(dirname $(dirname "$activate_script"))"
+      echo "${activate_script%/*/*}"
       return 0
     fi
 
-    # Exit if we've reached the root directory, otherwise, go up one level.
-    [[ "$search_dir" == "/" ]] && break
-    search_dir=$(dirname "$search_dir")
+    # Exit if root, otherwise go up one level
+    [[ -z "$search_dir" ]] && break
+    search_dir="${search_dir%/*}" # Removes the last path component
   done
   return 1
 }
