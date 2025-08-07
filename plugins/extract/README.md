@@ -17,7 +17,6 @@ plugins=(... extract)
 | Extension         | Description                             |
 | :---------------- | :-------------------------------------- |
 | `7z`              | 7zip file                               |
-| `Z`               | Z archive (LZW)                         |
 | `apk`             | Android app file                        |
 | `aar`             | Android library file                    |
 | `bz2`             | Bzip2 file                              |
@@ -60,6 +59,7 @@ plugins=(... extract)
 | `whl`             | Python wheel file                       |
 | `xpi`             | Mozilla XPI module file                 |
 | `xz`              | LZMA2 archive                           |
+| `Z`               | Z archive (LZW)                         |
 | `zip`             | Zip archive                             |
 | `zlib`            | zlib archive                            |
 | `zst`             | Zstandard file (zstd)                   |
