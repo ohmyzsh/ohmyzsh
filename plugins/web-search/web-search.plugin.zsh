@@ -97,7 +97,6 @@ alias grok='web_search grok'
 alias claudeai='web_search claudeai'
 alias reddit='web_search reddit'
 alias ppai='web_search ppai'
-alias ppai='web_search ppai'
 alias rscrate='web_search rscrate'
 alias rsdoc='web_search rsdoc'
 
