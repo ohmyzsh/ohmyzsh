@@ -84,6 +84,7 @@ alias kdelcm='kubectl delete configmap'
 
 # Secret management
 alias kgsec='kubectl get secret'
+alias kesec='kubectl edit secret'
 alias kgseca='kubectl get secret --all-namespaces'
 alias kdsec='kubectl describe secret'
 alias kdelsec='kubectl delete secret'
