@@ -47,10 +47,13 @@ Available search contexts are:
 | `youtube`             | `https://www.youtube.com/results?search_query=` |
 | `deepl`               | `https://www.deepl.com/translator#auto/auto/`   |
 | `dockerhub`           | `https://hub.docker.com/search?q=`              |
+| `gems`                | `https://rubygems.org/search?query=`            |
 | `npmpkg`              | `https://www.npmjs.com/search?q=`               |
 | `packagist`           | `https://packagist.org/?query=`                 |
 | `gopkg`               | `https://pkg.go.dev/search?m=package&q=`        |
 | `chatgpt`             | `https://chatgpt.com/?q=`                       |
+| `claudeai`            | `https://claude.ai/new?q=`                      |
+| `grok`                | `https://grok.com/?q=`                          |
 | `reddit`              | `https://www.reddit.com/search/?q=`             |
 | `ppai`                | `https://www.perplexity.ai/search/new?q=`       |
 
