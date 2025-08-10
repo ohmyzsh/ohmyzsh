@@ -31,7 +31,7 @@ function git_develop_branch() {
   return 1
 }
 
-# Get the default branch name from remote HEAD or fallback to common branch names
+# Get the default branch name from common branch names or fallback to remote HEAD
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
   
