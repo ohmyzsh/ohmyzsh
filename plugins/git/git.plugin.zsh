@@ -46,10 +46,9 @@ function git_main_branch() {
   
   # Fallback: try to get the default branch from remote HEAD symbolic refs
   for remote in origin upstream; do
-    ref=$(command git symbolic-ref --quiet refs/remotes/$remote/HEAD 2>/dev/null)
-    if [[ -n $ref ]]; then
-      echo ${ref#refs/remotes/$remote/}
-      return 0
+    ref=$(command git rev-parse --abbrev-ref $remote/HEAD 2>/dev/null)
+    if [[ $ref == $remote/* ]]; then
+      echo ${ref#"$remote/"}; return 0
     fi
   done
 
