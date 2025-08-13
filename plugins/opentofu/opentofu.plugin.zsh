@@ -29,9 +29,12 @@ function tofu_version_prompt_info() {
 
 alias tt='tofu'
 alias tta='tofu apply'
+alias ttaa='tofu apply -auto-approve'
 alias ttc='tofu console'
 alias ttd='tofu destroy'
+alias ttd!='tofu destroy -auto-approve'
 alias ttf='tofu fmt'
+alias ttfr='tofu fmt -recursive'
 alias tti='tofu init'
 alias tto='tofu output'
 alias ttp='tofu plan'

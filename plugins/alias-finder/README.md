@@ -11,6 +11,8 @@ plugins=(... alias-finder)
 
 To enable it for every single command, set zstyle in your `~/.zshrc`.
 
+If the user has installed `rg`([ripgrep](https://github.com/BurntSushi/ripgrep)), it will be used because it's faster. Otherwise, it will use the `grep` command.
+
 ```zsh
 # ~/.zshrc
 
@@ -28,7 +30,7 @@ When you execute a command alias finder will look at your defined aliases and su
 
 Running the un-aliased `git status` command:
 ```sh
-╭─tim@fox ~/repo/gitopolis ‹main› 
+╭─tim@fox ~/repo/gitopolis ‹main›
 ╰─$ git status
 
 gst='git status'         # <=== shorter suggestion from alias-finder
@@ -40,7 +42,7 @@ nothing to commit, working tree clean
 
 Running a shorter `git st` alias from `.gitconfig` that it suggested :
 ```sh
-╭─tim@fox ~/repo/gitopolis ‹main› 
+╭─tim@fox ~/repo/gitopolis ‹main›
 ╰─$ git st
 gs='git st'         # <=== shorter suggestion from alias-finder
 ## main...origin/main
@@ -48,7 +50,7 @@ gs='git st'         # <=== shorter suggestion from alias-finder
 
 Running the shortest `gs` shell alias that it found:
 ```sh
-╭─tim@fox ~/repo/gitopolis ‹main› 
+╭─tim@fox ~/repo/gitopolis ‹main›
 ╰─$ gs
          # <=== no suggestions alias-finder because this is the shortest
 ## main...origin/main

@@ -43,19 +43,33 @@ function pyuserpaths() {
 # Grep among .py files
 alias pygrep='grep -nr --include="*.py"'
 
-# Run proper IPython regarding current virtualenv (if any)
-alias ipython='python3 -c "import sys; del sys.path[0]; import IPython; sys.exit(IPython.start_ipython())"'
-
 # Share local directory as a HTTP server
 alias pyserver="python3 -m http.server"
 
 
-## venv utilities
+## venv settings
 : ${PYTHON_VENV_NAME:=venv}
 
+# Array of possible virtual environment names to look for, in order
+# -U for removing duplicates
+typeset -gaU PYTHON_VENV_NAMES
+[[ -n "$PYTHON_VENV_NAMES" ]] || PYTHON_VENV_NAMES=($PYTHON_VENV_NAME venv .venv)
+
 # Activate a the python virtual environment specified.
-# If none specified, use $PYTHON_VENV_NAME, else 'venv'.
+# If none specified, use the first existing in $PYTHON_VENV_NAMES.
 function vrun() {
+  if [[ -z "$1" ]]; then
+    local name
+    for name in $PYTHON_VENV_NAMES; do
+      local venvpath="${name:P}"
+      if [[ -d "$venvpath" ]]; then
+        vrun "$name"
+        return $?
+      fi
+    done
+    echo >&2 "Error: no virtual environment found in current directory"
+  fi
+
   local name="${1:-$PYTHON_VENV_NAME}"
   local venvpath="${name:P}"
 
@@ -74,7 +88,7 @@ function vrun() {
 }
 
 # Create a new virtual environment using the specified name.
-# If none specfied, use $PYTHON_VENV_NAME
+# If none specified, use $PYTHON_VENV_NAME
 function mkv() {
   local name="${1:-$PYTHON_VENV_NAME}"
   local venvpath="${name:P}"
@@ -94,10 +108,11 @@ if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
     fi
 
     if [[ $PWD != ${VIRTUAL_ENV:h} ]]; then
-      for _file in "${PYTHON_VENV_NAME}"*/bin/activate(N.); do
+      local file
+      for file in "${^PYTHON_VENV_NAMES[@]}"/bin/activate(N.); do
         # make sure we're not in a venv already
         (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
-        source $_file > /dev/null 2>&1
+        source $file > /dev/null 2>&1
         break
       done
     fi

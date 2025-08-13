@@ -88,13 +88,19 @@ if [[ $FOUND_PYENV -eq 1 ]]; then
 
   function pyenv_prompt_info() {
     local version="$(pyenv version-name)"
-    echo "${version:gs/%/%%}"
+    if [[ "$ZSH_THEME_PYENV_NO_SYSTEM" == "true" ]] && [[ "${version}" == "system" ]]; then
+      return
+    fi
+    echo "${ZSH_THEME_PYENV_PREFIX=}${version:gs/%/%%}${ZSH_THEME_PYENV_SUFFIX=}"
   }
 else
   # Fall back to system python
   function pyenv_prompt_info() {
+    if [[ "$ZSH_THEME_PYENV_NO_SYSTEM" == "true" ]]; then
+      return
+    fi
     local version="$(python3 -V 2>&1 | cut -d' ' -f2)"
-    echo "system: ${version:gs/%/%%}"
+    echo "${ZSH_THEME_PYENV_PREFIX=}system: ${version:gs/%/%%}${ZSH_THEME_PYENV_SUFFIX=}"
   }
 fi
 

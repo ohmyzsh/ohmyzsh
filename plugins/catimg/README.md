@@ -1,6 +1,7 @@
 # catimg
 
-Plugin for displaying images on the terminal using the `catimg.sh` script provided by [posva](https://github.com/posva/catimg)
+Plugin for displaying images on the terminal using the `catimg.sh` script provided by
+[posva](https://github.com/posva/catimg)
 
 To use it, add `catimg` to the plugins array in your zshrc file:
 
@@ -10,7 +11,7 @@ plugins=(... catimg)
 
 ## Requirements
 
-- `convert` (ImageMagick)
+- `magick convert` (ImageMagick)
 
 ## Functions
 

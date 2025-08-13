@@ -26,6 +26,7 @@ This plugin supplies one command, `jira`, through which all its features are exp
 | `jira new`                    | Opens a new Jira issue dialogue                          |
 | `jira ABC-123`                | Opens an existing issue                                  |
 | `jira ABC-123 m`              | Opens an existing issue for adding a comment             |
+| `jira project ABC`            | Opens JIRA project summary                               |
 | `jira dashboard [rapid_view]` | Opens your JIRA dashboard                                |
 | `jira mine`                   | Queries for your own issues                              |
 | `jira tempo`                  | Opens your JIRA Tempo                                    |
@@ -43,6 +44,22 @@ starting with "_": "MP-1234_fix_dashboard". In both these cases, the issue opene
 This is also checks if the prefix is in the name, and adds it if not, so: "MP-1234" opens the issue "MP-1234",
 "mp-1234" opens the issue "mp-1234", and "1234" opens the issue "MP-1234".
 
+If your branch naming convention deviates, you can overwrite the jira_branch function to determine and echo the Jira issue key yourself.
+Define a function `jira_branch` after sourcing `oh-my-zsh.sh` in your `.zshrc`.
+Example:
+```zsh
+# Determine branch name from naming convention 'type/KEY-123/description'.
+function jira_branch() {
+  # Get name of the branch
+  issue_arg=$(git rev-parse --abbrev-ref HEAD)
+  # Strip prefixes like feature/ or bugfix/
+  issue_arg=${issue_arg#*/}
+  # Strip suffixes like /some-branch-description
+  issue_arg=${issue_arg%%/*}
+  # Return the value
+  echo $issue_arg
+}
+```
 
 
 #### Debugging usage

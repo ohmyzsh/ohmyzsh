@@ -42,12 +42,12 @@ colorize_cat() {
         ZSH_COLORIZE_STYLE="emacs"
     fi
 
-    # Use stdin if no arguments have been passed.
-    if [ $# -eq 0 ]; then
+    # Use stdin if stdin is not attached to a terminal.
+    if [ ! -t 0 ]; then
         if [[ "$ZSH_COLORIZE_TOOL" == "pygmentize" ]]; then
             pygmentize -O style="$ZSH_COLORIZE_STYLE" -g
         else
-            chroma --style="$ZSH_COLORIZE_STYLE" --formatter="${ZSH_COLORIZE_CHROMA_FORMATTER:-terminal}"
+            chroma --style="$ZSH_COLORIZE_STYLE" --formatter="${ZSH_COLORIZE_CHROMA_FORMATTER:-terminal}" "$@"
         fi
         return $?
     fi

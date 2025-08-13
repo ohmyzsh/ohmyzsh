@@ -366,10 +366,10 @@ _rails_generate() {
           ;|
         (controller|job|model|resource|scaffold)
           opts+=(
-            '--parent=[The parent class for the generated controler]:parent class'
+            '--parent=[The parent class for the generated controller]:parent class'
           )
           ;|
-        (controler|mailer|resource|scaffold|scaffold_controller)
+        (controller|mailer|resource|scaffold|scaffold_controller)
           opts+=(
             '(-e --template-engine)'{-e,--template-engine=}'[Template engine to be invoked]:engine:(erb)'
           )
