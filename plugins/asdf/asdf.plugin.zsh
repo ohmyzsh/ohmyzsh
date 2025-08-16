@@ -1,7 +1,9 @@
 (( ! $+commands[asdf] )) && return
 
 export ASDF_DATA_DIR="${ASDF_DATA_DIR:-$HOME/.asdf}"
-path=("$ASDF_DATA_DIR/shims" $path)
+
+# Add shims to the front of the path, removing if already present.
+path=("$ASDF_DATA_DIR/shims" ${path:#$ASDF_DATA_DIR/shims})
 
 # If the completion file doesn't exist yet, we need to autoload it and
 # bind it to `asdf`. Otherwise, compinit will have already done that.
