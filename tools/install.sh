@@ -344,7 +344,7 @@ setup_zshrc() {
       return
     fi
     
-    if [[ $OVERWRITE_CONFIRMATION != "no" ]]; then
+    if [ $OVERWRITE_CONFIRMATION != "no" ]; then
       # Ask user for confirmation before backing up and overwriting
       echo "${FMT_YELLOW}Found ${zdot}/.zshrc."
       echo "The existing .zshrc will be backed up to .zshrc.pre-oh-my-zsh if overwritten."
