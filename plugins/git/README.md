@@ -91,7 +91,7 @@ plugins=(... git)
 | `gdnolock`             | `git diff $@ ":(exclude)package-lock.json" ":(exclude)\*.lock"`                                                                 |
 | `gdt`                  | `git diff-tree --no-commit-id --name-only -r`                                                                                   |
 | `gf`                   | `git fetch`                                                                                                                     |
-| `gfa`                  | `git fetch --all --tags --prune`                                                                                                       |
+| `gfa`                  | `git fetch --all --tags --prune`                                                                                                |
 | `gfo`                  | `git fetch origin`                                                                                                              |
 | `gg`                   | `git gui citool`                                                                                                                |
 | `gga`                  | `git gui citool --amend`                                                                                                        |
@@ -112,7 +112,7 @@ plugins=(... git)
 | `glgp`                 | `git log --stat --patch`                                                                                                        |
 | `gignored`             | `git ls-files -v \| grep "^[[:lower:]]"`                                                                                        |
 | `gfg`                  | `git ls-files \| grep`                                                                                                          |
-| `gm`                   | `git merge`                                                                                                                     |
+| `gme`                  | `git merge`                                                                                                                     |
 | `gma`                  | `git merge --abort`                                                                                                             |
 | `gmc`                  | `git merge --continue`                                                                                                          |
 | `gms`                  | `git merge --squash`                                                                                                            |
