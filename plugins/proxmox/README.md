@@ -191,21 +191,6 @@ pve-node2       online  8.7%    32.1%   604800
 
 For troubleshooting API calls, you can temporarily modify the curl commands to show more verbose output by adding `-v` flag.
 
-## Contributing
-
-This plugin welcomes contributions! Please:
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/your-improvement`
-3. Test your changes thoroughly
-4. Submit a pull request with a clear description
-
-### Planned Features
-- API token authentication support
-- Container (LXC) management
-- Storage and backup operations
-- Configuration file support
-- More detailed VM information display
 
 ## License
 
