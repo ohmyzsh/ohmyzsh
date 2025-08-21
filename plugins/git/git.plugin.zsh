@@ -86,7 +86,7 @@ function work_in_progress() {
 # Aliases
 # (sorted alphabetically by command)
 # (order should follow README)
-# (in some cases force the alisas order to match README, like for example gke and gk)
+# (in some cases force the alias order to match README, like for example gke and gk)
 #
 
 alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
@@ -200,6 +200,7 @@ alias gc!='git commit --verbose --amend'
 alias gcn='git commit --verbose --no-edit'
 alias gcn!='git commit --verbose --no-edit --amend'
 alias gcf='git config --list'
+alias gcfu='git commit --fixup'
 alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
 alias gd='git diff'
 alias gdca='git diff --cached'

@@ -271,7 +271,7 @@ function man-preview() {
   [[ $# -eq 0 ]] && >&2 echo "Usage: $0 command1 [command2 ...]" && return 1
 
   local page
-  for page in "${(@f)"$(man -w $@)"}"; do
+  for page in "${(@f)"$(command man -w $@)"}"; do
     command mandoc -Tpdf $page | open -f -a Preview
   done
 }

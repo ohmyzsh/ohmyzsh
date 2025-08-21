@@ -8,7 +8,7 @@
 # @github.com/mfaerevaag/wd
 
 # version
-readonly WD_VERSION=0.9.3
+readonly WD_VERSION=0.10.1
 
 # colors
 readonly WD_BLUE="\033[96m"
@@ -86,6 +86,7 @@ Commands:
     show                 Print warp points to current directory
     list                 Print all stored warp points
     ls  <point>          Show files from given warp point (ls)
+    open <point>         Open the warp point in the default file explorer (open / xdg-open)
     path <point>         Show the path to given warp point (pwd)
     clean                Remove points warping to nonexistent directories (will prompt unless --force is used)
 
@@ -173,6 +174,11 @@ wd_add()
         point=$(basename "$PWD")
     fi
 
+    if [ ! -w "$wd_config_file" ]; then
+        wd_exit_fail "\'$wd_config_file\' is not writeable."
+        return
+    fi
+
     if [[ $point =~ "^[\.]+$" ]]
     then
         wd_exit_fail "Warp point cannot be just dots"
@@ -236,6 +242,11 @@ wd_remove()
     if [[ "$point_list" == "" ]]
     then
         point_list=$(basename "$PWD")
+    fi
+
+    if [ ! -w "$wd_config_file" ]; then
+        wd_exit_fail "\'$wd_config_file\' is not writeable."
+        return
     fi
 
     for point_name in $point_list ; do
@@ -377,6 +388,21 @@ wd_ls()
     ls "${dir/#\~/$HOME}"
 }
 
+wd_open()
+{
+    wd_getdir "$1"
+    if command -v open >/dev/null 2>&1; then
+        # MacOS, Ubuntu (alias)
+        open "${dir/#\~/$HOME}"
+    elif command -v xdg-open >/dev/null 2>&1; then
+        # Most Linux desktops
+        xdg-open "${dir/#\~/$HOME}"
+    else
+        echo "No known file opener found (need 'open' or 'xdg-open')." >&2
+        exit 1
+    fi
+}
+
 wd_path()
 {
     wd_getdir "$1"
@@ -423,6 +449,11 @@ wd_clean() {
     local force=$1
     local count=0
     local wd_tmp=""
+
+    if [ ! -w "$wd_config_file" ]; then
+        wd_exit_fail "\'$wd_config_file\' is not writeable."
+        return
+    fi
 
     while read -r line
     do
@@ -521,20 +552,12 @@ do
 done < "$wd_config_file"
 
 # get opts
-args=$(getopt -o a:r:c:lhs -l add:,rm:,clean,list,ls:,path:,help,show -- $*)
+args=$(getopt -o a:r:c:lhs -l add:,rm:,clean,list,ls:,open:,path:,help,show -- $*)
 
 # check if no arguments were given, and that version is not set
 if [[ ($? -ne 0 || $#* -eq 0) && -z $wd_print_version ]]
 then
     wd_print_usage
-
-# check if config file is writeable
-elif [ ! -w "$wd_config_file" ]
-then
-    # do nothing
-    # can't run `exit`, as this would exit the executing shell
-    wd_exit_fail "\'$wd_config_file\' is not writeable."
-
 else
     # parse rest of options
     local wd_o
@@ -569,6 +592,10 @@ else
                 ;;
             "-ls"|"ls")
                 wd_ls "$2"
+                break
+                ;;
+            "-o"|"--open"|"open")
+                wd_open "$2"
                 break
                 ;;
             "-p"|"--path"|"path")

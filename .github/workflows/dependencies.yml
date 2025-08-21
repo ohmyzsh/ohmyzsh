@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 6 * * 0"
 
+permissions:
+  contents: read
+
 jobs:
   check:
     name: Check for updates
@@ -11,15 +14,15 @@ jobs:
     if: github.repository == 'ohmyzsh/ohmyzsh'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Authenticate as @ohmyzsh
-        id: generate_token
-        uses: ohmyzsh/github-app-token@v2
+        id: generate-token
+        uses: actions/create-github-app-token@v2
         with:
-          app_id: ${{ secrets.OHMYZSH_APP_ID }}
-          private_key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
+          app-id: ${{ secrets.OHMYZSH_APP_ID }}
+          private-key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -27,7 +30,7 @@ jobs:
           cache: "pip"
       - name: Process dependencies
         env:
-          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           GIT_APP_NAME: ohmyzsh[bot]
           GIT_APP_EMAIL: 54982679+ohmyzsh[bot]@users.noreply.github.com
           TMP_DIR: ${{ runner.temp }}

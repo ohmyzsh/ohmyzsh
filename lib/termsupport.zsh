@@ -17,7 +17,7 @@ function title {
   : ${2=$1}
 
   case "$TERM" in
-    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty*|st*|foot*|contour*)
+    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty*|st*|foot*|contour*|wezterm*)
       print -Pn "\e]2;${2:q}\a" # set window name
       print -Pn "\e]1;${1:q}\a" # set tab name
       ;;
@@ -53,7 +53,7 @@ function omz_termsupport_precmd {
 
 # Runs before executing the command
 function omz_termsupport_preexec {
-  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return
+  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return 0
 
   emulate -L zsh
   setopt extended_glob

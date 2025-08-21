@@ -40,6 +40,8 @@ alias kcgc='kubectl config get-contexts'
 alias kdel='kubectl delete'
 alias kdelf='kubectl delete -f'
 alias kdelk='kubectl delete -k'
+alias kge='kubectl get events --sort-by=".lastTimestamp"'
+alias kgew='kubectl get events --sort-by=".lastTimestamp" --watch'
 
 # Pod management.
 alias kgp='kubectl get pods'

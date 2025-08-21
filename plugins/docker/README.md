@@ -39,6 +39,10 @@ following setting. See https://github.com/ohmyzsh/ohmyzsh/issues/11789 for more 
 zstyle ':omz:plugins:docker' legacy-completion yes
 ```
 
+### For Podman's Docker wrapper users
+
+If you use Podman's Docker wrapper, you need to enable legacy completion. See above section.
+
 ## Aliases
 
 | Alias   | Command                       | Description                                                                              |
@@ -73,6 +77,7 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 | drs     | `docker container restart`    | Restart one or more containers                                                           |
 | dsta    | `docker stop $(docker ps -q)` | Stop all running containers                                                              |
 | dstp    | `docker container stop`       | Stop one or more running containers                                                      |
+| dsts    | `docker stats`                | Display real-time streaming statistics for containers                                                    |
 | dtop    | `docker top`                  | Display the running processes of a container                                             |
 | dvi     | `docker volume inspect`       | Display detailed information about one or more volumes                                   |
 | dvls    | `docker volume ls`            | List all the volumes known to docker                                                     |

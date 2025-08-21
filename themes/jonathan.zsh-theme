@@ -8,14 +8,15 @@ function theme_precmd {
   local rubypromptsize=${#${(%)$(ruby_prompt_info)}}
   local pwdsize=${#${(%):-%~}}
   local venvpromptsize=$((${#$(virtualenv_prompt_info)}))
+  local condapromptsize=$((${#$(conda_prompt_info)}))
 
   # Truncate the path if it's too long.
-  if (( promptsize + rubypromptsize + pwdsize + venvpromptsize > TERMWIDTH )); then
+  if (( promptsize + rubypromptsize + pwdsize + venvpromptsize + condapromptsize > TERMWIDTH )); then
     (( PR_PWDLEN = TERMWIDTH - promptsize ))
   elif [[ "${langinfo[CODESET]}" = UTF-8 ]]; then
-    PR_FILLBAR="\${(l:$(( TERMWIDTH - (promptsize + rubypromptsize + pwdsize + venvpromptsize ) ))::${PR_HBAR}:)}"
+    PR_FILLBAR="\${(l:$(( TERMWIDTH - (promptsize + rubypromptsize + pwdsize + venvpromptsize + condapromptsize ) ))::${PR_HBAR}:)}"
   else
-    PR_FILLBAR="${PR_SHIFT_IN}\${(l:$(( TERMWIDTH - (promptsize + rubypromptsize + pwdsize + venvpromptsize ) ))::${altchar[q]:--}:)}${PR_SHIFT_OUT}"
+    PR_FILLBAR="${PR_SHIFT_IN}\${(l:$(( TERMWIDTH - (promptsize + rubypromptsize + pwdsize + venvpromptsize + condapromptsize ) ))::${altchar[q]:--}:)}${PR_SHIFT_OUT}"
   fi
 }
 
@@ -104,7 +105,7 @@ fi
 PROMPT='${PR_SET_CHARSET}${PR_STITLE}${(e)PR_TITLEBAR}\
 ${PR_CYAN}${PR_ULCORNER}${PR_HBAR}${PR_GREY}(\
 ${PR_GREEN}%${PR_PWDLEN}<...<%~%<<\
-${PR_GREY})$(virtualenv_prompt_info)$(ruby_prompt_info)${PR_CYAN}${PR_HBAR}${PR_HBAR}${(e)PR_FILLBAR}${PR_HBAR}${PR_GREY}(\
+${PR_GREY})$(virtualenv_prompt_info)$(ruby_prompt_info)$(conda_prompt_info)${PR_CYAN}${PR_HBAR}${PR_HBAR}${(e)PR_FILLBAR}${PR_HBAR}${PR_GREY}(\
 ${PR_CYAN}%(!.%SROOT%s.%n)${PR_GREY}@${PR_GREEN}%m:%l\
 ${PR_GREY})${PR_CYAN}${PR_HBAR}${PR_URCORNER}\
 

@@ -1,7 +1,7 @@
 _togglePoetryShell() {
   # Determine if currently in a Poetry-managed directory
   local in_poetry_dir=0
-  if [[ -f "$PWD/pyproject.toml" ]] && grep -q 'tool.poetry' "$PWD/pyproject.toml"; then
+  if [[ -f "$PWD/pyproject.toml" && -f "$PWD/poetry.lock" ]]; then
     in_poetry_dir=1
   fi
 
