@@ -217,16 +217,16 @@ pve-status() {
         return 1
     fi
     
-    local status=$(curl -s -k -H "Authorization: PVEAuthCookie=$ticket" \
+    local vm_status=$(curl -s -k -H "Authorization: PVEAuthCookie=$ticket" \
         "https://$PROXMOX_HOST:8006/api2/json/nodes/$node/qemu/$1/status/current" 2>/dev/null)
     
-    if [[ -z "$status" ]]; then
+    if [[ -z "$vm_status" ]]; then
         echo "${PVE_RED}Failed to get status for VM $1${PVE_NC}"
         return 1
     fi
     
     echo "${PVE_GREEN}Status for VM $1:${PVE_NC}"
-    echo "$status" | grep -E '"(status|name|cpus|mem|uptime)"' | \
+    echo "$vm_status" | grep -E '"(status|name|cpus|mem|uptime)"' | \
     awk -F'"' '
     /status/ && !/qmpstatus/ { printf "Status: %s\n", $4 }
     /name/ { printf "Name: %s\n", $4 }
