@@ -1,0 +1,49 @@
+#compdef expressvpn
+
+# bash completion for expressvpn                           -*- shell-script -*-
+
+_expressvpn_bash_autocomplete() {
+    local cur cmd opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    if [ "$COMP_CWORD" -gt 1 ]; then
+        cmd="${COMP_WORDS[1]}"
+        opts=$( ${COMP_WORDS[0]} "$cmd" "${COMP_WORDS[@]:2:$COMP_CWORD-2}" --generate-bash-completion )
+    else
+        opts=$( ${COMP_WORDS[0]} --generate-bash-completion )
+    fi
+
+    local IFS=$'\n'
+    COMPREPLY=( $(compgen -W "${opts}" -- "${cur}") )
+
+    local escaped_single_qoute="\\'"
+    local i=0
+    for entry in ${COMPREPLY[*]}
+    do
+        if [[ "${cur:0:1}" == "'" ]] 
+        then
+            # started with single quote, escaping only other single quotes
+            # [']bla'bla"bla\bla bla --> [']bla'\''bla"bla\bla bla
+            COMPREPLY[$i]="${entry//\'/${escaped_single_qoute}}" 
+        elif [[ "${cur:0:1}" == "\"" ]] 
+        then
+            # started with double quote, escaping all double quotes and all backslashes
+            # ["]bla'bla"bla\bla bla --> ["]bla'bla\"bla\\bla bla
+            entry="${entry//\\/\\\\}" 
+            COMPREPLY[$i]="${entry//\"/\\\"}" 
+        else 
+            # no quotes in front, escaping _everything_
+            # [ ]bla'bla"bla\bla bla --> [ ]bla\'bla\"bla\\bla\ bla
+            entry="${entry//\\/\\\\}" 
+            entry="${entry//\'/\'}" 
+            entry="${entry//\"/\\\"}" 
+            COMPREPLY[$i]="${entry// /\\ }"
+        fi
+        (( i++ ))
+    done
+
+    return 0
+}
+
+complete -F _expressvpn_bash_autocomplete expressvpn
