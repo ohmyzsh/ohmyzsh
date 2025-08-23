@@ -134,7 +134,7 @@ Common Install Steps
     * if you are using `fklassen/ohmyzsh` ...
 
       ```shell
-      sh -c "$(curl -fsSL <https://raw.githubusercontent.com/fklassen/ohmyzsh/master/tools/install.sh>)"
+      `sh -c "$(curl -fsSL https://raw.githubusercontent.com/fklassen/ohmyzsh/master/tools/install.sh)"`
       ```
 
     * if you forked your own repo ...
