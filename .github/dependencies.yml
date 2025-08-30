@@ -16,6 +16,14 @@ dependencies:
     precopy: |
       set -e
       find . ! -name _gradle ! -name LICENSE -delete
+  plugins/kube-ps1:
+    repo: jonmosco/kube-ps1
+    branch: master
+    version: e1da055e905a91242f0c5a89a425a64ee8adcd6b
+    precopy: |
+      set -e
+      rm -f kube-ps1.plugin.zsh
+      test -e kube-ps1.sh && mv kube-ps1.sh kube-ps1.plugin.zsh
   plugins/history-substring-search:
     repo: zsh-users/zsh-history-substring-search
     branch: master
