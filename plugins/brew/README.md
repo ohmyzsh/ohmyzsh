@@ -31,6 +31,7 @@ the `brew` binary before sourcing `oh-my-zsh.sh` and it'll set up the environmen
 | `bcubc`  | `brew upgrade --cask && brew cleanup`   | Upgrade outdated casks, then run cleanup.                             |
 | `bcubo`  | `brew update && brew outdated --cask`   | Update Homebrew data, then list outdated casks.                       |
 | `bcup`   | `brew upgrade --cask`                   | Upgrade all outdated casks.                                           |
+| `bdr`    | `brew doctor`                           | Check your system for potential problems.                             |
 | `bfu`    | `brew upgrade --formula`                | Upgrade only formulae (not casks).                                    |
 | `bi`     | `brew install`                          | Install a formula.                                                    |
 | `bl`     | `brew list`                             | List all installed formulae.                                          |
