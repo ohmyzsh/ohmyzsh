@@ -35,6 +35,7 @@ if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
 fi
 
 alias ba='brew autoremove'
+alias bcfg='brew config'
 alias bci='brew info --cask'
 alias bcin='brew install --cask'
 alias bcl='brew list --cask'

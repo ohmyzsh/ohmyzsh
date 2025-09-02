@@ -22,8 +22,9 @@ the `brew` binary before sourcing `oh-my-zsh.sh` and it'll set up the environmen
 | Alias    | Command                                 | Description                                                           |
 | -------- | --------------------------------------- | --------------------------------------------------------------------- |
 | `ba`     | `brew autoremove`                       | Uninstall unnecessary formulae.                                       |
-| `bci`    | `brew info --cask`                      | Display information about the given cask.                             |
+| `bcfg`   | `brew config`                           | Show Homebrew and system configuration info useful for debugging.     |
 | `bcin`   | `brew install --cask`                   | Install the given cask.                                               |
+| `bci`    | `brew info --cask`                      | Display information about the given cask.                             |
 | `bcl`    | `brew list --cask`                      | List installed casks.                                                 |
 | `bcn`    | `brew cleanup`                          | Run cleanup.                                                          |
 | `bco`    | `brew outdated --cask`                  | Report all outdated casks.                                            |
