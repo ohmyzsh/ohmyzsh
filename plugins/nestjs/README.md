@@ -39,16 +39,14 @@ This plugin provides aliases for common [NestJS CLI](https://docs.nestjs.com/cli
 
 ## Usage
 
-1.  Clone this repository into your Oh My Zsh plugins directory (usually `~/.oh-my-zsh/custom/plugins`):
-    ```sh
-    git clone https://github.com/ohmyzsh/ohmyzsh.git # Or your fork
-    # Navigate to the plugins directory within the main repo if developing locally
-    # cp -r path/to/your/nestjs/plugin ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/nestjs
-    ```
-    _(Adjust the clone/copy command based on whether you are contributing to the main repo or using a local
-    copy)_
-2.  Add `nestjs` to the `plugins` array in your `~/.zshrc` file:
-    ```zsh
-    plugins=(... nestjs)
-    ```
-3.  Restart your terminal or source your `~/.zshrc` file: `source ~/.zshrc`
+1. Add `nestjs` to the `plugins` array in your `~/.zshrc` file:
+
+```zsh
+plugins=(... nestjs)
+```
+
+2. Restart your terminal or source your `~/.zshrc` file:
+
+```zsh
+source ~/.zshrc
+```
