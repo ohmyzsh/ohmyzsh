@@ -46,6 +46,7 @@ function _omz {
         'info:Get plugin information'
         'list:List plugins'
         'load:Load plugin(s)'
+        'view:Show plugin source'
       )
         _describe 'command' subcmds ;;
       pr) subcmds=('clean:Delete all Pull Request branches' 'test:Test a Pull Request')
@@ -212,6 +213,7 @@ Available commands:
   info <plugin>    Get information of a plugin
   list [--enabled] List Oh My Zsh plugins
   load <plugin>    Load plugin(s)
+  view <plugin>    Show the source of a plugin
 
 EOF
     return 1
@@ -221,6 +223,42 @@ EOF
   shift
 
   $0::$command "$@"
+}
+
+function _omz::plugin::view {
+  if [[ -z "$1" ]]; then
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} <plugin>"
+    return 1
+  fi
+
+  local plugin_source
+  for plugin_source in "$ZSH_CUSTOM/plugins/$1/$1.plugin.zsh" "$ZSH_CUSTOM/plugins/$1/_$1" "$ZSH/plugins/$1/$1.plugin.zsh" "$ZSH/plugins/$1/_$1"; do
+    if [[ -f "$plugin_source" ]]; then
+      # If being piped, just cat the source
+      if [[ ! -t 1 ]]; then
+        cat "$plugin_source"
+        return $?
+      fi
+
+      # Enrich the source display depending on the tools we have
+      # - glow: https://github.com/charmbracelet/glow
+      # - bat: https://github.com/sharkdp/bat
+      # - less: typical pager command
+      case 1 in
+        ${+commands[glow]}) glow -p "$plugin_source" ;;
+        ${+commands[bat]}) bat -l zsh --style plain "$plugin_source" ;;
+        ${+commands[less]}) less "$plugin_source" ;;
+        *) cat "$readme" ;;
+      esac
+      return $?
+    fi
+  done
+
+  if [[ ! -d "$ZSH_CUSTOM/plugins/$1" && ! -d "$ZSH/plugins/$1" ]]; then
+    _omz::log error "'$1' plugin not found"
+  fi
+
+  return 1
 }
 
 function _omz::plugin::disable {
