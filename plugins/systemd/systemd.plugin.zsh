@@ -67,13 +67,15 @@ power_commands=(
   suspend
 )
 
+readonly SUDO_PRESERVE_ENV="SYSTEMD_EDITOR,SUDO_EDITOR,VISUAL,EDITOR"
+
 for c in $user_commands; do
   alias "sc-$c"="systemctl $c"
   alias "scu-$c"="systemctl --user $c"
 done
 
 for c in $sudo_commands; do
-  alias "sc-$c"="sudo systemctl $c"
+  alias "sc-$c"="sudo --preserve-env=$SUDO_PRESERVE_ENV systemctl $c"
   alias "scu-$c"="systemctl --user $c"
 done
 
