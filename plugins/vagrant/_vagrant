@@ -47,6 +47,7 @@ _box_arguments=(
     'help:COMMAND List subcommands'
     'list:Lists all installed boxes'
     'outdated:Checks if a box has newer version'
+    'prune:Removes old versions of installed boxes'
     'remove:NAME Removes a box from the system'
     'repackage:NAME PROVIDER VERSION Repackages an installed box into a `.box` file'
     'update:Updates box to a newer version, if available'
