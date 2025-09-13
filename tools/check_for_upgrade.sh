@@ -232,7 +232,7 @@ function handle_update() {
 
     # Ask for confirmation and only update on 'y', 'Y' or Enter
     # Otherwise just show a reminder for how to update
-    echo -n "[oh-my-zsh] Would you like to update? [Y/n] "
+    printf "[oh-my-zsh] Would you like to update? [Y/n] "
     read -r -k 1 option
     [[ "$option" = $'\n' ]] || echo
     case "$option" in
@@ -280,7 +280,7 @@ case "$update_mode" in
           return 0
         elif [[ "$EXIT_STATUS" -ne 0 ]]; then
           print -P "\n%F{red}[oh-my-zsh] There was an error updating:%f"
-          printf "\n${fg[yellow]}%s${reset_color}" "$ERROR"
+          printf "\n${fg[yellow]}%s${reset_color}" "${ERROR}"
           return 0
         fi
       } always {
