@@ -221,6 +221,137 @@ function aws_change_access_key() {
   aws --no-cli-pager iam list-access-keys
 }
 
+function aws-cost() {
+  # Check if AWS CLI is available
+  if ! command -v aws &> /dev/null; then
+    echo "${fg[red]}AWS CLI not found. Please install AWS CLI v2.${reset_color}" >&2
+    return 1
+  fi
+
+  # Get current account ID
+  local account_id
+  account_id=$(aws sts get-caller-identity --query Account --output text 2>/dev/null)
+  if [[ -z "$account_id" ]]; then
+    echo "${fg[red]}Unable to get AWS account information. Please check your credentials.${reset_color}" >&2
+    return 1
+  fi
+
+  # Get current region
+  local region="${AWS_REGION:-${AWS_DEFAULT_REGION:-us-east-1}}"
+
+  echo "AWS Cost Overview - Account: $account_id ($region)"
+  echo ""
+
+  # Get current date and calculate date ranges
+  local today=$(date +%Y-%m-%d)
+  local yesterday=$(date -d "yesterday" +%Y-%m-%d 2>/dev/null || date -v-1d +%Y-%m-%d 2>/dev/null || echo "")
+  local week_ago=$(date -d "7 days ago" +%Y-%m-%d 2>/dev/null || date -v-7d +%Y-%m-%d 2>/dev/null || echo "")
+  local month_start=$(date +%Y-%m-01)
+  local last_month_start=$(date -d "last month" +%Y-%m-01 2>/dev/null || date -v-1m +%Y-%m-01 2>/dev/null || echo "")
+  local last_month_end=$(date -d "last month" +%Y-%m-%d 2>/dev/null || date -v-1m +%Y-%m-%d 2>/dev/null || echo "")
+
+  # Function to get cost for a date range
+  local get_cost() {
+    local start_date="$1"
+    local end_date="$2"
+    local granularity="${3:-DAILY}"
+    
+    aws ce get-cost-and-usage \
+      --time-period Start="$start_date",End="$end_date" \
+      --granularity "$granularity" \
+      --metrics BlendedCost \
+      --query 'ResultsByTime[0].Total.BlendedCost.Amount' \
+      --output text 2>/dev/null || echo "0.00"
+  }
+
+  # Function to get cost by service for current month
+  local get_cost_by_service() {
+    aws ce get-cost-and-usage \
+      --time-period Start="$month_start",End="$today" \
+      --granularity MONTHLY \
+      --metrics BlendedCost \
+      --group-by Type=DIMENSION,Key=SERVICE \
+      --query 'ResultsByTime[0].Groups[?Metrics.BlendedCost.Amount!=`0`] | sort_by(@, &to_number(Metrics.BlendedCost.Amount)) | reverse(@) | [0:5] | [].[Keys[0],Metrics.BlendedCost.Amount]' \
+      --output text 2>/dev/null || echo ""
+  }
+
+  # Get costs for different periods
+  local yesterday_cost="0.00"
+  local week_cost="0.00"
+  local month_cost="0.00"
+  local last_month_cost="0.00"
+
+  if [[ -n "$yesterday" ]]; then
+    yesterday_cost=$(get_cost "$yesterday" "$yesterday")
+  fi
+
+  if [[ -n "$week_ago" ]]; then
+    week_cost=$(get_cost "$week_ago" "$today")
+  fi
+
+  month_cost=$(get_cost "$month_start" "$today" "MONTHLY")
+  
+  if [[ -n "$last_month_start" && -n "$last_month_end" ]]; then
+    last_month_cost=$(get_cost "$last_month_start" "$last_month_end" "MONTHLY")
+  fi
+
+  # Calculate changes
+  local month_change="0.00"
+  if [[ "$last_month_cost" != "0.00" && "$month_cost" != "0.00" ]]; then
+    month_change=$(echo "$month_cost - $last_month_cost" | bc -l 2>/dev/null || echo "0.00")
+  fi
+
+  # Display cost summary table
+  echo "📊 CURRENT COSTS"
+  echo "┌─────────────┬─────────────┬─────────────┐"
+  echo "│ Period      │ Amount      │ Change      │"
+  echo "├─────────────┼─────────────┼─────────────┤"
+  
+  if [[ -n "$yesterday" ]]; then
+    printf "│ Yesterday   │ $%8s │ -           │\n" "$yesterday_cost"
+  fi
+  
+  if [[ -n "$week_ago" ]]; then
+    printf "│ Last 7 days │ $%8s │ -           │\n" "$week_cost"
+  fi
+  
+  printf "│ This month  │ $%8s │ $%+8s │\n" "$month_cost" "$month_change"
+  
+  if [[ -n "$last_month_start" && -n "$last_month_end" ]]; then
+    printf "│ Last month  │ $%8s │ -           │\n" "$last_month_cost"
+  fi
+  
+  echo "└─────────────┴─────────────┴─────────────┘"
+  echo ""
+
+  # Get and display top services
+  echo "️ TOP SERVICES (This Month)"
+  echo "┌─────────────────┬─────────────┬─────────────┐"
+  echo "│ Service         │ Cost        │ % of Total  │"
+  echo "├─────────────────┼─────────────┼─────────────┤"
+
+  local services_data
+  services_data=$(get_cost_by_service)
+  
+  if [[ -n "$services_data" ]]; then
+    local total_month_cost_num=$(echo "$month_cost" | bc -l 2>/dev/null || echo "0")
+    
+    echo "$services_data" | while read -r service cost; do
+      if [[ -n "$service" && -n "$cost" ]]; then
+        local percentage="0.0"
+        if [[ "$total_month_cost_num" != "0" ]]; then
+          percentage=$(echo "scale=1; $cost * 100 / $total_month_cost_num" | bc -l 2>/dev/null || echo "0.0")
+        fi
+        printf "│ %-15s │ $%8s │ %6s%%     │\n" "$service" "$cost" "$percentage"
+      fi
+    done
+  else
+    echo "│ No data available │ -         │ -         │"
+  fi
+  
+  echo "└─────────────────┴─────────────┴─────────────┘"
+}
+
 function aws_regions() {
   local region
   if [[ $AWS_DEFAULT_REGION ]];then
