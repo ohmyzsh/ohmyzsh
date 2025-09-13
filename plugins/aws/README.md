@@ -35,7 +35,7 @@ plugins=(... aws)
 
 * `aws_change_access_key`: changes the AWS access key of a profile.
 
-* `aws-cost`: displays a quick overview of AWS costs including current month spending, 
+* `aws_cost`: displays a quick overview of AWS costs including current month spending, 
   cost breakdown by service, and comparison with previous periods.
 
 * `aws_profiles`: lists the available profiles in the  `$AWS_CONFIG_FILE` (default: `~/.aws/config`).

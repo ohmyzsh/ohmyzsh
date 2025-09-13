@@ -221,7 +221,7 @@ function aws_change_access_key() {
   aws --no-cli-pager iam list-access-keys
 }
 
-function aws-cost() {
+function aws_cost() {
   # Check if AWS CLI is available
   if ! command -v aws &> /dev/null; then
     echo "${fg[red]}AWS CLI not found. Please install AWS CLI v2.${reset_color}" >&2
