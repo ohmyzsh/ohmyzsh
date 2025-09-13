@@ -255,8 +255,8 @@ function aws-cost() {
     local start_date="$1"
     local end_date="$2"
     local granularity="${3:-DAILY}"
-    
-    aws ce get-cost-and-usage \
+
+  aws ce get-cost-and-usage \
       --time-period Start="$start_date",End="$end_date" \
       --granularity "$granularity" \
       --metrics BlendedCost \
@@ -290,7 +290,7 @@ function aws-cost() {
   fi
 
   month_cost=$(get_cost "$month_start" "$today" "MONTHLY")
-  
+
   if [[ -n "$last_month_start" && -n "$last_month_end" ]]; then
     last_month_cost=$(get_cost "$last_month_start" "$last_month_end" "MONTHLY")
   fi
@@ -306,21 +306,21 @@ function aws-cost() {
   echo "┌─────────────┬─────────────┬─────────────┐"
   echo "│ Period      │ Amount      │ Change      │"
   echo "├─────────────┼─────────────┼─────────────┤"
-  
+
   if [[ -n "$yesterday" ]]; then
     printf "│ Yesterday   │ $%8s │ -           │\n" "$yesterday_cost"
   fi
-  
+
   if [[ -n "$week_ago" ]]; then
     printf "│ Last 7 days │ $%8s │ -           │\n" "$week_cost"
   fi
-  
+
   printf "│ This month  │ $%8s │ $%+8s │\n" "$month_cost" "$month_change"
-  
+
   if [[ -n "$last_month_start" && -n "$last_month_end" ]]; then
     printf "│ Last month  │ $%8s │ -           │\n" "$last_month_cost"
   fi
-  
+
   echo "└─────────────┴─────────────┴─────────────┘"
   echo ""
 
@@ -332,10 +332,10 @@ function aws-cost() {
 
   local services_data
   services_data=$(get_cost_by_service)
-  
+
   if [[ -n "$services_data" ]]; then
     local total_month_cost_num=$(echo "$month_cost" | bc -l 2>/dev/null || echo "0")
-    
+
     echo "$services_data" | while read -r service cost; do
       if [[ -n "$service" && -n "$cost" ]]; then
         local percentage="0.0"
@@ -348,7 +348,7 @@ function aws-cost() {
   else
     echo "│ No data available │ -         │ -         │"
   fi
-  
+
   echo "└─────────────────┴─────────────┴─────────────┘"
 }
 
