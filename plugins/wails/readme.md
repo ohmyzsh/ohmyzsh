@@ -26,3 +26,5 @@ plugins=(... wails)
 | wv | wails version |
 | wh | wails -help |
 
+*and just a funny one*
+| wd40 | wails doctor |
