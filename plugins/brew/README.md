@@ -10,12 +10,17 @@ plugins=(... brew)
 
 ## Shellenv
 
-If `brew` is not found in the PATH, this plugin will attempt to find it in common locations, and execute
-`brew shellenv` to set the environment appropriately. This plugin will also export
-`HOMEBREW_PREFIX="$(brew --prefix)"` if not previously defined for convenience.
+This plugin evaluates Homebrew's shell environment on load to ensure `PATH`, `MANPATH`, `INFOPATH`, and other
+Homebrew variables are up to date:
 
-In case you installed `brew` in a non-common location, you can still set `BREW_LOCATION` variable pointing to
-the `brew` binary before sourcing `oh-my-zsh.sh` and it'll set up the environment.
+```zsh
+eval "$(brew shellenv)"
+```
+
+If `brew` is not already on `PATH`, the plugin will attempt to find it in common locations and run
+`brew shellenv` from there. You can also set a `BREW_LOCATION` variable pointing to the `brew` binary before
+loading Oh My Zsh to override detection. This plugin will also export `HOMEBREW_PREFIX="$(brew --prefix)"`
+if not previously defined for convenience.
 
 ## Aliases
 
