@@ -22,9 +22,14 @@ if [ -d ~/.oh-my-zsh ]; then
 fi
 
 if [ -e ~/.zshrc ]; then
-  ZSHRC_SAVE=~/.zshrc.omz-uninstalled-$(date +%Y-%m-%d_%H-%M-%S)
-  echo "Found ~/.zshrc -- Renaming to ${ZSHRC_SAVE}"
-  mv ~/.zshrc "${ZSHRC_SAVE}"
+  ZSHRC_ORIG=~/.zshrc.pre-oh-my-zsh
+  if [ -e "$ZSHRC_ORIG" ]; then
+    ZSHRC_SAVE=~/.zshrc.omz-uninstalled-$(date +%Y-%m-%d_%H-%M-%S)
+    echo "Found ~/.zshrc -- Renaming to ${ZSHRC_SAVE}"
+    mv ~/.zshrc "${ZSHRC_SAVE}"
+  else
+    echo "Found ~/.zshrc but no backup config detected -- leaving it untouched"
+  fi
 fi
 
 echo "Looking for original zsh config..."
