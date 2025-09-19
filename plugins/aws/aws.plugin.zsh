@@ -46,6 +46,7 @@ function asp() {
   if [[ -z "${AWS_PROFILE_REGION}" ]]; then
     if [[ -z "${available_profiles[(r)default]}" ]]; then
       echo "region defaulting to us-east-1"
+      AWS_PROFILE_REGION=us-east-1
     else
       export AWS_PROFILE_REGION=$(aws configure get region --profile default)
     fi
