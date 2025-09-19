@@ -16,21 +16,26 @@
 _ans_i_echo() { print -P "%F{cyan}[ansible-init]%f $*"; }
 _ans_i_err()  { print -P "%F{red}[ansible-init]%f $*" >&2; }
 
-# mkdir -p if missing
-_ans_i_mk() { [[ -d "$1" ]] || mkdir -p "$1" }
+# mkdir -p if missing (supports multiple paths and ignores aliases)
+_ans_i_mk() {
+  local dir
+  for dir in "$@"; do
+    [[ -d "$dir" ]] || command mkdir -p "$dir"
+  done
+}
 
 # Create/overwrite file conditionally
-# usage: _ans_i_write <path> <content> [force(0|1)]
+# usage: _ans_i_write <file_path> <content> [force(0|1)]
 _ans_i_write() {
-  local path="$1"; shift
+  local file_path="$1"; shift
   local content="$1"; shift
   local force="${1:-0}"
-  if [[ -e "$path" && "$force" != "1" ]]; then
-    _ans_i_echo "skip: $path (exists)"
+  if [[ -e "$file_path" && "$force" != "1" ]]; then
+    _ans_i_echo "skip: $file_path (exists)"
     return 0
   fi
-  print -r -- "$content" > "$path"
-  _ans_i_echo "write: $path"
+  print -r -- "$content" > "$file_path"
+  _ans_i_echo "write: $file_path"
 }
 
 # Global help
@@ -334,8 +339,8 @@ ansible-init() {
         return 0
       fi
 
-      # Collect args (name, path, flags)
-      local name="" path="" force_flag=0
+      # Collect args (name, destination path, flags)
+      local name="" dest_path="" force_flag=0
       local args=("$@")
       for a in "${args[@]}"; do
         case "$a" in
@@ -346,7 +351,7 @@ ansible-init() {
           -h|--help)  print "usage: ansible-init new [NAME] [PATH] [--minimal|--standard|--full] [--force]"; return 0 ;;
           *)
             if [[ -z "$name" ]]; then name="$a"
-            elif [[ -z "$path" ]]; then path="$a"
+            elif [[ -z "$dest_path" ]]; then dest_path="$a"
             fi
             ;;
         esac
@@ -358,10 +363,10 @@ ansible-init() {
       if [[ "$name" == "." ]]; then
         _ans_i_scaffold "." "$PWD" "$force_flag"
       else
-        if [[ "$path" == "." ]]; then
+        if [[ "$dest_path" == "." ]]; then
           _ans_i_scaffold "$name" "$PWD/$name" "$force_flag"
         else
-          _ans_i_scaffold "$name" "${path:-$ANSIBLE_INIT_BASE/$name}" "$force_flag"
+          _ans_i_scaffold "$name" "${dest_path:-$ANSIBLE_INIT_BASE/$name}" "$force_flag"
         fi
       fi
       ;;
@@ -401,7 +406,9 @@ _ans_i_complete() {
     esac
   fi
 }
-compdef _ans_i_complete ansible-init
+if (( $+functions[compdef] )); then
+  compdef _ans_i_complete ansible-init
+fi
 
 # --- Extensions loader --------------------------------------------------------
 # Доп. команды можно класть как *.zsh в .../plugins/ansible-init/extensions/
