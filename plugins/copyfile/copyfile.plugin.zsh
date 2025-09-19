@@ -1,11 +1,12 @@
-# Copies the contents of a given file to the system or X Windows clipboard
+# Copies the contents of a given file or stdin to the system or X Windows
+# clipboard
 #
-# Usage: copyfile <file>
+# Usage: copyfile [<file>]
 function copyfile {
   emulate -L zsh
 
   clipcopy "${1-}" || {
-    echo "Usage: copyfile <file>"
+    echo "Usage: copyfile [<file>]"
     return 1
   }
 
