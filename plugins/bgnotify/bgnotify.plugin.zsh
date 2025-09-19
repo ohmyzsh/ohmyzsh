@@ -60,8 +60,10 @@ function bgnotify_formatted {
 }
 
 function bgnotify_appid {
-  if (( ${+commands[osascript]} )); then
-    osascript -e "tell application id \"$(bgnotify_programid)\"  to get the {id, frontmost, id of front window, visible of front window}" 2>/dev/null
+  if (( ${+commands[lsappinfo]} )); then
+    lsappinfo info -only bundleid "$(lsappinfo front)" | awk -F= '{print $2}' | tr -d '"' 2>/dev/null
+  elif (( ${+commands[osascript]} )); then
+    osascript -e "tell application id \"$(bgnotify_programid)\" to get the {id, frontmost, id of front window, visible of front window}" 2>/dev/null
   elif [[ -n $WAYLAND_DISPLAY ]] && ([[ -n $SWAYSOCK ]] || [[ -n $I3SOCK ]]) && (( ${+commands[swaymsg]} )); then # wayland+sway
     local app_id=$(bgnotify_find_sway_appid)
     [[ -n "$app_id" ]] && echo "$app_id" || echo $EPOCHSECONDS
@@ -108,6 +110,7 @@ function bgnotify_programid {
   case "$TERM_PROGRAM" in
     iTerm.app) echo 'com.googlecode.iterm2' ;;
     Apple_Terminal) echo 'com.apple.terminal' ;;
+    ghostty) echo 'com.mitchellh.ghostty' ;;
   esac
 }
 
