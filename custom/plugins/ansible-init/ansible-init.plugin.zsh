@@ -259,9 +259,56 @@ _ans_i_host_add() {
   if grep -q "^[[:space:]]*$host:" "$inv"; then
     _ans_i_echo "host exists: $host -> updating ansible_host"
     awk -v h="$host" -v ip="$ip" '
-      $0 ~ "^[[:space:]]*"h":" {print; getline; print "      ansible_host: "ip; skip=1; next}
-      skip==1 { if ($0 ~ /ansible_host:/) { skip=0; next } }
-      {print}
+      function indent_len(line) {
+        match(line, /^[[:space:]]*/)
+        return RLENGTH
+      }
+
+      {
+        if (inhost) {
+          cur_indent = indent_len($0)
+
+          if ($0 ~ /^[[:space:]]*$/) {
+            print
+            next
+          }
+
+          if (cur_indent > host_indent) {
+            temp = $0
+            sub(/^[[:space:]]*/, "", temp)
+            if (temp ~ /^ansible_host:[[:space:]]*/) {
+              printf "%sansible_host: %s\n", attr_spaces, ip
+              replaced = 1
+              next
+            }
+            print
+            next
+          }
+
+          if (!replaced) {
+            printf "%sansible_host: %s\n", attr_spaces, ip
+            replaced = 1
+          }
+          inhost = 0
+        }
+
+        if ($0 ~ "^[[:space:]]*" h ":") {
+          print
+          inhost = 1
+          host_indent = indent_len($0)
+          attr_spaces = sprintf("%*s", host_indent + 2, "")
+          replaced = 0
+          next
+        }
+
+        print
+      }
+
+      END {
+        if (inhost && !replaced) {
+          printf "%sansible_host: %s\n", attr_spaces, ip
+        }
+      }
     ' "$inv" > "$inv.tmp" && mv "$inv.tmp" "$inv"
   else
     _ans_i_echo "adding host: $host ($ip)"
