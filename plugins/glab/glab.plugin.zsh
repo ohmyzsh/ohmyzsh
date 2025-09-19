@@ -69,7 +69,7 @@ glissue-close() {
 
 # List open issues assigned to me
 glissue-list() {
-  glab issue list --assignee "@me" --state opened "$@"
+  glab issue list --assignee "@me" "$@"
 }
 
 # --- CI/CD Helper Functions ---
@@ -99,7 +99,7 @@ glrepo-clone() {
 
 # List all projects I’m a member of
 glrepo-list() {
-  glab repo list --membership "$@"
+  glab repo list "$@"
 }
 
 # Open a repository in browser
@@ -116,8 +116,15 @@ glrepo-starred() {
 
 # Create a release: glrelease-create "Title" "Tag"
 glrelease-create() {
-  glab release create -t "$1" "$2"
+  if [ -z "$1" ]; then
+    echo "Usage: glrelease-create <tag> [release name]"
+    return 1
+  fi
+  local tag="$1"
+  local name="${2:-$1}"  # Use tag as name if no name provided
+  glab release create "$tag" --name "$name"
 }
+
 
 # --- Search Helper Function ---
 

@@ -20,7 +20,6 @@ This plugin adds support for the [GitLab CLI (`glab`)](https://gitlab.com/gitlab
 | `glci`      | `glab ci`         | Manage CI pipelines             |
 | `glprj`     | `glab project`    | Manage projects                 |
 | `glrelease` | `glab release`    | Manage releases                 |
-| `gli`       | `glab incident`   | Manage incidents                |
 
 ## Helper functions
 
