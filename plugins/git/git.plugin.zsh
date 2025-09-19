@@ -391,6 +391,9 @@ alias gstp='git stash pop'
 is-at-least 2.13 "$git_version" \
   && alias gsta='git stash push' \
   || alias gsta='git stash save'
+is-at-least 2.13 "$git_version" \
+  && alias gstam='git stash push --message' \
+  || alias gstam='git stash save'
 alias gsts='git stash show --patch'
 alias gst='git status'
 alias gss='git status --short'
