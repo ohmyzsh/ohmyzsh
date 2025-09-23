@@ -19,7 +19,7 @@ plugins=(... opentofu)
 |--------|------------------------------|
 | `tt`   | `tofu`                       |
 | `tta`  | `tofu apply`                 |
-| `ttaa` | `tofu apply -auto-approve`   |
+| `tta!` | `tofu apply -auto-approve`   |
 | `ttc`  | `tofu console`               |
 | `ttd`  | `tofu destroy`               |
 | `ttd!` | `tofu destroy -auto-approve` |
