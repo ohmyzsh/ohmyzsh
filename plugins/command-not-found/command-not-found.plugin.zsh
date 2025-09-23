@@ -7,6 +7,7 @@ for file (
   /opt/homebrew/Library/Homebrew/command-not-found/handler.sh
   /usr/local/Homebrew/Library/Homebrew/command-not-found/handler.sh
   /home/linuxbrew/.linuxbrew/Homebrew/Library/Homebrew/command-not-found/handler.sh
+	# Old homebrew implementation
   /opt/homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh
   /usr/local/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh
   /home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/homebrew/homebrew-command-not-found/handler.sh
