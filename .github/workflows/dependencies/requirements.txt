@@ -1,7 +1,7 @@
 certifi==2025.8.3
 charset-normalizer==3.4.3
 idna==3.10
-PyYAML==6.0.2
+PyYAML==6.0.3
 requests==2.32.5
 semver==3.0.4
 urllib3==2.5.0
