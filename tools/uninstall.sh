@@ -22,19 +22,34 @@ if [ -d ~/.oh-my-zsh ]; then
 fi
 
 if [ -e ~/.zshrc ]; then
-  ZSHRC_SAVE=~/.zshrc.omz-uninstalled-$(date +%Y-%m-%d_%H-%M-%S)
-  echo "Found ~/.zshrc -- Renaming to ${ZSHRC_SAVE}"
-  mv ~/.zshrc "${ZSHRC_SAVE}"
+  BACKUP=~/.zshrc.backup-$(date +%Y-%m-%d_%H-%M-%S)
+  echo "Backing up your current ~/.zshrc to ${BACKUP}"
+  cp ~/.zshrc "${BACKUP}"
+
+  # Remove only oh-my-zsh related lines
+  if grep -q 'oh-my-zsh.sh' ~/.zshrc; then
+    sed -i '/oh-my-zsh.sh/d' ~/.zshrc
+    echo "Removed Oh My Zsh initialization from ~/.zshrc"
+  fi
+
+  if grep -q 'plugins=(' ~/.zshrc; then
+    sed -i '/plugins=(/d' ~/.zshrc
+    echo "Removed Oh My Zsh plugin line from ~/.zshrc"
+  fi
+
+  if grep -q 'ZSH_THEME=' ~/.zshrc; then
+    sed -i '/ZSH_THEME=/d' ~/.zshrc
+    echo "Removed Oh My Zsh theme setting from ~/.zshrc"
+  fi
 fi
 
 echo "Looking for original zsh config..."
 ZSHRC_ORIG=~/.zshrc.pre-oh-my-zsh
 if [ -e "$ZSHRC_ORIG" ]; then
-  echo "Found $ZSHRC_ORIG -- Restoring to ~/.zshrc"
-  mv "$ZSHRC_ORIG" ~/.zshrc
-  echo "Your original zsh config was restored."
+  echo "Found $ZSHRC_ORIG (not restoring automatically)."
+  echo "You can restore it manually if needed: cp $ZSHRC_ORIG ~/.zshrc"
 else
-  echo "No original zsh config found"
+  echo "No original zsh config found. Your current ~/.zshrc was cleaned."
 fi
 
 echo "Thanks for trying out Oh My Zsh. It's been uninstalled."
