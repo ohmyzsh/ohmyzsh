@@ -7,9 +7,3 @@ To use it add `finch` to the plugins array in your zshrc file.
 ```zsh
 plugins=(... finch)
 ```
-
-## Aliases
-
-| Alias   | Command     | Description                                       |
-| :------ | :---------- |  :----------------------------------------------- |
-| fvm     | `finch vm`  | Operate on the Virtual Machine container runtime  |

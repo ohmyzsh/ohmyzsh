@@ -11,5 +11,3 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_finch" ]]; then
 fi
 
 finch completion zsh 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_finch" &|
-
-alias fvm='finch vm'
