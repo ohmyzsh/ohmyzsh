@@ -28,7 +28,7 @@ EOF
 
     local success=0
     local file="$1" full_path="${1:A}"
-    local extract_dir="${1:t:r}"
+    local extract_dir="${1:A:r}"
 
     # Remove the .tar extension if the file name is .tar.*
     if [[ $extract_dir =~ '\.tar$' ]]; then
