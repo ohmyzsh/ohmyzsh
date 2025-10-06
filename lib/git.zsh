@@ -208,6 +208,8 @@ fi
 # Checks if working tree is dirty
 function parse_git_dirty() {
   local STATUS
+  local STASH_STATUS
+  local STASH_VALID=false
   local -a FLAGS
   FLAGS=('--porcelain')
   if [[ "$(__git_prompt_git config --get oh-my-zsh.hide-dirty)" != "1" ]]; then
@@ -225,11 +227,23 @@ function parse_git_dirty() {
         ;;
     esac
     STATUS=$(__git_prompt_git status ${FLAGS} 2> /dev/null | tail -n 1)
+    STASH_STATUS="$(git stash list | wc -l)"
+  fi
+  if [[ ! -z ${ZSH_THEME_GIT_PROMPT_STASH} && ! -z ${ZSH_THEME_GIT_PROMPT_STASH_DIRTY} && ! -z ${ZSH_THEME_GIT_RESET_COLOR} ]]; then
+    STASH_VALID=true
   fi
   if [[ -n $STATUS ]]; then
-    echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+    if [[ ! -z ${STASH_STATUS} && ${STASH_STATUS} != 0 && ${STASH_VALID} == true ]]; then
+      echo "${ZSH_THEME_GIT_PROMPT_STASH_DIRTY}${STASH_STATUS}${ZSH_THEME_GIT_RESET_COLOR}"
+    else
+      echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+    fi
   else
-    echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+    if [[ ! -z ${STASH_STATUS} && ${STASH_STATUS} != 0 && ${STASH_VALID} ]]; then
+      echo "$ZSH_THEME_GIT_PROMPT_STASH${STASH_STATUS}${ZSH_THEME_GIT_RESET_COLOR}"
+    else
+      echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+    fi
   fi
 }
 
