@@ -19,8 +19,17 @@ alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false &
 
 # Bluetooth restart
 function btrestart() {
-  sudo kextunload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
-  sudo kextload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
+  # Kill audio and bluetooth processes
+  pgrep audio | xargs sudo kill 2>/dev/null || true
+  pgrep bluetooth | xargs sudo kill 2>/dev/null || true
+
+  # Restart bluetooth services using launchctl
+  sudo launchctl list | grep -i blue | awk '{ print $3 }' | xargs sudo launchctl stop 2>/dev/null || true
+  sudo launchctl list | grep -i blue | awk '{ print $3 }' | xargs sudo launchctl start 2>/dev/null || true
+  
+  # Restart audio services using launchctl
+  sudo launchctl list | grep -i audio | awk '{ print $3 }' | xargs sudo launchctl stop 2>/dev/null || true
+  sudo launchctl list | grep -i audio | awk '{ print $3 }' | xargs sudo launchctl start 2>/dev/null || true
 }
 
 function _omz_macos_get_frontmost_app() {
