@@ -2,6 +2,8 @@
 
 [ghostty](https://ghostty.org/) users, this `zsh` plugin allows you to copy / paste a text selected with the keyboard with `ctrl+shift+c` / `ctrl+shift+v`.
 
+This is a complement to [zsh-shift-select](https://github.com/jirutka/zsh-shift-select), allowing to copy with `{ctrl+}shift+{left,right,up,down,home,end}`.
+
 To use it, add `ghostty-copypaste` to the plugins array of your `.zshrc` file:
 
 ```
