@@ -43,7 +43,6 @@ function _omz_git_prompt_status() {
   [[ "$(__git_prompt_git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]] && return
 
   # Maps a git status prefix to an internal constant
-  # This cannot use the prompt constants, as they may be empty
   local -A prefix_constant_map
   prefix_constant_map=(
     '\?\? '     'UNTRACKED'
@@ -78,22 +77,26 @@ function _omz_git_prompt_status() {
     'STASHED'   "$ZSH_THEME_GIT_PROMPT_STASHED"
   )
 
-  # The order that the prompt displays should be added to the prompt
   local status_constants
   status_constants=(
     UNTRACKED ADDED MODIFIED RENAMED DELETED
     STASHED UNMERGED AHEAD BEHIND DIVERGED
   )
 
+  #FIX START: respect DISABLE_UNTRACKED_FILES_DIRTY to avoid slow scans
   local status_text
-  status_text="$(__git_prompt_git status --porcelain -b 2> /dev/null)"
+  if [[ "${DISABLE_UNTRACKED_FILES_DIRTY:-}" == "true" ]]; then
+    status_text="$(__git_prompt_git status --porcelain -b --untracked-files=no 2> /dev/null)"
+  else
+    status_text="$(__git_prompt_git status --porcelain -b 2> /dev/null)"
+  fi
+  #FIX END
 
   # Don't continue on a catastrophic failure
   if [[ $? -eq 128 ]]; then
     return 1
   fi
 
-  # A lookup table of each git status encountered
   local -A statuses_seen
 
   if __git_prompt_git rev-parse --verify refs/stash &>/dev/null; then
@@ -103,7 +106,6 @@ function _omz_git_prompt_status() {
   local status_lines
   status_lines=("${(@f)${status_text}}")
 
-  # If the tracking line exists, get and parse it
   if [[ "$status_lines[1]" =~ "^## [^ ]+ \[(.*)\]" ]]; then
     local branch_statuses
     branch_statuses=("${(@s/,/)match}")
@@ -116,7 +118,6 @@ function _omz_git_prompt_status() {
     done
   fi
 
-  # For each status prefix, do a regex comparison
   for status_prefix in ${(k)prefix_constant_map}; do
     local status_constant="${prefix_constant_map[$status_prefix]}"
     local status_regex=$'(^|\n)'"$status_prefix"
@@ -126,7 +127,6 @@ function _omz_git_prompt_status() {
     fi
   done
 
-  # Display the seen statuses in the order specified
   local status_prompt
   for status_constant in $status_constants; do
     if (( ${+statuses_seen[$status_constant]} )); then
@@ -137,6 +137,7 @@ function _omz_git_prompt_status() {
 
   echo $status_prompt
 }
+
 
 # Use async version if setting is enabled, or unset but zsh version is at least 5.0.6.
 # This avoids async prompt issues caused by previous zsh versions:
