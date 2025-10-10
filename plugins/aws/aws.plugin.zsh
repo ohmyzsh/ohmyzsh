@@ -98,6 +98,27 @@ function acp() {
   local profile="$1"
   local mfa_token="$2"
 
+  # Check if profile uses SSO and perform SSO login if needed
+  if _aws_profile_uses_sso "$profile"; then
+    echo "Profile '$profile' uses SSO. Performing SSO login..."
+    aws sso login --profile "$profile"
+    if [[ $? -ne 0 ]]; then
+      echo "${fg[red]}SSO login failed for profile '$profile'${reset_color}" >&2
+      return 1
+    fi
+  else
+    # Check if source profile uses SSO (for role assumption)
+    local source_profile="$(aws configure get source_profile --profile $profile)"
+    if [[ -n "$source_profile" ]] && _aws_profile_uses_sso "$source_profile"; then
+      echo "Source profile '$source_profile' uses SSO. Performing SSO login..."
+      aws sso login --profile "$source_profile"
+      if [[ $? -ne 0 ]]; then
+        echo "${fg[red]}SSO login failed for source profile '$source_profile'${reset_color}" >&2
+        return 1
+      fi
+    fi
+  fi
+
   # Get fallback credentials for if the aws command fails or no command is run
   local aws_access_key_id="$(aws configure get aws_access_key_id --profile $profile)"
   local aws_secret_access_key="$(aws configure get aws_secret_access_key --profile $profile)"
@@ -242,6 +263,13 @@ function aws_profiles() {
   aws --no-cli-pager configure list-profiles 2> /dev/null && return
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
   grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([^[:space:]]+)\][[:space:]]*$/\2/g'
+}
+
+# Check if a profile uses SSO
+function _aws_profile_uses_sso() {
+  local profile="$1"
+  local sso_start_url="$(aws configure get sso_start_url --profile $profile 2>/dev/null)"
+  [[ -n "$sso_start_url" ]]
 }
 
 function _aws_regions() {
