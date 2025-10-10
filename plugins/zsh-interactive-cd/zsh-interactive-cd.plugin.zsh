@@ -24,8 +24,11 @@ __zic_matched_subdir_list() {
     fi
     find -L "$dir" -mindepth 1 -maxdepth 1 -type d 2>/dev/null \
         | cut -b $(( ${length} + 2 ))- | command sed '/^$/d' | while read -r line; do
-      if [[ "${line[1]}" == "." ]]; then
-        continue
+      # Skip hidden dirs unless explicitly allowed
+      if [[ -z "$ZIC_SHOW_HIDDEN" || "$ZIC_SHOW_HIDDEN" != "true" ]]; then
+        if [[ "${line[1]}" == "." ]]; then
+          continue
+        fi
       fi
       echo "$line"
     done
@@ -40,8 +43,11 @@ __zic_matched_subdir_list() {
       find -L "$dir" -mindepth 1 -maxdepth 1 -type d \
           2>/dev/null | cut -b $(( ${length} + 2 ))- | command sed '/^$/d' \
           | while read -r line; do
-        if [[ "${seg[1]}" != "." && "${line[1]}" == "." ]]; then
-          continue
+        # Skip hidden dirs unless explicitly allowed
+        if [[ -z "$ZIC_SHOW_HIDDEN" || "$ZIC_SHOW_HIDDEN" != "true" ]]; then
+          if [[ "${seg[1]}" != "." && "${line[1]}" == "." ]]; then
+            continue
+          fi
         fi
         if [ "$zic_case_insensitive" = "true" ]; then
           if [[ "$line:u" == "$seg:u"* ]]; then
@@ -60,8 +66,11 @@ __zic_matched_subdir_list() {
       find -L "$dir" -mindepth 1 -maxdepth 1 -type d \
           2>/dev/null | cut -b $(( ${length} + 2 ))- | command sed '/^$/d' \
           | while read -r line; do
-        if [[ "${seg[1]}" != "." && "${line[1]}" == "." ]]; then
-          continue
+        # Skip hidden dirs unless explicitly allowed
+        if [[ -z "$ZIC_SHOW_HIDDEN" || "$ZIC_SHOW_HIDDEN" != "true" ]]; then
+          if [[ "${seg[1]}" != "." && "${line[1]}" == "." ]]; then
+            continue
+          fi
         fi
         if [ "$zic_case_insensitive" = "true" ]; then
           if [[ "$line:u" == *"$seg:u"* ]]; then
@@ -164,11 +173,6 @@ zic-completion() {
 
 [ -z "$__zic_default_completion" ] && {
   binding=$(bindkey '^I')
-  # $binding[(s: :w)2]
-  # The command substitution and following word splitting to determine the
-  # default zle widget for ^I formerly only works if the IFS parameter contains
-  # a space via $binding[(w)2]. Now it specifically splits at spaces, regardless
-  # of IFS.
   [[ $binding =~ 'undefined-key' ]] || __zic_default_completion=$binding[(s: :w)2]
   unset binding
 }
