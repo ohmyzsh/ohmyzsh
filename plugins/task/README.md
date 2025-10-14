@@ -1,4 +1,4 @@
-# Buf plugin
+# Task plugin
 
 This plugin adds completion for [Task CLI](https://taskfile.dev/), a fast, cross-platform build tool inspired by Make, designed for modern workflows.
 
