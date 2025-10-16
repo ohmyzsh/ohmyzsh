@@ -47,18 +47,8 @@ alias rc='rails console'
 alias rcs='rails console --sandbox'
 alias rd='rails destroy'
 alias rdb='rails dbconsole'
-alias rdc='rails db:create'
-alias rdd='rails db:drop'
-alias rdm='rails db:migrate'
-alias rdmd='rails db:migrate:down'
-alias rdmr='rails db:migrate:redo'
-alias rdms='rails db:migrate:status'
 alias rdmtc='rails db:migrate db:test:clone'
-alias rdmu='rails db:migrate:up'
-alias rdr='rails db:rollback'
-alias rdrs='rails db:reset'
 alias rds='rails db:seed'
-alias rdsl='rails db:schema:load'
 alias rdtc='rails db:test:clone'
 alias rdtp='rails db:test:prepare'
 alias rgen='rails generate'
@@ -104,6 +94,97 @@ alias rkmd='rake middleware'
 alias rkn='rake notes'
 alias rksts='rake stats'
 alias rkt='rake test'
+
+# Multi-database functions
+# Usage: rdc <database> - rails db:create:<database>
+function rdc() {
+  if [ -z "$1" ]; then
+    rails db:create
+  else
+    rails db:create:$1
+  fi
+}
+
+# Usage: rdd <database> - rails db:drop:<database>
+function rdd() {
+  if [ -z "$1" ]; then
+    rails db:drop
+  else
+    rails db:drop:$1
+  fi
+}
+
+# Usage: rdm <database> - rails db:migrate:<database>
+function rdm() {
+  if [ -z "$1" ]; then
+    rails db:migrate
+  else
+    rails db:migrate:$1
+  fi
+}
+
+# Usage: rdmd <database> - rails db:migrate:down:<database>
+function rdmd() {
+  if [ -z "$1" ]; then
+    rails db:migrate:down
+  else
+    rails db:migrate:down:$1
+  fi
+}
+
+# Usage: rdmr <database> - rails db:migrate:redo:<database>
+function rdmr() {
+  if [ -z "$1" ]; then
+    rails db:migrate:redo
+  else
+    rails db:migrate:redo:$1
+  fi
+}
+
+# Usage: rdms <database> - rails db:migrate:status:<database>
+function rdms() {
+  if [ -z "$1" ]; then
+    rails db:migrate:status
+  else
+    rails db:migrate:status:$1
+  fi
+}
+
+# Usage: rdmu <database> - rails db:migrate:up:<database>
+function rdmu() {
+  if [ -z "$1" ]; then
+    rails db:migrate:up
+  else
+    rails db:migrate:up:$1
+  fi
+}
+
+# Usage: rdr <database> - rails db:rollback:<database>
+function rdr() {
+  if [ -z "$1" ]; then
+    rails db:rollback
+  else
+    rails db:rollback:$1
+  fi
+}
+
+# Usage: rdrs <database> - rails db:reset:<database>
+function rdrs() {
+  if [ -z "$1" ]; then
+    rails db:reset
+  else
+    rails db:reset:$1
+  fi
+}
+
+# Usage: rdsl <database> - rails db:schema:load:<database>
+function rdsl() {
+  if [ -z "$1" ]; then
+    rails db:schema:load
+  else
+    rails db:schema:load:$1
+  fi
+}
 
 # legacy stuff
 alias sc='ruby script/console'
