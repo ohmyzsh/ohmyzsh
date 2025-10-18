@@ -45,11 +45,16 @@ marks() {
 	done
 }
 
+function getmark {
+    LANG= command echo $(command realpath "$MARKPATH/$1") || command echo "No such mark: $1"
+}
+
 _completemarks() {
 	reply=("${MARKPATH}"/{,.}*(@N:t))
 }
 compctl -K _completemarks jump
 compctl -K _completemarks unmark
+compctl -K _completemarks getmark
 
 _mark_expansion() {
 	setopt localoptions extendedglob
