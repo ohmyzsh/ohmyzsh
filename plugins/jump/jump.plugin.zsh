@@ -46,7 +46,7 @@ marks() {
 }
 
 function getmark {
-    LANG= command echo $(command realpath "$MARKPATH/$1") || command echo "No such mark: $1"
+    LANG= command realpath "$MARKPATH/$1" 2>/dev/null || { command echo "No such mark: $1" >&2; return 1; }
 }
 
 _completemarks() {
