@@ -35,6 +35,9 @@ alias dvls='docker volume ls'
 alias dvprune='docker volume prune'
 alias dxc='docker container exec'
 alias dxcit='docker container exec -it'
+alias dcx="docker compose up -d --force-recreate --remove-orphans"
+alias dcxd="docker compose down"
+alias dcxb="docker compose up -d --force-recreate --build --remove-orphans"
 
 if (( ! $+commands[docker] )); then
   return
