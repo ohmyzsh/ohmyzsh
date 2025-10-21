@@ -280,10 +280,11 @@ alias gpra='git pull --rebase --autostash'
 alias gprav='git pull --rebase --autostash -v'
 
 function ggu() {
-  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
-  git pull --rebase origin "${b:=$1}"
+  local b
+  [[ "$#" != 1 ]] && b="$(git_current_branch)"
+  git pull --rebase origin "${b:-$1}"
 }
-compdef _git ggu=git-checkout
+compdef _git ggu=git-pull
 
 alias gprom='git pull --rebase origin $(git_main_branch)'
 alias gpromi='git pull --rebase=interactive origin $(git_main_branch)'
@@ -295,11 +296,12 @@ function ggl() {
   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
     git pull origin "${*}"
   else
-    [[ "$#" == 0 ]] && local b="$(git_current_branch)"
-    git pull origin "${b:=$1}"
+    local b
+    [[ "$#" == 0 ]] && b="$(git_current_branch)"
+    git pull origin "${b:-$1}"
   fi
 }
-compdef _git ggl=git-checkout
+compdef _git ggl=git-pull
 
 alias gluc='git pull upstream $(git_current_branch)'
 alias glum='git pull upstream $(git_main_branch)'
@@ -307,10 +309,11 @@ alias gp='git push'
 alias gpd='git push --dry-run'
 
 function ggf() {
-  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
-  git push --force origin "${b:=$1}"
+  local b
+  [[ "$#" != 1 ]] && b="$(git_current_branch)"
+  git push --force origin "${b:-$1}"
 }
-compdef _git ggf=git-checkout
+compdef _git ggf=git-push
 
 alias gpf!='git push --force'
 is-at-least 2.30 "$git_version" \
@@ -318,10 +321,11 @@ is-at-least 2.30 "$git_version" \
   || alias gpf='git push --force-with-lease'
 
 function ggfl() {
-  [[ "$#" != 1 ]] && local b="$(git_current_branch)"
-  git push --force-with-lease origin "${b:=$1}"
+  local b
+  [[ "$#" != 1 ]] && b="$(git_current_branch)"
+  git push --force-with-lease origin "${b:-$1}"
 }
-compdef _git ggfl=git-checkout
+compdef _git ggfl=git-push
 
 alias gpsup='git push --set-upstream origin $(git_current_branch)'
 is-at-least 2.30 "$git_version" \
@@ -336,11 +340,12 @@ function ggp() {
   if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
     git push origin "${*}"
   else
-    [[ "$#" == 0 ]] && local b="$(git_current_branch)"
-    git push origin "${b:=$1}"
+    local b
+    [[ "$#" == 0 ]] && b="$(git_current_branch)"
+    git push origin "${b:-$1}"
   fi
 }
-compdef _git ggp=git-checkout
+compdef _git ggp=git-push
 
 alias gpu='git push upstream'
 alias grb='git rebase'
