@@ -39,6 +39,10 @@ alias kdelf='kubectl delete -f'
 alias kge='kubectl get events --sort-by=".lastTimestamp"'
 alias kgew='kubectl get events --sort-by=".lastTimestamp" --watch'
 
+# Dry runs
+alias kdr='kubectl --dry-run=client'
+alias kdrs='kubectl --dry-run=server'
+
 # Pod management.
 alias kgp='kubectl get pods'
 alias kgpl='kgp -l'
