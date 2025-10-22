@@ -35,6 +35,9 @@ plugins=(... terraform)
 | `tfs`   | `terraform state`                      |
 | `tft`   | `terraform test`                       |
 | `tfsh`  | `terraform show`                       |
+| `tfw`   | `terraform workspace`                  |
+| `tfwl`  | `terraform workspace list`             |
+| `tfws`  | `terraform workspace select`           |
 
 ## Prompt function
 
