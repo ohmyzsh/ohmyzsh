@@ -39,7 +39,6 @@ jobs:
           GIT_APP_NAME: ohmyzsh[bot]
           GIT_APP_EMAIL: 54982679+ohmyzsh[bot]@users.noreply.github.com
           TMP_DIR: ${{ runner.temp }}
-          DRY_RUN: 1
         run: |
           pip install -r .github/workflows/dependencies/requirements.txt
           python3 .github/workflows/dependencies/updater.py
