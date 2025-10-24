@@ -14,13 +14,19 @@ bindkey -M menuselect '^o' accept-and-infer-next-history
 zstyle ':completion:*:*:*:*:*' menu select
 
 # case insensitive (all), partial-word and substring completion
+# NOTE: 'l:|=* r:|=*' matcher removed due to causing unexpected behavior:
+#   - Can trigger unintended execution of scripts during tab completion (issue #13366)
+#   - Causes duplicate completion candidates (issue #13310)
+#   - Creates overly permissive matching that degrades user experience
+# The remaining matchers (case-insensitive + right-side anchor) provide all essential
+# completion functionality without the problematic side effects.
 if [[ "$CASE_SENSITIVE" = true ]]; then
-  zstyle ':completion:*' matcher-list 'r:|=*' 'l:|=* r:|=*'
+  zstyle ':completion:*' matcher-list 'r:|=*'
 else
   if [[ "$HYPHEN_INSENSITIVE" = true ]]; then
-    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=*' 'l:|=* r:|=*'
+    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=*'
   else
-    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
+    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*'
   fi
 fi
 unset CASE_SENSITIVE HYPHEN_INSENSITIVE
