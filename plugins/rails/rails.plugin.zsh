@@ -96,93 +96,121 @@ alias rksts='rake stats'
 alias rkt='rake test'
 
 # Multi-database functions
-# Usage: rdc <database> - rails db:create:<database>
+# Usage: rdc [database] - rails db:create[:database]
 function rdc() {
-  if [ -z "$1" ]; then
+  if [ $# -eq 0 ]; then
     rails db:create
   else
-    rails db:create:$1
+    echo "Running: rails db:create:$1" >&2
+    rails db:create:"$1"
   fi
 }
 
-# Usage: rdd <database> - rails db:drop:<database>
+# Usage: rdd [database] - rails db:drop[:database]
 function rdd() {
-  if [ -z "$1" ]; then
+  if [ $# -eq 0 ]; then
     rails db:drop
   else
-    rails db:drop:$1
+    echo "Running: rails db:drop:$1" >&2
+    rails db:drop:"$1"
   fi
 }
 
-# Usage: rdm <database> - rails db:migrate:<database>
+# Usage: rdm [database] [VERSION=x VERBOSE=false SCOPE=blog] - rails db:migrate[:database]
 function rdm() {
-  if [ -z "$1" ]; then
+  if [ $# -eq 0 ]; then
     rails db:migrate
+  elif [[ "$1" == *"="* ]]; then
+    rails db:migrate "$@"
   else
-    rails db:migrate:$1
+    local database="$1"
+    shift
+    rails db:migrate:"$database" "$@"
   fi
 }
 
-# Usage: rdmd <database> - rails db:migrate:down:<database>
+# Usage: rdmd [database] [VERSION=x] - rails db:migrate:down[:database]
 function rdmd() {
-  if [ -z "$1" ]; then
+  if [ $# -eq 0 ]; then
     rails db:migrate:down
+  elif [[ "$1" == *"="* ]]; then
+    rails db:migrate:down "$@"
   else
-    rails db:migrate:down:$1
+    local database="$1"
+    shift
+    rails db:migrate:down:"$database" "$@"
   fi
 }
 
-# Usage: rdmr <database> - rails db:migrate:redo:<database>
+# Usage: rdmr [database] [STEP=x VERSION=x] - rails db:migrate:redo[:database]
 function rdmr() {
-  if [ -z "$1" ]; then
+  if [ $# -eq 0 ]; then
     rails db:migrate:redo
+  elif [[ "$1" == *"="* ]]; then
+    rails db:migrate:redo "$@"
   else
-    rails db:migrate:redo:$1
+    local database="$1"
+    shift
+    rails db:migrate:redo:"$database" "$@"
   fi
 }
 
-# Usage: rdms <database> - rails db:migrate:status:<database>
+# Usage: rdms [database] - rails db:migrate:status[:database]
 function rdms() {
-  if [ -z "$1" ]; then
+  if [ $# -eq 0 ]; then
     rails db:migrate:status
   else
-    rails db:migrate:status:$1
+    echo "Running: rails db:migrate:status:$1" >&2
+    rails db:migrate:status:"$1"
   fi
 }
 
-# Usage: rdmu <database> - rails db:migrate:up:<database>
+# Usage: rdmu [database] [VERSION=x] - rails db:migrate:up[:database]
 function rdmu() {
-  if [ -z "$1" ]; then
+  if [ $# -eq 0 ]; then
     rails db:migrate:up
+  elif [[ "$1" == *"="* ]]; then
+    rails db:migrate:up "$@"
   else
-    rails db:migrate:up:$1
+    local database="$1"
+    shift
+    rails db:migrate:up:"$database" "$@"
   fi
 }
 
-# Usage: rdr <database> - rails db:rollback:<database>
+# Usage: rdr [database] [STEP=n] - rails db:rollback[:database]
 function rdr() {
-  if [ -z "$1" ]; then
+  if [ $# -eq 0 ]; then
     rails db:rollback
+  elif [[ "$1" == *"="* ]]; then
+    rails db:rollback "$@"
   else
-    rails db:rollback:$1
+    local database="$1"
+    shift
+    rails db:rollback:"$database" "$@"
   fi
 }
 
-# Usage: rdrs <database> - rails db:reset:<database>
+# Usage: rdrs [database] - rails db:reset[:database]
 function rdrs() {
-  if [ -z "$1" ]; then
+  if [ $# -eq 0 ]; then
     rails db:reset
   else
-    rails db:reset:$1
+    echo "Running: rails db:reset:$1" >&2
+    rails db:reset:"$1"
   fi
 }
 
-# Usage: rdsl <database> - rails db:schema:load:<database>
+# Usage: rdsl [database] [SCHEMA_FORMAT=ruby|sql] - rails db:schema:load[:database]
 function rdsl() {
-  if [ -z "$1" ]; then
+  if [ $# -eq 0 ]; then
     rails db:schema:load
+  elif [[ "$1" == *"="* ]]; then
+    rails db:schema:load "$@"
   else
-    rails db:schema:load:$1
+    local database="$1"
+    shift
+    rails db:schema:load:"$database" "$@"
   fi
 }
 
