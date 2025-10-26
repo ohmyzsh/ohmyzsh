@@ -199,39 +199,53 @@ __gradle_subcommand() {
             ;;
         (dependencyInsight)
             _arguments \
+                '--all-variants[Show all variants of each dependency]' \
+                '--configuration=[Looks for the dependency in given configuration.]:dependency configuration:_gradle_dependency_configurations' \
                 '--dependency=[Shows the details of given dependency.]' \
-                '--configuration=[Looks for the dependency in given configuration.]:dependency configuration:_gradle_dependency_configurations' && ret=0
+                '--single-path[Show at most one path to each dependency]' && ret=0
             ;;
         (help)
             _arguments \
-                '--task[The task to show help for.]' && ret=0
+                '--task=[The task to show help for.]' && ret=0
             ;;
         (init)
             _arguments \
-                '--dsl=[DSL to be used in generated scripts.]:dsl:(groovy kotlin)' \
-                '--package=[Package for the generated source.]' \
-                '--project-name=[Name of the generated project.]' \
-                '--test-framework=[Test framework to be used.]:test framework:(junit kotlintest scalatest spock testng)' \
-                '--type=[Project type to generate.]:project type:(basic cpp-application cpp-library groovy-application groovy-library java-application java-library kotlin-application kotlin-library pom scala-library)' && ret=0
+                '--comments[Include clarifying comments in files.]' \
+                '--dsl=[Set the build script DSL to be used in generated scripts.]' \
+                '--incubating[Allow the generated build to use new features and APIs.]' \
+                '--insecure-protocol=[How to handle insecure URLs used for Maven Repositories.]' \
+                '--java-version=[Provides java version to use in the project.]' \
+                '--overwrite[Allow existing files in the build directory to be overwritten?]' \
+                '--package=[Set the package for source files.]' \
+                '--project-name=[Set the project name.]' \
+                '--split-project[Split functionality across multiple subprojects?]' \
+                '--test-framework=[Set the test framework to be used.]' \
+                '--type=[Set the type of project to generate.]' \
+                '--use-defaults[Use default values for options not configured explicitly]' && ret=0
             ;;
         (tasks)
             _arguments \
-                '--all[List all tasks, including subproject tasks.]' \
-                '--group=[Show tasks only from given task group.]' && ret=0
+                '--all[Show additional tasks and detail.]' \
+                '--group=[Show tasks for a specific group.]' \
+                '--groups=[Show tasks for specific groups (can be used multiple times to specify multiple groups).]' \
+                '--types[Show task class types]' && ret=0
             ;;
         (test)
             _arguments -C \
-                '--debug-jvm[Enable debugging for the test process. The process is started suspended and listening on port 5005. Requires the "java" plugin.]' \
-                '--fail-fast[Stops test execution after the first failed test. Requires the "java" plugin.]' \
-                '--tests=[Sets test class or method name to be included, * is supported. Requires the "java" plugin.]' \
+                '--debug-jvm[Enable debugging for the test process. The process is started suspended and listening on port 5005.]' \
+                '--fail-fast[Stops test execution after the first failed test.]' \
+                '--test-dry-run[Simulate test execution.]' \
+                '--tests=[Sets test class or method name to be included (in addition to the test task filters), '*' is supported.]' \
                 '(-)*:: :->task-or-option' && ret=0
             ;;
         (wrapper)
             _arguments \
-                '--distribution-type=[Binary-only or all with docs and sources]:*:distribution type:(bin all)' \
-                '--gradle-version=[Set Gradle version for wrapper]' \
-                '--gradle-distribution-sha256-sum=[SHA-256 checksum]' \
-                '--gradle-distribution-url=[Set Gradle distribution URL]' && ret=0
+                '--distribution-type=[The type of the Gradle distribution to be used by the wrapper.]:*:distribution type:(bin all)' \
+                '--gradle-distribution-sha256-sum=[The SHA-256 hash sum of the gradle distribution.]' \
+                '--gradle-distribution-url=[The URL to download the Gradle distribution from.]' \
+                '--gradle-version=[The version of the Gradle distribution required by the wrapper. The following labels are allowed: latest, release-candidate, release-milestone, release-nightly, and nightly.]' \
+                '--network-timeout=[Timeout in ms to use when the wrapper is performing network operations.]' \
+                '--validate-url[Sets task to validate the configured distribution url.]' && ret=0
             ;;
         (*)
             _arguments -C \
