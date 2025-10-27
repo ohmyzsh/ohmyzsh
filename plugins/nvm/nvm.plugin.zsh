@@ -20,10 +20,19 @@ if [[ -z "$NVM_DIR" ]] || [[ ! -f "$NVM_DIR/nvm.sh" ]]; then
   return
 fi
 
+if [[ -z "$NVM_SOURCE" ]]; then
+  if [[ -d "/usr/share/nvm" ]]; then
+    export NVM_SOURCE="/usr/share/nvm"
+  fi
+else
+    export NVM_SOURCE=$NVM_DIR
+fi
+
+
 function _omz_nvm_setup_completion {
   local _nvm_completion
   # Load nvm bash completion
-  for _nvm_completion in "$NVM_DIR/bash_completion" "$NVM_HOMEBREW/etc/bash_completion.d/nvm"; do
+  for _nvm_completion in "$NVM_SOURCE/bash_completion" "$NVM_HOMEBREW/etc/bash_completion.d/nvm"; do
     if [[ -f "$_nvm_completion" ]]; then
       # Load bashcompinit
       autoload -U +X bashcompinit && bashcompinit
@@ -82,8 +91,8 @@ if zstyle -t ':omz:plugins:nvm' lazy; then
           unfunction \$func
         fi
       done
-      # Load nvm if it exists in \$NVM_DIR
-      [[ -f \"\$NVM_DIR/nvm.sh\" ]] && source \"\$NVM_DIR/nvm.sh\"
+      # Load nvm if it exists in \$NVM_SOURCE
+      [[ -f \"\$NVM_SOURCE/nvm.sh\" ]] && source \"\$NVM_SOURCE/nvm.sh\"
       _omz_nvm_setup_completion
       _omz_nvm_setup_autoload
       if [[ \"\$0\" != _omz_nvm_load ]]; then
@@ -93,7 +102,7 @@ if zstyle -t ':omz:plugins:nvm' lazy; then
   "
   unset nvm_lazy_cmd
 else
-  source "$NVM_DIR/nvm.sh"
+  source "$NVM_SOURCE/nvm.sh"
   _omz_nvm_setup_completion
   _omz_nvm_setup_autoload
 fi
