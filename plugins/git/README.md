@@ -268,6 +268,7 @@ receive further support.
 | `grename <old> <new>`    | Renames branch `<old>` to `<new>`, including on the origin remote.                                              |
 | `gbda`                   | Deletes all merged branches                                                                                     |
 | `gbds`                   | Deletes all squash-merged branches (**Note: performance degrades with number of branches**)                     |
+| `glb`                    | List latest switched to branches (default 10, can use glb X to get latest X branches)
 
 ### Work in Progress (WIP)
 
