@@ -102,7 +102,7 @@ function work_in_progress() {
 alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
 
 function ggpnp() {
-  if [[ "$#" == 0 ]]; then
+  if [[ $# == 0 ]]; then
     ggl && ggp
   else
     ggl "${*}" && ggp "${*}"
@@ -281,7 +281,7 @@ alias gprav='git pull --rebase --autostash -v'
 
 function ggu() {
   local b
-  [[ "$#" != 1 ]] && b="$(git_current_branch)"
+  [[ $# != 1 ]] && b="$(git_current_branch)"
   git pull --rebase origin "${b:-$1}"
 }
 compdef _git ggu=git-pull
@@ -293,11 +293,11 @@ alias gprumi='git pull --rebase=interactive upstream $(git_main_branch)'
 alias ggpull='git pull origin "$(git_current_branch)"'
 
 function ggl() {
-  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+  if [[ $# != 0 ]] && [[ $# != 1 ]]; then
     git pull origin "${*}"
   else
     local b
-    [[ "$#" == 0 ]] && b="$(git_current_branch)"
+    [[ $# == 0 ]] && b="$(git_current_branch)"
     git pull origin "${b:-$1}"
   fi
 }
@@ -310,7 +310,7 @@ alias gpd='git push --dry-run'
 
 function ggf() {
   local b
-  [[ "$#" != 1 ]] && b="$(git_current_branch)"
+  [[ $# != 1 ]] && b="$(git_current_branch)"
   git push --force origin "${b:-$1}"
 }
 compdef _git ggf=git-push
@@ -322,7 +322,7 @@ is-at-least 2.30 "$git_version" \
 
 function ggfl() {
   local b
-  [[ "$#" != 1 ]] && b="$(git_current_branch)"
+  [[ $# != 1 ]] && b="$(git_current_branch)"
   git push --force-with-lease origin "${b:-$1}"
 }
 compdef _git ggfl=git-push
@@ -337,11 +337,11 @@ alias gpod='git push origin --delete'
 alias ggpush='git push origin "$(git_current_branch)"'
 
 function ggp() {
-  if [[ "$#" != 0 ]] && [[ "$#" != 1 ]]; then
+  if [[ $# != 0 ]] && [[ $# != 1 ]]; then
     git push origin "${*}"
   else
     local b
-    [[ "$#" == 0 ]] && b="$(git_current_branch)"
+    [[ $# == 0 ]] && b="$(git_current_branch)"
     git push origin "${b:-$1}"
   fi
 }
