@@ -339,8 +339,10 @@ __gradle_subcommand() {
                 (--warn,-w,--info,-i,--debug,-d){-q,--quiet}'[Log errors only.]' \
                 {-U,--refresh-dependencies}'[Refresh the state of dependencies.]' \
                 '--refresh-keys[Refresh the public keys used for dependency verification.]' \
+                '--rerun[Causes the task to be re-run even if up-to-date.]' \
                 '--rerun-tasks[Ignore previously cached task results.]' \
                 (--no-scan)'--scan[Generate a Build Scan (powered by Develocity).]' \
+                {-V,--show-version}'[Print version info and continue.]' \
                 (--full-stacktrace,-S){-s,--stacktrace}'[Print out the stacktrace for all exceptions.]' \
                 '--task-graph[(Experimental) Print task graph instead of executing tasks.]' \
                 \*'--update-locks[Perform a partial update of the dependency lock, letting passed in module notations change version. (incubating)]' \
@@ -465,14 +467,16 @@ _gradle() {
         (--warn,-w,--info,-i,--debug,-d){-q,--quiet}'[Log errors only.]' \
         {-U,--refresh-dependencies}'[Refresh the state of dependencies.]' \
         '--refresh-keys[Refresh the public keys used for dependency verification.]' \
+        '--rerun[Causes the task to be re-run even if up-to-date.]' \
         '--rerun-tasks[Ignore previously cached task results.]' \
         (--no-scan)'--scan[Generate a Build Scan (powered by Develocity).]' \
+        {-V,--show-version}'[Print version info and continue.]' \
         (--full-stacktrace,-S){-s,--stacktrace}'[Print out the stacktrace for all exceptions.]' \
         '--status[Shows status of running and recently stopped Gradle daemon(s).]' \
         '--stop[Stops the Gradle daemon if it is running.]' \
         '--task-graph[(Experimental) Print task graph instead of executing tasks.]' \
         \*'--update-locks[Perform a partial update of the dependency lock, letting passed in module notations change version. (incubating)]' \
-        {-v,--version}'[Shows the version info.]' \
+        {-v,--version}'[Print version info and exit.]' \
         (--quiet,-q,--info,-i,--debug,-d){-w,--warn}'[Set log level to warn.]' \
         '--warning-mode[Specifies which mode of warnings to generate. Values are 'all', 'fail', 'summary'(default) or 'none']:warning mode:(all summary none):->argument-expected' \
         (--no-watch-fs)'--watch-fs[Enables watching the file system for changes, allowing data about the file system to be re-used for the next build.]' \
