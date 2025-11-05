@@ -21,7 +21,7 @@ plugins=(... git)
 | `gapa`                 | `git add --patch`                                                                                                               |
 | `gau`                  | `git add --update`                                                                                                              |
 | `gav`                  | `git add --verbose`                                                                                                             |
-| `gwip`                 | `git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"` |
+| `gwip`                 | `git add -A; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"` |
 | `gam`                  | `git am`                                                                                                                        |
 | `gama`                 | `git am --abort`                                                                                                                |
 | `gamc`                 | `git am --continue`                                                                                                             |
