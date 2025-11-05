@@ -99,8 +99,10 @@ function work_in_progress() {
 # (in some cases force the alias order to match README, like for example gke and gk)
 #
 
+# Go to the root of the git repository
 alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
 
+# Pull and push
 function ggpnp() {
   if [[ "$#" == 0 ]]; then
     ggl && ggp
@@ -110,40 +112,79 @@ function ggpnp() {
 }
 compdef _git ggpnp=git-checkout
 
+# Alias for ggu
 alias ggpur='ggu'
-alias g='git'
-alias ga='git add'
-alias gaa='git add --all'
-alias gapa='git add --patch'
-alias gau='git add --update'
-alias gav='git add --verbose'
-alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'
-alias gam='git am'
-alias gama='git am --abort'
-alias gamc='git am --continue'
-alias gamscp='git am --show-current-patch'
-alias gams='git am --skip'
-alias gap='git apply'
-alias gapt='git apply --3way'
-alias gbs='git bisect'
-alias gbsb='git bisect bad'
-alias gbsg='git bisect good'
-alias gbsn='git bisect new'
-alias gbso='git bisect old'
-alias gbsr='git bisect reset'
-alias gbss='git bisect start'
-alias gbl='git blame -w'
-alias gb='git branch'
-alias gba='git branch --all'
-alias gbd='git branch --delete'
-alias gbD='git branch --delete --force'
 
-function gbda() {
-  git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null
-}
+# Git shorthand
+alias g='git'
+
+# Add files
+alias ga='git add'
+
+# Add all files
+alias gaa='git add --all'
+
+# Add files interactively
+alias gapa='git add --patch'
+
+# Add updated files
+alias gau='git add --update'
+
+# Add files verbosely
+alias gav='git add --verbose'
+# Work in progress commit
+alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'
+
+# Apply patches from mailbox
+alias gam='git am'
+
+# Abort applying patches
+alias gama='git am --abort'
+
+# Continue applying patches
+alias gamc='git am --continue'
+
+# Show current patch
+alias gamscp='git am --show-current-patch'
+
+# Skip current patch
+alias gams='git am --skip'
+
+# Apply patch
+alias gap='git apply'
+
+# Apply patch with 3-way merge
+alias gapt='git apply --3way'
+# Git bisect
+alias gbs='git bisect'
+
+# Mark current commit as bad
+alias gbsb='git bisect bad'
+
+# Mark current commit as good
+alias gbsg='git bisect good'
+
+# Start bisect assuming no good commit
+alias gbsn='git bisect new'
+
+# Mark current commit as old
+alias gbso='git bisect old'
+
+# Reset bisect
+alias gbsr='git bisect reset'
+
+# Start bisect
+alias gbss='git bisect start'
+# Blame with ignoring whitespace
+alias gbl='git blame -w'
+# Branch
+alias gb='git branch'
+# Branch all
+alias gba='git branch --all'
 
 # Copied and modified from James Roeder (jmaroeder) under MIT License
 # https://github.com/jmaroeder/plugin-git/blob/216723ef4f9e8dde399661c39c80bdf73f4076c4/functions/gbda.fish
+# Delete all squashed and merged branches
 function gbds() {
   local default_branch=$(git_main_branch)
   (( ! $? )) || default_branch=$(git_develop_branch)
@@ -157,26 +198,63 @@ function gbds() {
     done
 }
 
+# ...
+# Delete gone branches
 alias gbgd='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk '"'"'{print $1}'"'"' | xargs git branch -d'
+
+# Delete gone branches force
 alias gbgD='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk '"'"'{print $1}'"'"' | xargs git branch -D'
+
+# Branch move
 alias gbm='git branch --move'
+
+# List branches that are not yet merged into the current branch
 alias gbnm='git branch --no-merged'
+
+# List all remote-tracking branches
 alias gbr='git branch --remote'
+
+# Set the upstream branch for the current branch to origin/current_branch
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
+
+# Show branches that have been deleted on the remote (gone)
 alias gbg='LANG=C git branch -vv | grep ": gone\]"'
+# Switch branches or restore working tree files
 alias gco='git checkout'
+
+# Switch branches or restore working tree files with recurse submodules
 alias gcor='git checkout --recurse-submodules'
+
+# Switch branches or restore working tree files new branch
 alias gcb='git checkout -b'
+
+# Switch branches or restore working tree files new branch force
 alias gcB='git checkout -B'
+
+# Switch branches or restore working tree files develop branch
 alias gcd='git checkout $(git_develop_branch)'
+
+# Switch branches or restore working tree files main branch
 alias gcm='git checkout $(git_main_branch)'
+
+# Cherry pick
 alias gcp='git cherry-pick'
+
+# Cherry pick abort
 alias gcpa='git cherry-pick --abort'
+
+# Cherry pick continue
 alias gcpc='git cherry-pick --continue'
+# Clean interactive
 alias gclean='git clean --interactive -d'
+
+# Clone with recurse submodules
 alias gcl='git clone --recurse-submodules'
+
+# Clone with filter
 alias gclf='git clone --recursive --shallow-submodules --filter=blob:none --also-filter-submodules'
 
+# Clone and cd
 function gccd() {
   setopt localoptions extendedglob
 
