@@ -28,6 +28,7 @@ function _omz {
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
     'reload:Reload the current zsh session'
+    'shop:Open the Oh My Zsh shop'
     'theme:Manage themes'
     'update:Update Oh My Zsh'
     'version:Show the version'
@@ -173,6 +174,7 @@ Available commands:
   plugin <command>    Manage plugins
   pr     <command>    Manage Oh My Zsh Pull Requests
   reload              Reload the current zsh session
+  shop                Open the Oh My Zsh shop
   theme  <command>    Manage themes
   update              Update Oh My Zsh
   version             Show the version
@@ -719,6 +721,29 @@ function _omz::pr::test {
       return 1
     }
   )
+}
+
+function _omz::shop {
+  local shop_url="https://openswag.shop/collections/oh-my-zsh"
+  
+  _omz::log info "Opening Oh My Zsh shop in your browser..."
+  _omz::log info "$shop_url"
+  
+  # Try to open the URL in a browser
+  # Check for common commands to open URLs
+  if (( $+commands[xdg-open] )); then
+    xdg-open "$shop_url" 2>/dev/null
+  elif (( $+commands[open] )); then
+    open "$shop_url" 2>/dev/null
+  elif (( $+commands[start] )); then
+    start "$shop_url" 2>/dev/null
+  elif (( $+commands[cygstart] )); then
+    cygstart "$shop_url" 2>/dev/null
+  elif (( $+commands[wslview] )); then
+    wslview "$shop_url" 2>/dev/null
+  else
+    _omz::log info "Please open the URL above in your browser."
+  fi
 }
 
 function _omz::reload {
