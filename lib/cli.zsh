@@ -729,21 +729,7 @@ function _omz::shop {
   _omz::log info "Opening Oh My Zsh shop in your browser..."
   _omz::log info "$shop_url"
   
-  # Try to open the URL in a browser
-  # Check for common commands to open URLs
-  if (( $+commands[xdg-open] )); then
-    xdg-open "$shop_url" 2>/dev/null
-  elif (( $+commands[open] )); then
-    open "$shop_url" 2>/dev/null
-  elif (( $+commands[start] )); then
-    start "$shop_url" 2>/dev/null
-  elif (( $+commands[cygstart] )); then
-    cygstart "$shop_url" 2>/dev/null
-  elif (( $+commands[wslview] )); then
-    wslview "$shop_url" 2>/dev/null
-  else
-    _omz::log info "Please open the URL above in your browser."
-  fi
+  open_command "$shop_url"
 }
 
 function _omz::reload {
