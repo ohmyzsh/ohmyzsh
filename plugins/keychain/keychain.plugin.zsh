@@ -23,7 +23,7 @@ function {
 	local version_string=$(keychain --version 2>&1)
   # start keychain, only use --agents for versions below 2.9.0
 	autoload -Uz is-at-least
-	if [[ "$version_string" =~ 'keychain ([0-9]\.[0-9])' ]] && \
+	if [[ "$version_string" =~ 'keychain ([0-9]+\.[0-9]+)' ]] && \
       is-at-least 2.9 "$match[1]"; then
 		keychain ${^options:-} ${^identities} --host $SHORT_HOST
 	else
