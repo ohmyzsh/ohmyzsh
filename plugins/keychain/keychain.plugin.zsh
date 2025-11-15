@@ -20,10 +20,11 @@ function {
 	zstyle -a :omz:plugins:keychain options options
 
 	# Check keychain version to decide whether to use --agents
-	local version_string=$(keychain --version 2>&1 | head -n 2 | tail -n 1 | cut -d ' ' -f 4)
+	local version_string=$(keychain --version 2>&1)
   # start keychain, only use --agents for versions below 2.9.0
 	autoload -Uz is-at-least
-	if is-at-least 2.9 "$version_string"; then
+	if [[ "$version_string" =~ 'keychain ([0-9]+\.[0-9]+)' ]] && \
+      is-at-least 2.9 "$match[1]"; then
 		keychain ${^options:-} ${^identities} --host $SHORT_HOST
 	else
 		keychain ${^options:-} --agents ${agents:-gpg} ${^identities} --host $SHORT_HOST
