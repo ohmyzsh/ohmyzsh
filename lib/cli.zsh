@@ -724,7 +724,7 @@ function _omz::pr::test {
 }
 
 function _omz::shop {
-  local shop_url="https://openswag.shop/collections/oh-my-zsh"
+  local shop_url="https://commitgoods.com/collections/oh-my-zsh"
   
   _omz::log info "Opening Oh My Zsh shop in your browser..."
   _omz::log info "$shop_url"
