@@ -547,7 +547,7 @@ We're on social media:
 ## Merchandise
 
 We have
-[stickers, shirts, and coffee mugs available](https://openswag.shop/collections/oh-my-zsh?utm_source=github)
+[stickers, shirts, and coffee mugs available](https://commitgoods.com/collections/oh-my-zsh?utm_source=github)
 for you to show off your love of Oh My Zsh. Again, you will become the talk of the town!
 
 ## License
