@@ -1,15 +1,16 @@
-# Pulumi oh-my-zsh plugin (short aliases)
-
-if ! command -v pulumi &> /dev/null; then
+if (( ! $+commands[pulumi] )); then
   return
 fi
 
-# Load completion if available
-if pulumi gen-completion zsh &> /dev/null; then
-  autoload -U +X compinit && compinit
-  pulumi gen-completion zsh >! "${ZSH_CACHE_DIR:-$HOME/.zsh_cache}/_pulumi"
-  fpath=("${ZSH_CACHE_DIR:-$HOME/.zsh_cache}" $fpath)
+# If the completion file doesn't exist yet, we need to autoload it and
+# bind it to `pulumi`. Otherwise, compinit will have already done that.
+if [[ ! -f "$ZSH_CACHE_DIR/completions/_pulumi" ]]; then
+  typeset -g -A _comps
+  autoload -Uz _pulumi
+  _comps[pulumi]=_pulumi
 fi
+
+pulumi gen-completion zsh >| "$ZSH_CACHE_DIR/completions/_pulumi" &|
 
 # Aliases
 alias p='pulumi'
