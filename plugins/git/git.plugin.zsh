@@ -71,6 +71,12 @@ function grename() {
   fi
 }
 
+# List latest X (default 10) used branches
+glb() {
+    local count=${1:-10}
+    git reflog | grep 'checkout: moving' | awk '{print $8}' | awk '!seen[$0]++' | head -n "$count"
+}
+
 #
 # Functions Work in Progress (WIP)
 # (sorted alphabetically by function name)
