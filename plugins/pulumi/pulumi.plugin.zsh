@@ -13,18 +13,16 @@ fi
 pulumi gen-completion zsh >| "$ZSH_CACHE_DIR/completions/_pulumi" &|
 
 # Aliases
-alias p='pulumi'
-alias pu='pulumi up'
-alias pp='pulumi preview'
-alias pd='pulumi destroy'
-alias pr='pulumi refresh'
-alias ps='pulumi stack'
-alias pss='pulumi stack select'
-alias psh='pulumi stack history'
-alias psi='pulumi stack init'
-alias psl='pulumi stack ls'
-alias pso='pulumi stack output'
-alias plog='pulumi logs -f'
-alias pcs='pulumi config set'
-
-
+alias pul='pulumi'
+alias pulcs='pulumi config set'
+alias puld='pulumi destroy'
+alias pullog='pulumi logs -f'
+alias pulp='pulumi preview'
+alias pulr='pulumi refresh'
+alias puls='pulumi stack'
+alias pulsh='pulumi stack history'
+alias pulsi='pulumi stack init'
+alias pulsl='pulumi stack ls'
+alias pulso='pulumi stack output'
+alias pulss='pulumi stack select'
+alias pulu='pulumi up'
