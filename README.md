@@ -18,6 +18,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://x.c
 Twitter), and join us on [Discord](https://discord.gg/ohmyzsh).
 
 [![CI](https://github.com/ohmyzsh/ohmyzsh/workflows/CI/badge.svg)](https://github.com/ohmyzsh/ohmyzsh/actions?query=workflow%3ACI)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/10713/badge)](https://www.bestpractices.dev/projects/10713)
 [![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/ohmyzsh?label=%40ohmyzsh&logo=x&style=flat)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
 [![Mastodon Follow](https://img.shields.io/mastodon/follow/111169632522566717?label=%40ohmyzsh&domain=https%3A%2F%2Fmstdn.social&logo=mastodon&style=flat)](https://mstdn.social/@ohmyzsh)
 [![Discord server](https://img.shields.io/discord/642496866407284746)](https://discord.gg/ohmyzsh)
