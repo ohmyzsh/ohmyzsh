@@ -22,7 +22,7 @@ jobs:
           egress-policy: audit
       - name: Authenticate as @ohmyzsh
         id: generate-token
-        uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+        uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94 # v2.2.0
         with:
           app-id: ${{ secrets.OHMYZSH_APP_ID }}
           private-key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
