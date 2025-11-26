@@ -341,6 +341,11 @@ setup_zshrc() {
     # Skip this if the user doesn't want to replace an existing .zshrc
     if [ "$KEEP_ZSHRC" = yes ]; then
       echo "${FMT_YELLOW}Found ${zdot}/.zshrc.${FMT_RESET} ${FMT_GREEN}Keeping...${FMT_RESET}"
+      # Still create a backup for uninstall safety, but don't overwrite the existing .zshrc
+      if [ ! -e "$OLD_ZSHRC" ]; then
+        echo "${FMT_GREEN}Creating backup at ${OLD_ZSHRC} for safe uninstall${FMT_RESET}"
+        cp "$zdot/.zshrc" "$OLD_ZSHRC"
+      fi
       return
     fi
     
