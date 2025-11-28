@@ -238,7 +238,7 @@ class Dependency:
                             # Create GitHub PR
                             GitHub.create_pr(
                                 branch,
-                                f"feat({self.name}): update to version {new_version}",
+                                f"chore({self.name}): update to version {new_version}",
                                 f"""## Description
 
 Update for **{self.desc}**: update to version [{new_version}]({status["head_url"]}).
@@ -423,7 +423,7 @@ class Git:
                 f"user.email={user_email}",
                 "commit",
                 "-m",
-                f"feat({scope}): update to {version}",
+                f"chore({scope}): update to {version}",
             ],
             stage="CreateCommit",
             env=clean_env,
