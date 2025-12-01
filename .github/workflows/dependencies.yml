@@ -4,14 +4,13 @@ on:
   schedule:
     - cron: "0 6 * * 0"
 
-permissions:
-  contents: write
-
 jobs:
   check:
     name: Check for updates
     runs-on: ubuntu-latest
     if: github.repository == 'ohmyzsh/ohmyzsh'
+    permissions:
+      contents: write # this is needed to push commits and branches
     steps:
       - name: Harden the runner (Audit all outbound calls)
         uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
