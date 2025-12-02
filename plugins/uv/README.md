@@ -32,4 +32,3 @@ plugins=(... uv)
 | uvpl  | `uv python list`                                                        | Lists all python version installed                                   |
 | uvpi  | `uv python install`                                                     | Install a specific version of python                                 |
 | uvpu  | `uv python uninstall`                                                     | Remove a specific version of python              |
-| uvpp  | `uv python pin`                                                     | Pin the current project to use a specific Python version.                |
