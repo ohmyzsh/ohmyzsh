@@ -30,5 +30,6 @@ plugins=(... uv)
 | uvi   | `uv init`                                                               | Initialize a new project in current workspace and environment.       |
 | uvinw   | `uv init --no-workspace`                                                | Initialize a new project in a new workspace and environment          |
 | uvpl  | `uv python list`                                                        | Lists all python version installed                                   |
-| uvpi  | `uv python install`                                                     | Install a specific versino of python                                 |
+| uvpi  | `uv python install`                                                     | Install a specific version of python                                 |
+| uvpu  | `uv python uninstall`                                                     | Remove a specific version of python              |
 | uvpp  | `uv python pin`                                                     | Pin the current project to use a specific Python version.                |
