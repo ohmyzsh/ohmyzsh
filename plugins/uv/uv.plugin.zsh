@@ -19,8 +19,13 @@ alias uvsr='uv sync --refresh'
 alias uvsu='uv sync --upgrade'
 alias uvup='uv self update'
 alias uvv='uv venv'
-alias uvt='uv tree'
-
+alias uvtr='uv tree'
+alias uvi='uv install'
+alias uvinw='uv install --no-workspace'
+alias uvpl='uv python list'
+alias uvpi='uv python install'
+alias uvpu='uv python uninstall'
+alias uvpp='uv python pin'
 # If the completion file doesn't exist yet, we need to autoload it and
 # bind it. Otherwise, compinit will have already done that.
 if [[ ! -f "$ZSH_CACHE_DIR/completions/_uv" ]]; then
