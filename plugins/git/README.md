@@ -185,6 +185,7 @@ plugins=(... git)
 | `grmc`                 | `git rm --cached`                                                                                                               |
 | `gcount`               | `git shortlog --summary -n`                                                                                                     |
 | `gsh`                  | `git show`                                                                                                                      |
+| `gshs`                 | `git show --stat`                                                                                                               |
 | `gsps`                 | `git show --pretty=short --show-signature`                                                                                      |
 | `gstall`               | `git stash --all`                                                                                                               |
 | `gstu`                 | `git stash --include-untracked`                                                                                                 |
