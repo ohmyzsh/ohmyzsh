@@ -19,6 +19,7 @@ alias uvsr='uv sync --refresh'
 alias uvsu='uv sync --upgrade'
 alias uvup='uv self update'
 alias uvv='uv venv'
+alias uvt='uv tree'
 
 # If the completion file doesn't exist yet, we need to autoload it and
 # bind it. Otherwise, compinit will have already done that.
