@@ -26,3 +26,4 @@ plugins=(... uv)
 | uvsu  | `uv sync --upgrade`                                                     | Sync the environment, allowing upgrades and ignoring the lock file   |
 | uvup  | `uv self update`                                                        | Update the UV tool to the latest version                             |
 | uvv   | `uv venv`                                                               | Manage virtual environments                                          |
+| uvt   | `uv tree`                                                               | Displays the full dependency tree for the current project environment|
