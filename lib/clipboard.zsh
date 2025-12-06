@@ -14,6 +14,7 @@
 # - xclip (if $DISPLAY is set)
 # - lemonade (for SSH) https://github.com/pocke/lemonade
 # - doitclient (for SSH) http://www.chiark.greenend.org.uk/~sgtatham/doit/
+# - OSC52 (for SSH/remote terminals) https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h2-Operating-System-Commands
 # - win32yank (Windows)
 # - tmux (if $TMUX is set)
 #
@@ -48,6 +49,76 @@
 #   # Paste to a file
 #   clippaste > file.txt
 #
+# Check if terminal supports OSC52 escape sequences for clipboard operations
+# OSC52 allows copying to clipboard through terminal escape sequences, useful for SSH sessions
+function _osc52_supported() {
+  emulate -L zsh
+  
+  # Check for known OSC52-capable terminals
+  # iTerm2, WezTerm, foot, Alacritty, and many modern terminals support OSC52
+  [[ -n "${ITERM_SESSION_ID:-}" ]] && return 0
+  [[ -n "${WEZTERM_PANE:-}" ]] && return 0
+  [[ "$TERM" =~ ^(foot|alacritty|kitty|rxvt-unicode|xterm) ]] && return 0
+  
+  # Check if we're in a terminal that likely supports OSC52
+  # Most modern terminals support it, but we'll be conservative
+  [[ -t 1 ]] && [[ -n "${TERM:-}" ]] && return 0
+  
+  return 1
+}
+
+# Copy to clipboard using OSC52 escape sequence
+# OSC52 format: \033]52;c;<base64-data>\033\\
+function _osc52_copy() {
+  emulate -L zsh
+  
+  # Read input (file or stdin)
+  local input="${1:-/dev/stdin}"
+  local data
+  data=$(cat "$input" 2>/dev/null)
+  
+  if [[ -z "$data" ]]; then
+    return 1
+  fi
+  
+  # Base64 encode the data
+  # base64 command is standard on most Unix-like systems
+  local base64_data
+  if (( ${+commands[base64]} )); then
+    base64_data=$(printf '%s' "$data" | base64 | tr -d '\n')
+  elif (( ${+commands[python3]} )); then
+    base64_data=$(printf '%s' "$data" | python3 -m base64 2>/dev/null | tr -d '\n')
+  elif (( ${+commands[python]} )); then
+    base64_data=$(printf '%s' "$data" | python -m base64 2>/dev/null | tr -d '\n')
+  else
+    print "osc52: base64 encoder not found" >&2
+    return 1
+  fi
+  
+  if [[ -z "$base64_data" ]]; then
+    return 1
+  fi
+  
+  # Send OSC52 escape sequence to terminal
+  printf '\033]52;c;%s\033\\' "$base64_data"
+}
+
+# Paste from clipboard using OSC52 escape sequence
+# Note: Paste support is less common than copy support
+function _osc52_paste() {
+  emulate -L zsh
+  
+  # Query clipboard using OSC52
+  # Format: \033]52;c;?\033\\
+  printf '\033]52;c;?\033\\'
+  
+  # Note: Most terminals don't support OSC52 paste queries reliably
+  # This is a best-effort implementation
+  # The terminal would need to respond with the clipboard content
+  # For now, we'll return an error to fall back to other methods
+  return 1
+}
+
 function detect-clipboard() {
   emulate -L zsh
 
@@ -75,6 +146,18 @@ function detect-clipboard() {
   elif (( ${+commands[doitclient]} )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | doitclient wclip; }
     function clippaste() { doitclient wclip -r; }
+  elif _osc52_supported; then
+    # OSC52 clipboard support for SSH/remote terminals
+    # Copy works reliably in most modern terminals (iTerm2, WezTerm, foot, Alacritty, etc.)
+    # Paste support is limited - most terminals don't support OSC52 paste queries reliably
+    function clipcopy() { _osc52_copy "${1:-/dev/stdin}"; }
+    function clippaste() { 
+      # OSC52 paste query support is unreliable across terminals
+      # For now, we don't implement paste via OSC52 as it's not widely supported
+      # Users can use other methods (tmux, terminal-specific paste) for pasting
+      print "clippaste: OSC52 paste not supported. Try tmux or terminal-specific paste." >&2
+      return 1
+    }
   elif (( ${+commands[win32yank]} )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | win32yank -i; }
     function clippaste() { win32yank -o; }
