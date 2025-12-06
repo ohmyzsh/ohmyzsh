@@ -18,9 +18,9 @@ if [[ "$CASE_SENSITIVE" = true ]]; then
   zstyle ':completion:*' matcher-list 'r:|=*' 'l:|=* r:|=*'
 else
   if [[ "$HYPHEN_INSENSITIVE" = true ]]; then
-    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=*' 'l:|=* r:|=*'
+    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=* m:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'l:|=* r:|=* m:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}'
   else
-    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
+    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=* m:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'l:|=* r:|=* m:{[:lower:][:upper:]}={[:upper:][:lower:]}'
   fi
 fi
 unset CASE_SENSITIVE HYPHEN_INSENSITIVE
