@@ -27,3 +27,9 @@ plugins=(... uv)
 | uvsu  | `uv sync --upgrade`                                                     | Sync the environment, allowing upgrades and ignoring the lock file   |
 | uvup  | `uv self update`                                                        | Update the UV tool to the latest version                             |
 | uvv   | `uv venv`                                                               | Manage virtual environments                                          |
+| uvtr   | `uv tree`                                                               | Displays the full dependency tree for the current project environment|
+| uvi   | `uv init`                                                               | Initialize a new project in current workspace and environment.       |
+| uvinw   | `uv init --no-workspace`                                                | Initialize a new project in a new workspace and environment          |
+| uvpl  | `uv python list`                                                        | Lists all python version installed                                   |
+| uvpi  | `uv python install`                                                     | Install a specific version of python                                 |
+| uvpu  | `uv python uninstall`                                                     | Remove a specific version of python              |
