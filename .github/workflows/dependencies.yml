@@ -23,7 +23,7 @@ jobs:
           fetch-depth: 0
       - name: Authenticate as @ohmyzsh
         id: generate-token
-        uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94 # v2.2.0
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
         with:
           app-id: ${{ secrets.OHMYZSH_APP_ID }}
           private-key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
