@@ -23,6 +23,7 @@ plugins=(... uv)
 | uvp   | `uv pip`                                                                                 | Manage pip packages                                                   |
 | uvpi  | `uv python install`                                                                      | Install a specific version of python                                  |
 | uvpl  | `uv python list`                                                                         | Lists all python version installed                                    |
+| uvpp  | `uv python pin`                                                                          | Pin the current project to use a specific Python version              |
 | uvpu  | `uv python uninstall`                                                                    | Remove a specific version of python                                   |
 | uvpy  | `uv python`                                                                              | Manage Python installs                                                |
 | uvr   | `uv run`                                                                                 | Run commands within the project's environment                         |
