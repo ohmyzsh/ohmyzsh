@@ -101,14 +101,8 @@ function work_in_progress() {
 
 alias grt='cd "$(git rev-parse --show-toplevel || echo .)"'
 
-function ggpnp() {
-  if [[ $# == 0 ]]; then
-    ggl && ggp
-  else
-    ggl "${*}" && ggp "${*}"
-  fi
-}
-compdef _git ggpnp=git-checkout
+alias ggpnp='command git pull origin "$(git_current_branch)" && command git push origin "$(git_current_branch)"'
+compdef _git ggpnp=git-push
 
 alias ggpur='ggu'
 alias g='git'
@@ -218,14 +212,12 @@ alias gdcw='git diff --cached --word-diff'
 alias gds='git diff --staged'
 alias gdw='git diff --word-diff'
 
-function gdv() { git diff -w "$@" | view - }
+alias gdv='command git diff -w | view -'
 compdef _git gdv=git-diff
 
 alias gdup='git diff @{upstream}'
 
-function gdnolock() {
-  git diff "$@" ":(exclude)package-lock.json" ":(exclude)*.lock"
-}
+alias gdnolock='command git diff -- ":(exclude)package-lock.json" ":(exclude)*.lock"'
 compdef _git gdnolock=git-diff
 
 alias gdt='git diff-tree --no-commit-id --name-only -r'
@@ -279,11 +271,7 @@ alias gprv='git pull --rebase -v'
 alias gpra='git pull --rebase --autostash'
 alias gprav='git pull --rebase --autostash -v'
 
-function ggu() {
-  local b
-  [[ $# != 1 ]] && b="$(git_current_branch)"
-  git pull --rebase origin "${b:-$1}"
-}
+alias ggu='command git pull --rebase origin "$(git_current_branch)"'
 compdef _git ggu=git-pull
 
 alias gprom='git pull --rebase origin $(git_main_branch)'
@@ -292,15 +280,7 @@ alias gprum='git pull --rebase upstream $(git_main_branch)'
 alias gprumi='git pull --rebase=interactive upstream $(git_main_branch)'
 alias ggpull='git pull origin "$(git_current_branch)"'
 
-function ggl() {
-  if [[ $# != 0 ]] && [[ $# != 1 ]]; then
-    git pull origin "${*}"
-  else
-    local b
-    [[ $# == 0 ]] && b="$(git_current_branch)"
-    git pull origin "${b:-$1}"
-  fi
-}
+alias ggl='command git pull origin "$(git_current_branch)"'
 compdef _git ggl=git-pull
 
 alias gluc='git pull upstream $(git_current_branch)'
@@ -308,11 +288,7 @@ alias glum='git pull upstream $(git_main_branch)'
 alias gp='git push'
 alias gpd='git push --dry-run'
 
-function ggf() {
-  local b
-  [[ $# != 1 ]] && b="$(git_current_branch)"
-  git push --force origin "${b:-$1}"
-}
+alias ggf='command git push --force origin "$(git_current_branch)"'
 compdef _git ggf=git-push
 
 alias gpf!='git push --force'
@@ -320,11 +296,7 @@ is-at-least 2.30 "$git_version" \
   && alias gpf='git push --force-with-lease --force-if-includes' \
   || alias gpf='git push --force-with-lease'
 
-function ggfl() {
-  local b
-  [[ $# != 1 ]] && b="$(git_current_branch)"
-  git push --force-with-lease origin "${b:-$1}"
-}
+alias ggfl='command git push --force-with-lease origin "$(git_current_branch)"'
 compdef _git ggfl=git-push
 
 alias gpsup='git push --set-upstream origin $(git_current_branch)'
@@ -336,15 +308,7 @@ alias gpoat='git push origin --all && git push origin --tags'
 alias gpod='git push origin --delete'
 alias ggpush='git push origin "$(git_current_branch)"'
 
-function ggp() {
-  if [[ $# != 0 ]] && [[ $# != 1 ]]; then
-    git push origin "${*}"
-  else
-    local b
-    [[ $# == 0 ]] && b="$(git_current_branch)"
-    git push origin "${b:-$1}"
-  fi
-}
+alias ggp='command git push origin "$(git_current_branch)"'
 compdef _git ggp=git-push
 
 alias gpu='git push upstream'
@@ -421,7 +385,7 @@ alias gwtls='git worktree list'
 alias gwtmv='git worktree move'
 alias gwtrm='git worktree remove'
 alias gstu='gsta --include-untracked'
-alias gtl='gtl(){ git tag --sort=-v:refname -n --list "${1}*" }; noglob gtl'
+alias gtl='command git tag --sort=-v:refname -n --list'
 alias gk='\gitk --all --branches &!'
 alias gke='\gitk --all $(git log --walk-reflogs --pretty=%h) &!'
 
