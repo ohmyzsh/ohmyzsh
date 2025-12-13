@@ -81,6 +81,7 @@ alias tmuxconf='$EDITOR $ZSH_TMUX_CONFIG'
 
 _build_tmux_alias "ta" "attach" "-t"
 _build_tmux_alias "tad" "attach -d" "-t"
+_build_tmux_alias "to" "new-session -A" "-s"
 _build_tmux_alias "ts" "new-session" "-s"
 _build_tmux_alias "tkss" "kill-session" "-t"
 
