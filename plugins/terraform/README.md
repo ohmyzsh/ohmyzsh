@@ -20,9 +20,11 @@ plugins=(... terraform)
 | `tf`    | `terraform`                            |
 | `tfa`   | `terraform apply`                      |
 | `tfaa`  | `terraform apply -auto-approve`        |
+| `tfap`  | `terraform apply -parallelism=1`       |
 | `tfc`   | `terraform console`                    |
 | `tfd`   | `terraform destroy`                    |
 | `tfd!`  | `terraform destroy -auto-approve`      |
+| `tfdp`  | `terraform destroy -parallelism=1`     |
 | `tff`   | `terraform fmt`                        |
 | `tffr`  | `terraform fmt -recursive`             |
 | `tfi`   | `terraform init`                       |
@@ -38,8 +40,6 @@ plugins=(... terraform)
 | `tfw`   | `terraform workspace`                  |
 | `tfwl`  | `terraform workspace list`             |
 | `tfws`  | `terraform workspace select`           |
-| `tfap`  | `terraform apply -parallelism=1`       |
-| `tfdp`  | `terraform destroy -parallelism=1`     |
 
 ## Prompt function
 
