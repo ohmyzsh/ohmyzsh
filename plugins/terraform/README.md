@@ -38,6 +38,8 @@ plugins=(... terraform)
 | `tfw`   | `terraform workspace`                  |
 | `tfwl`  | `terraform workspace list`             |
 | `tfws`  | `terraform workspace select`           |
+| `tfap`  | `terraform apply -parallelism=1`       |
+| `tfdp`  | `terraform destroy -parallelism=1`     |
 
 ## Prompt function
 
