@@ -102,6 +102,7 @@ function ggpnp() {
 }
 compdef _git ggpnp=git-checkout
 
+alias ggpur='ggu'
 alias g='git'
 alias ga='git add'
 alias gaa='git add --all'
@@ -281,6 +282,7 @@ alias gprom='git pull --rebase origin $(git_main_branch)'
 alias gpromi='git pull --rebase=interactive origin $(git_main_branch)'
 alias gprum='git pull --rebase upstream $(git_main_branch)'
 alias gprumi='git pull --rebase=interactive upstream $(git_main_branch)'
+alias ggpull='git pull origin "$(git_current_branch)"'
 
 function ggl() {
   if [[ $# != 0 ]] && [[ $# != 1 ]]; then
@@ -324,6 +326,7 @@ is-at-least 2.30 "$git_version" \
 alias gpv='git push --verbose'
 alias gpoat='git push origin --all && git push origin --tags'
 alias gpod='git push origin --delete'
+alias ggpush='git push origin "$(git_current_branch)"'
 
 function ggp() {
   if [[ $# != 0 ]] && [[ $# != 1 ]]; then
@@ -420,9 +423,6 @@ unset git_version
 local old_name new_name
 for old_name new_name (
   current_branch  git_current_branch
-  ggpull          ggl
-  ggpur           ggu
-  ggpush          ggp
 ); do
   aliases[$old_name]="
     print -Pu2 \"%F{yellow}[oh-my-zsh] '%F{red}${old_name}%F{yellow}' is deprecated, using '%F{green}${new_name}%F{yellow}' instead.%f\"
