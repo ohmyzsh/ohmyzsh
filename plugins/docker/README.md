@@ -51,6 +51,12 @@ If you use Podman's Docker wrapper, you need to enable legacy completion. See ab
 | dcin    | `docker container inspect`    | Display detailed information on one or more containers                                   |
 | dcls    | `docker container ls`         | List all the running docker containers                                                   |
 | dclsa   | `docker container ls -a`      | List all running and stopped containers                                                  |
+| dctx    | `docker context`              | Base docker context command to add subcommands at will                                   |
+| dctxc   | `docker context create`       | Create a docker context                                                                  |
+| dctxi   | `docker context inspect`      | Inspect docker context to retrieve relevant config and metadata                          |
+| dctxls  | `docker context ls`           | List docker contexts                                                                     |
+| dctxrm  | `docker context rm`           | Remove one docker context by name                                                        |
+| dctxu   | `docker context use`          | Switch current context to specified name                                                 |
 | dib     | `docker image build`          | Build an image from a Dockerfile (same as docker build)                                  |
 | dii     | `docker image inspect`        | Display detailed information on one or more images                                       |
 | dils    | `docker image ls`             | List docker images                                                                       |
