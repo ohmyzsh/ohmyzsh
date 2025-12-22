@@ -17,6 +17,7 @@ plugins=(... jump)
 | `mark [mark-name]`   | Create a mark with the given name or with the name of the current directory if none is provided |
 | `unmark <mark-name>` | Remove the given mark                                                                           |
 | `marks`              | List the existing marks and the directories they point to                                       |
+| `getmark <mark-name>`| Get the full path of a mark                                                                     |
 
 ## Key bindings
 
