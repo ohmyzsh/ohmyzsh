@@ -595,9 +595,15 @@ def main():
 
     # Cache YAML version
     DependencyStore.set(data)
-
+    
     dependencies = data["dependencies"]
-    for path in dependencies:
+    if len(sys.argv) > 1:
+        # argv is list of dependencies to run, default is all of them
+        dependency_list = sys.argv[1:]
+    else:
+        dependency_list = dependencies.keys()
+    
+    for path in dependency_list:
         dependency = Dependency(path, dependencies[path])
         dependency.update_or_notify()
 
