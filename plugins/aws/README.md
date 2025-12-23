@@ -25,7 +25,8 @@ plugins=(... aws)
 * `acp [<profile>] [<mfa_token>]`: in addition to `asp` functionality, it actually changes
    the profile by assuming the role specified in the `<profile>` configuration. It supports
    MFA and sets `$AWS_ACCESS_KEY_ID`, `$AWS_SECRET_ACCESS_KEY` and `$AWS_SESSION_TOKEN`, if
-   obtained. It requires the roles to be configured as per the
+   obtained. It automatically detects and performs SSO login for profiles that use AWS SSO,
+   including source profiles used for role assumption. It requires the roles to be configured as per the
    [official guide](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-role.html).
    Run `acp` without arguments to clear the profile.
 
