@@ -1,5 +1,3 @@
-Sí, está mal formateado porque faltan encabezados ##, bloques de código y listas en markdown. Te lo dejo corregido y compacto, listo para pegar como README.md:
-
 # Jules
 
 Zsh autocompletion for the `jules` command-line interface.
