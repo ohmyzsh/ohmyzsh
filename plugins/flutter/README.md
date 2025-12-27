@@ -26,3 +26,7 @@ plugins=(... flutter)
 | `flrp`     | `flutter run --profile` | Runs flutter app in profile mode                                           |
 | `flrr`     | `flutter run --release` | Runs flutter app in release mode                                           |
 | `flupgrd`  | `flutter upgrade`       | Upgrades flutter version depending on the current channel                  |
+| `flt`      | `flutter test`          | Runs flutter tests                                                         |
+| `fla`      | `flutter analyze`       | Analyzes flutter code                                                      |
+| `flpu`     | `flutter pub upgrade`   | Upgrades dependencies                                                      |
+| `fll`      | `flutter logs`          | Shows flutter logs                                                         |

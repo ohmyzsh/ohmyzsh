@@ -12,6 +12,10 @@ alias flrd="flutter run --debug"
 alias flrp="flutter run --profile"
 alias flrr="flutter run --release"
 alias flupgrd="flutter upgrade"
+alias flt="flutter test"
+alias fla="flutter analyze"
+alias flpu="flutter pub upgrade"
+alias fll="flutter logs"
 
 # COMPLETION FUNCTION
 if (( ! $+commands[flutter] )); then
