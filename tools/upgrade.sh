@@ -1,4 +1,7 @@
 #!/usr/bin/env zsh
+set +u # disable nounset
+
+local ret=0 # exit code
 
 # Protect against running with shells other than zsh
 if [ -z "$ZSH_VERSION" ]; then
@@ -7,8 +10,13 @@ fi
 
 # Protect against unwanted sourcing
 case "$ZSH_EVAL_CONTEXT" in
-  *:file) echo "error: this file should not be sourced" && return ;;
+  *:file) echo "error: this file should not be sourced" && return 1 ;;
 esac
+
+# Define "$ZSH" if not defined -- in theory this should be `export`ed by the calling script
+if [[ -z "$ZSH" ]]; then
+  ZSH="${0:a:h:h}"
+fi
 
 cd "$ZSH"
 
@@ -87,11 +95,16 @@ supports_hyperlinks() {
 
   # If $TERM_PROGRAM is set, these terminals support hyperlinks
   case "$TERM_PROGRAM" in
-  Hyper|iTerm.app|terminology|WezTerm) return 0 ;;
+  Hyper|iTerm.app|terminology|WezTerm|vscode) return 0 ;;
   esac
 
-  # kitty supports hyperlinks
-  if [ "$TERM" = xterm-kitty ]; then
+  # These termcap entries support hyperlinks
+  case "$TERM" in
+  xterm-kitty|alacritty|alacritty-direct) return 0 ;;
+  esac
+
+  # xfce4-terminal supports hyperlinks
+  if [ "$COLORTERM" = "xfce4-terminal" ]; then
     return 0
   fi
 
@@ -181,17 +194,23 @@ fi
 # Update upstream remote to ohmyzsh org
 git remote -v | while read remote url extra; do
   case "$url" in
-  https://github.com/robbyrussell/oh-my-zsh(|.git))
-    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git"
-    break ;;
-  git@github.com:robbyrussell/oh-my-zsh(|.git))
-    git remote set-url "$remote" "git@github.com:ohmyzsh/ohmyzsh.git"
-    break ;;
-  # Update out-of-date "unauthenticated git protocol on port 9418" to https
   git://github.com/robbyrussell/oh-my-zsh(|.git))
-    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git"
-    break ;;
+    # Update out-of-date "unauthenticated git protocol on port 9418" to https
+    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git" ;;
+  https://github.com/robbyrussell/oh-my-zsh(|.git))
+    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git" ;;
+  git@github.com:robbyrussell/oh-my-zsh(|.git))
+    git remote set-url "$remote" "git@github.com:ohmyzsh/ohmyzsh.git" ;;
+  https://github.com/ohmyzsh/ohmyzsh(|.git)) ;;
+  git@github.com:ohmyzsh/ohmyzsh(|.git)) ;;
+  *) continue ;;
   esac
+
+  # If we reach this point we have found the proper ohmyzsh upstream remote. If we don't,
+  # we'll only update from the set remote if `oh-my-zsh.remote` has been set to a remote,
+  # as when installing from a fork.
+  git config --local oh-my-zsh.remote "$remote"
+  break
 done
 
 # Set git-config values known to fix git errors
@@ -234,8 +253,8 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     git config oh-my-zsh.lastVersion "$last_commit"
 
     # Print changelog to the terminal
-    if [[ interactive == true && $verbose_mode == default ]] ; then
-      "$ZSH/tools/changelog.sh" HEAD "$last_commit"
+    if [[ $interactive == true && $verbose_mode == default ]]; then
+      ZSH="$ZSH" command zsh -f "$ZSH/tools/changelog.sh" HEAD "$last_commit"
     fi
 
     if [[ $verbose_mode != silent ]]; then
@@ -252,9 +271,9 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
     printf '\n'
     printf "${BLUE}%s${RESET}\n\n" "$message"
-    printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on Twitter:" "$(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on X:" "$(fmt_link @ohmyzsh https://x.com/ohmyzsh)"
     printf "${BLUE}${BOLD}%s %s${RESET}\n" "Want to get involved in the community? Join our Discord:" "$(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
-    printf "${BLUE}${BOLD}%s %s${RESET}\n" "Get your Oh My Zsh swag at:" "$(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" "Get your Oh My Zsh swag at:" "$(fmt_link "CommitGoods Shop" https://commitgoods.com/collections/oh-my-zsh)"
   elif [[ $verbose_mode == minimal ]]; then
     printf "${BLUE}%s${RESET}\n" "$message"
   fi

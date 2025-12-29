@@ -106,6 +106,9 @@ function parse-commit {
       message="${match[1]}"
       # remove CR characters (might be inserted in GitHub UI commit description form)
       message="${message//$'\r'/}"
+      # remove lines containing only whitespace
+      local nlnl=$'\n\n'
+      message="${message//$'\n'[[:space:]]##$'\n'/$nlnl}"
       # skip next paragraphs (separated by two newlines or more)
       message="${message%%$'\n\n'*}"
       # ... and replace newlines with spaces
@@ -157,6 +160,94 @@ function parse-commit {
   fi
 }
 
+################################
+# SUPPORTS HYPERLINKS FUNCTION #
+################################
+
+# The code for checking if a terminal supports hyperlinks is copied from install.sh
+
+# The [ -t 1 ] check only works when the function is not called from
+# a subshell (like in `$(...)` or `(...)`, so this hack redefines the
+# function at the top level to always return false when stdout is not
+# a tty.
+if [ -t 1 ]; then
+  is_tty() {
+    true
+  }
+else
+  is_tty() {
+    false
+  }
+fi
+
+# This function uses the logic from supports-hyperlinks[1][2], which is
+# made by Kat Marchán (@zkat) and licensed under the Apache License 2.0.
+# [1] https://github.com/zkat/supports-hyperlinks
+# [2] https://crates.io/crates/supports-hyperlinks
+#
+# Copyright (c) 2021 Kat Marchán
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+supports_hyperlinks() {
+  # $FORCE_HYPERLINK must be set and be non-zero (this acts as a logic bypass)
+  if [ -n "$FORCE_HYPERLINK" ]; then
+    [ "$FORCE_HYPERLINK" != 0 ]
+    return $?
+  fi
+
+  # If stdout is not a tty, it doesn't support hyperlinks
+  is_tty || return 1
+
+  # DomTerm terminal emulator (domterm.org)
+  if [ -n "$DOMTERM" ]; then
+    return 0
+  fi
+
+  # VTE-based terminals above v0.50 (Gnome Terminal, Guake, ROXTerm, etc)
+  if [ -n "$VTE_VERSION" ]; then
+    [ $VTE_VERSION -ge 5000 ]
+    return $?
+  fi
+
+  # If $TERM_PROGRAM is set, these terminals support hyperlinks
+  case "$TERM_PROGRAM" in
+  Hyper|iTerm.app|terminology|WezTerm|vscode) return 0 ;;
+  esac
+
+  # These termcap entries support hyperlinks
+  case "$TERM" in
+  xterm-kitty|alacritty|alacritty-direct) return 0 ;;
+  esac
+
+  # xfce4-terminal supports hyperlinks
+  if [ "$COLORTERM" = "xfce4-terminal" ]; then
+    return 0
+  fi
+
+  # Windows Terminal also supports hyperlinks
+  if [ -n "$WT_SESSION" ]; then
+    return 0
+  fi
+
+  # Konsole supports hyperlinks, but it's an opt-in setting that can't be detected
+  # https://github.com/ohmyzsh/ohmyzsh/issues/10964
+  # if [ -n "$KONSOLE_VERSION" ]; then
+  #   return 0
+  # fi
+
+  return 1
+}
+
 #############################
 # RELEASE CHANGELOG DISPLAY #
 #############################
@@ -206,10 +297,17 @@ function display-release {
   function fmt:hash {
     #* Uses $hash from outer scope
     local hash="${1:-$hash}"
+    local short_hash="${hash:0:7}" # 7 characters sha, top level sha is 12 characters
     case "$output" in
-    raw) printf '%s' "$hash" ;;
-    text) printf '\e[33m%s\e[0m' "$hash" ;; # red
-    md) printf '[`%s`](https://github.com/ohmyzsh/ohmyzsh/commit/%s)' "$hash" "$hash" ;;
+    raw) printf '%s' "$short_hash" ;;
+    text)
+      local text="\e[33m$short_hash\e[0m"; # red
+      if supports_hyperlinks; then
+        printf "\e]8;;%s\a%s\e]8;;\a" "https://github.com/ohmyzsh/ohmyzsh/commit/$hash" $text;
+      else
+        echo $text;
+      fi ;;
+    md) printf '[`%s`](https://github.com/ohmyzsh/ohmyzsh/commit/%s)' "$short_hash" "$hash" ;;
     esac
   }
 
@@ -272,7 +370,12 @@ function display-release {
     case "$output" in
     raw) printf '%s' "$subject" ;;
     # In text mode, highlight (#<issue>) and dim text between `backticks`
-    text) sed -E $'s|#([0-9]+)|\e[32m#\\1\e[0m|g;s|`([^`]+)`|`\e[2m\\1\e[0m`|g' <<< "$subject" ;;
+    text)
+      if supports_hyperlinks; then
+        sed -E $'s|#([0-9]+)|\e]8;;https://github.com/ohmyzsh/ohmyzsh/issues/\\1\a\e[32m#\\1\e[0m\e]8;;\a|g;s|`([^`]+)`|`\e[2m\\1\e[0m`|g' <<< "$subject"
+      else
+        sed -E $'s|#([0-9]+)|\e[32m#\\1\e[0m|g;s|`([^`]+)`|`\e[2m\\1\e[0m`|g' <<< "$subject"
+      fi ;;
     # In markdown mode, link to (#<issue>) issues
     md) sed -E 's|#([0-9]+)|[#\1](https://github.com/ohmyzsh/ohmyzsh/issues/\1)|g' <<< "$subject" ;;
     esac
@@ -296,6 +399,9 @@ function display-release {
 
   function display:breaking {
     (( $#breaking != 0 )) || return 0
+
+    # If we reach here we have shown commits, set flag
+    shown_commits=1
 
     case "$output" in
     text) printf '\e[31m'; fmt:header "BREAKING CHANGES" 3 ;;
@@ -324,6 +430,9 @@ function display-release {
     # If no commits found of type $type, go to next type
     (( $#hashes != 0 )) || return 0
 
+    # If we reach here we have shown commits, set flag
+    shown_commits=1
+
     fmt:header "${TYPES[$type]}" 3
     for hash in $hashes; do
       echo " - $(fmt:hash) $(fmt:scope)$(fmt:subject)"
@@ -340,6 +449,9 @@ function display-release {
 
     # If no commits found under "other" types, don't display anything
     (( $#changes != 0 )) || return 0
+
+    # If we reach here we have shown commits, set flag
+    shown_commits=1
 
     fmt:header "Other changes" 3
     for hash type in ${(kv)changes}; do
@@ -395,7 +507,7 @@ function main {
 
   # Commit classification arrays
   local -A types subjects scopes breaking reverts
-  local truncate=0 read_commits=0
+  local truncate=0 read_commits=0 shown_commits=0
   local version tag
   local hash refs subject body
 
@@ -415,13 +527,13 @@ function main {
   # Git log options
   # -z:             commits are delimited by null bytes
   # --format:       [7-char hash]<field sep>[ref names]<field sep>[subject]<field sep>[body]
-  # --abbrev=7:     force commit hashes to be 7 characters long
+  # --abbrev=7:     force commit hashes to be 12 characters long
   # --no-merges:    merge commits are omitted
   # --first-parent: commits from merged branches are omitted
   local SEP="0mZmAgIcSeP"
   local -a raw_commits
   raw_commits=(${(0)"$(command git -c log.showSignature=false log -z \
-    --format="%h${SEP}%D${SEP}%s${SEP}%b" --abbrev=7 \
+    --format="%h${SEP}%D${SEP}%s${SEP}%b" --abbrev=12 \
     --no-merges --first-parent $range)"})
 
   local raw_commit
@@ -465,6 +577,10 @@ function main {
   if (( truncate )); then
     echo " ...more commits omitted"
     echo
+  fi
+
+  if (( ! shown_commits )); then
+    echo "No changes to mention."
   fi
 }
 

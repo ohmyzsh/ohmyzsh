@@ -5,7 +5,7 @@ function zsh_stats() {
 }
 
 function uninstall_oh_my_zsh() {
-  env ZSH="$ZSH" sh "$ZSH/tools/uninstall.sh"
+  command env ZSH="$ZSH" sh "$ZSH/tools/uninstall.sh"
 }
 
 function upgrade_oh_my_zsh() {
@@ -23,6 +23,9 @@ function open_command() {
     linux*)   [[ "$(uname -r)" != *icrosoft* ]] && open_cmd='nohup xdg-open' || {
                 open_cmd='cmd.exe /c start ""'
                 [[ -e "$1" ]] && { 1="$(wslpath -w "${1:a}")" || return 1 }
+                [[ "$1" = (http|https)://* ]] && {
+                  1="$(echo "$1" | sed -E 's/([&|()<>^])/^\1/g')" || return 1
+                }
               } ;;
     msys*)    open_cmd='start ""' ;;
     *)        echo "Platform $OSTYPE not supported"
@@ -57,6 +60,16 @@ function takeurl() {
   cd "$thedir"
 }
 
+function takezip() {
+  local data thedir
+  data="$(mktemp)"
+  curl -L "$1" > "$data"
+  unzip "$data" -d "./"
+  thedir="$(unzip -l "$data" | awk 'NR==4 {print $4}' | sed 's/\/.*//')"
+  rm "$data"
+  cd "$thedir"
+}
+
 function takegit() {
   git clone "$1"
   cd "$(basename ${1%%.git})"
@@ -65,6 +78,8 @@ function takegit() {
 function take() {
   if [[ $1 =~ ^(https?|ftp).*\.(tar\.(gz|bz2|xz)|tgz)$ ]]; then
     takeurl "$1"
+  elif [[ $1 =~ ^(https?|ftp).*\.(zip)$ ]]; then
+    takezip "$1"
   elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]; then
     takegit "$1"
   else
@@ -160,6 +175,8 @@ zmodload zsh/langinfo
 #    -P causes spaces to be encoded as '%20' instead of '+'
 function omz_urlencode() {
   emulate -L zsh
+  setopt norematchpcre
+
   local -a opts
   zparseopts -D -E -a opts r m P
 
@@ -182,6 +199,8 @@ function omz_urlencode() {
   fi
 
   # Use LC_CTYPE=C to process text byte-by-byte
+  # Note that this doesn't work in Termux, as it only has UTF-8 locale.
+  # Characters will be processed as UTF-8, which is fine for URLs.
   local i byte ord LC_ALL=C
   export LC_ALL
   local reserved=';/?:@&=+$,'
@@ -206,6 +225,9 @@ function omz_urlencode() {
     else
       if [[ "$byte" == " " && -n $spaces_as_plus ]]; then
         url_str+="+"
+      elif [[ "$PREFIX" = *com.termux* ]]; then
+        # Termux does not have non-UTF8 locales, so just send the UTF-8 character directly
+        url_str+="$byte"
       else
         ord=$(( [##16] #byte ))
         url_str+="%$ord"

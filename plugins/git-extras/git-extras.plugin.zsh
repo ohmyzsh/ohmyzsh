@@ -80,20 +80,8 @@ __gitex_specific_branch_names() {
     _wanted branch-names expl branch-name compadd - $branch_names
 }
 
-__gitex_chore_branch_names() {
-    __gitex_specific_branch_names 'chore'
-}
-
 __gitex_feature_branch_names() {
     __gitex_specific_branch_names 'feature'
-}
-
-__gitex_refactor_branch_names() {
-    __gitex_specific_branch_names 'refactor'
-}
-
-__gitex_bug_branch_names() {
-    __gitex_specific_branch_names 'bug'
 }
 
 __gitex_submodule_names() {
@@ -114,88 +102,29 @@ __gitex_author_names() {
 }
 
 # subcommands
+# new subcommand should be added in alphabetical order
 _git-authors() {
     _arguments  -C \
         '(--list -l)'{--list,-l}'[show authors]' \
         '--no-email[without email]' \
 }
 
-_git-bug() {
-    local curcontext=$curcontext state line ret=1
-    declare -A opt_args
-
-    _arguments -C \
-        ': :->command' \
-        '*:: :->option-or-argument' && ret=0
-
-    case $state in
-        (command)
-            declare -a commands
-            commands=(
-                'finish:merge bug into the current branch'
-            )
-            _describe -t commands command commands && ret=0
-            ;;
-        (option-or-argument)
-            curcontext=${curcontext%:*}-$line[1]:
-            case $line[1] in
-                (finish)
-                    _arguments -C \
-                        ':branch-name:__gitex_bug_branch_names'
-                    ;;
-                -r|--remote )
-                    _arguments -C \
-                        ':remote-name:__gitex_remote_names'
-                    ;;
-            esac
-            return 0
-    esac
-
-    _arguments \
-        '(--remote -r)'{--remote,-r}'[setup remote tracking branch]'
-}
-
-
 _git-changelog() {
     _arguments \
         '(-l --list)'{-l,--list}'[list commits]' \
 }
 
-_git-chore() {
-    local curcontext=$curcontext state line ret=1
-    declare -A opt_args
-
-    _arguments -C \
-        ': :->command' \
-        '*:: :->option-or-argument' && ret=0
-
-    case $state in
-        (command)
-            declare -a commands
-            commands=(
-                'finish:merge and delete the chore branch'
-            )
-            _describe -t commands command commands && ret=0
-            ;;
-        (option-or-argument)
-            curcontext=${curcontext%:*}-$line[1]:
-            case $line[1] in
-                (finish)
-                    _arguments -C \
-                        ':branch-name:__gitex_chore_branch_names'
-                    ;;
-                -r|--remote )
-                    _arguments -C \
-                        ':remote-name:__gitex_remote_names'
-                    ;;
-            esac
-            return 0
-    esac
-
+_git-clear() {
     _arguments \
-        '(--remote -r)'{--remote,-r}'[setup remote tracking branch]'
+        '(-f --force)'{-f,--force}'[force clear]' \
+        '(-h --help)'{-h,--help}'[help message]' \
 }
 
+_git-coauthor() {
+    _arguments \
+        ':co-author[co-author to add]' \
+        ':co-author-email[email address of co-author to add]'
+}
 
 _git-contrib() {
     _arguments \
@@ -231,6 +160,11 @@ _git-create-branch() {
 }
 
 _git-delete-branch() {
+    _arguments \
+        ':branch-name:__gitex_branch_names'
+}
+
+_git-delete-squashed-branches() {
     _arguments \
         ':branch-name:__gitex_branch_names'
 }
@@ -298,6 +232,7 @@ _git-feature() {
             case $line[1] in
                 (finish)
                     _arguments -C \
+                        '--squash[Use squash merge]' \
                         ':branch-name:__gitex_feature_branch_names'
                     ;;
                 -r|--remote )
@@ -327,20 +262,17 @@ _git-guilt() {
 }
 
 _git-ignore() {
-    _arguments  -C \
+    _arguments -C \
         '(--local -l)'{--local,-l}'[show local gitignore]' \
         '(--global -g)'{--global,-g}'[show global gitignore]' \
         '(--private -p)'{--private,-p}'[show repo gitignore]'
 }
 
 
-_git-ignore() {
-    _arguments  -C \
-        '(--append -a)'{--append,-a}'[append .gitignore]' \
-        '(--replace -r)'{--replace,-r}'[replace .gitignore]' \
-        '(--list-in-table -l)'{--list-in-table,-l}'[print available types in table format]' \
-        '(--list-alphabetically -L)'{--list-alphabetically,-L}'[print available types in alphabetical order]' \
-        '(--search -s)'{--search,-s}'[search word in available types]'
+_git-info() {
+    _arguments -C \
+        '(--color -c)'{--color,-c}'[use color for information titles]' \
+        '--no-config[do not show list all variables set in config file, along with their values]'
 }
 
 
@@ -357,50 +289,27 @@ _git-missing() {
         ':second-branch-name:__gitex_branch_names'
 }
 
-
-_git-refactor() {
-    local curcontext=$curcontext state line ret=1
-    declare -A opt_args
-
+_git-release() {
     _arguments -C \
-        ': :->command' \
-        '*:: :->option-or-argument' && ret=0
-
-    case $state in
-        (command)
-            declare -a commands
-            commands=(
-                'finish:merge refactor into the current branch'
-            )
-            _describe -t commands command commands && ret=0
-            ;;
-        (option-or-argument)
-            curcontext=${curcontext%:*}-$line[1]:
-            case $line[1] in
-                (finish)
-                    _arguments -C \
-                        ':branch-name:__gitex_refactor_branch_names'
-                    ;;
-                -r|--remote )
-                    _arguments -C \
-                        ':remote-name:__gitex_remote_names'
-                    ;;
-            esac
-            return 0
-    esac
-
-    _arguments \
-        '(--remote -r)'{--remote,-r}'[setup remote tracking branch]'
+        '-c[Generates/populates the changelog with all commit message since the last tag.]' \
+        '-r[The "remote" repository that is destination of a push operation.]' \
+        '-m[use the custom commit information instead of the default message.]' \
+        '-s[Create a signed and annotated tag.]' \
+        '-u[Create a tag, annotated and signed with the given key.]' \
+        '--semver[If the latest tag in your repo matches the semver format requirement, you could increase part of it as the new release tag.]' \
+        '--prefix[Add a prefix string to semver to allow more complex tags.]' \
+        '--no-empty-commit[Avoid creating empty commit if nothing could be committed.]' \
+        '--[The arguments listed after "--" separator will be passed to pre/post-release hook.]'
 }
 
-
 _git-squash() {
+    _arguments '--squash-msg[commit with the squashed commit messages]'
     _arguments \
         ':branch-name:__gitex_branch_names'
 }
 
 _git-stamp() {
-    _arguments  -C \
+    _arguments -C \
          '(--replace -r)'{--replace,-r}'[replace stamps with same id]'
 }
 
@@ -413,17 +322,19 @@ _git-standup() {
         '-g[Display GPG signed info]' \
         '-h[Display help message]' \
         '-L[Enable the inclusion of symbolic links]' \
-        '-m[The depth of recursive directory search]'
+        '-m[The depth of recursive directory search]' \
+        '-B[Display the commits in branch groups]'
 }
 
 _git-summary() {
     _arguments '--line[summarize with lines rather than commits]'
+    _arguments '--dedup-by-email[remove duplicate users by the email address]'
+    _arguments '--no-merges[exclude merge commits]'
     __gitex_commits
 }
 
-
 _git-undo(){
-    _arguments  -C \
+    _arguments -C \
         '(--soft -s)'{--soft,-s}'[only rolls back the commit but changes remain un-staged]' \
         '(--hard -h)'{--hard,-h}'[wipes your commit(s)]'
 }
@@ -432,21 +343,26 @@ zstyle -g existing_user_commands ':completion:*:*:git:*' user-commands
 
 zstyle ':completion:*:*:git:*' user-commands $existing_user_commands \
     alias:'define, search and show aliases' \
+    abort:'abort current revert, merge, rebase, or cherry-pick process' \
     archive-file:'export the current head of the git repository to an archive' \
     authors:'generate authors report' \
-    back:'undo and stage latest commits' \
+    browse:'open repo website in browser' \
+    browse-ci:'open repo CI page in browser' \
     bug:'create bug branch' \
     bulk:'run bulk commands' \
+    brv:'list branches sorted by their last commit date'\
     changelog:'generate a changelog report' \
     chore:'create chore branch' \
     clear-soft:'soft clean up a repository' \
     clear:'rigorously clean up a repository' \
+    coauthor:'add a co-author to the last commit' \
     commits-since:'show commit logs since some date' \
     contrib:'show user contributions' \
     count:'show commit count' \
     create-branch:'create branches' \
     delete-branch:'delete branches' \
     delete-merged-branches:'delete merged branches' \
+    delete-squashed-branches:'delete squashed branches' \
     delete-submodule:'delete submodules' \
     delete-tag:'delete tags' \
     delta:'lists changed files' \
@@ -465,11 +381,13 @@ zstyle ':completion:*:*:git:*' user-commands $existing_user_commands \
     local-commits:'list local commits' \
     lock:'lock a file excluded from version control' \
     locked:'ls files that have been locked' \
+    magic:'commits everything with a generated message' \
     merge-into:'merge one branch into another' \
     merge-repo:'merge two repo histories' \
     missing:'show commits missing from another branch' \
     mr:'checks out a merge request locally' \
     obliterate:'rewrite past commits to remove some files' \
+    paste:'send patches to pastebin sites' \
     pr:'checks out a pull request locally' \
     psykorebase:'rebase a branch with a merge commit' \
     pull-request:'create pull request to GitHub project' \
@@ -479,6 +397,7 @@ zstyle ':completion:*:*:git:*' user-commands $existing_user_commands \
     release:'commit, tag and push changes to the repository' \
     rename-branch:'rename a branch' \
     rename-tag:'rename a tag' \
+    rename-remote:'rename a remote' \
     repl:'git read-eval-print-loop' \
     reset-file:'reset one file' \
     root:'show path of root' \
@@ -495,4 +414,5 @@ zstyle ':completion:*:*:git:*' user-commands $existing_user_commands \
     sync:'sync local branch with remote branch' \
     touch:'touch and add file to the index' \
     undo:'remove latest commits' \
-    unlock:'unlock a file excluded from version control'
+    unlock:'unlock a file excluded from version control' \
+    utimes:'change files modification time to their last commit date'

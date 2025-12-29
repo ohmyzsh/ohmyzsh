@@ -1,6 +1,7 @@
 #!/usr/bin/env zsh
 
 function omz {
+  setopt localoptions noksharrays
   [[ $# -gt 0 ]] || {
     _omz::help
     return 1
@@ -11,7 +12,7 @@ function omz {
 
   # Subcommand functions start with _ so that they don't
   # appear as completion entries when looking for `omz`
-  (( $+functions[_omz::$command] )) || {
+  (( ${+functions[_omz::$command]} )) || {
     _omz::help
     return 1
   }
@@ -27,6 +28,7 @@ function _omz {
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
     'reload:Reload the current zsh session'
+    'shop:Open the Oh My Zsh shop'
     'theme:Manage themes'
     'update:Update Oh My Zsh'
     'version:Show the version'
@@ -71,6 +73,10 @@ function _omz {
         local -aU plugins
         plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t))
         _describe 'plugin' plugins ;;
+      plugin::list)
+        local -a opts
+        opts=('--enabled:List enabled plugins only')
+        _describe -o 'options' opts ;;
       theme::(set|use))
         local -aU themes
         themes=("$ZSH"/themes/*.zsh-theme(-.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(-.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
@@ -168,6 +174,7 @@ Available commands:
   plugin <command>    Manage plugins
   pr     <command>    Manage Oh My Zsh Pull Requests
   reload              Reload the current zsh session
+  shop                Open the Oh My Zsh shop
   theme  <command>    Manage themes
   update              Update Oh My Zsh
   version             Show the version
@@ -192,7 +199,7 @@ EOF
     return 1
   fi
 
-  "$ZSH/tools/changelog.sh" "$version" "${2:-}" "$format"
+  ZSH="$ZSH" command zsh -f "$ZSH/tools/changelog.sh" "$version" "${2:-}" "$format"
 }
 
 function _omz::plugin {
@@ -205,7 +212,7 @@ Available commands:
   disable <plugin> Disable plugin(s)
   enable <plugin>  Enable plugin(s)
   info <plugin>    Get information of a plugin
-  list             List all available Oh My Zsh plugins
+  list [--enabled] List Oh My Zsh plugins
   load <plugin>    Load plugin(s)
 
 EOF
@@ -241,10 +248,18 @@ function _omz::plugin::disable {
 
   # Remove plugins substitution awk script
   local awk_subst_plugins="\
-  gsub(/[ \t]+(${(j:|:)dis_plugins})/, \"\") # with spaces before
-  gsub(/(${(j:|:)dis_plugins})[ \t]+/, \"\") # with spaces after
-  gsub(/\((${(j:|:)dis_plugins})\)/, \"\") # without spaces (only plugin)
+  gsub(/[ \t]+(${(j:|:)dis_plugins})[ \t]+/, \" \") # with spaces before or after
+  gsub(/[ \t]+(${(j:|:)dis_plugins})$/, \"\")       # with spaces before and EOL
+  gsub(/^(${(j:|:)dis_plugins})[ \t]+/, \"\")       # with BOL and spaces after
+
+  gsub(/\((${(j:|:)dis_plugins})[ \t]+/, \"(\")     # with parenthesis before and spaces after
+  gsub(/[ \t]+(${(j:|:)dis_plugins})\)/, \")\")     # with spaces before or parenthesis after
+  gsub(/\((${(j:|:)dis_plugins})\)/, \"()\")        # with only parentheses
+
+  gsub(/^(${(j:|:)dis_plugins})\)/, \")\")          # with BOL and closing parenthesis
+  gsub(/\((${(j:|:)dis_plugins})$/, \"(\")          # with opening parenthesis and EOL
 "
+
   # Disable plugins awk script
   local awk_script="
 # if plugins=() is in oneline form, substitute disabled plugins and go to next line
@@ -336,18 +351,38 @@ function _omz::plugin::enable {
   next
 }
 
-# if plugins=() is in multiline form, enable multi flag
+# if plugins=() is in multiline form, enable multi flag and indent by default with 2 spaces
 /^[ \t]*plugins=\(/ {
   multi=1
+  indent=\"  \"
+  print \$0
+  next
 }
 
 # if multi flag is enabled and we find a valid closing parenthesis,
-# add new plugins and disable multi flag
+# add new plugins with proper indent and disable multi flag
 multi == 1 && /^[^#]*\)/ {
   multi=0
-  sub(/\)/, \" $add_plugins&\")
+  split(\"$add_plugins\",p,\" \")
+  for (i in p) {
+    print indent p[i]
+  }
   print \$0
   next
+}
+
+# if multi flag is enabled and we didnt find a closing parenthesis,
+# get the indentation level to match when adding plugins
+multi == 1 && /^[^#]*/ {
+  indent=\"\"
+  for (i = 1; i <= length(\$0); i++) {
+    char=substr(\$0, i, 1)
+    if (char == \" \" || char == \"\t\") {
+      indent = indent char
+    } else {
+      break
+    }
+  }
 }
 
 { print \$0 }
@@ -389,8 +424,23 @@ function _omz::plugin::info {
   local readme
   for readme in "$ZSH_CUSTOM/plugins/$1/README.md" "$ZSH/plugins/$1/README.md"; do
     if [[ -f "$readme" ]]; then
-      (( ${+commands[less]} )) && less "$readme" || cat "$readme"
-      return 0
+      # If being piped, just cat the README
+      if [[ ! -t 1 ]]; then
+        cat "$readme"
+        return $?
+      fi
+
+      # Enrich the README display depending on the tools we have
+      # - glow: https://github.com/charmbracelet/glow
+      # - bat: https://github.com/sharkdp/bat
+      # - less: typical pager command
+      case 1 in
+        ${+commands[glow]}) glow -p "$readme" ;;
+        ${+commands[bat]}) bat -l md --style plain "$readme" ;;
+        ${+commands[less]}) less "$readme" ;;
+        *) cat "$readme" ;;
+      esac
+      return $?
     fi
   done
 
@@ -405,8 +455,21 @@ function _omz::plugin::info {
 
 function _omz::plugin::list {
   local -a custom_plugins builtin_plugins
-  custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
-  builtin_plugins=("$ZSH"/plugins/*(-/N:t))
+
+  # If --enabled is provided, only list what's enabled
+  if [[ "$1" == "--enabled" ]]; then
+    local plugin
+    for plugin in "${plugins[@]}"; do
+      if [[ -d "${ZSH_CUSTOM}/plugins/${plugin}" ]]; then
+        custom_plugins+=("${plugin}")
+      elif [[ -d "${ZSH}/plugins/${plugin}" ]]; then
+        builtin_plugins+=("${plugin}")
+      fi
+    done
+  else
+    custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
+    builtin_plugins=("$ZSH"/plugins/*(-/N:t))
+  fi
 
   # If the command is being piped, print all found line by line
   if [[ ! -t 1 ]]; then
@@ -448,7 +511,7 @@ function _omz::plugin::load {
     if [[ ! -f "$base/_$plugin" && ! -f "$base/$plugin.plugin.zsh" ]]; then
       _omz::log warn "'$plugin' is not a valid plugin"
       continue
-    # It it is a valid plugin, add its directory to $fpath unless it is already there
+    # It is a valid plugin, add its directory to $fpath unless it is already there
     elif (( ! ${fpath[(Ie)$base]} )); then
       fpath=("$base" $fpath)
     fi
@@ -560,9 +623,47 @@ function _omz::pr::test {
     done
 
     (( $found )) || {
-      _omz::log error "could not found the ohmyzsh git remote. Aborting..."
+      _omz::log error "could not find the ohmyzsh git remote. Aborting..."
       return 1
     }
+
+    # Check if Pull Request has the "testers needed" label
+    _omz::log info "checking if PR #$1 has the 'testers needed' label..."
+    local pr_json label label_id="MDU6TGFiZWw4NzY1NTkwNA=="
+    pr_json=$(
+      curl -fsSL \
+        -H "Accept: application/vnd.github+json" \
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        "https://api.github.com/repos/ohmyzsh/ohmyzsh/pulls/$1"
+    )
+
+    if [[ $? -gt 0 || -z "$pr_json" ]]; then
+      _omz::log error "error when trying to fetch PR #$1 from GitHub."
+      return 1
+    fi
+
+    # Check if the label is present with jq or grep
+    if (( $+commands[jq] )); then
+      label="$(command jq ".labels.[] | select(.node_id == \"$label_id\")" <<< "$pr_json")"
+    else
+      label="$(command grep "\"$label_id\"" <<< "$pr_json" 2>/dev/null)"
+    fi
+
+    # If a maintainer hasn't labeled the PR to test, explain the security risk
+    if [[ -z "$label" ]]; then
+      _omz::log warn "PR #$1 does not have the 'testers needed' label. This means that the PR"
+      _omz::log warn "has not been reviewed by a maintainer and may contain malicious code."
+
+      # Ask for explicit confirmation: user needs to type "yes" to continue
+      _omz::log prompt "Do you want to continue testing it? [yes/N] "
+      builtin read -r
+      if [[ "${REPLY:l}" != yes ]]; then
+        _omz::log error "PR test canceled. Please ask a maintainer to review and label the PR."
+        return 1
+      else
+        _omz::log warn "Continuing to check out and test PR #$1. Be careful!"
+      fi
+    fi
 
     # Fetch pull request head
     _omz::log info "fetching PR #$1 to ohmyzsh/pull-$1..."
@@ -620,6 +721,15 @@ function _omz::pr::test {
       return 1
     }
   )
+}
+
+function _omz::shop {
+  local shop_url="https://commitgoods.com/collections/oh-my-zsh"
+  
+  _omz::log info "Opening Oh My Zsh shop in your browser..."
+  _omz::log info "$shop_url"
+  
+  open_command "$shop_url"
 }
 
 function _omz::reload {
@@ -773,15 +883,28 @@ function _omz::theme::use {
 }
 
 function _omz::update {
-  local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD)
+  # Check if git command is available
+  (( $+commands[git] )) || {
+    _omz::log error "git is not installed. Aborting..."
+    return 1
+  }
+
+  # Check if --unattended was passed
+  [[ "$1" != --unattended ]] || {
+    _omz::log error "the \`\e[2m--unattended\e[0m\` flag is no longer supported, use the \`\e[2mupgrade.sh\e[0m\` script instead."
+    _omz::log error "for more information see https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#how-do-i-update-oh-my-zsh"
+    return 1
+  }
+
+  local last_commit=$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)
+  [[ $? -eq 0 ]] || {
+    _omz::log error "\`$ZSH\` is not a git directory. Aborting..."
+    return 1
+  }
 
   # Run update script
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
-  if [[ "$1" != --unattended ]]; then
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode || return $?
-  else
-    ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -v $verbose_mode || return $?
-  fi
+  ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode || return $?
 
   # Update last updated file
   zmodload zsh/datetime
@@ -790,7 +913,7 @@ function _omz::update {
   command rm -rf "$ZSH/log/update.lock"
 
   # Restart the zsh session if there were changes
-  if [[ "$1" != --unattended && "$(builtin cd -q "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
+  if [[ "$(builtin cd -q "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
     # Old zsh versions don't have ZSH_ARGZERO
     local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
     # Check whether to run a login shell

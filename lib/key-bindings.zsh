@@ -32,19 +32,26 @@ if [[ -n "${terminfo[knp]}" ]]; then
 fi
 
 # Start typing + [Up-Arrow] - fuzzy find history forward
-if [[ -n "${terminfo[kcuu1]}" ]]; then
-  autoload -U up-line-or-beginning-search
-  zle -N up-line-or-beginning-search
+autoload -U up-line-or-beginning-search
+zle -N up-line-or-beginning-search
 
+bindkey -M emacs "^[[A" up-line-or-beginning-search
+bindkey -M viins "^[[A" up-line-or-beginning-search
+bindkey -M vicmd "^[[A" up-line-or-beginning-search
+if [[ -n "${terminfo[kcuu1]}" ]]; then
   bindkey -M emacs "${terminfo[kcuu1]}" up-line-or-beginning-search
   bindkey -M viins "${terminfo[kcuu1]}" up-line-or-beginning-search
   bindkey -M vicmd "${terminfo[kcuu1]}" up-line-or-beginning-search
 fi
-# Start typing + [Down-Arrow] - fuzzy find history backward
-if [[ -n "${terminfo[kcud1]}" ]]; then
-  autoload -U down-line-or-beginning-search
-  zle -N down-line-or-beginning-search
 
+# Start typing + [Down-Arrow] - fuzzy find history backward
+autoload -U down-line-or-beginning-search
+zle -N down-line-or-beginning-search
+
+bindkey -M emacs "^[[B" down-line-or-beginning-search
+bindkey -M viins "^[[B" down-line-or-beginning-search
+bindkey -M vicmd "^[[B" down-line-or-beginning-search
+if [[ -n "${terminfo[kcud1]}" ]]; then
   bindkey -M emacs "${terminfo[kcud1]}" down-line-or-beginning-search
   bindkey -M viins "${terminfo[kcud1]}" down-line-or-beginning-search
   bindkey -M vicmd "${terminfo[kcud1]}" down-line-or-beginning-search
@@ -105,12 +112,12 @@ bindkey -M vicmd '^[[1;5D' backward-word
 
 
 bindkey '\ew' kill-region                             # [Esc-w] - Kill from the cursor to the mark
-bindkey -s '\el' 'ls\n'                               # [Esc-l] - run command: ls
+bindkey -s '\el' '^q ls\n'                            # [Esc-l] - run command: ls
 bindkey '^r' history-incremental-search-backward      # [Ctrl-r] - Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
 bindkey ' ' magic-space                               # [Space] - don't do history expansion
 
 
-# Edit the current command line in $EDITOR
+# Edit the current command line in $VISUAL (or $EDITOR / `vi` if not set)
 autoload -U edit-command-line
 zle -N edit-command-line
 bindkey '\C-x\C-e' edit-command-line

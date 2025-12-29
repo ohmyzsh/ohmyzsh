@@ -1,6 +1,6 @@
-# .NET Core CLI plugin
+# .NET CLI plugin
 
-This plugin provides completion and useful aliases for [.NET Core CLI](https://dotnet.microsoft.com/).
+This plugin provides completion and useful aliases for [.NET CLI](https://dotnet.microsoft.com/).
 
 To use it, add `dotnet` to the plugins array in your zshrc file.
 
@@ -23,3 +23,4 @@ plugins=(... dotnet)
 | dp    | dotnet pack      | Create a NuGet package.                                           |
 | dng   | dotnet nuget     | Provides additional NuGet commands.                               |
 | db    | dotnet build     | Build a .NET project                                              |
+| dres  | dotnet restore   | Restore dependencies and project-specific tools for a project.    |

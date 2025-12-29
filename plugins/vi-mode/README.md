@@ -37,6 +37,8 @@ plugins=(... vi-mode)
 - `INSERT_MODE_INDICATOR`: controls the string displayed when the shell is in insert mode.
   See [Mode indicators](#mode-indicators) for details.
 
+- `VI_MODE_DISABLE_CLIPBOARD`: If set, disables clipboard integration on yank/paste
+
 ## Mode indicators
 
 *Normal mode* is indicated with a red `<<<` mark at the right prompt, when it
@@ -44,7 +46,7 @@ hasn't been defined by theme, *Insert mode* is not displayed by default.
 
 You can change these indicators by setting the `MODE_INDICATOR` (*Normal mode*) and
 `INSERT_MODE_INDICATORS` (*Insert mode*) variables.
-This settings support Prompt Expansion sequences. For example:
+These settings support Prompt Expansion sequences. For example:
 
 ```zsh
 MODE_INDICATOR="%F{white}+%f"
@@ -53,7 +55,7 @@ INSERT_MODE_INDICATOR="%F{yellow}+%f"
 
 ### Adding mode indicators to your prompt
 
-`Vi-mode` by default will add mode indicators to `RPROMPT` **unless** that is defined by 
+`Vi-mode` by default will add mode indicators to `RPROMPT` **unless** that is defined by
 a preceding plugin.
 
 If `PROMPT` or `RPROMPT` is not defined to your liking, you can add mode info manually. The `vi_mode_prompt_info` function is available to insert mode indicator information.
@@ -144,10 +146,37 @@ NOTE: this used to be bound to `v`. That is now the default (`visual-mode`).
 - `c{motion}`   : Delete {motion} text and start insert
 - `cc`          : Delete line and start insert
 - `C`           : Delete to the end of the line and start insert
+- `P`           : Insert the contents of the clipboard before the cursor
+- `p`           : Insert the contents of the clipboard after the cursor
 - `r{char}`     : Replace the character under the cursor with {char}
 - `R`           : Enter replace mode: Each character replaces existing one
 - `x`           : Delete `count` characters under and after the cursor
 - `X`           : Delete `count` characters before the cursor
+
+NOTE: delete/kill commands (`dd`, `D`, `c{motion}`, `C`, `x`,`X`) and yank commands
+(`y`, `Y`) will copy to the clipboard. Contents can then be put back using paste commands
+(`P`, `p`).
+
+## Text objects
+
+Standard text objects are supported with `i` ("inside") and `a` ("around"), e.g., for words; thus, you can select the word the cursor is in with `viw`, or delete the current word, including surrounding spaces, with `daw`.
+
+For other text objects, you can rely on the built-in functionality of Zsh and enable it accordingly.
+For example, for quoted strings, you can copy the commented snippet of <https://sourceforge.net/p/zsh/code/ci/master/tree/Functions/Zle/select-quoted>: place this in your `.zsrhc` file, e.g., after sourcing oh-my-zsh:
+
+```sh
+autoload -U select-quoted
+zle -N select-quoted
+for m in visual viopp; do
+    for c in {a,i}{\',\",\`}; do
+        bindkey -M $m $c select-quoted
+    done
+done
+```
+
+Now, in normal mode, you can select everything inside a double-quoted string with `vi"`.
+Note that this works even if you're not already inside a quoted string.
+For example, you can replace everything inside a single-quoted string in the current line, from wherever the cursor is, with `ci'`.
 
 ## Known issues
 

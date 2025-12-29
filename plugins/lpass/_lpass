@@ -78,7 +78,7 @@ _lpass() {
                 has_sync=1
             ;;
             status)
-               _arguments : '(-q --quiet)'{-q,--quiet}'[Supress output to stdout]'
+               _arguments : '(-q --quiet)'{-q,--quiet}'[Suppress output to stdout]'
                 has_color=1
             ;;
             sync)
