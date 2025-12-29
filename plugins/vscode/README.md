@@ -1,7 +1,6 @@
 # VS Code
 
-This plugin provides useful aliases to simplify the interaction between the command line and VS Code or
-VSCodium editor.
+This plugin provides useful aliases to simplify the interaction between the command line and VS Code, VSCodium, or Cursor editor.
 
 To start using it, add the `vscode` plugin to your `plugins` array in `~/.zshrc`:
 
@@ -18,6 +17,7 @@ You can install either:
 - VS Code (code)
 - VS Code Insiders (code-insiders)
 - VSCodium (codium)
+- Cursor (cursor)
 
 ### MacOS
 
@@ -33,6 +33,10 @@ open the Command Palette via (F1 or ⇧⌘P) and type shell command to find the 
 
 > Shell Command: Install 'codium' command in PATH
 
+For Cursor, open the Command Palette via (F1 or ⌘⇧P) and type shell command to find the Shell Command:
+
+> Shell Command: Install 'cursor' command in PATH
+
 ## Using multiple flavours
 
 If for any reason, you ever require to use multiple flavours of VS Code i.e. VS Code (stable) and VS Code
@@ -43,7 +47,7 @@ executable.
 ```zsh
 ZSH_THEME=...
 
-# Choose between one [code, code-insiders or codium]
+# Choose between one [code, code-insiders, codium, or cursor]
 # The following line will make the plugin to open VS Code Insiders
 # Invalid entries will be ignored, no aliases will be added
 VSCODE=code-insiders

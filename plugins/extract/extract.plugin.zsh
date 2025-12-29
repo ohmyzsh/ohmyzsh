@@ -76,11 +76,19 @@ EOF
       (*.lz4) lz4 -d "$full_path" ;;
       (*.lzma) unlzma "$full_path" ;;
       (*.z) uncompress "$full_path" ;;
-      (*.zip|*.war|*.jar|*.ear|*.sublime-package|*.ipa|*.ipsw|*.xpi|*.apk|*.aar|*.whl|*.vsix|*.crx) unzip "$full_path" ;;
-      (*.rar) unrar x -ad "$full_path" ;;
+      (*.zip|*.war|*.jar|*.ear|*.sublime-package|*.ipa|*.ipsw|*.xpi|*.apk|*.aar|*.whl|*.vsix|*.crx|*.pk3|*.pk4) unzip "$full_path" ;;
+      (*.rar)
+        if (( $+commands[unrar] )); then
+          unrar x -ad "$full_path"
+        elif (( $+commands[unar] )); then
+          unar -o . "$full_path"
+        else
+          echo "extract: cannot extract RAR files: install unrar or unar" >&2
+          success=1
+        fi ;;
       (*.rpm)
         rpm2cpio "$full_path" | cpio --quiet -id ;;
-      (*.7z | *.7z.[0-9]*) 7za x "$full_path" ;;
+      (*.7z | *.7z.[0-9]* | *.pk7) 7za x "$full_path" ;;
       (*.deb)
         command mkdir -p "control" "data"
         ar vx "$full_path" > /dev/null

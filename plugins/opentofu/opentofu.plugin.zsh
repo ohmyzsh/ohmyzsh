@@ -29,7 +29,7 @@ function tofu_version_prompt_info() {
 
 alias tt='tofu'
 alias tta='tofu apply'
-alias ttaa='tofu apply -auto-approve'
+alias tta!='tofu apply -auto-approve'
 alias ttc='tofu console'
 alias ttd='tofu destroy'
 alias ttd!='tofu destroy -auto-approve'

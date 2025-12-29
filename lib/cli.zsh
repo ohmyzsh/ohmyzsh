@@ -28,6 +28,7 @@ function _omz {
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
     'reload:Reload the current zsh session'
+    'shop:Open the Oh My Zsh shop'
     'theme:Manage themes'
     'update:Update Oh My Zsh'
     'version:Show the version'
@@ -72,6 +73,10 @@ function _omz {
         local -aU plugins
         plugins=("$ZSH"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t) "$ZSH_CUSTOM"/plugins/*/{_*,*.plugin.zsh}(-.N:h:t))
         _describe 'plugin' plugins ;;
+      plugin::list)
+        local -a opts
+        opts=('--enabled:List enabled plugins only')
+        _describe -o 'options' opts ;;
       theme::(set|use))
         local -aU themes
         themes=("$ZSH"/themes/*.zsh-theme(-.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(-.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
@@ -169,6 +174,7 @@ Available commands:
   plugin <command>    Manage plugins
   pr     <command>    Manage Oh My Zsh Pull Requests
   reload              Reload the current zsh session
+  shop                Open the Oh My Zsh shop
   theme  <command>    Manage themes
   update              Update Oh My Zsh
   version             Show the version
@@ -193,7 +199,7 @@ EOF
     return 1
   fi
 
-  "$ZSH/tools/changelog.sh" "$version" "${2:-}" "$format"
+  ZSH="$ZSH" command zsh -f "$ZSH/tools/changelog.sh" "$version" "${2:-}" "$format"
 }
 
 function _omz::plugin {
@@ -206,7 +212,7 @@ Available commands:
   disable <plugin> Disable plugin(s)
   enable <plugin>  Enable plugin(s)
   info <plugin>    Get information of a plugin
-  list             List all available Oh My Zsh plugins
+  list [--enabled] List Oh My Zsh plugins
   load <plugin>    Load plugin(s)
 
 EOF
@@ -449,8 +455,21 @@ function _omz::plugin::info {
 
 function _omz::plugin::list {
   local -a custom_plugins builtin_plugins
-  custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
-  builtin_plugins=("$ZSH"/plugins/*(-/N:t))
+
+  # If --enabled is provided, only list what's enabled
+  if [[ "$1" == "--enabled" ]]; then
+    local plugin
+    for plugin in "${plugins[@]}"; do
+      if [[ -d "${ZSH_CUSTOM}/plugins/${plugin}" ]]; then
+        custom_plugins+=("${plugin}")
+      elif [[ -d "${ZSH}/plugins/${plugin}" ]]; then
+        builtin_plugins+=("${plugin}")
+      fi
+    done
+  else
+    custom_plugins=("$ZSH_CUSTOM"/plugins/*(-/N:t))
+    builtin_plugins=("$ZSH"/plugins/*(-/N:t))
+  fi
 
   # If the command is being piped, print all found line by line
   if [[ ! -t 1 ]]; then
@@ -604,9 +623,47 @@ function _omz::pr::test {
     done
 
     (( $found )) || {
-      _omz::log error "could not found the ohmyzsh git remote. Aborting..."
+      _omz::log error "could not find the ohmyzsh git remote. Aborting..."
       return 1
     }
+
+    # Check if Pull Request has the "testers needed" label
+    _omz::log info "checking if PR #$1 has the 'testers needed' label..."
+    local pr_json label label_id="MDU6TGFiZWw4NzY1NTkwNA=="
+    pr_json=$(
+      curl -fsSL \
+        -H "Accept: application/vnd.github+json" \
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        "https://api.github.com/repos/ohmyzsh/ohmyzsh/pulls/$1"
+    )
+
+    if [[ $? -gt 0 || -z "$pr_json" ]]; then
+      _omz::log error "error when trying to fetch PR #$1 from GitHub."
+      return 1
+    fi
+
+    # Check if the label is present with jq or grep
+    if (( $+commands[jq] )); then
+      label="$(command jq ".labels.[] | select(.node_id == \"$label_id\")" <<< "$pr_json")"
+    else
+      label="$(command grep "\"$label_id\"" <<< "$pr_json" 2>/dev/null)"
+    fi
+
+    # If a maintainer hasn't labeled the PR to test, explain the security risk
+    if [[ -z "$label" ]]; then
+      _omz::log warn "PR #$1 does not have the 'testers needed' label. This means that the PR"
+      _omz::log warn "has not been reviewed by a maintainer and may contain malicious code."
+
+      # Ask for explicit confirmation: user needs to type "yes" to continue
+      _omz::log prompt "Do you want to continue testing it? [yes/N] "
+      builtin read -r
+      if [[ "${REPLY:l}" != yes ]]; then
+        _omz::log error "PR test canceled. Please ask a maintainer to review and label the PR."
+        return 1
+      else
+        _omz::log warn "Continuing to check out and test PR #$1. Be careful!"
+      fi
+    fi
 
     # Fetch pull request head
     _omz::log info "fetching PR #$1 to ohmyzsh/pull-$1..."
@@ -664,6 +721,15 @@ function _omz::pr::test {
       return 1
     }
   )
+}
+
+function _omz::shop {
+  local shop_url="https://commitgoods.com/collections/oh-my-zsh"
+  
+  _omz::log info "Opening Oh My Zsh shop in your browser..."
+  _omz::log info "$shop_url"
+  
+  open_command "$shop_url"
 }
 
 function _omz::reload {

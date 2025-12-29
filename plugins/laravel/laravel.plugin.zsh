@@ -12,6 +12,7 @@ alias pamf='php artisan migrate:fresh'
 alias pamfs='php artisan migrate:fresh --seed'
 alias pamr='php artisan migrate:rollback'
 alias pads='php artisan db:seed'
+alias padw='php artisan db:wipe'
 
 # Makers
 alias pamm='php artisan make:model'

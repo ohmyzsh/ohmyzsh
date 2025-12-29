@@ -17,7 +17,7 @@ function title {
   : ${2=$1}
 
   case "$TERM" in
-    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty*|st*|foot*|contour*)
+    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty*|st*|foot*|contour*|wezterm*)
       print -Pn "\e]2;${2:q}\a" # set window name
       print -Pn "\e]1;${1:q}\a" # set tab name
       ;;
@@ -47,13 +47,13 @@ fi
 
 # Runs before showing the prompt
 function omz_termsupport_precmd {
-  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return
+  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return 0
   title "$ZSH_THEME_TERM_TAB_TITLE_IDLE" "$ZSH_THEME_TERM_TITLE_IDLE"
 }
 
 # Runs before executing the command
 function omz_termsupport_preexec {
-  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return
+  [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return 0
 
   emulate -L zsh
   setopt extended_glob
@@ -145,6 +145,7 @@ esac
 # Identifies the directory using a file: URI scheme, including
 # the host name to disambiguate local vs. remote paths.
 function omz_termsupport_cwd {
+  setopt localoptions unset
   # Percent-encode the host and path names.
   local URL_HOST URL_PATH
   URL_HOST="$(omz_urlencode -P $HOST)" || return 1

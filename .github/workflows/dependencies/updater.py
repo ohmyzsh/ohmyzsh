@@ -219,31 +219,32 @@ class Dependency:
                     # Create new branch
                     branch = Git.checkout_or_create_branch(branch_name)
 
-                    # Update dependencies.yml file
-                    self.__update_yaml(
-                        f"tag:{new_version}" if is_tag else status["version"]
-                    )
-
                     # Update dependency files
                     self.__apply_upstream_changes()
 
-                    # Add all changes and commit
-                    has_new_commit = Git.add_and_commit(self.name, new_version)
-
-                    if has_new_commit:
-                        # Push changes to remote
-                        Git.push(branch)
-
-                        # Create GitHub PR
-                        GitHub.create_pr(
-                            branch,
-                            f"feat({self.name}): update to version {new_version}",
-                            f"""## Description
-
-Update for **{self.desc}**: update to version [{new_version}]({status['head_url']}).
-Check out the [list of changes]({status['compare_url']}).
-""",
+                    if not Git.repo_is_clean():
+                        # Update dependencies.yml file
+                        self.__update_yaml(
+                            f"tag:{new_version}" if is_tag else status["version"]
                         )
+
+                        # Add all changes and commit
+                        has_new_commit = Git.add_and_commit(self.name, new_version)
+
+                        if has_new_commit:
+                            # Push changes to remote
+                            Git.push(branch)
+
+                            # Create GitHub PR
+                            GitHub.create_pr(
+                                branch,
+                                f"chore({self.name}): update to version {new_version}",
+                                f"""## Description
+
+Update for **{self.desc}**: update to version [{new_version}]({status["head_url"]}).
+Check out the [list of changes]({status["compare_url"]}).
+""",
+                            )
 
                     # Clean up repository
                     Git.clean_repo()
@@ -275,8 +276,8 @@ Check out the [list of changes]({status['compare_url']}).
 
 There is a new version of `{self.name}` {self.kind} available.
 
-New version: [{new_version}]({status['head_url']})
-Check out the [list of changes]({status['compare_url']}).
+New version: [{new_version}]({status["head_url"]})
+Check out the [list of changes]({status["compare_url"]}).
 """
 
                     print("Creating GitHub issue", file=sys.stderr)
@@ -378,20 +379,27 @@ class Git:
         return branch_name
 
     @staticmethod
+    def repo_is_clean() -> bool:
+        """
+        Returns `True` if the repo is clean.
+        Returns `False` if the repo is dirty.
+        """
+        try:
+            CommandRunner.run_or_fail(
+                ["git", "diff", "--exit-code"], stage="CheckRepoClean"
+            )
+            return True
+        except CommandRunner.Exception:
+            return False
+
+    @staticmethod
     def add_and_commit(scope: str, version: str) -> bool:
         """
         Returns `True` if there were changes and were indeed commited.
         Returns `False` if the repo was clean and no changes were commited.
         """
-        # check if repo is clean (clean => no error, no commit)
-        try:
-            CommandRunner.run_or_fail(
-                ["git", "diff", "--exit-code"], stage="CheckRepoClean"
-            )
+        if Git.repo_is_clean():
             return False
-        except CommandRunner.Exception:
-            # if it's other kind of error just throw!
-            pass
 
         user_name = os.environ.get("GIT_APP_NAME")
         user_email = os.environ.get("GIT_APP_EMAIL")
@@ -415,7 +423,7 @@ class Git:
                 f"user.email={user_email}",
                 "commit",
                 "-m",
-                f"feat({scope}): update to {version}",
+                f"chore({scope}): update to {version}",
             ],
             stage="CreateCommit",
             env=clean_env,
