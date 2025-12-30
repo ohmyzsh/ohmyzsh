@@ -13,17 +13,72 @@ setopt always_to_end
 bindkey -M menuselect '^o' accept-and-infer-next-history
 zstyle ':completion:*:*:*:*:*' menu select
 
-# case insensitive (all), partial-word and substring completion
-if [[ "$CASE_SENSITIVE" = true ]]; then
-  zstyle ':completion:*' matcher-list 'r:|=*' 'l:|=* r:|=*'
-else
-  if [[ "$HYPHEN_INSENSITIVE" = true ]]; then
-    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=*' 'l:|=* r:|=*'
-  else
-    zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|=*' 'l:|=* r:|=*'
-  fi
-fi
+
+# Completion matcher configuration:
+# - case-sensitive: if 'yes', matching is case-sensitive (default: no, case-insensitive)
+# - hyphen-insensitive: if 'yes', treat hyphens and underscores as equivalent (default: no)
+# - substring-match: if 'yes', match substrings anywhere in completion (e.g., "de" matches "abcdef") (default: yes)
+# - fuzzy-match: if 'yes', match characters with gaps (e.g., "ad" matches "abcdef") (default: no)
+#   Note: fuzzy-match is more permissive and may impact performance; it includes substring behavior
+
+# Support legacy environment variables (will be deprecated)
+[[ "$CASE_SENSITIVE" = true ]] && zstyle ':omz:completion' case-sensitive 'yes'
+[[ "$HYPHEN_INSENSITIVE" = true ]] && zstyle ':omz:completion' hyphen-insensitive 'yes'
 unset CASE_SENSITIVE HYPHEN_INSENSITIVE
+
+# Set defaults if not already configured
+zstyle -s ':omz:completion' case-sensitive _ || zstyle ':omz:completion' case-sensitive 'no'
+zstyle -s ':omz:completion' hyphen-insensitive _ || zstyle ':omz:completion' hyphen-insensitive 'no'
+zstyle -s ':omz:completion' substring-match _ || zstyle ':omz:completion' substring-match 'yes'
+zstyle -s ':omz:completion' fuzzy-match _ || zstyle ':omz:completion' fuzzy-match 'no'
+
+# Build matcher-list based on enabled features
+() {
+  local -a matchers=()
+  local -i case_sensitive hyphen_insensitive substring_match fuzzy_match
+
+  # Query zstyle settings (convert to 0 or 1)
+  zstyle -t ':omz:completion' case-sensitive && case_sensitive=1 || case_sensitive=0
+  zstyle -t ':omz:completion' hyphen-insensitive && hyphen_insensitive=1 || hyphen_insensitive=0
+  zstyle -t ':omz:completion' substring-match && substring_match=1 || substring_match=0
+  zstyle -t ':omz:completion' fuzzy-match && fuzzy_match=1 || fuzzy_match=0
+  
+  # Matcher 1: Case and hyphen sensitivity
+  if (( ! case_sensitive )); then
+    if (( hyphen_insensitive )); then
+      # Case-insensitive + hyphen-insensitive
+      matchers+=('m:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}')
+    else
+      # Case-insensitive only
+      matchers+=('m:{[:lower:][:upper:]}={[:upper:][:lower:]}')
+    fi
+  else
+    if (( hyphen_insensitive )); then
+      # Case-sensitive + hyphen-insensitive
+      matchers+=('m:{-_}={_-}')
+    fi
+    # If both case-sensitive and hyphen-sensitive, no first matcher needed
+  fi
+
+  # Matcher 2: Partial word completion (left anchor)
+  # Matches from the left side of words: "ab" matches "abcd"
+  matchers+=('r:|=*')
+
+  # Matcher 3 & 4: Substring and fuzzy match
+  if (( fuzzy_match )); then
+    # Fuzzy match: allows match characters with gaps, also includes substring behavior
+    # "ad" can match "abcdef" (a...d...), very permissive
+    matchers+=('r:|?=**')
+  elif (( substring_match )); then
+    # Substring match: matches contiguous substrings anywhere
+    # "de" matches "abcdef", but "ad" would not match
+    matchers+=('l:|=* r:|=*')
+  fi
+
+  # Apply the final matcher-list
+  zstyle ':completion:*' matcher-list $matchers
+}
+
 
 # Complete . and .. special directories
 zstyle ':completion:*' special-dirs true
