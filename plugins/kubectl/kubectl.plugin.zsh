@@ -135,7 +135,7 @@ alias kga='kubectl get all'
 alias kgaa='kubectl get all --all-namespaces'
 
 # Logs
-alias klog='kubectl logs'
+alias kl='kubectl logs'
 alias kl1h='kubectl logs --since 1h'
 alias kl1m='kubectl logs --since 1m'
 alias kl1s='kubectl logs --since 1s'
