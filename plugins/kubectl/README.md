@@ -90,7 +90,7 @@ plugins=(... kubectl)
 | kga      | `kubectl get all`                                       | List all resources in ps format                                                                  |
 | kgaa     | `kubectl get all --all-namespaces`                      | List the requested object(s) across all namespaces                                               |
 |          |                                                         | **Logs**                                                                                         |
-| klog     | `kubectl logs`                                          | Print the logs for a container or resource                                                       |
+| kl       | `kubectl logs`                                          | Print the logs for a container or resource                                                       |
 | klf      | `kubectl logs -f`                                       | Stream the logs for a container or resource (follow)                                             |
 |          |                                                         | **File copy**                                                                                    |
 | kcp      | `kubectl cp`                                            | Copy files and directories to and from containers                                                |
