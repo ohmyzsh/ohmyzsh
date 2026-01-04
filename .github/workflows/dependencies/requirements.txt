@@ -1,4 +1,4 @@
-certifi==2025.11.12
+certifi==2026.1.4
 charset-normalizer==3.4.4
 idna==3.11
 PyYAML==6.0.3
