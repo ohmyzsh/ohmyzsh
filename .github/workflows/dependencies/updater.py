@@ -19,11 +19,12 @@ DEPS_YAML_FILE = ".github/dependencies.yml"
 # Dry run flag
 DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
 # GitHub Token is needed to avoid rate limiting
-GH_TOKEN = os.environ.get("GH_TOKEN", "")
+GH_TOKEN = os.environ.get("GH_TOKEN")
 HEADERS = {
-    "Authorization": f"Bearer {GH_TOKEN}",
     "Accept": "application/vnd.github+json",
 }
+if GH_TOKEN:
+    HEADERS["Authorization"] = f"Bearer {GH_TOKEN}"
 
 # utils for tag comparison
 BASEVERSION = re.compile(
