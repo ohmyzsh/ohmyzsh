@@ -18,6 +18,13 @@ TMP_DIR = os.path.join(os.environ.get("TMP_DIR", "/tmp"), "ohmyzsh")
 DEPS_YAML_FILE = ".github/dependencies.yml"
 # Dry run flag
 DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
+# GitHub Token is needed to avoid rate limiting
+GH_TOKEN = os.environ.get("GH_TOKEN")
+HEADERS = {
+    "Accept": "application/vnd.github+json",
+}
+if GH_TOKEN:
+    HEADERS["Authorization"] = f"Bearer {GH_TOKEN}"
 
 # utils for tag comparison
 BASEVERSION = re.compile(
@@ -453,7 +460,7 @@ class GitHub:
         url = f"https://api.github.com/repos/{repo}/git/refs/tags"
 
         # Send a GET request to the GitHub API
-        response = requests.get(url)
+        response = requests.get(url, headers=HEADERS)
         current_version = coerce(current_tag)
         if current_version is None:
             raise ValueError(
@@ -513,7 +520,7 @@ class GitHub:
         url = f"https://api.github.com/repos/{repo}/compare/{version}...{branch}"
 
         # Send a GET request to the GitHub API
-        response = requests.get(url)
+        response = requests.get(url, headers=HEADERS)
 
         # If the request was successful
         if response.status_code == 200:
@@ -595,14 +602,14 @@ def main():
 
     # Cache YAML version
     DependencyStore.set(data)
-    
+
     dependencies = data["dependencies"]
     if len(sys.argv) > 1:
         # argv is list of dependencies to run, default is all of them
         dependency_list = sys.argv[1:]
     else:
         dependency_list = dependencies.keys()
-    
+
     for path in dependency_list:
         dependency = Dependency(path, dependencies[path])
         dependency.update_or_notify()
