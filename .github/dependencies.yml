@@ -27,6 +27,14 @@ dependencies:
     postcopy: |
       set -e
       test -e dependencies/OMZ-README.md && cat dependencies/OMZ-README.md >> README.md
+  plugins/kube-ps1:
+    repo: jonmosco/kube-ps1
+    branch: master
+    version: e1da055e905a91242f0c5a89a425a64ee8adcd6b
+    precopy: |
+      set -e
+      find . ! -name kube-ps1.sh ! -name LICENSE ! -name README.md -delete
+      test -e kube-ps1.sh && mv kube-ps1.sh kube-ps1.plugin.zsh
   plugins/wd:
     repo: mfaerevaag/wd
     branch: master
