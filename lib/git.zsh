@@ -104,7 +104,7 @@ function _omz_git_prompt_status() {
   status_lines=("${(@f)${status_text}}")
 
   # If the tracking line exists, get and parse it
-  if [[ "$status_lines[1]" =~ "^## [^ ]+ \[(.*)\]" ]]; then
+  if [[ "$status_lines[1]" =~ "^## [^[:space:]]+ \[(.*)\]" ]]; then
     local branch_statuses
     branch_statuses=("${(@s/,/)match}")
     for branch_status in $branch_statuses; do
