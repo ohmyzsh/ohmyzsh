@@ -29,7 +29,7 @@ In termux, it is [`x termux`](https://x-cmd.com/mod/termux).
 ```bash
 m ss                        # Info about systemsetup
 m app                       # List application status
-m wifi proxy enable :2023   # Set
+m proxy enable 8090         # Set
 ```
 
 
