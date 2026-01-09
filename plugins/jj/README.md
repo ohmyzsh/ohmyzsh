@@ -12,6 +12,7 @@ plugins=(... jj)
 
 | Alias  | Command                       |
 | ------ | ----------------------------- |
+| jja    | `jj abandon`                  |
 | jjb    | `jj bookmark`                 |
 | jjbc   | `jj bookmark create`          |
 | jjbd   | `jj bookmark delete`          |
