@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.15)
+project(wat)
+cmake_minimum_required(VERSION 3.15)
+add_executable(cpc /Users/aadipalnitkar/c++/wat/src/main.cpp)
+#find_package()
+#target_incldue_directories()
+#target_link_directories()
+#target_link_libraries()
