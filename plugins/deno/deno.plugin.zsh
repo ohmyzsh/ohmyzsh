@@ -25,4 +25,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_deno" ]]; then
   _comps[deno]=_deno
 fi
 
-deno completions zsh >| "$ZSH_CACHE_DIR/completions/_deno" &|
+deno completions zsh --dynamic >| "$ZSH_CACHE_DIR/completions/_deno" &|
