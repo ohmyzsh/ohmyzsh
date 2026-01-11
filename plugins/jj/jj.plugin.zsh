@@ -34,6 +34,7 @@ function jj_prompt_template() {
 }
 
 # Aliases (sorted alphabetically)
+alias jja='jj abandon'
 alias jjb='jj bookmark'
 alias jjbc='jj bookmark create'
 alias jjbd='jj bookmark delete'
