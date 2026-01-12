@@ -35,6 +35,19 @@ if [ -e "$ZSHRC_ORIG" ]; then
   echo "Your original zsh config was restored."
 else
   echo "No original zsh config found"
+  # Check if we have a backup from this uninstall session
+  if [ -e ~/.zshrc.omz-uninstalled-* ]; then
+    echo "However, your .zshrc was backed up during this uninstall."
+    echo "Restoring it automatically..."
+    # Find the most recent backup and restore it
+    LATEST_BACKUP=$(ls -t ~/.zshrc.omz-uninstalled-* 2>/dev/null | head -1)
+    if [ -n "$LATEST_BACKUP" ]; then
+      mv "$LATEST_BACKUP" ~/.zshrc
+      echo "Your .zshrc has been restored from backup."
+    fi
+  else
+    echo "No backup found. You may need to recreate your .zshrc configuration."
+  fi
 fi
 
 echo "Thanks for trying out Oh My Zsh. It's been uninstalled."
