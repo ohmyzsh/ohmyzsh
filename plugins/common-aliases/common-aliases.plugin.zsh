@@ -87,4 +87,5 @@ if is-at-least 4.2.0; then
 fi
 
 # Make zsh know about hosts already accessed by SSH
-zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ })'
+# Merge with existing hosts from .ssh/config instead of overriding
+zstyle -e ':completion:*:(ssh|scp|sftp|rsh|rsync):hosts' hosts 'reply=(${=${${(f)"$(cat {/etc/ssh_,~/.ssh/known_}hosts(|2)(N) /dev/null)"}%%[# ]*}//,/ } ${(f)"$(cat ~/.ssh/config 2>/dev/null | grep -E "^Host " | awk '"'"'{for (i=2; i<=NF; i++) print $i}'"'"' | grep -v '"'"'^*'"'"' | sed '"'"'s/\.*\*$//'"'"')"} | sort -u)'
