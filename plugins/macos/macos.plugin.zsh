@@ -19,8 +19,44 @@ alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false &
 
 # Bluetooth restart
 function btrestart() {
-  sudo kextunload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
-  sudo kextload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
+  echo "Restarting Bluetooth daemon..."
+  
+  # Get the current bluetoothd PID before killing
+  local old_pid=$(pgrep bluetoothd)
+  
+  if [ -n "$old_pid" ]; then
+    echo "Stopping bluetoothd (PID: $old_pid)..."
+    sudo pkill bluetoothd
+    
+    # Wait for the process to actually stop
+    local count=0
+    while pgrep -f "bluetoothd" >/dev/null 2>&1 && [ $count -lt 10 ]; do
+      sleep 0.5
+      count=$((count + 1))
+    done
+    
+    # Wait for bluetoothd to restart
+    echo "Waiting for bluetoothd to restart..."
+    count=0
+    while ! pgrep bluetoothd >/dev/null 2>&1 && [ $count -lt 20 ]; do
+      sleep 0.5
+      count=$((count + 1))
+    done
+    
+    # Check if it restarted successfully
+    local new_pid=$(pgrep bluetoothd)
+    if [ -n "$new_pid" ] && [ "$new_pid" != "$old_pid" ]; then
+      echo "✓ Bluetooth daemon restarted successfully (new PID: $new_pid)"
+    elif [ -n "$new_pid" ] && [ "$new_pid" = "$old_pid" ]; then
+      echo "⚠ Bluetooth daemon may not have restarted (same PID: $new_pid)"
+    else
+      echo "✗ Bluetooth daemon failed to restart"
+      return 1
+    fi
+  else
+    echo "No bluetoothd process found to restart"
+    return 1
+  fi
 }
 
 function _omz_macos_get_frontmost_app() {
