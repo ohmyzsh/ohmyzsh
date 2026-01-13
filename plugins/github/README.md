@@ -6,6 +6,12 @@ This plugin supports working with GitHub from the command line. It provides a fe
 * Completion for the [`github` Ruby gem](https://github.com/defunkt/github-gem).
 * Convenience functions for working with repos and URLs.
 
+### Aliases
+
+| Alias                  | Command                                                                                                                        |
+| :--------------------- | :----------------------------------------------------------------------------------------------------------------------------- |
+| `gho`                  | `open_command "$(git config --get remote.origin.url | sed -e "s#git@.*\.*github\.com:#https://github.com/#" -e "s/\.git$//")"` |
+
 ### Functions
 
 * `empty_gh` - Creates a new empty repo (with a `README.md`) and pushes it to GitHub
