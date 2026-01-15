@@ -149,30 +149,42 @@ if zstyle -t ':omz:alpha:lib:git' async-prompt \
   function git_prompt_info() {
     if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}" ]]; then
       echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}"
+    elif __git_prompt_git rev-parse --git-dir &> /dev/null; then
+      _omz_git_prompt_info
     fi
   }
 
   function git_prompt_status() {
     if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}" ]]; then
       echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}"
+    elif __git_prompt_git rev-parse --git-dir &> /dev/null; then
+      _omz_git_prompt_status
     fi
   }
 
   # Conditionally register the async handler, only if it's needed in $PROMPT
   # or any of the other prompt variables
   function _defer_async_git_register() {
+    local prompt_vars="${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT}:${RPS1}:${RPS2}:${RPS3}:${RPS4}:${PROMPT}"
+    local registered=0
+
     # Check if git_prompt_info is used in a prompt variable
-    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
+    case "$prompt_vars" in
     *(\$\(git_prompt_info\)|\`git_prompt_info\`)*)
       _omz_register_handler _omz_git_prompt_info
+      registered=1
       ;;
     esac
 
-    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
+    case "$prompt_vars" in
     *(\$\(git_prompt_status\)|\`git_prompt_status\`)*)
       _omz_register_handler _omz_git_prompt_status
       ;;
     esac
+
+    if (( ! registered )) && __git_prompt_git rev-parse --git-dir &> /dev/null; then
+      _omz_register_handler _omz_git_prompt_info
+    fi
 
     add-zsh-hook -d precmd _defer_async_git_register
     unset -f _defer_async_git_register
@@ -185,12 +197,16 @@ elif zstyle -s ':omz:alpha:lib:git' async-prompt _style && [[ $_style == "force"
   function git_prompt_info() {
     if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}" ]]; then
       echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}"
+    elif __git_prompt_git rev-parse --git-dir &> /dev/null; then
+      _omz_git_prompt_info
     fi
   }
 
   function git_prompt_status() {
     if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}" ]]; then
       echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}"
+    elif __git_prompt_git rev-parse --git-dir &> /dev/null; then
+      _omz_git_prompt_status
     fi
   }
 
