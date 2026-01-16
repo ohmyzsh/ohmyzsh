@@ -1,0 +1,68 @@
+function lpm() {
+  local sw_vers=$(sw_vers -productVersion 2>/dev/null)
+
+  autoload is-at-least
+  if [[ -z "$sw_vers" ]] || ! is-at-least 12.0 $sw_vers; then
+    echo "Error: Low Power Mode requires macOS 12.0 (Monterey) or later" >&2
+    echo "Current version: ${sw_vers:-unknown}" >&2
+    return 1
+  fi
+
+  local action="${1:-}"
+
+  # Helper function to get current status (returns 0, 1, or empty string)
+  local get_status() {
+    pmset -g | grep lowpowermode | awk '{print $2}'
+  }
+
+  case "${action}" in
+    on)
+      sudo pmset -a lowpowermode 1
+      ;;
+    off)
+      sudo pmset -a lowpowermode 0
+      ;;
+    status)
+      local lpm_status=$(get_status)
+      if [[ "$lpm_status" == "1" ]]; then
+        echo "enabled"
+      elif [[ "$lpm_status" == "0" ]]; then
+        echo "disabled"
+      else
+        echo "unknown" >&2
+        return 3
+      fi
+      ;;
+    toggle)
+      local lpm_status=$(get_status)
+      if [[ "$lpm_status" == "1" ]]; then
+        sudo pmset -a lowpowermode 0
+      elif [[ "$lpm_status" == "0" ]]; then
+        sudo pmset -a lowpowermode 1
+      else
+        echo "Unable to determine current status to toggle" >&2
+        return 3
+      fi
+      ;;
+    *)
+      echo "usage: lpm on|off|status|toggle" >&2
+      return 2
+      ;;
+  esac
+}
+
+function lpm-off() {
+  lpm off
+}
+
+function lpm-on() {
+  lpm on
+}
+
+function lpm-status() {
+  lpm status
+}
+
+function lpm-toggle() {
+  lpm toggle
+}
