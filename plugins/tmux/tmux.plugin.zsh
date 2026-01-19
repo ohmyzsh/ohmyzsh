@@ -178,12 +178,22 @@ alias tmux=_zsh_tmux_plugin_run
 function _tmux_directory_session() {
   # current directory without leading path
   local dir=${PWD##*/}
-  # md5 hash for the full working directory path
-  local md5=$(printf '%s' "$PWD" | md5sum | cut -d  ' ' -f 1)
+  # md5 hash for the full working directory path (portable across Linux/macOS/BSD)
+  local md5
+  if (( $+commands[md5sum] )); then
+    md5=$(printf '%s' "$PWD" | md5sum)
+  elif (( $+commands[md5] )); then
+    md5=$(printf '%s' "$PWD" | md5)
+  else
+    md5=$(printf '%s' "$PWD" | cksum)
+  fi
+  md5=${md5%% *}
   # human friendly unique session name for this directory
   local session_name="${dir}-${md5:0:6}"
-  # create or attach to the session
-  tmux new -As "$session_name"
+  # create or attach to the session, with terminal title support
+  tmux new -As "$session_name" \; \
+    set-option -g set-titles on \; \
+    set-option -g set-titles-string '#{b:pane_current_path}: #{pane_current_command}'
 }
 
 alias tds=_tmux_directory_session
