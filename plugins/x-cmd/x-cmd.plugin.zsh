@@ -6,6 +6,7 @@ x(){(
 
     if [ -e "$HOME/.x-cmd.root/X" ]; then
         . "$HOME/.x-cmd.root/X"
+        ___x_cmd "$@"
         return $?
     fi
     

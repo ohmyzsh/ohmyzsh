@@ -31,6 +31,3 @@ m ss                        # Info about systemsetup
 m app                       # List application status
 m proxy enable 8090         # Set
 ```
-
-
-
