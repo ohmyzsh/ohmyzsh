@@ -22,10 +22,10 @@ Try: sudo apt install <selected package>
 
 It works out of the box with the command-not-found packages for:
 
-- [Ubuntu](https://www.porcheron.info/command-not-found-for-zsh/)
+- [Ubuntu](https://launchpad.net/ubuntu/+source/command-not-found)
 - [Debian](https://packages.debian.org/search?keywords=command-not-found)
-- [Arch Linux](https://wiki.archlinux.org/index.php/Pkgfile#Command_not_found)
-- [macOS (Homebrew)](https://github.com/Homebrew/homebrew-command-not-found)
+- [Arch Linux](https://wiki.archlinux.org/title/Zsh#pkgfile_"command_not_found"_handler)
+- [macOS (Homebrew)](https://github.com/Homebrew/brew/blob/main/docs/Command-Not-Found.md)
 - [Fedora](https://fedoraproject.org/wiki/Features/PackageKitCommandNotFound)
 - [NixOS](https://github.com/NixOS/nixpkgs/tree/master/nixos/modules/programs/command-not-found)
 - [Termux](https://github.com/termux/command-not-found)
