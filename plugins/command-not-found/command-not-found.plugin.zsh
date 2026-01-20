@@ -3,6 +3,8 @@
 for file (
   # Arch Linux. Must have pkgfile installed: https://wiki.archlinux.org/index.php/Pkgfile#Command_not_found
   /usr/share/doc/pkgfile/command-not-found.zsh
+  # Void Linux: https://codeberg.org/classabbyamp/xbps-command-not-found
+  /usr/share/zsh/plugins/xbps-command-not-found/xbps-command-not-found.zsh
   # Homebrew: https://github.com/Homebrew/homebrew-command-not-found
   /opt/homebrew/Library/Homebrew/command-not-found/handler.sh
   /usr/local/Homebrew/Library/Homebrew/command-not-found/handler.sh

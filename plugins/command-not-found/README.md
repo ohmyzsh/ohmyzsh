@@ -31,5 +31,6 @@ It works out of the box with the command-not-found packages for:
 - [Termux](https://github.com/termux/command-not-found)
 - [SUSE](https://www.unix.com/man-page/suse/1/command-not-found/)
 - [Gentoo](https://github.com/AndrewAmmerlaan/command-not-found-gentoo/tree/main)
+- [Void Linux](https://codeberg.org/classabbyamp/xbps-command-not-found)
 
 You can add support for other platforms by submitting a Pull Request.
