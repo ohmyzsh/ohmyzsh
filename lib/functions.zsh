@@ -9,7 +9,7 @@ function uninstall_oh_my_zsh() {
 }
 
 function upgrade_oh_my_zsh() {
-  echo >&2 "${fg[yellow]}Note: \`$0\` is deprecated. Use \`omz update\` instead.$reset_color"
+  echo >&2 "${fg[yellow]}Note: \`$0\` is deprecated. Using \`omz update\` instead.$reset_color"
   omz update
 }
 
