@@ -30,6 +30,7 @@ man-command-line() {
     else
         BUFFER="man ${args[1]}"
     fi
+    zle end-of-line
 }
 
 zle -N man-command-line
