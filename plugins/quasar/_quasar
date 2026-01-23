@@ -1,0 +1,431 @@
+#compdef quasar
+# autoload
+
+typeset -A opt_args
+local context state line
+
+
+_quasar() {
+  local context state line curcontext="$curcontext"
+
+  if (( CURRENT > 2 )); then
+    (( CURRENT-- ))
+    shift words
+    _call_function - "__quasar_${words[1]}" || _nothing
+  else
+    __quasar_commands
+  fi
+}
+
+
+__quasar_commands() {
+    local context state line curcontext="$curcontext"
+
+    local -a quasar_options
+    __quasar_setup_quasar_options
+
+
+    _arguments -C \
+    $quasar_options \
+    ': :->command'
+
+      case "$state" in
+        command)
+    local -a commands
+
+    commands=(
+      {dev,d}'[Start a dev server for your App]'
+      {build,b}'[Build your app for production]'
+      {clean,c}'[Clean all build artifacts]'
+      {new,n}'[Quickly scaffold page/layout/component/... vue file]'
+      {mode,m}'[Add/remove Quasar Modes for your App]'
+      {ext,e}'[Manage Quasar App Extensions]'
+      {run,r}'[Run specific command provided by an installed  Quasar App Extension]'
+      {test,t}'[Run @quasar/testing App Extension command]'
+      {help,h}'[shows this help message]'
+      {info,i}'[Display info about your machine and your App]'
+      describe'[ Describe a Quasar API (component)]'
+      inspect'[ Inspect generated Webpack config]'
+      upgrade'[Check (and optionally) upgrade Quasar packages from a Quasar project folder]'
+      serve'[Create an ad-hoc server on App distributables]'
+
+      )
+
+
+    _values 'command' $commands
+    ;;
+    esac
+}
+
+
+__quasar_dev() {
+ local context state line curcontext="$curcontext"
+
+ local -a quasar_options
+
+ _arguments -C \
+ $quasar_options \
+  "1: :->command" \
+  "2: :->arg" \
+  "3: :->cordova_opt" \
+  "4: :->cordova_opt_nested" 
+
+
+ case "$state" in
+      command)
+    local -a commands
+
+      commands=(
+        {--port,-p}'[<port number>]'
+        {--mode,-m}'[App mode (spa|ssr|pwa|bex|cordova|capacitor|electron) (default: spa)]'
+        {--hostname,-h}'[A hostname to use for serving the application]'
+        {--help,-h}'[Displays this message]'
+        )
+      _values 'command' $commands
+      ;;
+      arg)
+          case $line[1] in
+            '--mode')
+                __quasar_mode_select
+            ;;
+          esac
+      ;;
+      cordova_opt)
+          case $line[2] in
+            cordova)
+                __quasar_mode_cordova_specific_select
+           ;;
+            capacitor)
+                _values 'cordova_opt' {--target,-T}
+           ;;
+           esac 
+      ;;
+      cordova_opt_nested)
+          case $line[3] in
+            '--target')
+                _values 'cordova_opt_nested' 'android' 'ios'
+           ;;
+
+            '--ide')
+                _values 'cordova_opt_nested' 'XCode' 'Android Studio'
+           ;;
+           esac 
+      ;;
+  esac
+
+}
+
+__quasar_new() {
+
+  local context state line curcontext="$curcontext"
+
+  local -a quasar_options
+
+  _arguments -C \
+  $quasar_options \
+  ': :->command'
+
+  case "$state" in
+    command)
+      local -a commands
+
+      commands=(
+        {page,p}'[add new vue page]'
+        {layout,l}'[add new vue layout]'
+        {component,c}'[add new vue component]'
+        {boot,b}'[add new boot file]'
+        {store,s}'[add new store file]'
+        ssrmiddleware'add new ssr middleware'
+        )
+      _values 'command' $commands
+    ;;
+    
+  esac
+
+}
+
+
+
+__quasar_mode() {
+
+  local context state line curcontext="$curcontext"
+
+  local -a quasar_options
+
+  _arguments -C \
+  $quasar_options \
+  "1: :->command" \
+  "2: :->arg" 
+
+  case "$state" in
+    command)
+      local -a commands
+
+      commands=(
+        add'[add (pwa|ssr|bex|cordova|capacitor|electron)]'
+        remove'[remove (pwa|ssr|bex|cordova|capacitor|electron)]'
+        )
+      _values 'command' $commands
+    ;;
+    arg)
+
+    __quasar_mode_select
+    
+    ;;
+  esac
+
+}
+
+
+__quasar_ext() {
+
+  local context state line curcontext="$curcontext"
+
+  local -a quasar_options
+
+  _arguments -C \
+  $quasar_options \
+  '1: :->command' \
+  "2: :->arg" 
+
+  case "$state" in
+    command)
+      local -a commands
+
+      commands=(
+        add'[Add Quasar App Extension]'
+        remove'[Remove  Quasar App Extension]'
+        invoke'[Add  Quasar App Extension (assumes it is already installed) skip installing the npm package]'
+        uninvoke'[Remove  Quasar App Extension (assumes it is already installed)]'
+        )
+      _values 'command' $commands
+    ;;
+    arg)
+      case $line[1] in
+        remove)
+        extensions=( `quasar e | grep 'Extension name'| awk -F ':' '{print $2}'` )
+        _values 'command' $extensions
+        ;;
+      esac
+    ;;
+  esac
+
+}
+
+
+
+
+__quasar_upgrade() {
+
+  local context state line curcontext="$curcontext"
+
+  local -a quasar_options
+
+  _arguments -C \
+  $quasar_options \
+  ': :->command'
+
+  case "$state" in
+    command)
+      local -a commands
+
+      commands=(
+        {--install,-i}'[Also perform package upgrades]'
+        {--prerelease,-p}'[Allow pre-release versions (alpha/beta)]'
+        {--major,-m}'[Allow newer major versions (breaking changes)]'
+        {--help,-h}'[Displays this message]'
+        )
+      _values 'command' $commands
+    ;;
+    
+  esac
+
+}
+
+
+__quasar_build() {
+  local context state line curcontext="$curcontext"
+  # if (( CURRENT >  7 )); then  
+  # # elif [[ $line[4] == 'electron' && $CURRENT == 6 ]];then
+  #  (( CURRENT-=4 ))
+
+  # if (( CURRENT > 5 )); then
+  #   (( CURRENT-=2 ))
+  # fi
+
+  while (( CURRENT > 5 )); do
+    (( CURRENT-=2 ))
+  done
+    __quasar_build_commands
+
+}
+
+
+__quasar_build_commands() {
+ local context state line curcontext="$curcontext"
+
+ local -a quasar_options
+ declare -a electron_opts
+
+ _arguments -C \
+ $quasar_options \
+  "1: :->command" \
+  "2: :->arg" \
+  "3: :->opts" \
+  "*: :->nested_opts" 
+
+
+ case "$state" in
+      command)
+        local -a commands
+        commands=( 
+          {--mode,-m}'[App mode (spa|ssr|pwa|bex|cordova|capacitor|electron) (default: spa)]' 
+          {--port,-p}'[<port number>]' 
+          {--help,-h}'[Displays this message]' 
+          )
+        _values 'command' $commands
+      ;;
+      arg)
+          case $line[1] in
+            --mode|-m)
+                __quasar_mode_select
+            ;;
+          esac
+      ;;
+      opts)
+          case $line[2] in
+            cordova)
+                cordova_opts=( 
+                  {--target,-T}'[App target (android|ios)]' 
+                  {--ide,-i}'[Open IDE (Android Studio / XCode) instead of letting Cordova]' 
+                )
+            # remove used args
+            for cmd_word in ${line[@]};do
+              if [[ ($cmd_word == '--target' || $cmd_word == '-T') ]];then
+                cordova_opts=( "${cordova_opts[@]/'--target[App target (android|ios)]'}" )
+                cordova_opts=( "${cordova_opts[@]/'-T[App target (android|ios)]'}" )
+              elif [[ ($cmd_word == '--ide' || $cmd_word == '-i') ]];then
+                  cordova_opts=( "${cordova_opts[@]/'--ide[Open IDE (Android Studio \/ XCode) instead of letting Cordova]'}" )
+                  cordova_opts=( "${cordova_opts[@]/'-i[Open IDE (Android Studio \/ XCode) instead of letting Cordova]'}" )
+              fi
+            done
+                if [[ `echo $cordova_opts` == "" ]];then break ;fi
+
+              _values 'cordova_opt' $cordova_opts
+           ;;
+
+            capacitor)
+                _values 'capacitor_opt' {--target,-T}
+           ;;
+
+            electron)
+              electron_opts=(
+                  {--target,-T}'[App target (android|ios)]' 
+                )
+              for cmd_word in ${line[@]};do
+                if [[ ($cmd_word == '--target' || $cmd_word == '-T') ]];then
+                  electron_opts=( 
+                      {--bundler,-b}'[Bundler (electron-packager or electron-builder)]' 
+                      {--arch,-A}'[App architecture - packager (ia32|x64|armv7l|arm64|mips64el|all) - builder (ia32|x64|armv7l|arm64|all) ]' 
+                      {--publish,-P}'[ONLY for electron-builder Publish options (onTag|onTagOrDraft|always|never) see https://www.electron.build/configuration/publish]' 
+                    ) 
+                # remove used args
+                elif [[ ($cmd_word == '--bundler' || $cmd_word == '-b') ]];then
+                    electron_opts=( "${electron_opts[@]/'--bundler[Bundler (electron-packager or electron-builder)]'}" )
+                    electron_opts=( "${electron_opts[@]/'-b[Bundler (electron-packager or electron-builder)]'}" )
+
+                elif [[ ($cmd_word == '--arch' || $cmd_word == '-A') ]];then
+                    electron_opts=( "${electron_opts[@]/'--arch[App architecture - packager (ia32|x64|armv7l|arm64|mips64el|all) - builder (ia32|x64|armv7l|arm64|all) ]'}" )
+                    electron_opts=( "${electron_opts[@]/'-A[App architecture - packager (ia32|x64|armv7l|arm64|mips64el|all) - builder (ia32|x64|armv7l|arm64|all) ]'}" )
+
+                elif [[ ($cmd_word == '--publish' || $cmd_word == '-P') ]];then
+                    electron_opts=( "${electron_opts[@]/'--publish[ONLY for electron-builder Publish options (onTag|onTagOrDraft|always|never) see https:\/\/www.electron.build\/configuration\/publish]'}" )
+                    electron_opts=( "${electron_opts[@]/'-P[ONLY for electron-builder Publish options (onTag|onTagOrDraft|always|never) see https:\/\/www.electron.build\/configuration\/publish]'}" )
+                fi
+              done
+                if [[ `echo $electron_opts` == "" ]];then break ;fi
+                 _values 'electron_opts' $electron_opts 
+           ;;
+           esac 
+      ;;
+      nested_opts)
+          len=`echo ${#line[@]}`
+          for cmd_word in ${line[@]};do
+            if [[ ($cmd_word == '--target' || $cmd_word == '-T') && ( $line[$len-1] == $cmd_word )  ]];then
+            case true in
+              true)
+                if [[ $line[2] == 'cordova' ]];then
+                  _values 'cordova_opt_nested' 'android' 'ios'
+                elif [[ $line[2] == 'electron' ]];then
+                  _values 'electron_opt' 'darwin ' 'mac' 'win32' 'win' 'linux' 'all'
+                fi
+              ;;
+            esac
+            fi
+          done
+          for cmd_word in ${line[@]};do
+            if [[ ($cmd_word == '--ide' || $cmd_word == '-i') && ( $line[$len-1] == $cmd_word ) ]];then
+            
+            case $line[2] in
+              cordova|capacitor)
+                _values 'cordova_opt_nested' 'XCode' 'Android Studio'
+              ;;
+            esac
+            fi
+          done
+        case $line[2] in
+          electron)
+          for cmd_word in ${line[@]};do
+            if [[ ($cmd_word == '--arch' || $cmd_word == '-A') && ( $line[$len-1] == $cmd_word ) ]];then
+              _values 'cordova_opt_nested' 'ia32' 'x64' 'armv7l' 'arm64' 'mips64el' 'all'
+            elif [[ ($cmd_word == '--bundler' || $cmd_word == '-b') && ( $line[$len-1] == $cmd_word ) ]];then
+              _values 'cordova_opt_nested' 'packager' 'builder'
+            elif [[ ($cmd_word == '--publish' || $cmd_word == '-P') && ( $line[$len-1] == $cmd_word ) ]];then
+              _values 'cordova_opt_nested' 'onTag' 'onTagOrDraft' 'always' 'never'
+            fi
+          done
+        ;;
+      esac
+      ;;
+esac
+
+}
+
+__quasar_setup_quasar_options() {
+  quasar_options=(
+    -h'[display help ...]'
+    )
+}
+
+
+__quasar_mode_select(){
+  _values 'mode' 'spa' 'pwa' 'cordova' 'capacitor' 'electron' 'ssr' 'bex'
+}
+__quasar_mode_cordova_specific_select(){
+  local -a cordova_opts
+  cordova_opts=( 
+    {--target,-T}'[App target (android|ios)]' 
+    {--emulator,-e}'[Emulator name Examples: iPhone-7, iPhone-X]' 
+    {--ide,-i}'[Open IDE (Android Studio / XCode) instead of letting Cordova]' 
+    {--devtools,-d}'[Open remote Vue Devtools]' 
+     )
+  _values 'cordova_opt' $cordova_opts
+}
+
+__quasar_b(){
+  __quasar_build
+}
+__quasar_n(){
+  __quasar_new
+}
+__quasar_m(){
+  __quasar_mode
+}
+__quasar_e(){
+  __quasar_ext
+}
+__quasar_d(){
+  __quasar_dev
+}
+_quasar "$@"
+
