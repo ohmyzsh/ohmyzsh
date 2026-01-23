@@ -42,7 +42,7 @@ function asp() {
   export AWS_PROFILE=$1
   export AWS_EB_PROFILE=$1
 
-  export AWS_PROFILE_REGION=$(aws configure get region)
+  export AWS_PROFILE_REGION=$(_aws_get_profile_region "$1")
 
   _aws_update_state
 
@@ -263,6 +263,28 @@ function aws_profiles() {
   else
     aws --no-cli-pager configure list-profiles 2>/dev/null
   fi
+}
+
+# Fast region lookup by parsing config file directly, with fallback to AWS CLI
+function _aws_get_profile_region() {
+  local profile="${1:-$AWS_PROFILE}"
+  local config_file="${AWS_CONFIG_FILE:-$HOME/.aws/config}"
+  local region=""
+
+  # Try fast config file parsing first
+  if [[ -r "$config_file" ]]; then
+    region=$(awk -v profile="$profile" '
+      /^\[/ { in_profile = ($0 ~ "\\[(profile )?[ ]*"profile"[ ]*\\]") }
+      in_profile && /^[ ]*region[ ]*=/ { gsub(/^[ ]*region[ ]*=[ ]*/, ""); gsub(/[ ]*$/, ""); print; exit }
+    ' "$config_file")
+  fi
+
+  # Fallback to AWS CLI if fast method didn't find region
+  if [[ -z "$region" ]]; then
+    region=$(aws configure get region --profile "$profile" 2>/dev/null)
+  fi
+
+  echo "$region"
 }
 
 function _aws_regions() {
