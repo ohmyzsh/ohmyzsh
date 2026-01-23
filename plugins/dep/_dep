@@ -1,0 +1,66 @@
+#compdef dep
+#autoload
+
+# dep zsh completion, based on last release 0.5.2
+# Sagi Medina <sagimedina@gmail.com>
+
+local -a _1st_arguments
+_1st_arguments=(
+  'init:Set up a new Go project, or migrate an existing one'
+  'status:Report the status of the project dependencies'
+  'ensure:Ensure a dependency is safely vendored in the project'
+  'version:Show the dep version information'
+  'check:Check if imports, Gopkg.toml, and Gopkg.lock are in sync'
+)
+
+local expl
+local -a all_pkgs installed_pkgs
+
+_arguments \
+  '(-h --help)'{-h,--help}'[output usage information]' \
+  '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "dep subcommand" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  init)
+    _arguments \
+      '(-gopath)'-gopath'[search in GOPATH for dependencies (default: false)]' \
+      '(-no-examples)'-no-examples'[dont include example in Gopkg.toml (default: false)]' \
+      '(-skip-tools)'-skip-tools'[skip importing configuration from other dependency managers (default: false)]' \
+      '(-v)'-v'[enable verbose logging (default: false)]' ;;
+  status)
+    _arguments \
+      '(-detail)'-detail'[include more detail in the chosen format (default: false)]' \
+      '(-dot)'-dot'[output the dependency graph in GraphViz format (default: false)]' \
+      '(-examples)'-examples'[print detailed usage examples (default: false)]' \
+      '(-f)'-f'[output in text/template format (default: <none>)]' \
+      '(-json)'-json'[output in JSON format (default: false)]' \
+      '(-lock)'-lock'[output in the lock file format (assumes -detail) (default: false)]' \
+      '(-missing)'-missing'[only show missing dependencies (default: false)]' \
+      '(-old)'-old'[only show out-of-date dependencies (default: false)]' \
+      '(-out)'-out'[path to a file to which to write the output. Blank value will be ignored (default: <none>)]' \
+      '(-v)'-v'[enable verbose logging (default: false)]' \
+      '1: :->packages' &&  return 0 ;;
+  ensure)
+    _arguments \
+      '(-add)'-add'[add new dependencies, or populate Gopkg.toml with constraints for existing dependencies (default: false)]' \
+      '(-dry-run)'-dry-run'[only report the changes that would be made (default: false)]' \
+      '(-examples)'-examples'[print detailed usage examples (default: false)]' \
+      '(-no-vendor)'-no-vendor'[update Gopkg.lock (if needed), but do not update vendor/ (default: false)]' \
+      '(-update)'-update'[update the named dependencies (or all, if none are named) in Gopkg.lock to the latest allowed by Gopkg.toml (default: false)]' \
+      '(-v)'-v'[enable verbose logging (default: false)]' \
+      '(-vendor-only)'-vendor-only'[populate vendor/ from Gopkg.lock without updating it first (default: false)]' \
+      '1: :->packages' &&  return 0 ;;
+  version)
+    _arguments \
+      '(-v)'-v'[enable verbose logging (default: false)]' ;;
+  check)
+    _arguments \
+      '(-q)'-q'[Suppress non-error output (default: false)]' \
+      '(-skip-lock)'-skip-lock'[Skip checking that imports and Gopkg.toml are in sync with Gopkg.lock (default: false)]' \
+      '(-skip-vendor)'-skip-vendor'[Skip checking that vendor is in sync with Gopkg.lock (default: false)]' ;;
+esac
