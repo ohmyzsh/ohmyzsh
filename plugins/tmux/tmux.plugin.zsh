@@ -1,4 +1,4 @@
-if ! (( $+commands[tmux] )); then
+if ! command -v tmux >/dev/null; then
   print "zsh tmux plugin: tmux not found. Please install tmux before using this plugin." >&2
   return 1
 fi
