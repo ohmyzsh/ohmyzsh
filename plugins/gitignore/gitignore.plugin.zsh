@@ -1,12 +1,21 @@
-function gi() { curl -fLw '\n' https://www.toptal.com/developers/gitignore/api/"${(j:,:)@}" }
+# gitignore plugin for oh-my-zsh
+# Uses gitignore.io CDN endpoint
+function _gi_curl() {
+  curl -sfL "https://www.gitignore.io/api/$1"
+}
+
+function gi() {
+  local query="${(j:,:)@}"
+  _gi_curl "$query" || return 1
+}
 
 _gitignoreio_get_command_list() {
-  curl -sfL https://www.toptal.com/developers/gitignore/api/list | tr "," "\n"
+  _gi_curl "list" | tr "," "\n"
 }
 
 _gitignoreio () {
   compset -P '*,'
-  compadd -S '' `_gitignoreio_get_command_list`
+  compadd -S '' $(_gitignoreio_get_command_list)
 }
 
 compdef _gitignoreio gi
