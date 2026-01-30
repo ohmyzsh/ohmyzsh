@@ -4,6 +4,7 @@ omz_f() {
   [ $# -gt 0 ] || return
   IFS=";" printf "\033[%sm" $*
 }
+
 # If stdout is not a terminal ignore all formatting
 [ -t 1 ] || omz_f() { :; }
 
