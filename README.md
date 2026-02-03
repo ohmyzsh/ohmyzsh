@@ -331,7 +331,7 @@ Once you open up a new terminal window, it should load zsh with Oh My Zsh's conf
 
 ### Installation Problems
 
-If you have any hiccups installing, here are a few common fixes.
+If you have any hiccups installing, here are a few common fixes. You can try : 
 
 - You _might_ need to modify your `PATH` in `~/.zshrc` if you're not able to find some commands after
   switching to `oh-my-zsh`.
