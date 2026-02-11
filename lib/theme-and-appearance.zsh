@@ -40,9 +40,9 @@ if [[ -z "$LS_COLORS" ]]; then
 fi
 
 function test-ls-args {
-  local cmd="$1"          # ls, gls, colorls, ...
-  local args="${@[2,-1]}" # arguments except the first one
-  command "$cmd" "$args" /dev/null &>/dev/null
+  # Usage: test-ls-args cmd args...
+  # e.g. test-ls-args gls --color
+  command "$@" /dev/null &>/dev/null
 }
 
 # Find the option for using colors in ls, depending on the version
