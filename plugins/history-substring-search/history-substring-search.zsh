@@ -45,14 +45,7 @@
 
 : ${HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='bg=magenta,fg=white,bold'}
 : ${HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='bg=red,fg=white,bold'}
-
-# Respect CASE_SENSITIVE setting for case sensitivity
-if [[ "$CASE_SENSITIVE" = true ]]; then
-  : ${HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS=''}
-else
-  : ${HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS='i'}
-fi
-
+: ${HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS='i'}
 : ${HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=''}
 : ${HISTORY_SUBSTRING_SEARCH_FUZZY=''}
 : ${HISTORY_SUBSTRING_SEARCH_PREFIXED=''}
@@ -302,8 +295,8 @@ _history-substring-search-begin() {
     fi
 
     #
-    # Escape and join query parts with wildcard character '*' as separator
-    # `(j:CHAR:)` join array to string with CHAR as separator
+    # Escape and join query parts with wildcard character '*' as seperator
+    # `(j:CHAR:)` join array to string with CHAR as seperator
     #
     local search_pattern="${(j:*:)_history_substring_search_query_parts[@]//(#m)[\][()|\\*?#<>~^]/\\$MATCH}*"
 
