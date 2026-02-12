@@ -97,6 +97,35 @@ change.
 NOTE: if a directory is found in both the allowed and disallowed lists, the disallowed list
 takes preference, _i.e._ the .env file will never be sourced.
 
+### Glob/Wildcard Patterns
+
+Entries in the allowed and disallowed list files are matched as zsh patterns against the
+directory path, so wildcards work in addition to exact paths. This is useful when you want
+to allow or disallow entire directory trees at once.
+
+For example, if you use [git worktrees](https://git-scm.com/docs/git-worktree) and all your
+worktrees live under a common prefix, you can add a single pattern instead of allowing each
+one individually:
+
+```sh
+# In your dotenv-allowed.list file:
+/Users/me/Dev/my-project-wt-*
+```
+
+Note that entries are matched against the whole path as a string (as in
+`[[ $dir == pattern ]]`), not with filename globbing: `*` and `?` match any characters
+**including `/`**, so `/Users/me/*` also matches nested directories like `/Users/me/a/b`.
+The basic zsh pattern operators are supported: `*`, `?`, character classes like `[abc]`,
+and alternation like `(foo|bar)`. Operators that require `EXTENDED_GLOB` (such as `#`,
+`^` and `~`) are **not** enabled by the plugin.
+
+If a literal path contains pattern metacharacters (`*`, `?`, `[`, `(`, etc.), escape them
+with a backslash to match the path exactly. Paths added by answering [a]lways or n[e]ver
+at the prompt are escaped automatically. Malformed patterns are treated as non-matching.
+
+Lines starting with `#` are treated as comments. Blank lines are ignored, and leading and
+trailing whitespace around an entry is stripped.
+
 ## Named Pipe (FIFO) Support
 
 The plugin supports `.env` files provided as UNIX named pipes (FIFOs) in addition to regular files.
