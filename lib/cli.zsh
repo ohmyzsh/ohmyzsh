@@ -93,8 +93,8 @@ function _omz {
       trace::view)
         local -a opts traces
         traces=("${ZSH_CACHE_DIR}/.traces/"*.log(N:t))
-        # opts=('-w:View in browser')
-        # _describe 'options' opts
+        opts=('--no-web:View file in terminal')
+        _describe 'options' opts
         _describe 'trace' traces ;;
     esac
   elif (( CURRENT > 4 )); then
@@ -956,9 +956,9 @@ function _omz::trace::clean {
   fi
 
   # Print found PR branches
-  print -l "Found these traces:" ${traces:t}
+  print -l -- "Found these traces:" ${${traces:t}/#/\- }
   # Confirm before removing the branches
-  _omz::confirm "do you want remove them? [Y/n] "
+  _omz::confirm "do you want to remove them? [Y/n] "
   # Only proceed if the answer is a valid yes option
   [[ "$REPLY" != [yY$'\n'] ]] && return
 
