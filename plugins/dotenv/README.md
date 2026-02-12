@@ -78,6 +78,31 @@ change.
 NOTE: if a directory is found in both the allowed and disallowed lists, the disallowed list
 takes preference, _i.e._ the .env file will never be sourced.
 
+### Glob/Wildcard Patterns
+
+The allowed and disallowed list files support glob (wildcard) patterns in addition to exact
+paths. This is useful when you want to allow or disallow entire directory trees at once.
+
+For example, if you use [git worktrees](https://git-scm.com/docs/git-worktree) and all your
+worktrees live under a common prefix, you can add a single pattern instead of allowing each
+one individually:
+
+```sh
+# In your dotenv-allowed.list file:
+/Users/me/Dev/my-project-wt-*
+```
+
+Supported patterns:
+
+| Pattern | Matches |
+|---------|---------|
+| `*` | Any characters in a single path component |
+| `**` | Any characters across path components |
+| `?` | Any single character |
+| `[abc]` | Any one of the listed characters |
+
+Lines starting with `#` are treated as comments. Blank lines are ignored.
+
 ## Version Control
 
 **It's strongly recommended to add `.env` file to `.gitignore`**, because usually it contains sensitive information such as your credentials, secret keys, passwords etc. You don't want to commit this file, it's supposed to be local only.

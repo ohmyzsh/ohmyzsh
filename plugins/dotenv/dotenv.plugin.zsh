@@ -10,6 +10,20 @@
 
 ## Functions
 
+_dotenv_list_match() {
+  emulate -L zsh
+  local dirpath=$1 list_file=$2 line
+
+  [[ -r $list_file ]] || return 1
+
+  while IFS= read -r line || [[ -n $line ]]; do
+    [[ -z "$line" || "$line" == \#* ]] && continue
+    [[ $dirpath == ${~line} ]] && return 0
+  done < "$list_file"
+
+  return 1
+}
+
 source_env() {
   if [[ ! -f "$ZSH_DOTENV_FILE" ]]; then
     return
@@ -23,12 +37,12 @@ source_env() {
     touch "$ZSH_DOTENV_DISALLOWED_LIST"
 
     # early return if disallowed
-    if command grep -Fx -q "$dirpath" "$ZSH_DOTENV_DISALLOWED_LIST" &>/dev/null; then
+    if _dotenv_list_match "$dirpath" "$ZSH_DOTENV_DISALLOWED_LIST"; then
       return
     fi
 
     # check if current directory's .env file is allowed or ask for confirmation
-    if ! command grep -Fx -q "$dirpath" "$ZSH_DOTENV_ALLOWED_LIST" &>/dev/null; then
+    if ! _dotenv_list_match "$dirpath" "$ZSH_DOTENV_ALLOWED_LIST"; then
       # get cursor column and print new line before prompt if not at line beginning
       local column
       echo -ne "\e[6n" > /dev/tty
@@ -44,8 +58,8 @@ source_env() {
       # check input
       case "$confirmation" in
         [nN]) return ;;
-        [aA]) echo "$dirpath" >> "$ZSH_DOTENV_ALLOWED_LIST" ;;
-        [eE]) echo "$dirpath" >> "$ZSH_DOTENV_DISALLOWED_LIST"; return ;;
+        [aA]) print -r -- "${(b)dirpath}" >> "$ZSH_DOTENV_ALLOWED_LIST" ;;
+        [eE]) print -r -- "${(b)dirpath}" >> "$ZSH_DOTENV_DISALLOWED_LIST"; return ;;
         *) ;; # interpret anything else as a yes
       esac
     fi
