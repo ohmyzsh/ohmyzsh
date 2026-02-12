@@ -919,7 +919,50 @@ EOF
 }
 
 function _omz::trace::on {
-  'builtin' ':' > "${OMZ_TRACES}/.enabled"
+  # Check that .zshenv hook is added
+  if [[ ! -f "$HOME/.zshenv" ]]; then
+    touch "$HOME/.zshenv"
+    chmod u+rw "$HOME/.zshenv"
+  fi
+
+  # Check that hook is sourced in .zshenv
+  #
+  # 1. Compute the hook path relative to $HOME
+  local hook_path="$ZSH/hooks/zshenv.zsh"
+  hook_path="${hook_path/#$HOME\//\$HOME/}"
+
+  # 2. Compute the source command
+  local hook_source=". \"$hook_path\""
+
+  # 3. Check if already added to .zshenv, otherwise add it
+  if ! command grep -Fq "$hook_source" "$HOME/.zshenv"; then
+    # 4. If not, prepend the hook source command
+    local tmpfile==(:)
+    cat - "$HOME/.zshenv" >| "$tmpfile" <<EOF
+$hook_source # set by \`omz\`
+
+EOF
+
+    # 5. Check for syntax errors
+    if ! zsh -n "$tmpfile"; then
+      _omz::log error "error when adding the tracing hook to .zshenv"
+      _omz::log error "add the following line to your .zshenv file to enable tracing:"
+      _omz::log error "$hook_source"
+      echo
+      command rm -f "$tmpfile"
+    else
+      command mv -f "$tmpfile" "$HOME/.zshenv"
+    fi
+  fi
+
+  # Check that traces directory exists
+  local OMZ_TRACES="${OMZ_TRACES:-"$ZSH_CACHE_DIR/.traces"}"
+  if [[ ! -d "$OMZ_TRACES" ]]; then
+    command mkdir -p "$OMZ_TRACES"
+  fi
+
+  # Create .enabled file to turn on tracing
+  touch "${OMZ_TRACES}/.enabled" || return 1
   print -ru2 '[oh-my-zsh] tracing enabled'
 }
 
