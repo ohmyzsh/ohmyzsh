@@ -78,6 +78,14 @@ change.
 NOTE: if a directory is found in both the allowed and disallowed lists, the disallowed list
 takes preference, _i.e._ the .env file will never be sourced.
 
+## Named Pipe (FIFO) Support
+
+The plugin supports `.env` files provided as UNIX named pipes (FIFOs) in addition to regular files.
+This is useful when secrets managers like [1Password Environments](https://developer.1password.com/docs/environment/)
+mount `.env` files as named pipes to inject secrets on-the-fly without writing them to disk.
+
+No additional configuration is required — the plugin automatically detects and sources named pipes.
+
 ## Version Control
 
 **It's strongly recommended to add `.env` file to `.gitignore`**, because usually it contains sensitive information such as your credentials, secret keys, passwords etc. You don't want to commit this file, it's supposed to be local only.
