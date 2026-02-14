@@ -77,6 +77,15 @@ _my_theme_vcs_info() {
 PROMPT='$(_my_theme_vcs_info) $'
 ```
 
+> **Note:** When using a wrapper function around `git_prompt_info`, the git async prompt feature
+> (enabled by default on Zsh ≥5.0.6) will not work because it only detects the literal pattern
+> `$(git_prompt_info)` in prompt variables. To fix this, either:
+>
+> - Disable git async prompt: `zstyle ':omz:alpha:lib:git' async-prompt no`
+> - Force async handlers to always register: `zstyle ':omz:alpha:lib:git' async-prompt force`
+>
+> See [issue #13555](https://github.com/ohmyzsh/ohmyzsh/issues/13555) for details.
+
 You can find an example
 [here](https://github.com/nasso/omzsh/blob/e439e494f22f4fd4ef1b6cb64626255f4b341c1b/themes/sunakayu.zsh-theme).
 
