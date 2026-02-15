@@ -36,7 +36,7 @@ function rbwpw {
   echo -n "$_random" > "$_cache"
 
   # Use clipcopy to copy the password to the clipboard
-  echo -n $pw | clipcopy
+  echo -n "$pw" | clipcopy
   echo "password for $service copied!"
 
   # Clear the clipboard after 20 seconds, but only if the clipboard hasn't
