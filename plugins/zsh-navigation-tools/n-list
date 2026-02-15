@@ -55,9 +55,9 @@ _nlist_cursor_visibility() {
         [ "$1" = "1" ] && { tput cvvis; tput cnorm }
         [ "$1" = "0" ] && tput civis
     elif [ "$_nlist_has_terminfo" = "1" ]; then
-        [ "$1" = "1" ] && { [ -n $terminfo[cvvis] ] && echo -n $terminfo[cvvis];
-                           [ -n $terminfo[cnorm] ] && echo -n $terminfo[cnorm] }
-        [ "$1" = "0" ] && [ -n $terminfo[civis] ] && echo -n $terminfo[civis]
+        [ "$1" = "1" ] && { [ -n "$terminfo[cvvis]" ] && echo -n "$terminfo[cvvis]";
+                           [ -n "$terminfo[cnorm]" ] && echo -n "$terminfo[cnorm]" }
+        [ "$1" = "0" ] && [ -n "$terminfo[civis]" ] && echo -n "$terminfo[civis]"
     fi 
 }
 
