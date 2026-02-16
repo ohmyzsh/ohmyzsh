@@ -10,7 +10,7 @@ _microk8s_cache_completion() {
     $2 $cache
   fi
 
-  [[ -f $cache ]] && source $cache
+  [[ -f $cache ]] && source "$cache"
 }
 
 # ---------------------------------------------------------- #
