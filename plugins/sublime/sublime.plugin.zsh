@@ -109,7 +109,7 @@ function create_project() {
   local _sublime_project_file=$_target/$(basename $_target).sublime-project
 
   if [[ ! -f $_sublime_project_file ]]; then
-    touch $_sublime_project_file
+    touch "$_sublime_project_file"
 
     echo -e "{"                         >> $_sublime_project_file
     echo -e "\t\"folders\":"            >> $_sublime_project_file
