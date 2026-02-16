@@ -32,12 +32,12 @@ rack_root(){
 
   builtin cd "$orgdir" 2>/dev/null
   [[ ${basedir} == "/" ]] && return 1
-  echo $basedir
+  echo "$basedir"
 }
 
 rack_root_detect(){
   basedir=$(rack_root)
-  echo `basename $basedir | sed -E "s/.(com|net|org)//"`
+  echo `basename "$basedir" | sed -E "s/.(com|net|org)//"`
 }
 
 kapow(){
