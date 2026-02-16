@@ -17,7 +17,7 @@ fi
 ZSH_PIP_INDEXES=(https://pypi.org/simple/)
 
 zsh-pip-clear-cache() {
-  rm $ZSH_PIP_CACHE_FILE
+  rm "$ZSH_PIP_CACHE_FILE"
   unset piplist
 }
 
@@ -41,7 +41,7 @@ zsh-pip-cache-packages() {
                >> $tmp_cache
       done
       sort $tmp_cache | uniq | tr '\n' ' ' > $ZSH_PIP_CACHE_FILE
-      rm $tmp_cache
+      rm "$tmp_cache"
   fi
 }
 
