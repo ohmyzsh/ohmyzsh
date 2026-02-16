@@ -53,7 +53,7 @@ _rake_generate () {
   local rake_tasks_file="$(mktemp -t .rake_tasks.XXXXXX)"
   echo $rake_tasks_content > $rake_tasks_file
 
-  mv $rake_tasks_file .rake_tasks
+  mv "$rake_tasks_file" .rake_tasks
 }
 
 _rake () {
