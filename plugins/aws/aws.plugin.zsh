@@ -103,8 +103,25 @@ function acp() {
   local aws_secret_access_key="$(aws configure get aws_secret_access_key --profile $profile)"
   local aws_session_token="$(aws configure get aws_session_token --profile $profile)"
 
+  # Are we using SSO?
+  local sso_start_url="$(aws configure get sso_start_url --profile $profile)"
+  if [[ -n "sso_start_url" ]]; then
+    # And is the session still valid?
+    aws sts get-caller-identity --profile $profile > /dev/null
+    if [ $? -ne 0 ]; then
+      aws sso login --profile $profile
+    fi
+    if [ $? -eq 0 ]; then
+      export AWS_DEFAULT_PROFILE="$profile"
+      export AWS_PROFILE="$profile"
+      export AWS_EB_PROFILE="$profile"
+      unset AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+      echo "Switched to AWS Profile: $profile"
+      return
+    fi
+  fi
 
-  # First, if the profile has MFA configured, lets get the token and session duration
+  # If the profile has MFA configured, lets get the token and session duration
   local mfa_serial="$(aws configure get mfa_serial --profile $profile)"
   local sess_duration="$(aws configure get duration_seconds --profile $profile)"
 
