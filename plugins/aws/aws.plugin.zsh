@@ -42,7 +42,7 @@ function asp() {
   export AWS_PROFILE=$1
   export AWS_EB_PROFILE=$1
 
-  export AWS_PROFILE_REGION=$(aws configure get region)
+  export AWS_PROFILE_REGION=$(_aws_get_profile_region "$1")
 
   _aws_update_state
 
@@ -239,9 +239,52 @@ function aws_regions() {
 }
 
 function aws_profiles() {
-  aws --no-cli-pager configure list-profiles 2> /dev/null && return
-  [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([^[:space:]]+)\][[:space:]]*$/\2/g'
+  local config_file="${AWS_CONFIG_FILE:-$HOME/.aws/config}"
+  local credentials_file="${AWS_SHARED_CREDENTIALS_FILE:-$HOME/.aws/credentials}"
+  local profiles=()
+
+  # Parse config file: match [default], [profile name], but not [sso-session ...] etc.
+  # Pattern handles optional whitespace around brackets and profile keyword
+  if [[ -r "$config_file" ]]; then
+    profiles+=($(grep --color=never -Eo '\[.*\]' "$config_file" \
+      | sed -nE 's/^[[:space:]]*\[(profile[[:space:]]+)?([^[:space:]]+)[[:space:]]*\]$/\2/p' \
+      | grep -v '^sso-session$'))
+  fi
+
+  # Parse credentials file (profiles have [name] format, no "profile" prefix)
+  if [[ -r "$credentials_file" ]]; then
+    profiles+=($(grep --color=never -Eo '\[.*\]' "$credentials_file" \
+      | sed -nE 's/^[[:space:]]*\[([^[:space:]]+)[[:space:]]*\]$/\1/p'))
+  fi
+
+  # Return unique profiles, or fall back to AWS CLI
+  if [[ ${#profiles[@]} -gt 0 ]]; then
+    printf '%s\n' "${profiles[@]}" | sort -u
+  else
+    aws --no-cli-pager configure list-profiles 2>/dev/null
+  fi
+}
+
+# Fast region lookup by parsing config file directly, with fallback to AWS CLI
+function _aws_get_profile_region() {
+  local profile="${1:-$AWS_PROFILE}"
+  local config_file="${AWS_CONFIG_FILE:-$HOME/.aws/config}"
+  local region=""
+
+  # Try fast config file parsing first
+  if [[ -r "$config_file" ]]; then
+    region=$(awk -v profile="$profile" '
+      /^\[/ { in_profile = ($0 ~ "\\[(profile )?[ ]*"profile"[ ]*\\]") }
+      in_profile && /^[ ]*region[ ]*=/ { gsub(/^[ ]*region[ ]*=[ ]*/, ""); gsub(/[ ]*$/, ""); print; exit }
+    ' "$config_file")
+  fi
+
+  # Fallback to AWS CLI if fast method didn't find region
+  if [[ -z "$region" ]]; then
+    region=$(aws configure get region --profile "$profile" 2>/dev/null)
+  fi
+
+  echo "$region"
 }
 
 function _aws_regions() {
