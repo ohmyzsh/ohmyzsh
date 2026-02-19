@@ -310,6 +310,14 @@ function git_commits_behind() {
   fi
 }
 
+function git_commits_status() {
+  local ahead=$(git_commits_ahead)
+  local behind=$(git_commits_behind)
+  if [[ -n "$ahead$behind" ]]; then
+    echo "$ZSH_THEME_GIT_COMMITS_STATUS_PREFIX$ahead$behind$ZSH_THEME_GIT_COMMITS_STATUS_SUFFIX"
+  fi
+}
+
 # Outputs if current branch is ahead of remote
 function git_prompt_ahead() {
   if [[ -n "$(__git_prompt_git rev-list origin/$(git_current_branch)..HEAD 2> /dev/null)" ]]; then
