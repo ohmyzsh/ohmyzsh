@@ -365,3 +365,34 @@ function git_repo_name() {
     echo ${repo_path:t}
   fi
 }
+
+# Outputs 3 stats for git repo
+# 1) number of files changed,
+# 2) the total number of lines added
+# 3) total number of lines removed
+# 
+# Example 
+#  3f:69+:6-
+function git_files_changed() {
+    local -i files=0
+    local -i insertions=0
+    local -i deletions=0
+    local raw=$(command git diff --numstat 2>/dev/null) || return 0
+    if [[ -n $raw ]]; then
+      echo $raw | while IFS= read -r line; do
+        local -i d=$line[(w)2]
+        local -i i=$line[(w)1]
+        insertions+=i
+        deletions+=d
+        files+=1
+      done
+      local output="$ZSH_THEME_GIT_FILES_CHANGED_PREFIX${files}f$ZSH_THEME_GIT_FILES_CHANGED_SUFFIX"
+      if (( $insertions > 0 )); then
+          output="$output:$ZSH_THEME_GIT_LINES_ADDED_PREFIX${insertions}+$ZSH_THEME_GIT_LINES_ADDED_SUFFIX"
+      fi
+      if (( $deletions > 0 )); then
+          output="$output:$ZSH_THEME_GIT_LINES_REMOVED_PREFIX${deletions}-$ZSH_THEME_GIT_LINES_REMOVED_SUFFIX"
+      fi
+      echo $output
+    fi
+}
