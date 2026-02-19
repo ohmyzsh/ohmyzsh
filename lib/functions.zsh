@@ -282,3 +282,30 @@ function omz_urldecode {
 
   echo -E "$decoded"
 }
+
+# The OS is linux
+function is_linux { [[ "$OSTYPE" == linux* ]]; }
+# The OS is Android
+function is_android { [[ "$OSTYPE" == linux-android* ]]; }
+# The OS is NetBSD
+function is_netbsd() { [[ "$OSTYPE" == netbsd* ]]; }
+# The OS is OpenBSD
+function is_openbsd() { [[ "$OSTYPE" == openbsd* ]]; }
+# The OS is FreeBSD
+function is_freebsd() { [[ "$OSTYPE" == freebsd* ]]; }
+# The OS is macOS (darwin)
+function is_mac() { [[ "$OSTYPE" == darwin* ]]; }
+# The OS is macOS (darwin) running on series of ARM-based systems-on-a-chip designed by Apple Inc
+function is_mac_arm() { is_mac && [[ "$CPUTYPE" == arm64 ]]; }
+# The OS is macOS (darwin) running on series of Intel (amd64 / x86_64) CPU
+function is_mac_intel() { is_mac && [[ "$CPUTYPE" == x86_64 ]]; }
+# The OS is a BSD derivate
+function is_bsd() { [[ "$OSTYPE" == (darwin|freebsd|openbsd|netbsd|dragonfly)* ]]; }
+# The OS is Solaris
+function is_solaris { [[ "$OSTYPE" == solaris* ]]; }
+# The Platform is Cygwin (Windows)
+function is_cygwin { [[ "$OSTYPE" == cygwin* ]]; }
+# The platform is MinGW (Windows)
+function is_msys { [[ "$OSTYPE" == msys* ]]; }
+# The OS is Windows
+function is_windows { [[ "$OSTYPE" == (cygwin|msys)* ]]; }
