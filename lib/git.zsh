@@ -147,12 +147,16 @@ local _style
 if zstyle -t ':omz:alpha:lib:git' async-prompt \
   || { is-at-least 5.0.6 && zstyle -T ':omz:alpha:lib:git' async-prompt }; then
   function git_prompt_info() {
+    # Support wrapper calls like $(_my_git_prompt_info) by lazily registering
+    # the async handler on first invocation.
+    _omz_register_handler _omz_git_prompt_info
     if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}" ]]; then
       echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}"
     fi
   }
 
   function git_prompt_status() {
+    _omz_register_handler _omz_git_prompt_status
     if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}" ]]; then
       echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}"
     fi
