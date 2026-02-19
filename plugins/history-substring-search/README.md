@@ -79,7 +79,7 @@ Using [Zinit](https://github.com/zdharma-continuum/zinit):
 
 2. Load the plugin in `~/.zshrc`:
 
-        zinit load 'zsh-users/zsh-history-substring-search
+        zinit load 'zsh-users/zsh-history-substring-search'
         zinit ice wait atload'_history_substring_search_config'
 
 3. Run `exec zsh` to take changes into account:
