@@ -51,7 +51,7 @@ function drnew() {
     fi
 
     echo "Moving to $DIRECTORY$WEBSITE_NAME"
-    sudo mv $WEBSITE_NAME $DIRECTORY
+    sudo mv "$WEBSITE_NAME" "$DIRECTORY"
     cd $DIRECTORY$WEBSITE_NAME
 
     echo "Database's user: "
