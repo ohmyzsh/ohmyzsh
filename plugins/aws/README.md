@@ -96,3 +96,14 @@ source_profile = source-profile-name
 region = us-east-1
 output = json
 ```
+
+## NOTES
+1. If we see an issue with a `aws` CLI command for a specific region e.g:
+   ```shell
+   $ aws eks list-clusters --region me-central-1
+   An error occurred (UnrecognizedClientException) when calling the ListClusters operation: The security token included in the request is invalid
+   ```
+   Ensure you're fetching the AWS credentials from a regional STS endpoint i.e:
+   ```shell
+   $ AWS_STS_REGIONAL_ENDPOINTS=regional gimme-aws-creds
+   ```
