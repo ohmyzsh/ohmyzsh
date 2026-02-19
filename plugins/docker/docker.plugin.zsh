@@ -36,6 +36,40 @@ alias dvprune='docker volume prune'
 alias dxc='docker container exec'
 alias dxcit='docker container exec -it'
 
+function _dxgcit() {
+  if [ $# -lt 2 ]; then
+    echo "Usage: $0 <grep-pattern> <command...>" >&2
+    return 1
+  fi
+
+  local pattern=$1
+  shift 1
+
+  local -a candidates
+  candidates=(
+    ${(f)"$(docker ps --format "{{.ID}}:{{.Names}}:{{.Image}}" | grep -- "$pattern")"}
+  )
+  if [ ${#candidates[@]} -eq 0 ]; then
+    printf "No container/image matches name pattern: '%s'!\n" "$pattern" >&2
+    return 1
+  fi
+  if [ ${#candidates[@]} -ne 1 ]; then
+    printf "Ambiguous container/image name pattern: '%s' results in '%d' candidates!\n" \
+      "$pattern" "${#candidates[@]}" >&2
+    for candidate in ${candidates[@]}; do
+      parts=(${(@s/:/)candidate})
+      printf "  %s (%s) (image: %s)\n" "${parts[1]}" "${parts[2]}" "${parts[3]}" >&2
+    done
+    return 1
+  fi
+
+  local -a candidate
+  candidate=(${(@s/:/)${candidates[1]}})
+  local id="${candidate[1]}"
+  docker container exec -it "$id" "$@"
+}
+alias dxgcit='_dxgcit'
+
 if (( ! $+commands[docker] )); then
   return
 fi
