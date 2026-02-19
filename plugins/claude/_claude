@@ -1,0 +1,249 @@
+# Zsh completion for the `claude` CLI.
+
+# Guard multiple loads
+(( $+functions[_claude] )) && return 0
+
+_claude() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    '(-h --help)'{-h,--help}'[Show help information]' \
+    '(-V --version)'{-V,--version}'[Show CLI version]' \
+    '(-v --verbose)'{-v,--verbose}'[Increase verbosity]' \
+    '(-q --quiet)'{-q,--quiet}'[Reduce output]' \
+    '(-c --continue)'{-c,--continue}'[Continue most recent conversation]' \
+    '(-p --print)'{-p,--print}'[Print-only mode (no streaming)]' \
+    '(-y --yes)'{-y,--yes}'[Assume yes for all prompts]' \
+    '(-n --no-color)'{-n,--no-color}'[Disable colored output]' \
+    '(-C --config)'{-C,--config}'[Specify config file]:config file:_files' \
+    '(-o --output)'{-o,--output}'[Write response to file]:output file:_files' \
+    '(-m --model)'{-m,--model}'[Select Claude model]:model name:->model' \
+    '(-s --session)'{-s,--session}'[Use or resume session by ID]:session id: ' \
+    '(-i --input)'{-i,--input}'[Send file(s) as input]:input file(s):_files' \
+    '(-I --stdin)'{-I,--stdin}'[Read prompt from stdin]' \
+    '(-d --directory)'{-d,--directory}'[Working directory for context]:directory:_files -/' \
+    '(-)'{-,-\-}'[End of options]' \
+    '1:subcommand:->subcmd' \
+    '*::args:->args' && return 0
+
+  case $state in
+    model)
+      # Common Claude models – easy to tweak/extend.
+      local -a models
+      models=(
+        'claude-4.1:General-purpose, high capability'
+        'claude-4.1-sonnet:Fast, strong reasoning'
+        'claude-4.1-haiku:Cheaper, very fast'
+        'claude-3.7-sonnet:Previous-gen balanced model'
+      )
+      _describe -t models 'Claude model' models
+      return
+      ;;
+    subcmd)
+      _claude_subcommands
+      return
+      ;;
+    args)
+      _claude_dispatch_subcommand
+      return
+      ;;
+  esac
+}
+
+# Known subcommands & short descriptions
+_claude_subcommands() {
+  local -a subcmds
+  subcmds=(
+    'chat:Start a new interactive chat'
+    'c:Continue the most recent conversation'
+    'r:Resume a conversation by ID'
+    'commit:Generate and apply a Git commit'
+    'review:Review a diff, PR, or file'
+    'edit:Edit file(s) using Claude'
+    'explore:Explore and summarize a codebase'
+    'mcp:Manage MCP servers and config'
+    'config:Show or edit CLI configuration'
+    'update:Update the Claude CLI'
+    'help:Show help for a subcommand'
+  )
+  _describe -t commands 'claude subcommand' subcmds
+}
+
+# Route completion based on subcommand
+_claude_dispatch_subcommand() {
+  local -a words
+  words=(${words[@]})  # defensive copy
+
+  # First non-option word after 'claude'
+  local subcmd
+  for w in ${words[@]:1}; do
+    [[ $w == -* ]] && continue
+    subcmd=$w
+    break
+  done
+
+  [[ -z $subcmd ]] && { _claude_subcommands; return; }
+
+  case $subcmd in
+    chat)
+      _claude_chat
+      ;;
+    c|continue)
+      _claude_continue
+      ;;
+    r|resume)
+      _claude_resume
+      ;;
+    commit)
+      _claude_commit
+      ;;
+    review)
+      _claude_review
+      ;;
+    edit)
+      _claude_edit
+      ;;
+    explore)
+      _claude_explore
+      ;;
+    mcp)
+      _claude_mcp
+      ;;
+    config)
+      _claude_config
+      ;;
+    update)
+      _claude_update
+      ;;
+    help)
+      _claude_help
+      ;;
+    *)
+      _message "No additional completions for: $subcmd"
+      ;;
+  esac
+}
+
+# ---- Subcommand completion functions ----
+
+_claude_chat() {
+  _arguments -C \
+    '(-m --model)'{-m,--model}'[Claude model]:model name:->model' \
+    '(-i --input)'{-i,--input}'[Attach file(s) as context]:file:_files' \
+    '(-p --print)'{-p,--print}'[Print full response when done]' \
+    '1:prompt text: ' \
+    '*:extra arguments: '
+}
+
+_claude_continue() {
+  _arguments -C \
+    '(-p --print)'{-p,--print}'[Print full response when done]' \
+    '1:optional prompt to continue with: ' \
+    '*:extra arguments: '
+}
+
+_claude_resume() {
+  _arguments -C \
+    '(-p --print)'{-p,--print}'[Print full response when done]' \
+    '1:session id: ' \
+    '2:prompt text: ' \
+    '*:extra arguments: '
+}
+
+_claude_commit() {
+  _arguments -C \
+    '--amend[Amend the previous commit]' \
+    '--no-verify[Skip pre-commit hooks]' \
+    '--all[Stage all modified files]' \
+    '--staged[Use only staged changes]' \
+    '--message=-[Override generated message]:message: ' \
+    '--branch=-[Describe current branch]:branch name: ' \
+    '*:file:_files'
+}
+
+_claude_review() {
+  _arguments -C \
+    '--staged[Review only staged changes]' \
+    '--patch[Review current diff/patch]' \
+    '--file=-[Review a specific file]:file:_files' \
+    '--pr=-[Review a pull request id or URL]:PR id or URL: ' \
+    '*:additional files or args:_files'
+}
+
+_claude_edit() {
+  _arguments -C \
+    '--in-place[Apply edits directly to files]' \
+    '--dry-run[Show changes without writing files]' \
+    '--diff[Show unified diff of edits]' \
+    '1:file to edit:_files' \
+    '*:additional files:_files'
+}
+
+_claude_explore() {
+  _arguments -C \
+    '--root=-[Root directory of project]:directory:_files -/' \
+    '--summary[Summarize the project structure]' \
+    '--map[Create or update a code map]' \
+    '*:paths to include:_files'
+}
+
+_claude_mcp() {
+  local -a mcp_sub
+  mcp_sub=(
+    'list:List configured MCP servers'
+    'add:Add a new MCP server'
+    'remove:Remove an MCP server'
+    'test:Test connectivity to a server'
+    'open:Open MCP config in editor'
+  )
+
+  _arguments -C \
+    '1:subcommand:->mcp_sub' \
+    '*::args:->mcp_args'
+
+  case $state in
+    mcp_sub)
+      _describe -t subcmds 'mcp subcommand' mcp_sub
+      ;;
+    mcp_args)
+      local sub=${words[2]}
+      case $sub in
+        add)
+          _arguments -C \
+            '1:server name: ' \
+            '2:server URL: ' \
+            '*:extra options: '
+          ;;
+        remove|test|open)
+          _arguments -C \
+            '1:server name: '
+          ;;
+        list|*)
+          ;;
+      esac
+      ;;
+  esac
+}
+
+_claude_config() {
+  _arguments -C \
+    '1:action:(show edit path doctor)' \
+    '*:args: '
+}
+
+_claude_update() {
+  _arguments -C \
+    '--preview[Update to latest preview or beta]' \
+    '--force[Force re-install even if up to date]' \
+    '*:args: '
+}
+
+_claude_help() {
+  _arguments -C \
+    '1:command to show help for:->cmd' \
+    '*:args: '
+  [[ $state == cmd ]] && _claude_subcommands
+}
+
+# End of file
