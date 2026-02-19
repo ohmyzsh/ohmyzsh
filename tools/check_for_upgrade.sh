@@ -6,17 +6,15 @@ fi
 # Get user's update preferences
 #
 # Supported update modes:
-# - prompt (default): the user is asked before updating when it's time to update
-# - auto: the update is performed automatically when it's time
+# - auto (default): the update is performed automatically when it's time
+# - prompt: the user is asked before updating when it's time to update
 # - reminder: a reminder is shown to the user when it's time to update
 # - background-alpha: an experimental update-on-the-background option
 # - disabled: automatic update is turned off
 zstyle -s ':omz:update' mode update_mode || {
-  update_mode=prompt
-
-  # If the mode zstyle setting is not set, support old-style settings
-  [[ "$DISABLE_UPDATE_PROMPT" != true ]] || update_mode=auto
-  [[ "$DISABLE_AUTO_UPDATE" != true ]] || update_mode=disabled
+  update_mode=auto
+  [[ "$DISABLE_UPDATE_PROMPT" = false ]] && update_mode=prompt
+  [[ "$DISABLE_AUTO_UPDATE" = true ]] && update_mode=disabled
 }
 
 # Cancel update if:
