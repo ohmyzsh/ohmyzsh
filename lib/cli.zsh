@@ -30,6 +30,7 @@ function _omz {
     'reload:Reload the current zsh session'
     'shop:Open the Oh My Zsh shop'
     'theme:Manage themes'
+    'trace:Manage debug tracing'
     'update:Update Oh My Zsh'
     'version:Show the version'
   )
@@ -42,16 +43,25 @@ function _omz {
         refs=("${(@f)$(builtin cd -q "$ZSH"; command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
       plugin) subcmds=(
-        'disable:Disable plugin(s)'
-        'enable:Enable plugin(s)'
-        'info:Get plugin information'
-        'list:List plugins'
-        'load:Load plugin(s)'
-      )
+          'disable:Disable plugin(s)'
+          'enable:Enable plugin(s)'
+          'info:Get plugin information'
+          'list:List plugins'
+          'load:Load plugin(s)'
+        )
         _describe 'command' subcmds ;;
       pr) subcmds=('clean:Delete all Pull Request branches' 'test:Test a Pull Request')
         _describe 'command' subcmds ;;
       theme) subcmds=('list:List themes' 'set:Set a theme in your .zshrc file' 'use:Load a theme')
+        _describe 'command' subcmds ;;
+      trace) subcmds=(
+          'clean:Delete all traces'
+          'list:List traces'
+          'off:Turn debug tracing off'
+          'on:Turn debug tracing on'
+          'toggle:Toggle debug tracing'
+          'view:View trace in browser'
+        )
         _describe 'command' subcmds ;;
     esac
   elif (( CURRENT == 4 )); then
@@ -81,6 +91,12 @@ function _omz {
         local -aU themes
         themes=("$ZSH"/themes/*.zsh-theme(-.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(-.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
         _describe 'theme' themes ;;
+      trace::view)
+        local -a opts traces
+        traces=("${ZSH_CACHE_DIR}/.traces/"*.log(N:t))
+        opts=('--no-web:View file in terminal')
+        _describe 'options' opts
+        _describe 'trace' traces ;;
     esac
   elif (( CURRENT > 4 )); then
     case "${words[2]}::${words[3]}" in
@@ -105,6 +121,12 @@ function _omz {
         valid_plugins=(${valid_plugins:|args})
 
         _describe 'plugin' valid_plugins ;;
+      trace::view)
+        local -a opts traces
+        # opts=('-w:View in browser')
+        traces=("${ZSH_CACHE_DIR}/.traces/"*.log(N:t))
+        # _describe 'options' opts
+        _describe 'trace' traces ;;
     esac
   fi
 
@@ -746,7 +768,7 @@ function _omz::theme {
   (( $# > 0 && $+functions[$0::$1] )) || {
     cat >&2 <<EOF
 Usage: ${(j: :)${(s.::.)0#_}} <command> [options]
-
+$#traces
 Available commands:
 
   list            List all available Oh My Zsh themes
@@ -880,6 +902,193 @@ function _omz::theme::use {
   # Update theme settings
   ZSH_THEME="$1"
   [[ $1 = random ]] || unset RANDOM_THEME
+}
+
+
+function _omz::trace {
+  (( $# > 0 && $+functions[$0::$1] )) || {
+    cat >&2 <<EOF
+Usage: ${(j: :)${(s.::.)0#_}} <command> [options]
+
+Available commands:
+
+  clean [-a]  Delete old or all traces
+  list        List traces
+  off         Turn debug tracing off
+  on          Turn debug tracing on
+  toggle      Toggle debug tracing
+  view        View trace in browser
+
+EOF
+    return 1
+  }
+
+  local command="$1"
+  shift
+
+  $0::$command "$@"
+}
+
+function _omz::trace::on {
+  # Check that .zshenv hook is added
+  if [[ ! -f "$HOME/.zshenv" ]]; then
+    touch "$HOME/.zshenv"
+    chmod u+rw "$HOME/.zshenv"
+  fi
+
+  # Check that hook is sourced in .zshenv
+  #
+  # 1. Compute the hook path relative to $HOME
+  local hook_path="$ZSH/hooks/zshenv.zsh"
+  hook_path="${hook_path/#$HOME\//\$HOME/}"
+
+  # 2. Compute the source command
+  local hook_source=". \"$hook_path\""
+
+  # 3. Check if already added to .zshenv, otherwise add it
+  if ! command grep -Fq "$hook_source" "$HOME/.zshenv"; then
+    # 4. If not, prepend the hook source command
+    local tmpfile==(:)
+    cat - "$HOME/.zshenv" >| "$tmpfile" <<EOF
+$hook_source # set by \`omz\`
+
+EOF
+
+    # 5. Check for syntax errors
+    if ! zsh -n "$tmpfile"; then
+      _omz::log error "error when adding the tracing hook to .zshenv"
+      _omz::log error "add the following line to your .zshenv file to enable tracing:"
+      _omz::log error "$hook_source"
+      echo
+      command rm -f "$tmpfile"
+    else
+      command mv -f "$tmpfile" "$HOME/.zshenv"
+    fi
+  fi
+
+  # Check that traces directory exists
+  local OMZ_TRACES="${OMZ_TRACES:-"$ZSH_CACHE_DIR/.traces"}"
+  if [[ ! -d "$OMZ_TRACES" ]]; then
+    command mkdir -p "$OMZ_TRACES"
+  fi
+
+  # Create .enabled file to turn on tracing
+  touch "${OMZ_TRACES}/.enabled" || return 1
+  print -ru2 '[oh-my-zsh] tracing enabled'
+}
+
+function _omz::trace::off {
+  'command' 'rm' "${OMZ_TRACES}/.enabled" 2>/dev/null
+  print -ru2 '[oh-my-zsh] tracing disabled'
+}
+
+function _omz::trace::toggle {
+  'builtin' 'test' -f "${OMZ_TRACES}/.enabled" \
+  && _omz::trace::off || _omz::trace::on
+}
+
+function _omz::trace::clean {
+  if [[ -n "$1" && "$1" != "-a" ]]; then
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} [-a]"
+    return 1
+  fi
+
+  local -a traces
+  if [[ "$1" == "-a" ]]; then
+    traces=("${ZSH_CACHE_DIR}/.traces/"*.log(N))
+    if (( ! $#traces )); then
+      _omz::log info "there are no traces to remove"
+      return
+    fi
+  else
+    traces=("${ZSH_CACHE_DIR}/.traces/"*.log(m+7N))
+
+    if (( ! $#traces )); then
+      _omz::log info "there are no traces older than 7 days"
+      return
+    fi
+  fi
+
+  # Print found PR branches
+  print -l -- "Found these traces:" ${${traces:t}/#/\- }
+  # Confirm before removing the branches
+  _omz::confirm "do you want to remove them? [Y/n] "
+  # Only proceed if the answer is a valid yes option
+  [[ "$REPLY" != [yY$'\n'] ]] && return
+
+  _omz::log info "removing trace files..."
+  LANG= command rm -v "${traces[@]}"
+}
+
+
+function _omz::trace::list {
+  traces=("${ZSH_CACHE_DIR}/.traces/"*.log(N:t))
+  print -l -- ${(q-)traces}
+}
+
+function _omz::trace::view {
+  if [[ -z "$1" || "$1" = (-h|--help) ]] \
+    || [[ "$1" == "--no-web" && -z "$2"  ]]; then
+    echo >&2 "Usage: ${(j: :)${(s.::.)0#_}} [--no-web] <trace>"
+    return 1
+  fi
+
+  # If --no-web, open locally
+  local in_web=1
+  if [[ "$1" == "--no-web" ]]; then
+    in_web=0
+    shift
+  fi
+
+  # Get trace file
+  local trace="${OMZ_TRACES:-${ZSH_CACHE_DIR}/.traces}/$1"
+
+  if [[ ! -f "$trace" ]]; then
+    _omz::log error "Trace file not found: $trace"
+    return 1
+  fi
+
+  # If not in web mode, just display the trace file
+  if (( ! in_web )); then
+    # Enrich the file display depending on the tools we have
+    # - bat: https://github.com/sharkdp/bat
+    # - less: typical pager command
+    case 1 in
+      ${+commands[bat]}) bat -l sh --style plain "$trace" ;;
+      ${+commands[less]}) less "$trace" ;;
+      *) cat "$trace" ;;
+    esac
+    return $?
+  fi
+
+  # Load functions for web mode
+  autoload -Uz serve-file-and-quit omz_urlencode
+  local baseurl="https://trace.ohmyz.sh"
+
+  # Serve the trace file and get its URL
+  local profileURL
+  profileURL="$(serve-file-and-quit "$trace" 30 "$baseurl" 2>/dev/null)"
+
+  # If successful, open the trace viewer with the trace file URL
+  if [[ $? -eq 0 ]]; then
+    # Give the server some time to start
+    sleep 0.2
+
+    # -r and -P encode any special characters in the filename
+    local title="$(omz_urlencode -r -P "${trace:t}")"
+
+    _omz::log info "Opening ${baseurl} with trace file: '$trace' ..."
+    open_command "${baseurl}/#profileURL=${profileURL}&title=${title}"
+
+    return 0
+  fi
+
+  # Fallback: just open the trace viewer and let the user upload the file manually
+  _omz::log error "could not start HTTP server. Falling back to manual upload."
+
+  _omz::log info "Opening ${baseurl} ... Please manually upload the trace file from this path:"
+  _omz::log info "$trace"
+  open_command "$baseurl"
 }
 
 function _omz::update {
