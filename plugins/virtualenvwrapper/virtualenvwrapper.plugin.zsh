@@ -89,4 +89,9 @@ if [[ ! $DISABLE_VENV_CD -eq 1 ]]; then
   autoload -U add-zsh-hook
   add-zsh-hook chpwd workon_cwd
   [[ $PWD != ~ ]] && workon_cwd
+else
+  if [[ "${chpwd_functions[(Ie)workon_cwd]}" -ne 0 ]]; then
+    autoload -U add-zsh-hook
+    add-zsh-hook -d chpwd workon_cwd
+  fi
 fi
