@@ -322,6 +322,18 @@ prompt_virtualenv() {
   fi
 }
 
+# Anaconda: current working conda env
+# To replace the conda modification of PS1 do `conda config --set changeps1 False`
+# or add 'changeps1: False' to your .condarc file.
+prompt_conda() {
+  local conda_env="$CONDA_DEFAULT_ENV"
+  if [[ -n $conda_env ]]; then
+    if [[ -z $CONDA_PROMPT_MODIFIER ]]; then
+      prompt_segment blue black "conda:$(basename $conda_env)"
+    fi
+  fi
+}
+
 # Status:
 # - was there an error
 # - am I root
@@ -363,6 +375,7 @@ prompt_terraform() {
 build_prompt() {
   RETVAL=$?
   prompt_status
+  prompt_conda
   prompt_virtualenv
   prompt_aws
   prompt_terraform
