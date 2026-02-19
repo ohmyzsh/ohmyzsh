@@ -15,7 +15,12 @@ _togglePoetryShell() {
   # Activate the environment if in a Poetry directory and no environment is currently active
   if [[ $in_poetry_dir -eq 1 ]] && [[ $poetry_active -ne 1 ]]; then
     venv_dir=$(poetry env info --path 2>/dev/null)
-    if [[ -n "$venv_dir" ]]; then
+    # Handle case where poetry returns "." for in-project virtual environments
+    if [[ "$venv_dir" == "." ]]; then
+      venv_dir="$PWD/.venv"
+    fi
+    # Only proceed if venv_dir is set and the activate script exists
+    if [[ -n "$venv_dir" && -f "${venv_dir}/bin/activate" ]]; then
       export poetry_active=1
       export poetry_dir="$PWD"
       source "${venv_dir}/bin/activate"
