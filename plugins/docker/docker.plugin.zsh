@@ -35,6 +35,13 @@ alias dvls='docker volume ls'
 alias dvprune='docker volume prune'
 alias dxc='docker container exec'
 alias dxcit='docker container exec -it'
+alias ddeng='docker desktop engine'
+alias ddres='docker desktop restart'
+alias ddst='docker desktop start'
+alias ddsts='docker desktop status'
+alias ddstp='docker desktop stop'
+alias ddver='docker desktop version'
+
 
 if (( ! $+commands[docker] )); then
   return

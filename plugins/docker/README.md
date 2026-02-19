@@ -84,3 +84,9 @@ If you use Podman's Docker wrapper, you need to enable legacy completion. See ab
 | dvprune | `docker volume prune`         | Cleanup dangling volumes                                                                 |
 | dxc     | `docker container exec`       | Run a new command in a running container                                                 |
 | dxcit   | `docker container exec -it`   | Run a new command in a running container in an interactive shell                         |
+| ddeng   | `docker desktop engine`       | Commands to list and switch containers (Windows only)                                    |
+| ddres   | `docker desktop restart`      | Restart Docker Desktop                                                                   |
+| ddst    | `docker desktop start`        | Start Docker Desktop                                                                     |
+| ddsts   | `docker desktop status`       | Display Docker Desktop's status                                                          |
+| ddstp   | `docker desktop stop`         | Stop Docker Desktop                                                                      |
+| ddver   | `docker desktop version`      | Show the Docker Desktop version information                                              |
