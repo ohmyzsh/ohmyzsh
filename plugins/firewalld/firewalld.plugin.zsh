@@ -15,3 +15,11 @@ function fwl () {
   echo 'Direct Rules:'
   sudo firewall-cmd --direct --get-all-rules
 }
+
+# backup
+function fwbackup() {
+  sudo firewall-cmd --runtime-to-permanent
+  mkdir -p ~/firewall-backup
+  sudo cp /etc/firewalld/zones/* ~/firewall-backup/
+  echo "Backup saved to ~/firewall-backup/"
+}
