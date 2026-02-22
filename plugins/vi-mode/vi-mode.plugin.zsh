@@ -47,13 +47,16 @@ function _vi-mode-set-cursor-shape-for-keymap() {
 function zle-line-pre-redraw() {
   if [[ "$REGION_ACTIVE" -eq 0 && ("$VI_KEYMAP" == visual || "$VI_KEYMAP" == visual-line) ]]; then
     typeset -g VI_KEYMAP=$KEYMAP
-    _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
+    zle reset-prompt
+    zle -R
   elif [[ "$REGION_ACTIVE" -eq 1 && "$VI_KEYMAP" != "visual" ]]; then
     typeset -g VI_KEYMAP=visual
-    _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
+    zle reset-prompt
+    zle -R
   elif [[ "$REGION_ACTIVE" -eq 2 && "$VI_KEYMAP" != "visual-line" ]]; then
     typeset -g VI_KEYMAP=visual-line
-    _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
+    zle reset-prompt
+    zle -R
   fi
 }
 zle -N zle-line-pre-redraw
@@ -171,9 +174,16 @@ fi
 
 # if mode indicator wasn't setup by theme, define default, we'll leave INSERT_MODE_INDICATOR empty by default
 typeset -g MODE_INDICATOR=${MODE_INDICATOR:='%B%F{red}<%b<<%f'}
+typeset -g VISUAL_MODE_INDICATOR=${VISUAL_MODE_INDICATOR:='%B%F{white}<%b<<%f'}
+typeset -g VISUAL_LINE_MODE_INDICATOR=${VISUAL_LINE_MODE_INDICATOR:='%B%F{white}<%b<<%f'}
 
 function vi_mode_prompt_info() {
-  echo "${${VI_KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/$INSERT_MODE_INDICATOR}"
+  case "$VI_KEYMAP" in
+    vicmd)       echo "$MODE_INDICATOR" ;;
+    visual)      echo "$VISUAL_MODE_INDICATOR" ;;
+    visual-line) echo "$VISUAL_LINE_MODE_INDICATOR" ;;
+    main|viins)  echo "$INSERT_MODE_INDICATOR" ;;
+  esac
 }
 
 # define right prompt, if it wasn't defined by a theme
