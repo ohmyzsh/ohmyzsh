@@ -12,3 +12,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_molecule" ]]; then
 fi
 
 _MOLECULE_COMPLETE=zsh_source molecule >| "$ZSH_CACHE_DIR/completions/_molecule" &|
+
+# Alias
+# molecule: https://docs.ansible.com/projects/molecule/
+alias mol='molecule '
+alias mct='molecule create '
+alias mcv='molecule converge '
+alias mls='molecule list '
+alias mvf='molecule verify '

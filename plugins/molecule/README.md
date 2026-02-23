@@ -1,9 +1,20 @@
 # Molecule plugin
 
-This plugin adds completion for [Molecule](https://ansible.readthedocs.io/projects/molecule/), the project designed to aid in the development and testing of Ansible roles..
+This plugin adds aliases and completion for [Molecule](https://ansible.readthedocs.io/projects/molecule/), the
+project designed to aid in the development and testing of Ansible roles..
 
 To use it, add `molecule` to the plugins array in your zshrc file:
 
 ```zsh
 plugins=(... molecule)
 ```
+
+## Aliases
+
+| Command | Description              |
+| :------ | :----------------------- |
+| alias   | mol='molecule '          |
+| alias   | mct='molecule create '   |
+| alias   | mcv='molecule converge ' |
+| alias   | mls='molecule list '     |
+| alias   | mvf='molecule verify '   |
