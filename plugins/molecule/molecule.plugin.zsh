@@ -17,6 +17,6 @@ _MOLECULE_COMPLETE=zsh_source molecule >| "$ZSH_CACHE_DIR/completions/_molecule"
 # molecule: https://docs.ansible.com/projects/molecule/
 alias mol='molecule'
 alias mcr='molecule create'
-alias mcv='molecule converge'
+alias mcon='molecule converge'
 alias mls='molecule list'
 alias mvf='molecule verify'
