@@ -21,7 +21,7 @@ plugins=(... ansible)
 | `ainv`              | command `ansible-inventory` |
 | `aplb`, `aplaybook` | command `ansible-playbook`  |
 | `apull`             | command `ansible-pull`      |
-| `atest`             | command `ansible-test`      |
+| `ates`              | command `ansible-test`      |
 | `aval`              | command `ansible-vault`     |
 
 ## Maintainer
