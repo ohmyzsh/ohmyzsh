@@ -14,7 +14,7 @@ plugins=(... molecule)
 | Alias | Command           | Description                                                                        |
 | :---- | :---------------- | ---------------------------------------------------------------------------------- |
 | mol   | molecule          | Molecule aids in the development and testing of Ansible roles.                     |
-| mct   | molecule create   | Use the provisioner to start the instances.                                        |
+| mcr   | molecule create   | Use the provisioner to start the instances.                                        |
 | mcv   | molecule converge | Use the provisioner to configure instances (dependency, create, prepare converge). |
 | mls   | molecule list     | List status of instances.                                                          |
 | mvf   | molecule verify   | Run automated tests against instances.                                             |
