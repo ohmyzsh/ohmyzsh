@@ -51,3 +51,62 @@ function ssh_unload_key {
     ssh-add -d "$keyfile"
   fi
 }
+
+############################################################
+# Port forwarding
+function ssh_port_forward {
+  if [[ $# -lt 2 ]]; then
+    echo "Usage: ssh port-forward <local_port>:<remote_port> user@host [ssh options]"
+    return 1
+  fi
+  local ports="$1"
+  shift
+  local local_port="${ports%%:*}"
+  local remote_port="${ports##*:}"
+  if [[ -z "$local_port" || -z "$remote_port" ]]; then
+    echo "Invalid port format. Use local_port:remote_port"
+    return 1
+  fi
+  command ssh -N -L "${local_port}:127.0.0.1:${remote_port}" "$@"
+}
+
+############################################################
+# SSH SOCKS proxy
+function ssh_proxy {
+  local local_port="$1"
+  if [[ -z "$local_port" ]]; then
+    echo "Usage: ssh proxy <local_port> user@host [ssh options]"
+    return 1
+  fi
+  shift
+  if [[ -z "$local_port" || "$local_port" != <-> ]]; then
+    echo "Invalid port. Use a numeric local port."
+    return 1
+  fi
+  if [[ $# -lt 1 ]]; then
+    echo "Usage: ssh proxy local_port user@host [ssh options]"
+    return 1
+  fi
+
+  command ssh -D "${local_port}" -N "$@"
+}
+
+############################################################
+# Configure ssh command to support custom subcommands
+function ssh {
+  case "$1" in
+    port-forward|pf)
+      shift
+      ssh_port_forward "$@"
+      return $?
+      ;;
+    proxy|px)
+      shift
+      ssh_proxy "$@"
+      return $?
+      ;;
+    *)
+      command ssh "$@"
+      ;;
+  esac
+}
