@@ -59,7 +59,7 @@ function detect-clipboard() {
     function clippaste() { cat /dev/clipboard; }
   elif (( $+commands[clip.exe] )) && (( $+commands[powershell.exe] )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | clip.exe; }
-    function clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
+    function clippaste() { powershell.exe -noprofile -command Get-Clipboard | tr -d '\r'; }
   elif [ -n "${WAYLAND_DISPLAY:-}" ] && (( ${+commands[wl-copy]} )) && (( ${+commands[wl-paste]} )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | wl-copy &>/dev/null &|; }
     function clippaste() { wl-paste --no-newline; }
