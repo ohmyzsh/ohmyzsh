@@ -37,16 +37,16 @@ source_env() {
       [[ $column -eq 1 ]] || echo
 
       # print same-line prompt and output newline character if necessary
-      echo -n "dotenv: found '$ZSH_DOTENV_FILE' file. Source it? ([Y]es/[n]o/[a]lways/n[e]ver) "
+      echo -n "dotenv: found '$ZSH_DOTENV_FILE' file. Source it? ([y]es/[N]o/[a]lways/n[e]ver) "
       read -k 1 confirmation
       [[ "$confirmation" = $'\n' ]] || echo
 
       # check input
       case "$confirmation" in
-        [nN]) return ;;
+        [yY]) ;;
         [aA]) echo "$dirpath" >> "$ZSH_DOTENV_ALLOWED_LIST" ;;
         [eE]) echo "$dirpath" >> "$ZSH_DOTENV_DISALLOWED_LIST"; return ;;
-        *) ;; # interpret anything else as a yes
+        *) return ;; # interpret anything else as a no
       esac
     fi
   fi
