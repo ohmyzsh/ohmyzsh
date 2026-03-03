@@ -1,0 +1,139 @@
+#!/usr/bin/env zsh
+# Bootstrap script for dotenv plugin tests
+# This is sourced before any tests run and provides shared utilities
+
+# Load the dotenv plugin
+source "$PWD/dotenv.plugin.zsh"
+ZSH_DOTENV_PROMPT=false
+ZSH_DOTENV_FILE=/dev/null
+
+# Helper: Parse dotenv file in test mode
+_parse_dotenv_test() {
+  parse_dotenv "$1" "test"
+}
+
+# Helper: Parse dotenv file in export mode
+_parse_dotenv_export() {
+  unset "${(k)parameters[(R)*export*]}" 2>/dev/null || true
+
+  parse_dotenv "$1" "test"
+
+  for key in "${(k)DOTENV_TEST_VARS}"; do
+    typeset -x "$key"="${DOTENV_TEST_VARS[$key]}"
+  done
+}
+
+# Helper: Run parse_dotenv supressing stderr
+_parse_dotenv_quiet() {
+  parse_dotenv "$@" 2>/dev/null
+}
+
+# Helper: Create a temporary test fixture
+_create_temp_fixture() {
+  local fixture
+  fixture==(:)  # Create temp file
+  echo "$fixture"
+}
+
+_write_temp_fixture() {
+  local fixture="$1"
+  > "$fixture"
+}
+
+
+# Helper: Source file with allexport and capture variables
+# Usage: _source_with_allexport "file.env"
+# Result is in DOTENV_SOURCE_VARS associative array
+_source_with_allexport() {
+  local filename="$1"
+
+  # Source with allexport in a subshell with no exported variables
+
+  # The return and capture of the exported variables is a bit of a pain:
+  # 1. We first store the key=value pairs in $vars associative array, which is
+  #    defined before allexport is set to avoid appearing in results.
+  # 2. Afterwards, we join all keys and values of the associative with null delimiters. With 
+  #    "$(@kv)vars}" we get keys and values with quotes, to retain empty values. With (pj:\0:)
+  #    we join them with nulls.
+  # 3. The caller reads this output with "${(@0)}" to split by nulls and quoting to retain
+  #    empty values, and then uses it to populate an associative array.
+  # Don't try to understand this or change it unless you have to. Debugging is a nightmare.
+  typeset -gA DOTENV_SOURCE_VARS
+  DOTENV_SOURCE_VARS=("${(@0)"$(
+    local -A vars
+
+    # Clear all exports first
+    zmodload zsh/parameter
+    unset ${(k)parameters[(R)*export*]} 2>/dev/null || true
+
+    # Source file with allexport
+    setopt localoptions allexport
+    source "$filename"
+
+    # Set all exported variables into an associative array
+    for key in ${(k)parameters[(R)*export*]}; do
+      vars[$key]="${(P)key}"
+    done
+
+    print -rn -- "${(@kvpj:\0:)vars}"
+  )"}")
+}
+
+
+## ZUnit assertion helpers
+
+_zunit_assert_function_exists() {
+  [[ "${+functions[$1]}" -eq 1 ]] && return 0
+  echo "Function '$1' does not exist"
+  exit 1
+}
+
+_zunit_assert_var_same_as() {
+  local tvalue=${${:-${(Pt)1%-*}}:-unset} tcomp=${${:-${(Pt)2%-*}}:-unset}
+  if [[ $tvalue != $tcomp ]]; then
+    echo "Type mismatch: '$1' ($tvalue) and '$2' ($tcomp)"
+    exit 78
+  fi
+
+  # Special case for associative arrays
+  if [[ ${(Pt)1} == "association" ]]; then
+    local -A value=("${(P@kv)1}") comparison=("${(P@kv)2}")
+    local -aU keys=("${(@k)value}" "${(@k)comparison}")
+
+    local ret=0 key
+    for key in "${keys[@]}"; do
+      # Key match checks
+      if [[ -v "value[$key]" && ! -v "comparison[$key]" ]]; then
+        echo "'$1[$key]' is set"
+        ret=1
+      elif [[ ! -v "value[$key]" && -v "comparison[$key]" ]]; then
+        echo "'$1[$key]' is not set"
+        ret=1
+      # Value match checks
+      elif [[ "${value[$key]}" != "${comparison[$key]}" ]]; then
+        echo "'$1[$key]' value mismatch: '${value[$key]}' is not the same as '${comparison[$key]}'"
+        ret=1
+      fi
+    done
+
+    exit $ret
+  fi
+
+  # Generic case
+  local value="${(P)1}" comparison="${(P)2}"
+  [[ "$value" != "$comparison" ]] || exit 0
+  echo "'$1' value mismatch: '$value' is not the same as '$comparison'"
+  exit 1
+}
+
+_zunit_assert_var_is_set() {
+  [[ -v "$1" ]] && return 0
+  echo "Variable '$1' is not set"
+  exit 1
+}
+
+_zunit_assert_var_is_not_set() {
+  [[ ! -v "$1" ]] && return 0
+  echo "Variable '$1' is set"
+  exit 1
+}

@@ -86,6 +86,14 @@ mount `.env` files as named pipes to inject secrets on-the-fly without writing t
 
 No additional configuration is required — the plugin automatically detects and sources named pipes.
 
+## Tests
+
+The tests use [zunit](https://github.com/zunit-zsh/zunit). Install it per its documentation, then run:
+
+```sh
+zunit plugins/dotenv/tests/test_run.sh
+```
+
 ## Version Control
 
 **It's strongly recommended to add `.env` file to `.gitignore`**, because usually it contains sensitive information such as your credentials, secret keys, passwords etc. You don't want to commit this file, it's supposed to be local only.

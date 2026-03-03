@@ -1,0 +1,257 @@
+#!/usr/bin/env zunit
+
+
+@setup {
+  typeset -g fixture="$(_create_temp_fixture)"
+  typeset -gA expected_vars=()
+}
+
+@teardown {
+  [[ -f "$fixture" ]] && command rm -f "$fixture"
+  unset DOTENV_TEST_VARS DOTENV_SOURCE_VARS 2>/dev/null
+}
+
+@test 'dotenv plugin loads successfully' {
+  assert "parse_dotenv" function_exists
+  assert "source_env" function_exists
+}
+
+@test 'parse returns error for unsupported mode' {
+  run _parse_dotenv_quiet "/dev/null" "export"
+  assert $state equals 0
+
+  run _parse_dotenv_quiet "/dev/null" "test"
+  assert $state equals 0
+
+  run _parse_dotenv_quiet "/dev/null" "invalid_mode"
+  assert $state equals 1
+}
+
+@test 'parse returns error for non-existent file' {
+  run _parse_dotenv_quiet "/nonexistent/path/.env" "test"
+  assert $state equals 1
+}
+
+@test 'parse basic variable assignment' {
+  > "$fixture" <<'EOF'
+# Basic assignments
+BASIC=basic
+
+# previous line intentionally left blank
+AFTER_LINE=after_line
+EOF
+
+  expected_vars=(
+    BASIC 'basic'
+    AFTER_LINE 'after_line'
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'parse empty values' {
+  > "$fixture" <<'EOF'
+# Empty values
+EMPTY=
+EMPTY_SINGLE_QUOTES=''
+EMPTY_DOUBLE_QUOTES=""
+EOF
+
+  expected_vars=(
+    EMPTY ''
+    EMPTY_SINGLE_QUOTES ''
+    EMPTY_DOUBLE_QUOTES ''
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'parse single quoted values' {
+  > "$fixture" <<'EOF'
+# Single quotes (literal, no expansion)
+SINGLE_QUOTES='single_quotes'
+SINGLE_QUOTES_SPACED='    single quotes    '
+DONT_EXPAND_SQUOTED='dontexpand\nnewlines'
+EOF
+
+  expected_vars=(
+    SINGLE_QUOTES 'single_quotes'
+    SINGLE_QUOTES_SPACED '    single quotes    '
+    DONT_EXPAND_SQUOTED 'dontexpand\nnewlines'
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'parse double quoted values' {
+  > "$fixture" <<'EOF'
+# Double quotes (with escapes)
+DOUBLE_QUOTES="double_quotes"
+DOUBLE_QUOTES_SPACED="    double quotes    "
+EXPAND_NEWLINES="expand\nnew\nlines"
+EOF
+
+  expected_vars=(
+    DOUBLE_QUOTES 'double_quotes'
+    DOUBLE_QUOTES_SPACED '    double quotes    '
+    EXPAND_NEWLINES "expand\nnew\nlines"
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'parse unquoted values' {
+  > "$fixture" <<'EOF'
+# Unquoted (no escape expansion)
+DONT_EXPAND_UNQUOTED=dontexpand\\nnewlines
+EOF
+
+
+  expected_vars=(
+    DONT_EXPAND_UNQUOTED 'dontexpandnnewlines'
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'parse quotes inside quotes' {
+  > "$fixture" <<'EOF'
+# Quotes inside quotes
+DOUBLE_QUOTES_INSIDE_SINGLE='double "quotes" work inside single quotes'
+SINGLE_QUOTES_INSIDE_DOUBLE="single 'quotes' work inside double quotes"
+EOF
+
+  expected_vars=(
+    DOUBLE_QUOTES_INSIDE_SINGLE 'double "quotes" work inside single quotes'
+    SINGLE_QUOTES_INSIDE_DOUBLE "single 'quotes' work inside double quotes"
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'parse inline comments' {
+  > "$fixture" <<'EOF'
+# Comments
+# COMMENTS=work
+INLINE_COMMENTS_SINGLE_QUOTES='inline comments outside of #singlequotes' # work
+INLINE_COMMENTS_DOUBLE_QUOTES="inline comments outside of #doublequotes" # work
+INLINE_COMMENTS_UNQUOTED=value # work
+EOF
+
+  expected_vars=(
+    INLINE_COMMENTS_SINGLE_QUOTES 'inline comments outside of #singlequotes'
+    INLINE_COMMENTS_DOUBLE_QUOTES 'inline comments outside of #doublequotes'
+    INLINE_COMMENTS_UNQUOTED 'value'
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'parse special characters' {
+  > "$fixture" <<'EOF'
+# Special characters
+EQUAL_SIGNS=equals==
+RETAIN_INNER_QUOTES_AS_STRING='{"foo": "bar"}'
+USEREMAIL=therealnerdybeast@example.tld
+EOF
+
+  expected_vars=(
+    EQUAL_SIGNS 'equals=='
+    RETAIN_INNER_QUOTES_AS_STRING '{"foo": "bar"}'
+    USEREMAIL 'therealnerdybeast@example.tld'
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'parse multiline values with mixed quotes' {
+  > "$fixture" <<'EOF'
+# Multiline values with double quotes
+MULTI_DOUBLE_QUOTED="THIS
+IS
+A
+MULTILINE
+STRING"
+
+
+# Multiline values with single quotes
+MULTI_SINGLE_QUOTED='THIS
+IS
+A
+MULTILINE
+STRING'
+
+# Multiline PEM certificate
+MULTI_PEM_DOUBLE_QUOTED="-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnNl1tL3QjKp3DZWM0T3u
+LgGJQwu9WqyzHKZ6WIA5T+7zPjO1L8l3S8k8YzBrfH4mqWOD1GBI8Yjq2L1ac3Y/
+bTdfHN8CmQr2iDJC0C6zY8YV93oZB3x0zC/LPbRYpF8f6OqX1lZj5vo2zJZy4fI/
+kKcI5jHYc8VJq+KCuRZrvn+3V+KuL9tF9v8ZgjF2PZbU+LsCy5Yqg1M8f5Jp5f6V
+u4QuUoobAgMBAAE=
+-----END PUBLIC KEY-----"
+EOF
+
+  expected_vars=(
+    MULTI_DOUBLE_QUOTED $'THIS\nIS\nA\nMULTILINE\nSTRING'
+    MULTI_SINGLE_QUOTED $'THIS\nIS\nA\nMULTILINE\nSTRING'
+    MULTI_PEM_DOUBLE_QUOTED $'-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnNl1tL3QjKp3DZWM0T3u\nLgGJQwu9WqyzHKZ6WIA5T+7zPjO1L8l3S8k8YzBrfH4mqWOD1GBI8Yjq2L1ac3Y/\nbTdfHN8CmQr2iDJC0C6zY8YV93oZB3x0zC/LPbRYpF8f6OqX1lZj5vo2zJZy4fI/\nkKcI5jHYc8VJq+KCuRZrvn+3V+KuL9tF9v8ZgjF2PZbU+LsCy5Yqg1M8f5Jp5f6V\nu4QuUoobAgMBAAE=\n-----END PUBLIC KEY-----'
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'parse export syntax' {
+  > "$fixture" <<'EOF'
+# Exported variables
+export EXPORTED_VAR=exported_value
+export EXPORTED_EMPTY=
+EOF
+
+  expected_vars=(
+    EXPORTED_VAR 'exported_value'
+    EXPORTED_EMPTY ''
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'parse in-file variable expansion' {
+  > "$fixture" <<'EOF'
+# Variable expansion (in-file forward references)
+BASE_URL=https://api.example.com
+API_ENDPOINT="${BASE_URL}/v1"
+FULL_ENDPOINT=$BASE_URL/v2/users
+COMBINED="${BASE_URL}_suffix"
+EOF
+
+  expected_vars=(
+    BASE_URL 'https://api.example.com'
+    API_ENDPOINT 'https://api.example.com/v1'
+    FULL_ENDPOINT 'https://api.example.com/v2/users'
+    COMBINED 'https://api.example.com_suffix'
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}

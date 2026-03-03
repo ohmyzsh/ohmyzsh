@@ -1,0 +1,9 @@
+tap: false
+directories:
+  tests: tests
+  output: tests/_output
+  support: tests/_support
+time_limit: 0
+fail_fast: false
+allow_risky: false
+verbose: true
