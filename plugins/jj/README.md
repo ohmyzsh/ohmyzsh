@@ -98,6 +98,25 @@ If you prefer to keep your prompt always up-to-date but still don't want to _fee
 your prompt asynchronous. This plugin doesn't do this automatically so you'd have to hack your theme a bit for
 that.
 
+### Git async-prompt compatibility
+
+If you use a wrapper function that calls `git_prompt_info` (as shown above), it won't work with
+the default git async-prompt mode. This is because async-prompt only registers its background worker
+when it detects `$(git_prompt_info)` literally in your prompt variables. A wrapper like
+`$(_my_theme_vcs_info)` won't match, so the async output stays empty.
+
+To fix this, add one of the following to your `.zshrc` **before** Oh My Zsh is sourced:
+
+```zsh
+# Option 1: force async handlers to always register (recommended, keeps async behavior)
+zstyle ':omz:alpha:lib:git' async-prompt force
+
+# Option 2: disable async-prompt entirely (simpler, but prompt may feel slower in large repos)
+zstyle ':omz:alpha:lib:git' async-prompt no
+```
+
+See [#13555](https://github.com/ohmyzsh/ohmyzsh/issues/13555) for details.
+
 ## See Also
 
 - [martinvonz/jj](https://github.com/martinvonz/jj)
