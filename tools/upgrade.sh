@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 set +u # disable nounset
 
-local ret=0 # exit code
+ret=0 # exit code
 
 # Protect against running with shells other than zsh
 if [ -z "$ZSH_VERSION" ]; then
