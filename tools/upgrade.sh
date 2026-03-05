@@ -225,8 +225,6 @@ git config receive.fsck.zeroPaddedFilemode ignore
 resetAutoStash=$(git config --bool rebase.autoStash 2>/dev/null)
 git config rebase.autoStash true
 
-local ret=0
-
 # repository settings
 remote=${"$(git config --local oh-my-zsh.remote)":-origin}
 branch=${"$(git config --local oh-my-zsh.branch)":-master}
