@@ -27,6 +27,13 @@
   assert $state equals 1
 }
 
+@test 'parse returns error for oversized file (> 10MiB)' {
+  command truncate -s 11M "$fixture" 2>/dev/null
+
+  run _parse_dotenv_quiet "$fixture" "test"
+  assert $state equals 1
+}
+
 @test 'parse returns error for non-existent file' {
   run _parse_dotenv_quiet "/nonexistent/path/.env" "test"
   assert $state equals 1

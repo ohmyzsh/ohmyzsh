@@ -25,6 +25,19 @@ parse_dotenv() {
       ;;
   esac
 
+  # Fail if file is too large to avoid DoS
+  zmodload -F zsh/stat b:zstat
+  local -i file_size max_size=10485760  # 10MiB
+  if ! file_size=$(zstat -L +size "$filename" 2>/dev/null); then
+    echo "dotenv: unable to determine size of file '$filename'" >&2
+    return 1
+  fi
+
+  if (( file_size > max_size )); then
+    echo "dotenv: file '$filename' is too large to parse (size: $file_size bytes)" >&2
+    return 1
+  fi
+
   local content node line key value
   local -A parsed_vars
   local -a nodes lines
