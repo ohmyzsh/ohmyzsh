@@ -233,10 +233,9 @@ function handle_update() {
     # Ask for confirmation and only update on 'y', 'Y' or Enter
     # Otherwise just show a reminder for how to update
     printf "[oh-my-zsh] Would you like to update? [Y/n] "
-    read -r -k 1 option
-    [[ "$option" = $'\n' ]] || echo
+    read -r option
     case "$option" in
-      [yY$'\n']) update_ohmyzsh ;;
+      [yY]|"") update_ohmyzsh ;;
       [nN]) update_last_updated_file ;&
       *) echo "[oh-my-zsh] You can update manually by running \`omz update\`" ;;
     esac
