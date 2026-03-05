@@ -1,6 +1,6 @@
 # Jump plugin
 
-This plugin allows to easily jump around the file system by manually adding marks.
+This plugin allows you to easily jump around the file system by manually adding marks.
 Those marks are stored as symbolic links in the directory `$MARKPATH` (default `$HOME/.marks`)
 
 To use it, add `jump` to the plugins array in your zshrc file:
