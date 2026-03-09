@@ -9,23 +9,29 @@ plugins=(... zellij)
 
 ## Dynamic prefix
 
-The default alias prefix is `z`. If `z` is already taken by another plugin (e.g., the
-[suse](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/suse) plugin), the prefix
-automatically falls back to `zj`.
+The default alias prefix is `zj`. To use the shorter `z` prefix instead, set the following
+variable before oh-my-zsh is sourced:
+
+```zsh
+ZSH_ZELLIJ_PREFIX_Z=true
+```
+
+> **Note:** If `z` is already aliased by another plugin (e.g., zoxide), the prefix stays `zj`
+> even when `ZSH_ZELLIJ_PREFIX_Z` is set.
 
 ## Aliases
 
-| Alias      | Command                      | Description              |
-| ---------- | ---------------------------- | ------------------------ |
-| `z`/`zj`   | `zellij`                     | Zellij command           |
-| `za`/`zja`  | `zellij attach`              | Attach to a session      |
-| `zd`/`zjd`  | `zellij delete-session`      | Delete a session         |
-| `zda`/`zjda` | `zellij delete-all-sessions` | Delete all sessions      |
-| `zk`/`zjk`  | `zellij kill-session`        | Kill a session           |
-| `zka`/`zjka` | `zellij kill-all-sessions`   | Kill all sessions        |
-| `zl`/`zjl`  | `zellij list-sessions`       | List sessions            |
-| `zr`/`zjr`  | `zellij run`                 | Run a command in a pane  |
-| `zs`/`zjs`  | `zellij -s`                  | Start a named session    |
+| Alias (default) | Alias (with `z`) | Command                      | Description              |
+| ---------------- | ---------------- | ---------------------------- | ------------------------ |
+| `zj`             | `z`              | `zellij`                     | Zellij command           |
+| `zja`            | `za`             | `zellij attach`              | Attach to a session      |
+| `zjd`            | `zd`             | `zellij delete-session`      | Delete a session         |
+| `zjda`           | `zda`            | `zellij delete-all-sessions` | Delete all sessions      |
+| `zjk`            | `zk`             | `zellij kill-session`        | Kill a session           |
+| `zjka`           | `zka`            | `zellij kill-all-sessions`   | Kill all sessions        |
+| `zjl`            | `zl`             | `zellij list-sessions`       | List sessions            |
+| `zjr`            | `zr`             | `zellij run`                 | Run a command in a pane  |
+| `zjs`            | `zs`             | `zellij -s`                  | Start a named session    |
 
 ## Completions
 

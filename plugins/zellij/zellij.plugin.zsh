@@ -2,11 +2,11 @@ if (( ! $+commands[zellij] )); then
   return
 fi
 
-# Dynamic prefix: use "z" if no conflict, fall back to "zj"
-if (( $+aliases[z] )); then
-  _zellij_prefix="zj"
-else
+# Dynamic prefix: use "zj" by default, use "z" if ZSH_ZELLIJ_PREFIX_Z is set and "z" is available
+if [[ -n "$ZSH_ZELLIJ_PREFIX_Z" ]] && (( ! $+aliases[z] )); then
   _zellij_prefix="z"
+else
+  _zellij_prefix="zj"
 fi
 
 # Aliases
