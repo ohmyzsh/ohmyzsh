@@ -13,3 +13,6 @@ log/
 
 # zcompile cached files
 *.zwc
+
+# Stakpak session files
+.stakpak/session*
