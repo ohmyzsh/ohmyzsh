@@ -11,18 +11,18 @@ plugins=(... bundler)
 
 ## Aliases
 
-| Alias  | Command                              | Description                                                                              |
-|--------|--------------------------------------|------------------------------------------------------------------------------------------|
-| `ba`   | `bundle add`                         | Add gem to the Gemfile and run bundle install                                            |
-| `bck`  | `bundle check`                       | Verifies if dependencies are satisfied by installed gems                                 |
-| `bcn`  | `bundle clean`                       | Cleans up unused gems in your bundler directory                                          |
-| `be`   | `bundle exec`                        | Execute a command in the context of the bundle                                           |
-| `bi`   | `bundle install --jobs=<core_count>` | Install the dependencies specified in your Gemfile (using all cores in bundler >= 1.4.0) |
-| `bl`   | `bundle list`                        | List all the gems in the bundle                                                          |
-| `bo`   | `bundle open`                        | Opens the source directory for a gem in your bundle                                      |
-| `bout` | `bundle outdated`                    | List installed gems with newer versions available                                        |
-| `bp`   | `bundle package`                     | Package your needed .gem files into your application                                     |
-| `bu`   | `bundle update`                      | Update your gems to the latest available versions                                        |
+| Alias  | Command           | Description                                              |
+| ------ | ----------------- | -------------------------------------------------------- |
+| `ba`   | `bundle add`      | Add gem to the Gemfile and run bundle install            |
+| `bck`  | `bundle check`    | Verifies if dependencies are satisfied by installed gems |
+| `bcn`  | `bundle clean`    | Cleans up unused gems in your bundler directory          |
+| `be`   | `bundle exec`     | Execute a command in the context of the bundle           |
+| `bi`   | `bundle install`  | Install the dependencies specified in your Gemfile       |
+| `bl`   | `bundle list`     | List all the gems in the bundle                          |
+| `bo`   | `bundle open`     | Opens the source directory for a gem in your bundle      |
+| `bout` | `bundle outdated` | List installed gems with newer versions available        |
+| `bp`   | `bundle package`  | Package your needed .gem files into your application     |
+| `bu`   | `bundle update`   | Update your gems to the latest available versions        |
 
 ## Gem wrapper
 
