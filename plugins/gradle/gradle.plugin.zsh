@@ -13,9 +13,9 @@ function gradle-or-gradlew() {
     dir="${dir:h}"
   done
 
-  # if gradlew found, run it instead of gradle
+  # if local gradle wrapper found, run it instead of gradle
   if [[ -f "$project_root/gradlew" ]]; then
-    echo "executing gradlew instead of gradle"
+    echo "executing local gradle wrapper instead of gradle"
     "$project_root/gradlew" "$@"
   else
     command gradle "$@"
@@ -23,4 +23,5 @@ function gradle-or-gradlew() {
 }
 
 alias gradle=gradle-or-gradlew
+alias gradlew=gradle-or-gradlew
 compdef _gradle gradle-or-gradlew
