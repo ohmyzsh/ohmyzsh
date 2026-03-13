@@ -213,7 +213,7 @@ In case you would like to have more control over kube environment context, you c
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
 | `KUBE_ENV_CTX_ENABLE` | `false` | Extract environment identifiers from context and display them as a separate block in square brackets, e.g `testing-mycluster` becomes `[test] mycluster` |
-| `KUBE_ENV_PADDING` | ` ` | Padding (spaces or characters) added around the environment block |
+| `KUBE_ENV_PADDING` | ` ` (one space) | Padding (spaces or characters) added around the environment block |
 | `KUBE_ENV_OPEN_SYMBOL` | `[` | Opening symbol used for the environment block |
 | `KUBE_ENV_CLOSE_SYMBOL` | `]` | Closing symbol used for the environment block |
 | `KUBE_ENV_PROD` | `prod` | Set default production label |
