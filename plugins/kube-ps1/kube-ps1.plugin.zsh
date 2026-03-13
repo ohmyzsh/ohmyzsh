@@ -348,20 +348,20 @@ _kube_ps1_set_env_ctx() {
 
   if grep -qE "${KUBE_ENV_PROD_RE}" <<< "${KUBE_PS1_CONTEXT}"; then
     _kube_ps1_cut_context "${KUBE_ENV_PROD_RE}"
-    ctx_color=$(_kube_ps1_color_fg "${KUBE_ENV_PROD_COLOR}")
-    env_label=${KUBE_ENV_PROD}
+    ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_PROD_COLOR}")"
+    env_label="${KUBE_ENV_PROD}"
   elif grep -qE "${KUBE_ENV_STG_RE}" <<< "${KUBE_PS1_CONTEXT}"; then
     _kube_ps1_cut_context "${KUBE_ENV_PROD_RE}"
-    ctx_color=$(_kube_ps1_color_fg "${KUBE_ENV_PROD_COLOR}")
-    env_label=${KUBE_ENV_PROD}
+    ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_PROD_COLOR}")"
+    env_label="${KUBE_ENV_PROD}"
   elif grep -qE "${KUBE_ENV_TEST_RE}" <<< "${KUBE_PS1_CONTEXT}"; then
     _kube_ps1_cut_context "${KUBE_ENV_TEST_RE}"
-    ctx_color=$(_kube_ps1_color_fg "${KUBE_ENV_TEST_COLOR}")
-    env_label=${KUBE_ENV_TEST}
+    ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_TEST_COLOR}")"
+    env_label="${KUBE_ENV_TEST}"
   elif grep -qE "${KUBE_ENV_DEV_RE}" <<< "${KUBE_PS1_CONTEXT}"; then
     _kube_ps1_cut_context "${KUBE_ENV_DEV_RE}"
-    ctx_color=$(_kube_ps1_color_fg "${KUBE_ENV_DEV_COLOR}")
-    env_label=${KUBE_ENV_DEV}
+    ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_DEV_COLOR}")"
+    env_label="${KUBE_ENV_DEV}"
   fi
 
   KUBE_PS1+="${KUBE_ENV_OPEN_SYMBOL}${ctx_color}${env_label}${KUBE_PS1_RESET_COLOR}${KUBE_ENV_CLOSE_SYMBOL}"
@@ -494,3 +494,4 @@ kube_ps1() {
 
   echo "${KUBE_PS1}"
 }
+
