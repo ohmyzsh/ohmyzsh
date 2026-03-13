@@ -48,10 +48,10 @@ KUBE_ENV_STG_COLOR="${KUBE_ENV_STG_COLOR:-yellow}"
 KUBE_ENV_TEST_COLOR="${KUBE_ENV_TEST_COLOR:-green}"
 KUBE_ENV_DEV_COLOR="${KUBE_ENV_DEV_COLOR:-blue}"
 
-KUBE_ENV_PROD="${KUBE_ENV_PROD:-prod}"
-KUBE_ENV_STG="${KUBE_ENV_STG:-stag}"
-KUBE_ENV_TEST="${KUBE_ENV_TEST:-test}"
-KUBE_ENV_DEV="${KUBE_ENV_DEV:-dev}"
+KUBE_ENV_PROD_LABEL="${KUBE_ENV_PROD_LABEL:-prod}"
+KUBE_ENV_STG_LABEL="${KUBE_ENV_STG_LABEL:-stag}"
+KUBE_ENV_TEST_LABEL="${KUBE_ENV_TEST_LABEL:-test}"
+KUBE_ENV_DEV_LABEL="${KUBE_ENV_DEV_LABEL:-dev}"
 
 KUBE_ENV_PROD_RE="${KUBE_ENV_PROD_RE:-(production|prod)-}"
 KUBE_ENV_STG_RE="${KUBE_ENV_STG_RE:-(staging|stg)-}"
@@ -349,19 +349,19 @@ _kube_ps1_set_env_ctx() {
   if grep -qE "${KUBE_ENV_PROD_RE}" <<< "${KUBE_PS1_CONTEXT}"; then
     _kube_ps1_cut_context "${KUBE_ENV_PROD_RE}"
     ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_PROD_COLOR}")"
-    env_label="${KUBE_ENV_PROD}"
+    env_label="${KUBE_ENV_PROD_LABEL}"
   elif grep -qE "${KUBE_ENV_STG_RE}" <<< "${KUBE_PS1_CONTEXT}"; then
     _kube_ps1_cut_context "${KUBE_ENV_PROD_RE}"
     ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_PROD_COLOR}")"
-    env_label="${KUBE_ENV_PROD}"
+    env_label="${KUBE_ENV_PROD_LABEL}"
   elif grep -qE "${KUBE_ENV_TEST_RE}" <<< "${KUBE_PS1_CONTEXT}"; then
     _kube_ps1_cut_context "${KUBE_ENV_TEST_RE}"
     ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_TEST_COLOR}")"
-    env_label="${KUBE_ENV_TEST}"
+    env_label="${KUBE_ENV_TEST_LABEL}"
   elif grep -qE "${KUBE_ENV_DEV_RE}" <<< "${KUBE_PS1_CONTEXT}"; then
     _kube_ps1_cut_context "${KUBE_ENV_DEV_RE}"
     ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_DEV_COLOR}")"
-    env_label="${KUBE_ENV_DEV}"
+    env_label="${KUBE_ENV_DEV_LABEL}"
   fi
 
   KUBE_PS1+="${KUBE_ENV_OPEN_SYMBOL}${ctx_color}${env_label}${KUBE_PS1_RESET_COLOR}${KUBE_ENV_CLOSE_SYMBOL}"
