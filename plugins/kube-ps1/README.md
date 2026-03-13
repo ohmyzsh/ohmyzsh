@@ -213,16 +213,16 @@ In case you would like to have more control over kube environment context, you c
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
 | `KUBE_ENV_CTX_ENABLE` | `false` | Extract environment identifiers from context and display them as a separate block in square brackets, e.g `testing-mycluster` becomes `[test] mycluster` |
-| `KUBE_ENV_PADDING` | ` ` (one space) | Padding (spaces or characters) added around the environment block |
+| `KUBE_ENV_PADDING` | one space | Padding (spaces or characters) added around the environment block |
 | `KUBE_ENV_OPEN_SYMBOL` | `[` | Opening symbol used for the environment block |
 | `KUBE_ENV_CLOSE_SYMBOL` | `]` | Closing symbol used for the environment block |
 | `KUBE_ENV_PROD` | `prod` | Set default production label |
 | `KUBE_ENV_STG` | `stag` | Set default staging label |
 | `KUBE_ENV_TEST` | `test` | Set default testing label |
 | `KUBE_ENV_DEV` | `dev` | Set default developing label |
-| `KUBE_ENV_PROD_RE` | `(production|prod)-` | Regex used to detect production in the context name |
-| `KUBE_ENV_STG_RE` | `(staging|stg)-` | Regex used to detect staging in the context name |
-| `KUBE_ENV_TEST_RE` | `(testing|test)-` | Regex used to detect test in the context name |
+| `KUBE_ENV_PROD_RE` | `(production\|prod)-` | Regex used to detect production in the context name |
+| `KUBE_ENV_STG_RE` | `(staging\|stg)-` | Regex used to detect staging in the context name |
+| `KUBE_ENV_TEST_RE` | `(testing\|test)-` | Regex used to detect test in the context name |
 | `KUBE_ENV_DEV_RE` | `develop-` | Regex used to detect development in the context name|
 
 To disable a feature, set it to an empty string:
