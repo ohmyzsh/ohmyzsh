@@ -212,10 +212,10 @@ In case you would like to have more control over kube environment context, you c
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
-| `KUBE_ENV_CTX_ENABLE` | `false` | Extract environment identifiers from `kube_ps1` context and display them as a separate block in square brackets |
+| `KUBE_ENV_CTX_ENABLE` | `false` | Extract environment identifiers from context and display them as a separate block in square brackets, e.g `testing-mycluster` becomes `[test] mycluster` |
 | `KUBE_ENV_PADDING` | ` ` | Padding (spaces or characters) added around the environment block |
 | `KUBE_ENV_OPEN_SYMBOL` | `[` | Opening symbol used for the environment block |
-| `KUBE_ENV_CLOSE_SYMBOL` | `]${KUBE_ENV_PADDING}` | Closing symbol used for the environment block |
+| `KUBE_ENV_CLOSE_SYMBOL` | `]` | Closing symbol used for the environment block |
 | `KUBE_ENV_PROD` | `prod` | Set default production label |
 | `KUBE_ENV_STG` | `stag` | Set default staging label |
 | `KUBE_ENV_TEST` | `test` | Set default testing label |
@@ -244,7 +244,11 @@ The default colors are set with the following variables:
 | `KUBE_PS1_NS_COLOR` | `cyan` | Set default color of the namespace |
 | `KUBE_PS1_BG_COLOR` | `null` | Set default color of the prompt background |
 
-If `KUBE_ENV_CTX_ENABLE` set to `true`, you can also adjust:
+Blue was used for the default symbol to match the Kubernetes color as closely
+as possible. Red was chosen as the context name to stand out, and cyan for the
+namespace.
+
+If `KUBE_ENV_CTX_ENABLE` is set to `true`, you can also adjust:
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
@@ -252,10 +256,6 @@ If `KUBE_ENV_CTX_ENABLE` set to `true`, you can also adjust:
 | `KUBE_ENV_STG_COLOR` | `yellow` | Set default color of  the staging environment |
 | `KUBE_ENV_TEST_COLOR` | `green` | Set default color of  the testing environment |
 | `KUBE_ENV_DEV_COLOR` | `blue` | Set default color of the development environment |
-
-Blue was used for the default symbol to match the Kubernetes color as closely
-as possible. Red was chosen as the context name to stand out, and cyan for the
-namespace.
 
 Set the variable to an empty string if you do not want color for each
 prompt section:
