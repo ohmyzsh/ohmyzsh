@@ -351,9 +351,9 @@ _kube_ps1_set_env_ctx() {
     ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_PROD_COLOR}")"
     env_label="${KUBE_ENV_PROD_LABEL}"
   elif grep -qE "${KUBE_ENV_STG_RE}" <<< "${KUBE_PS1_CONTEXT}"; then
-    _kube_ps1_cut_context "${KUBE_ENV_PROD_RE}"
-    ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_PROD_COLOR}")"
-    env_label="${KUBE_ENV_PROD_LABEL}"
+    _kube_ps1_cut_context "${KUBE_ENV_STG_RE}"
+    ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_STG_COLOR}")"
+    env_label="${KUBE_ENV_STG_LABEL}"
   elif grep -qE "${KUBE_ENV_TEST_RE}" <<< "${KUBE_PS1_CONTEXT}"; then
     _kube_ps1_cut_context "${KUBE_ENV_TEST_RE}"
     ctx_color="$(_kube_ps1_color_fg "${KUBE_ENV_TEST_COLOR}")"
