@@ -40,8 +40,8 @@ KUBE_PS1_HIDE_IF_NOCONTEXT="${KUBE_PS1_HIDE_IF_NOCONTEXT:-false}"
 KUBE_PS1_ENV_CTX_ENABLE="${KUBE_PS1_ENV_CTX_ENABLE:-false}"
 KUBE_PS1_ENV_PADDING="${KUBE_PS1_ENV_PADDING:- }"
 
-KUBE_PS1_ENV_OPEN_SYMBOL="${KUBE_PS1_ENV_OPEN_SYMBOL:-${KUBE_PS1_ENV_PADDING}[}"
-KUBE_PS1_ENV_CLOSE_SYMBOL="${KUBE_PS1_ENV_CLOSE_SYMBOL:-]${KUBE_PS1_ENV_PADDING}}"
+KUBE_PS1_ENV_OPEN_SYMBOL="${KUBE_PS1_ENV_OPEN_SYMBOL:-[}"
+KUBE_PS1_ENV_CLOSE_SYMBOL="${KUBE_PS1_ENV_CLOSE_SYMBOL:-]}"
 
 KUBE_PS1_ENV_PROD_COLOR="${KUBE_PS1_ENV_PROD_COLOR:-red}"
 KUBE_PS1_ENV_STG_COLOR="${KUBE_PS1_ENV_STG_COLOR:-yellow}"
@@ -177,7 +177,7 @@ _kube_ps1_symbol() {
 
   local symbol=""
   local symbol_default=$'\u2388'
-  local symbol_img="☸️" 
+  local symbol_img="☸️"
   local k8s_glyph=$'\Uf10fe'
   local k8s_symbol_color=blue
   local oc_glyph=$'\ue7b7'
@@ -364,7 +364,7 @@ _kube_ps1_set_env_ctx() {
     env_label="${KUBE_PS1_ENV_DEV_LABEL}"
   fi
 
-  KUBE_PS1+="${KUBE_PS1_ENV_OPEN_SYMBOL}${ctx_color}${env_label}${KUBE_PS1_RESET_COLOR}${KUBE_PS1_ENV_CLOSE_SYMBOL}"
+  KUBE_PS1+="${KUBE_PS1_ENV_PADDING}${KUBE_PS1_ENV_OPEN_SYMBOL}${ctx_color}${env_label}${KUBE_PS1_RESET_COLOR}${KUBE_PS1_ENV_CLOSE_SYMBOL}${KUBE_PS1_ENV_PADDING}"
 }
 
 # Set kube-ps1 shell defaults
