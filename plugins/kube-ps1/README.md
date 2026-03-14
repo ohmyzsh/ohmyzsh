@@ -223,7 +223,7 @@ For more control over the Kubernetes environment context, you can adjust:
 | `KUBE_PS1_ENV_PROD_RE` | `(production\|prod)-` | Regex used to detect production in the context name |
 | `KUBE_PS1_ENV_STG_RE` | `(staging\|stg)-` | Regex used to detect staging in the context name |
 | `KUBE_PS1_ENV_TEST_RE` | `(testing\|test)-` | Regex used to detect test in the context name |
-| `KUBE_PS1_ENV_DEV_RE` | `develop-` | Regex used to detect development in the context name|
+| `KUBE_PS1_ENV_DEV_RE` | `dev(elop(ment)?)?-` | Regex used to detect development in the context name |
 
 To disable a feature, set it to an empty string:
 
