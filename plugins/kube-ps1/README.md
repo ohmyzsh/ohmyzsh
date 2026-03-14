@@ -253,8 +253,8 @@ If `KUBE_PS1_ENV_CTX_ENABLE` is set to `true`, you can also modify:
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
 | `KUBE_PS1_ENV_PROD_COLOR` | `red` | Set default color of the production environment |
-| `KUBE_PS1_ENV_STG_COLOR` | `yellow` | Set default color of  the staging environment |
-| `KUBE_PS1_ENV_TEST_COLOR` | `green` | Set default color of  the testing environment |
+| `KUBE_PS1_ENV_STG_COLOR` | `yellow` | Set default color of the staging environment |
+| `KUBE_PS1_ENV_TEST_COLOR` | `green` | Set default color of the testing environment |
 | `KUBE_PS1_ENV_DEV_COLOR` | `blue` | Set default color of the development environment |
 
 Set the variable to an empty string if you do not want color for each
