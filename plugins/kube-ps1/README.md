@@ -208,7 +208,7 @@ the following variables:
 | `KUBE_PS1_CTX_COLOR_FUNCTION` | No default, must be user supplied | Function to customize context color based on context name |
 | `KUBE_PS1_HIDE_IF_NOCONTEXT` | `false` | Hide the kube-ps1 prompt if no context is set |
 
-In case you would like to have more control over kube environment context, you can tackle:
+For more control over the Kubernetes environment context, you can adjust:
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
@@ -248,7 +248,7 @@ Blue was used for the default symbol to match the Kubernetes color as closely
 as possible. Red was chosen as the context name to stand out, and cyan for the
 namespace.
 
-If `KUBE_PS1_ENV_CTX_ENABLE` is set to `true`, you can also adjust:
+If `KUBE_PS1_ENV_CTX_ENABLE` is set to `true`, you can also modify:
 
 | Variable | Default | Meaning |
 | :------- | :-----: | ------- |
