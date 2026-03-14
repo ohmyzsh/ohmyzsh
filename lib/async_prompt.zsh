@@ -46,7 +46,7 @@ function _omz_register_handler {
 function _omz_async_request {
   setopt localoptions noksharrays unset
   local -i ret=$?
-  typeset -gA _OMZ_ASYNC_FDS _OMZ_ASYNC_PIDS _OMZ_ASYNC_OUTPUT
+  typeset -gA _OMZ_ASYNC_FDS _OMZ_ASYNC_PIDS _OMZ_ASYNC_OUTPUT _OMZ_ASYNC_PENDING
 
   # executor runs a subshell for all async requests based on key
   local handler
@@ -79,6 +79,7 @@ function _omz_async_request {
     # Define global variables to store the file descriptor, PID and output
     _OMZ_ASYNC_FDS[$handler]=-1
     _OMZ_ASYNC_PIDS[$handler]=-1
+    _OMZ_ASYNC_PENDING[$handler]=1
 
     # Fork a process to fetch the git status and open a pipe to read from it
     exec {fd}< <(
@@ -117,14 +118,23 @@ function _omz_async_callback() {
     # Get handler name from fd
     local handler="${(k)_OMZ_ASYNC_FDS[(r)$fd]}"
 
-    # Store old output which is supposed to be already printed
+    # Store old output and pending state before updating
     local old_output="${_OMZ_ASYNC_OUTPUT[$handler]}"
+    local was_pending="${_OMZ_ASYNC_PENDING[$handler]}"
+
+    # Mark handler as no longer pending
+    _OMZ_ASYNC_PENDING[$handler]=0
 
     # Read output from fd
     IFS= read -r -u $fd -d '' "_OMZ_ASYNC_OUTPUT[$handler]"
 
-    # Repaint prompt if output has changed
-    if [[ "$old_output" != "${_OMZ_ASYNC_OUTPUT[$handler]}" ]]; then
+    # Repaint prompt if output has changed, or if the git prompt handler was
+    # pending — even when the output is identical, the prompt needs redrawing
+    # to clear stale/unbolded styling applied while the handler was in-flight.
+    # Only the git handler uses pending-state styling, so other handlers skip
+    # the extra repaint to avoid unnecessary redraws.
+    if [[ "$old_output" != "${_OMZ_ASYNC_OUTPUT[$handler]}" ]] \
+      || { (( was_pending )) && [[ "$handler" == _omz_git_prompt_info ]]; }; then
       zle .reset-prompt
       zle -R
     fi
