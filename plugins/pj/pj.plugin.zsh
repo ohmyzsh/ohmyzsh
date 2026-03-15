@@ -2,17 +2,20 @@ alias pjo="pj open"
 
 function pj() {
   local cmd="cd"
-  local project="$1"
+  local project=""
+  local editor="${EDITOR}"
 
-  if [[ "open" == "$project" ]]; then
+  if [[ "$1" == "open" ]]; then
     shift
-    project=$*
-    cmd=${=EDITOR}
+    project="$1"
+    shift
+    [[ -n "$1" ]] && editor="$1"
+    cmd="$editor"
   else
-    project=$*
+    project="$*"
   fi
 
-  for basedir ($PROJECT_PATHS); do
+  for basedir in $PROJECT_PATHS; do
     if [[ -d "$basedir/$project" ]]; then
       $cmd "$basedir/$project"
       return
