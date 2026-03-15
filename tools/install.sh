@@ -473,7 +473,10 @@ EOF
   # be prompted for the password either way, so this shouldn't cause any issues.
   #
   if user_can_sudo; then
-    sudo -k chsh -s "$zsh" "$USER"  # -k forces the password prompt
+    # Use -k to invalidate cached credentials (forces password prompt).
+    # Some sudo shims (e.g. doas-sudo-shim on Alpine) don't support -k,
+    # so fall back to running without it.
+    sudo -k chsh -s "$zsh" "$USER" 2>/dev/null || sudo chsh -s "$zsh" "$USER"
   else
     chsh -s "$zsh" "$USER"          # run chsh normally
   fi
