@@ -265,6 +265,7 @@ __gradle_subcommand() {
                 '-Dorg.gradle.configuration-cache.unsafe.ignore.unsupported-build-events-listeners=[]' \
                 '-Dorg.gradle.configuration-cache=[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]' \
                 '-Dorg.gradle.configureondemand=[Configure necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]' \
+                '-Dorg.gradle.console.unicode=[Specifies which character types are allowed in console output to generate. Values are 'auto' (default), 'disable' or 'enable'.]' \
                 '-Dorg.gradle.console=[Specifies which type of console output to generate. Values are 'plain', 'colored', 'auto' (default), 'rich' or 'verbose'.]:org.gradle.console:(plain auto rich verbose)' \
                 '-Dorg.gradle.continue=[Continue task execution after a task failure.]' \
                 '-Dorg.gradle.continuous.quietperiod=[]' \
@@ -292,6 +293,7 @@ __gradle_subcommand() {
                 '-Dorg.gradle.priority=[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Values are 'normal' (default) or 'low']:org.gradle.priority:(normal low)' \
                 '-Dorg.gradle.problems.report=[(Experimental) enables HTML problems report]' \
                 '-Dorg.gradle.projectcachedir=[Specify the project-specific cache directory. Defaults to .gradle in the root project directory.]:org.gradle.projectcachedir:_directories' \
+                '-Dorg.gradle.tooling.parallel=[]' \
                 '-Dorg.gradle.unsafe.isolated-projects=[]' \
                 '-Dorg.gradle.vfs.verbose=[]' \
                 '-Dorg.gradle.vfs.watch=[Enables watching the file system for changes, allowing data about the file system to be re-used for the next build.]:org.gradle.vfs.watch:(true false)' \
@@ -303,6 +305,7 @@ __gradle_subcommand() {
                 '--configuration-cache-problems[Configures how the configuration cache handles problems (fail or warn). Defaults to fail.]:configuration cache problems:(fail warn)' \
                 (--no-configure-on-demand)'--configure-on-demand[Configure necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds. (incubating)]' \
                 '--console[Specifies which type of console output to generate. Values are 'plain', 'colored', 'auto' (default), 'rich' or 'verbose'.]:console:(plain auto rich verbose)' \
+                '--console-unicode[Specifies which character types are allowed in console output to generate. Values are 'auto' (default), 'disable' or 'enable'.]' \
                 (--no-continue)'--continue[Continue task execution after a task failure.]' \
                 {-t,--continuous}'[Enables continuous build. Gradle does not exit and will re-execute tasks when task file inputs change.]' \
                 (--no-daemon)'--daemon[Uses the Gradle daemon to run the build. Starts the daemon if not running.]' \
@@ -344,7 +347,7 @@ __gradle_subcommand() {
                 (--no-scan)'--scan[Generate a Build Scan (powered by Develocity).]' \
                 {-V,--show-version}'[Print version info and continue.]' \
                 (--full-stacktrace,-S){-s,--stacktrace}'[Print out the stacktrace for all exceptions.]' \
-                '--task-graph[(Experimental) Print task graph instead of executing tasks.]' \
+                '--task-graph[Print task graph instead of executing tasks.]' \
                 \*'--update-locks[Perform a partial update of the dependency lock, letting passed in module notations change version. (incubating)]' \
                 (--quiet,-q,--info,-i,--debug,-d){-w,--warn}'[Set log level to warn.]' \
                 '--warning-mode[Specifies which mode of warnings to generate. Values are 'all', 'fail', 'summary'(default) or 'none']:warning mode:(all summary none)' \
@@ -392,6 +395,7 @@ _gradle() {
         '-Dorg.gradle.configuration-cache.unsafe.ignore.unsupported-build-events-listeners=[]:->argument-expected' \
         '-Dorg.gradle.configuration-cache=[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]:->argument-expected' \
         '-Dorg.gradle.configureondemand=[Configure necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]:->argument-expected' \
+        '-Dorg.gradle.console.unicode=[Specifies which character types are allowed in console output to generate. Values are 'auto' (default), 'disable' or 'enable'.]:->argument-expected' \
         '-Dorg.gradle.console=[Specifies which type of console output to generate. Values are 'plain', 'colored', 'auto' (default), 'rich' or 'verbose'.]:org.gradle.console:(plain auto rich verbose):->argument-expected' \
         '-Dorg.gradle.continue=[Continue task execution after a task failure.]:->argument-expected' \
         '-Dorg.gradle.continuous.quietperiod=[]:->argument-expected' \
@@ -419,6 +423,7 @@ _gradle() {
         '-Dorg.gradle.priority=[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Values are 'normal' (default) or 'low']:org.gradle.priority:(normal low):->argument-expected' \
         '-Dorg.gradle.problems.report=[(Experimental) enables HTML problems report]:->argument-expected' \
         '-Dorg.gradle.projectcachedir=[Specify the project-specific cache directory. Defaults to .gradle in the root project directory.]:org.gradle.projectcachedir:_directories:->argument-expected' \
+        '-Dorg.gradle.tooling.parallel=[]:->argument-expected' \
         '-Dorg.gradle.unsafe.isolated-projects=[]:->argument-expected' \
         '-Dorg.gradle.vfs.verbose=[]:->argument-expected' \
         '-Dorg.gradle.vfs.watch=[Enables watching the file system for changes, allowing data about the file system to be re-used for the next build.]:org.gradle.vfs.watch:(true false):->argument-expected' \
@@ -430,6 +435,7 @@ _gradle() {
         '--configuration-cache-problems[Configures how the configuration cache handles problems (fail or warn). Defaults to fail.]:configuration cache problems:(fail warn):->argument-expected' \
         (--no-configure-on-demand)'--configure-on-demand[Configure necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds. (incubating)]' \
         '--console[Specifies which type of console output to generate. Values are 'plain', 'colored', 'auto' (default), 'rich' or 'verbose'.]:console:(plain auto rich verbose):->argument-expected' \
+        '--console-unicode[Specifies which character types are allowed in console output to generate. Values are 'auto' (default), 'disable' or 'enable'.]:->argument-expected' \
         (--no-continue)'--continue[Continue task execution after a task failure.]' \
         {-t,--continuous}'[Enables continuous build. Gradle does not exit and will re-execute tasks when task file inputs change.]' \
         (--no-daemon)'--daemon[Uses the Gradle daemon to run the build. Starts the daemon if not running.]' \
@@ -474,7 +480,7 @@ _gradle() {
         (--full-stacktrace,-S){-s,--stacktrace}'[Print out the stacktrace for all exceptions.]' \
         '--status[Shows status of running and recently stopped Gradle daemon(s).]' \
         '--stop[Stops the Gradle daemon if it is running.]' \
-        '--task-graph[(Experimental) Print task graph instead of executing tasks.]' \
+        '--task-graph[Print task graph instead of executing tasks.]' \
         \*'--update-locks[Perform a partial update of the dependency lock, letting passed in module notations change version. (incubating)]' \
         {-v,--version}'[Print version info and exit.]' \
         (--quiet,-q,--info,-i,--debug,-d){-w,--warn}'[Set log level to warn.]' \
