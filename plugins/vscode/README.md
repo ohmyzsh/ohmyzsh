@@ -10,7 +10,7 @@ plugins=(... vscode)
 
 ## Requirements
 
-This plugin requires to have a flavour of VS Code installed and it's executable available in PATH.
+This plugin requires to have a flavour of VS Code installed and its executable available in PATH.
 
 You can install either:
 
