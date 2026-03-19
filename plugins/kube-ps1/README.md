@@ -127,6 +127,10 @@ The default prompt layout is:
 ```sh
 (<symbol>|<context>:<namespace>)
 ```
+You can enable kube environment context (like dev/staging/test/prod) via `KUBE_PS1_ENV_CTX_ENABLE=true`. In this case, the layout will be:
+```sh
+[<kube-environment>] (<symbol>|<context>:<namespace>)
+```
 
 If the current-context is not set, kube-ps1 will return the following:
 
@@ -204,6 +208,23 @@ the following variables:
 | `KUBE_PS1_CTX_COLOR_FUNCTION` | No default, must be user supplied | Function to customize context color based on context name |
 | `KUBE_PS1_HIDE_IF_NOCONTEXT` | `false` | Hide the kube-ps1 prompt if no context is set |
 
+For more control over the Kubernetes environment context, you can adjust:
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `KUBE_PS1_ENV_CTX_ENABLE` | `false` | Extract environment identifiers from context and display them as a separate block in square brackets, e.g `testing-mycluster` becomes `[test] mycluster` |
+| `KUBE_PS1_ENV_PADDING` | one space | Padding (spaces or characters) added around the environment block |
+| `KUBE_PS1_ENV_OPEN_SYMBOL` | `[` | Opening symbol used for the environment block |
+| `KUBE_PS1_ENV_CLOSE_SYMBOL` | `]` | Closing symbol used for the environment block |
+| `KUBE_PS1_ENV_PROD_LABEL` | `prod` | Set default production label |
+| `KUBE_PS1_ENV_STG_LABEL` | `stag` | Set default staging label |
+| `KUBE_PS1_ENV_TEST_LABEL` | `test` | Set default testing label |
+| `KUBE_PS1_ENV_DEV_LABEL` | `dev` | Set default developing label |
+| `KUBE_PS1_ENV_PROD_RE` | `(production\|prod)-` | Regex used to detect production in the context name |
+| `KUBE_PS1_ENV_STG_RE` | `(staging\|stg)-` | Regex used to detect staging in the context name |
+| `KUBE_PS1_ENV_TEST_RE` | `(testing\|test)-` | Regex used to detect test in the context name |
+| `KUBE_PS1_ENV_DEV_RE` | `dev(elop(ment)?)?-` | Regex used to detect development in the context name |
+
 To disable a feature, set it to an empty string:
 
 ```sh
@@ -226,6 +247,15 @@ The default colors are set with the following variables:
 Blue was used for the default symbol to match the Kubernetes color as closely
 as possible. Red was chosen as the context name to stand out, and cyan for the
 namespace.
+
+If `KUBE_PS1_ENV_CTX_ENABLE` is set to `true`, you can also modify:
+
+| Variable | Default | Meaning |
+| :------- | :-----: | ------- |
+| `KUBE_PS1_ENV_PROD_COLOR` | `red` | Set default color of the production environment |
+| `KUBE_PS1_ENV_STG_COLOR` | `yellow` | Set default color of the staging environment |
+| `KUBE_PS1_ENV_TEST_COLOR` | `green` | Set default color of the testing environment |
+| `KUBE_PS1_ENV_DEV_COLOR` | `blue` | Set default color of the development environment |
 
 Set the variable to an empty string if you do not want color for each
 prompt section:
