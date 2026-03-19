@@ -1,0 +1,7 @@
+alias es="expo start"
+alias ei="expo install"
+alias eba="expo build:android"
+alias ebi="expo build:ios"
+alias el="expo login"
+alias eh="expo help"
+alias eu="expo upgrade"
