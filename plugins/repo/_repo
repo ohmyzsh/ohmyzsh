@@ -131,6 +131,8 @@ _repo()
                      "(--autosquash)--no-ff[Pass --autosquash to git rebase]"\
                      "(--whitespace=)--whitespace=[Pass --whitespace to git rebase]: :__git_apply_whitespace_strategies"\
                      "(--auto-stash)--auto-stash[Stash local modifications before starting]"\
+                     "(--update-refs)--update-refs[Automatically force-update any branches that point to commits that are being rebased.]"\
+                     "(--no-update-refs)--no-update-refs[Turn off the automatic force-update of any branches that point to commits that are being rebased.]"\
                      && ret=0
           ;;
         (checkout)

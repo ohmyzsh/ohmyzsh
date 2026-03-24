@@ -1,6 +1,6 @@
 # gitignore
 
-This plugin enables you the use of [gitignore.io](https://www.toptal.com/developers/gitignore) from the command line. You need an active internet connection.
+This plugin enables you to use [gitignore.io](https://www.gitignore.io) from the command line. You need an active internet connection to fetch templates. The plugin uses the gitignore.io CDN endpoint to simplify access and improve reliability.
 
 To use it, add `gitignore` to the plugins array in your zshrc file:
 
@@ -14,4 +14,4 @@ plugins=(... gitignore)
 
 * `gi [TEMPLATENAME]`: Show git-ignore output on the command line, e.g. `gi java` to exclude class and package files.
 
-* `gi [TEMPLATENAME] >> .gitignore`: Appending programming language settings to your projects .gitignore.
+* `gi [TEMPLATENAME] >> .gitignore`: Append the template rules to your project's `.gitignore` file.

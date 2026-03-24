@@ -28,6 +28,7 @@ function _omz {
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
     'reload:Reload the current zsh session'
+    'shop:Open the Oh My Zsh shop'
     'theme:Manage themes'
     'update:Update Oh My Zsh'
     'version:Show the version'
@@ -173,6 +174,7 @@ Available commands:
   plugin <command>    Manage plugins
   pr     <command>    Manage Oh My Zsh Pull Requests
   reload              Reload the current zsh session
+  shop                Open the Oh My Zsh shop
   theme  <command>    Manage themes
   update              Update Oh My Zsh
   version             Show the version
@@ -621,9 +623,47 @@ function _omz::pr::test {
     done
 
     (( $found )) || {
-      _omz::log error "could not found the ohmyzsh git remote. Aborting..."
+      _omz::log error "could not find the ohmyzsh git remote. Aborting..."
       return 1
     }
+
+    # Check if Pull Request has the "testers needed" label
+    _omz::log info "checking if PR #$1 has the 'testers needed' label..."
+    local pr_json label label_id="MDU6TGFiZWw4NzY1NTkwNA=="
+    pr_json=$(
+      curl -fsSL \
+        -H "Accept: application/vnd.github+json" \
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        "https://api.github.com/repos/ohmyzsh/ohmyzsh/pulls/$1"
+    )
+
+    if [[ $? -gt 0 || -z "$pr_json" ]]; then
+      _omz::log error "error when trying to fetch PR #$1 from GitHub."
+      return 1
+    fi
+
+    # Check if the label is present with jq or grep
+    if (( $+commands[jq] )); then
+      label="$(command jq ".labels.[] | select(.node_id == \"$label_id\")" <<< "$pr_json")"
+    else
+      label="$(command grep "\"$label_id\"" <<< "$pr_json" 2>/dev/null)"
+    fi
+
+    # If a maintainer hasn't labeled the PR to test, explain the security risk
+    if [[ -z "$label" ]]; then
+      _omz::log warn "PR #$1 does not have the 'testers needed' label. This means that the PR"
+      _omz::log warn "has not been reviewed by a maintainer and may contain malicious code."
+
+      # Ask for explicit confirmation: user needs to type "yes" to continue
+      _omz::log prompt "Do you want to continue testing it? [yes/N] "
+      builtin read -r
+      if [[ "${REPLY:l}" != yes ]]; then
+        _omz::log error "PR test canceled. Please ask a maintainer to review and label the PR."
+        return 1
+      else
+        _omz::log warn "Continuing to check out and test PR #$1. Be careful!"
+      fi
+    fi
 
     # Fetch pull request head
     _omz::log info "fetching PR #$1 to ohmyzsh/pull-$1..."
@@ -681,6 +721,15 @@ function _omz::pr::test {
       return 1
     }
   )
+}
+
+function _omz::shop {
+  local shop_url="https://commitgoods.com/collections/oh-my-zsh"
+  
+  _omz::log info "Opening Oh My Zsh shop in your browser..."
+  _omz::log info "$shop_url"
+  
+  open_command "$shop_url"
 }
 
 function _omz::reload {

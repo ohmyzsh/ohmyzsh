@@ -22,6 +22,7 @@ the `brew` binary before sourcing `oh-my-zsh.sh` and it'll set up the environmen
 | Alias    | Command                                 | Description                                                           |
 | -------- | --------------------------------------- | --------------------------------------------------------------------- |
 | `ba`     | `brew autoremove`                       | Uninstall unnecessary formulae.                                       |
+| `bcfg`   | `brew config`                           | Show Homebrew and system configuration info useful for debugging.     |
 | `bci`    | `brew info --cask`                      | Display information about the given cask.                             |
 | `bcin`   | `brew install --cask`                   | Install the given cask.                                               |
 | `bcl`    | `brew list --cask`                      | List installed casks.                                                 |
@@ -31,13 +32,18 @@ the `brew` binary before sourcing `oh-my-zsh.sh` and it'll set up the environmen
 | `bcubc`  | `brew upgrade --cask && brew cleanup`   | Upgrade outdated casks, then run cleanup.                             |
 | `bcubo`  | `brew update && brew outdated --cask`   | Update Homebrew data, then list outdated casks.                       |
 | `bcup`   | `brew upgrade --cask`                   | Upgrade all outdated casks.                                           |
+| `bdr`    | `brew doctor`                           | Check your system for potential problems.                             |
 | `bfu`    | `brew upgrade --formula`                | Upgrade only formulae (not casks).                                    |
 | `bi`     | `brew install`                          | Install a formula.                                                    |
+| `bih`    | `brew install --HEAD`                   | Install a formula with --HEAD                                         |
 | `bl`     | `brew list`                             | List all installed formulae.                                          |
 | `bo`     | `brew outdated`                         | List installed formulae that have an updated version available.       |
+| `br`     | `brew reinstall`                        | Reinstall a formula.                                                  |
 | `brewp`  | `brew pin`                              | Pin a specified formula so that it's not upgraded.                    |
 | `brews`  | `brew list -1`                          | List installed formulae or the installed files for a given formula.   |
 | `brewsp` | `brew list --pinned`                    | List pinned formulae, or show the version of a given formula.         |
+| `brh`    | `brew reinstall --HEAD`                 | Reinstall a formula with --HEAD                                       |
+| `bs`     | `brew search`                           | Perform a substring search of cask tokens and formula names for text. |
 | `bsl`    | `brew services list`                    | List all running services.                                            |
 | `bsoff`  | `brew services stop`                    | Stop the service and unregister it from launching at login (or boot). |
 | `bsoffa` | `bsoff --all`                           | Stop all started services.                                            |

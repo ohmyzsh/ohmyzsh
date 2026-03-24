@@ -49,4 +49,4 @@ plugins=(... systemadmin)
 | geteip      | Gather information regarding an external IP address using [icanhazip.com](https://icanhazip.com)                      |
 | getip       | Determine the local IP Address with `ip addr` or `ifconfig`                                                           |
 | clrz        | Clear zombie processes                                                                                                |
-| conssec     | Show number of concurrent connections per second based on ngnix/access.log file or another log file if specified      |
+| conssec     | Show number of concurrent connections per second based on nginx/access.log file or another log file if specified      |

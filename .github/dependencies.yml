@@ -12,14 +12,14 @@ dependencies:
   plugins/gradle:
     repo: gradle/gradle-completion
     branch: master
-    version: 25da917cf5a88f3e58f05be3868a7b2748c8afe6
+    version: dd3a8adb47e51b1f6e4dc180cb04bd02d5fccd4a
     precopy: |
       set -e
       find . ! -name _gradle ! -name LICENSE -delete
   plugins/history-substring-search:
     repo: zsh-users/zsh-history-substring-search
     branch: master
-    version: 87ce96b1862928d84b1afe7c173316614b30e301
+    version: 14c8d2e0ffaee98f2df9850b19944f32546fdea5
     precopy: |
       set -e
       rm -f zsh-history-substring-search.plugin.zsh
@@ -27,10 +27,18 @@ dependencies:
     postcopy: |
       set -e
       test -e dependencies/OMZ-README.md && cat dependencies/OMZ-README.md >> README.md
+  plugins/kube-ps1:
+    repo: jonmosco/kube-ps1
+    branch: master
+    version: 9b41c091d5dd4a99e58cf58b5d98a4847937b1bb
+    precopy: |
+      set -e
+      find . ! -name kube-ps1.sh ! -name LICENSE ! -name README.md -delete
+      test -e kube-ps1.sh && mv kube-ps1.sh kube-ps1.plugin.zsh
   plugins/wd:
     repo: mfaerevaag/wd
     branch: master
-    version: tag:v0.10.0
+    version: tag:v0.10.1
     precopy: |
       set -e
       rm -r test

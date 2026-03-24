@@ -23,8 +23,8 @@ lwd() {
 #
 # - This isn't the first time the plugin is loaded
 # - We're not in the $HOME directory (e.g. if terminal opened a different folder)
-[[ -z "$ZSH_LAST_WORKING_DIRECTORY" ]] || return
-[[ "$PWD" == "$HOME" ]] || return
+[[ -z "$ZSH_LAST_WORKING_DIRECTORY" ]] || return 0
+[[ "$PWD" == "$HOME" ]] || return 0
 
 if lwd 2>/dev/null; then
   ZSH_LAST_WORKING_DIRECTORY=1

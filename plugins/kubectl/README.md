@@ -16,6 +16,7 @@ plugins=(... kubectl)
 | k        | `kubectl`                                               | The kubectl command                                                                              |
 | kca      | `kubectl --all-namespaces`                              | The kubectl command targeting all namespaces                                                     |
 | kaf      | `kubectl apply -f`                                      | Apply a YML file                                                                                 |
+| kapk     | `kubectl apply -k`                                      | Apply a kustomization directory                                                                  |
 | keti     | `kubectl exec -ti`                                      | Drop into an interactive terminal on a container                                                 |
 |          |                                                         | **Manage configuration quickly to switch contexts between local, dev and staging**               |
 | kcuc     | `kubectl config use-context`                            | Set the current-context in a kubeconfig file                                                     |
@@ -26,8 +27,9 @@ plugins=(... kubectl)
 |          |                                                         | **General aliases**                                                                              |
 | kdel     | `kubectl delete`                                        | Delete resources by filenames, stdin, resources and names, or by resources and label selector    |
 | kdelf    | `kubectl delete -f`                                     | Delete a pod using the type and name specified in -f argument                                    |
+| kdelk    | `kubectl delete -k`                                     | Delete all resources defined in a kustomization directory                                        |
 | kge      | `kubectl get events --sort-by=".lastTimestamp"`         | Get events (sorted by timestamp)                                                                 |
-| kgew     | `kubectl get events --watch --sort-by=".lastTimestamp"` | Get events and watch as they occur (sorted by timestamp)                                                                 |
+| kgew     | `kubectl get events --watch --sort-by=".lastTimestamp"` | Get events and watch as they occur (sorted by timestamp)                                         |
 |          |                                                         | **Pod management**                                                                               |
 | kgp      | `kubectl get pods`                                      | List all pods in ps output format                                                                |
 | kgpl     | `kgp -l`                                                | Get pods by label. Example: `kgpl "app=myapp" -n myns`                                           |
@@ -74,6 +76,7 @@ plugins=(... kubectl)
 | kdeld    | `kubectl delete deployment`                             | Delete the deployment                                                                            |
 | ksd      | `kubectl scale deployment`                              | Scale a deployment                                                                               |
 | krsd     | `kubectl rollout status deployment`                     | Check the rollout status of a deployment                                                         |
+| krrd     | `kubectl rollout restart deployment`                    | Rollout restart a deployment                                                                     |
 | kres     | `kubectl set env $@ REFRESHED_AT=...`                   | Recreate all pods in deployment with zero-downtime                                               |
 |          |                                                         | **Rollout management**                                                                           |
 | kgrs     | `kubectl get replicaset`                                | List all ReplicaSets `rs` created by the deployment                                              |
@@ -112,6 +115,7 @@ plugins=(... kubectl)
 | kdelss   | `kubectl delete statefulset`                            | Delete the statefulset                                                                           |
 | ksss     | `kubectl scale statefulset`                             | Scale a statefulset                                                                              |
 | krsss    | `kubectl rollout status statefulset`                    | Check the rollout status of a deployment                                                         |
+| krrss    | `kubectl rollout restart statefulset`                   | Rollout restart a statefulset                                                                    |
 |          |                                                         | **Service Accounts management**                                                                  |
 | kdsa     | `kubectl describe sa`                                   | Describe a service account in details                                                            |
 | kdelsa   | `kubectl delete sa`                                     | Delete the service account                                                                       |

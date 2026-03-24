@@ -81,6 +81,7 @@ alias tmuxconf='$EDITOR $ZSH_TMUX_CONFIG'
 
 _build_tmux_alias "ta" "attach" "-t"
 _build_tmux_alias "tad" "attach -d" "-t"
+_build_tmux_alias "to" "new-session -A" "-s"
 _build_tmux_alias "ts" "new-session" "-s"
 _build_tmux_alias "tkss" "kill-session" "-t"
 
@@ -188,7 +189,7 @@ function _tmux_directory_session() {
 alias tds=_tmux_directory_session
 
 # Autostart if not already in tmux and enabled.
-if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z "$EMACS" && -z "$VIM" && -z "$INTELLIJ_ENVIRONMENT_READER" ]]; then
+if [[ -z "$TMUX" && "$ZSH_TMUX_AUTOSTART" == "true" && -z "$INSIDE_EMACS" && -z "$EMACS" && -z "$VIM" && -z "$INTELLIJ_ENVIRONMENT_READER" && -z "$ZED_TERM" ]]; then
   # Actually don't autostart if we already did and multiple autostarts are disabled.
   if [[ "$ZSH_TMUX_AUTOSTART_ONCE" == "false" || "$ZSH_TMUX_AUTOSTARTED" != "true" ]]; then
     export ZSH_TMUX_AUTOSTARTED=true

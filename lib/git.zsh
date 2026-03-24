@@ -117,7 +117,7 @@ function _omz_git_prompt_status() {
   fi
 
   # For each status prefix, do a regex comparison
-  for status_prefix in ${(k)prefix_constant_map}; do
+  for status_prefix in "${(@k)prefix_constant_map}"; do
     local status_constant="${prefix_constant_map[$status_prefix]}"
     local status_regex=$'(^|\n)'"$status_prefix"
 

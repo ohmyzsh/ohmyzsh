@@ -29,9 +29,24 @@ function rbwpw {
     echo "$service not found"
     return 1
   fi
+
+  # Generate a random identifier for this call to rbwpw
+  # so we can check if the clipboard content has changed
+  local _random="$RANDOM" _cache="$ZSH_CACHE_DIR/.rbwpw"
+  echo -n "$_random" > "$_cache"
+
+  # Use clipcopy to copy the password to the clipboard
   echo -n $pw | clipcopy
   echo "password for $service copied!"
-  {sleep 20 && clipcopy </dev/null 2>/dev/null} &|
+
+  # Clear the clipboard after 20 seconds, but only if the clipboard hasn't
+  # changed (if rbwpw hasn't been called again)
+  {
+    sleep 20 \
+    && [[ "$(<"$_cache")" == "$_random" ]] \
+    && clipcopy </dev/null 2>/dev/null \
+    && command rm -f "$_cache" &>/dev/null
+  } &|
 }
 
 function _rbwpw {

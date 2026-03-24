@@ -22,6 +22,6 @@ plugins=(... yum)
 | yi    | `sudo yum install`                | Install package              |
 | ygi   | `sudo yum groupinstall`           | Install package group        |
 | yr    | `sudo yum remove`                 | Remove package               |
-| ygr   | `sudo yum groupremove`            | Remove pagage group          |
+| ygr   | `sudo yum groupremove`            | Remove package group         |
 | yrl   | `sudo yum remove --remove-leaves` | Remove package and leaves    |
 | yc    | `sudo yum clean all`              | Clean yum cache              |

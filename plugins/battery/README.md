@@ -19,6 +19,12 @@ For example:
 BATTERY_CHARGING="⚡️"
 ```
 
+You can see the power of your charger using the following setting (MacOS only)
+
+```zsh
+BATTERY_SHOW_WATTS=true
+```
+
 ## Requirements
 
 - On Linux, you must have the `acpi` or `acpitool` commands installed on your operating system.

@@ -25,9 +25,10 @@
 #   BRANCH  - branch to check out immediately after install (default: master)
 #
 # Other options:
-#   CHSH       - 'no' means the installer will not change the default shell (default: yes)
-#   RUNZSH     - 'no' means the installer will not run zsh after the install (default: yes)
-#   KEEP_ZSHRC - 'yes' means the installer will not replace an existing .zshrc (default: no)
+#   CHSH                   - 'no' means the installer will not change the default shell (default: yes)
+#   RUNZSH                 - 'no' means the installer will not run zsh after the install (default: yes)
+#   KEEP_ZSHRC             - 'yes' means the installer will not replace an existing .zshrc (default: no)
+#   OVERWRITE_CONFIRMATION - 'no' means the installer will not ask for confirmation to overwrite the existing .zshrc (default: yes)
 #
 # You can also pass some arguments to the install script to set some these options:
 #   --skip-chsh: has the same behavior as setting CHSH to 'no'
@@ -77,6 +78,7 @@ BRANCH=${BRANCH:-master}
 CHSH=${CHSH:-yes}
 RUNZSH=${RUNZSH:-yes}
 KEEP_ZSHRC=${KEEP_ZSHRC:-no}
+OVERWRITE_CONFIRMATION=${OVERWRITE_CONFIRMATION:-yes}
 
 
 command_exists() {
@@ -341,6 +343,25 @@ setup_zshrc() {
       echo "${FMT_YELLOW}Found ${zdot}/.zshrc.${FMT_RESET} ${FMT_GREEN}Keeping...${FMT_RESET}"
       return
     fi
+    
+    if [ $OVERWRITE_CONFIRMATION != "no" ]; then
+      # Ask user for confirmation before backing up and overwriting
+      echo "${FMT_YELLOW}Found ${zdot}/.zshrc."
+      echo "The existing .zshrc will be backed up to .zshrc.pre-oh-my-zsh if overwritten."
+      echo "Make sure your .zshrc contains the following minimal configuration if you choose not to overwrite it:${FMT_RESET}"
+      echo "----------------------------------------"
+      cat "$ZSH/templates/minimal.zshrc"
+      echo "----------------------------------------"
+      printf '%sDo you want to overwrite it with the Oh My Zsh template? [Y/n]%s ' \
+        "$FMT_YELLOW" "$FMT_RESET"
+      read -r opt
+      case $opt in
+        [Yy]*|"") ;;
+        [Nn]*) echo "Overwrite skipped. Existing .zshrc will be kept."; return ;;
+        *) echo "Invalid choice. Overwrite skipped. Existing .zshrc will be kept."; return ;;
+      esac
+    fi
+
     if [ -e "$OLD_ZSHRC" ]; then
       OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
       if [ -e "$OLD_OLD_ZSHRC" ]; then
@@ -353,7 +374,7 @@ setup_zshrc() {
       echo "${FMT_YELLOW}Found old .zshrc.pre-oh-my-zsh." \
         "${FMT_GREEN}Backing up to ${OLD_OLD_ZSHRC}${FMT_RESET}"
     fi
-    echo "${FMT_YELLOW}Found ${zdot}/.zshrc.${FMT_RESET} ${FMT_GREEN}Backing up to ${OLD_ZSHRC}${FMT_RESET}"
+    echo "${FMT_GREEN}Backing up to ${OLD_ZSHRC}${FMT_RESET}"
     mv "$zdot/.zshrc" "$OLD_ZSHRC"
   fi
 
@@ -484,7 +505,7 @@ print_success() {
   printf '\n'
   printf '%s\n' "• Follow us on X: $(fmt_link @ohmyzsh https://x.com/ohmyzsh)"
   printf '%s\n' "• Join our Discord community: $(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
-  printf '%s\n' "• Get stickers, t-shirts, coffee mugs and more: $(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
+  printf '%s\n' "• Get stickers, t-shirts, coffee mugs and more: $(fmt_link "CommitGoods Shop" https://commitgoods.com/collections/oh-my-zsh)"
   printf '%s\n' $FMT_RESET
 }
 
@@ -493,12 +514,13 @@ main() {
   if [ ! -t 0 ]; then
     RUNZSH=no
     CHSH=no
+    OVERWRITE_CONFIRMATION=no
   fi
 
   # Parse arguments
   while [ $# -gt 0 ]; do
     case $1 in
-      --unattended) RUNZSH=no; CHSH=no ;;
+      --unattended) RUNZSH=no; CHSH=no; OVERWRITE_CONFIRMATION=no ;;
       --skip-chsh) CHSH=no ;;
       --keep-zshrc) KEEP_ZSHRC=yes ;;
     esac
