@@ -15,25 +15,25 @@ fi
 : ${ZSH_CLAUDE_DEFAULT_MODEL:=}
 # Default reasoning effort level (low, medium, high, max)
 : ${ZSH_CLAUDE_DEFAULT_EFFORT:=}
-# Default permission mode for claude sessions (e.g., plan, autoaccept)
+# Default permission mode for claude sessions (choices: "acceptEdits", "bypassPermissions", "default", "dontAsk", "plan", "auto")
 : ${ZSH_CLAUDE_DEFAULT_PERMISSION_MODE:=}
 # Auto-resume last conversation on new shell start (true/false)
 : ${ZSH_CLAUDE_AUTO_CONTINUE:=false}
 
 # Core aliases
 
-alias cl='claude'
-alias clc='claude --continue'
-alias clr='claude --resume'
-alias clp='claude -p'
+alias cl='_claude_with_defaults'
+alias clc='_claude_with_defaults --continue'
+alias clr='_claude_with_defaults --resume'
+alias clp='_claude_with_defaults -p'
 alias clv='claude --version'
 alias clu='claude update'
 
 # Session aliases
 
-alias cln='claude -n'
-alias clw='claude -w'
-alias clfork='claude --fork-session'
+alias cln='_claude_with_defaults -n'
+alias clw='_claude_with_defaults -w'
+alias clfork='_claude_with_defaults --fork-session'
 
 # Auth aliases
 
@@ -55,7 +55,10 @@ function clm() {
     return 1
   fi
   shift 2>/dev/null
-  claude --model "$model" "$@"
+  local -a args=()
+  [[ -n "$ZSH_CLAUDE_DEFAULT_EFFORT" ]] && args+=(--effort "$ZSH_CLAUDE_DEFAULT_EFFORT")
+  [[ -n "$ZSH_CLAUDE_DEFAULT_PERMISSION_MODE" ]] && args+=(--permission-mode "$ZSH_CLAUDE_DEFAULT_PERMISSION_MODE")
+  claude --model "$model" "${args[@]}" "$@"
 }
 
 function cle() {
@@ -65,13 +68,16 @@ function cle() {
     return 1
   fi
   shift 2>/dev/null
-  claude --effort "$effort" "$@"
+  local -a args=()
+  [[ -n "$ZSH_CLAUDE_DEFAULT_MODEL" ]] && args+=(--model "$ZSH_CLAUDE_DEFAULT_MODEL")
+  [[ -n "$ZSH_CLAUDE_DEFAULT_PERMISSION_MODE" ]] && args+=(--permission-mode "$ZSH_CLAUDE_DEFAULT_PERMISSION_MODE")
+  claude --effort "$effort" "${args[@]}" "$@"
 }
 
 # Channel aliases
 
-alias clch-tg='claude --channels plugin:telegram@claude-plugins-official'
-alias clch-dc='claude --channels plugin:discord@claude-plugins-official'
+alias clch-tg='_claude_with_defaults --channels plugin:telegram@claude-plugins-official'
+alias clch-dc='_claude_with_defaults --channels plugin:discord@claude-plugins-official'
 
 function clch() {
   if [[ -z "$1" ]]; then
@@ -81,7 +87,7 @@ function clch() {
   fi
   local channel="$1"
   shift
-  claude --channels "$channel" "$@"
+  _claude_with_defaults --channels "$channel" "$@"
 }
 
 # Helper functions
@@ -92,7 +98,7 @@ function clds() {
   local dir="${PWD##*/}"
   [[ "$PWD" == "$HOME" ]] && dir="HOME"
   [[ "$PWD" == "/" ]] && dir="ROOT"
-  claude --resume "$dir" "$@" 2>/dev/null || claude -n "$dir" "$@"
+  _claude_with_defaults --resume "$dir" "$@" 2>/dev/null || _claude_with_defaults -n "$dir" "$@"
 }
 
 # Resume from a PR number
