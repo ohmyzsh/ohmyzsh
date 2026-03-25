@@ -7,7 +7,6 @@
 : ${ZSH_DOTENV_ALLOWED_LIST:="${ZSH_CACHE_DIR:-$ZSH/cache}/dotenv-allowed.list"}
 : ${ZSH_DOTENV_DISALLOWED_LIST:="${ZSH_CACHE_DIR:-$ZSH/cache}/dotenv-disallowed.list"}
 
-
 ## Functions
 
 parse_dotenv() {
@@ -55,7 +54,6 @@ parse_dotenv() {
   #   VAR1=value1; VAR2=value2
   #   VAR3="multi
   #   line value"
-  #
   # Result:
   #   typeset -a nodes=( 'VAR1=value1' ';' 'VAR2=value2' ';' $'VAR3="multi\nline value"' )
   #   typeset -a lines=( 'VAR1=value1' 'VAR2=value2' $'VAR3="multi\nline value"' )
@@ -73,7 +71,33 @@ parse_dotenv() {
     [[ -z "$line" ]] || line+=" "
     line="$node"
   done
-  # typeset -p nodes lines
+
+  local -a forbidden_vars=(
+    NODE_OPTIONS
+    BASH_ENV
+    ENV
+    ZDOTDIR
+    ZSH
+    LD_PRELOAD
+    LD_LIBRARY_PATH
+    DYLD_INSERT_LIBRARIES
+    GIT_CONFIG_GLOBAL
+    GIT_DIR
+    GIT_EDITOR
+    GIT_EXTERNAL_DIFF
+    GIT_EXEC_PATH
+    GIT_PAGER
+    GIT_SSH
+    GIT_SSH_COMMAND
+    GIT_SSL_NO_VERIFY
+    GIT_TEMPLATE_DIR
+    VISUAL
+    PAGER
+    EDITOR
+    ${(k)parameters[(R)*export*special]}
+  )
+  local forbidden="${(j:|:)forbidden_vars}"
+
 
   # Each line contains a single command line, we need to parse valid KEY=VALUE pairs
   for line in "${lines[@]}"; do
@@ -90,6 +114,11 @@ parse_dotenv() {
     key="${match[1]}"
     value="${match[2]}"
 
+    # Filter out variables to be ignored for security reasons (best effort)
+    if [[ "$key" == (${~forbidden}) ]]; then
+      continue
+    fi
+
     # Use tokenization to split value with native shell parsing (handles quotes and escapes)
     # Ignore any values that parse to multiple words, e.g. `BASE_URL=/ echo command run`
     local -a words
@@ -102,12 +131,12 @@ parse_dotenv() {
     #
     # Filter lines with command expansion not in safe contexts
     #
-    # Reader's note: this is actually a "best effort" check (works in tests), but
+    # READER'S NOTE: this is actually a "best effort" check (works in tests), but
     # only to prevent setting variables with command substitution. The actual effect
     # of setting them would not be a vulnerability, because we use `typeset name=value`
     # and value is a quoted string parsed by zsh itself with `${(Z:C:)content}`.
     #
-    # What does this mean? If we remove remove this filter block, this is what happens:
+    # What does this mean? If we were to remove this filter block, this is what would happen:
     #
     # Input: DANGEROUS=$(echo this is a command)
     # Output: DANGEROUS='$(echo this is a command)' (literal string, no command execution)

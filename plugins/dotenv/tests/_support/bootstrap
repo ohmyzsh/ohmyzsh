@@ -104,10 +104,10 @@ _zunit_assert_var_same_as() {
     for key in "${keys[@]}"; do
       # Key match checks
       if [[ -v "value[$key]" && ! -v "comparison[$key]" ]]; then
-        echo "'$1[$key]' is set"
+        echo "'$1[$key]' is set (value='${value[$key]}')"
         ret=1
       elif [[ ! -v "value[$key]" && -v "comparison[$key]" ]]; then
-        echo "'$1[$key]' is not set"
+        echo "'$1[$key]' is not set (expected='${comparison[$key]}')"
         ret=1
       # Value match checks
       elif [[ "${value[$key]}" != "${comparison[$key]}" ]]; then

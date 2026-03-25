@@ -162,3 +162,48 @@ EOF
 
   assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
 }
+
+
+
+@test 'blocks changes of special environment variables' {
+  _parse_dotenv_test =(<<'EOF'
+# Executes on the next node/npm/npx invocation
+NODE_OPTIONS=--require=./payload.js
+
+# Used for shell initialization
+BASH_ENV=./payload.sh
+# Used for shell initialization in zsh, but also respected by some tools like git
+# - https://man7.org/linux/man-pages/man1/dash.1.html#DESCRIPTION:~:text=by%20the%20shell.-,Invocation,-If%20no%20args
+# - https://zsh.sourceforge.io/Doc/Release/Parameters.html#index-ENV
+ENV=./payload.sh
+# Used for zsh startup
+ZDOTDIR=./.malicious_zsh
+ZSH=./.malicious_zsh
+
+# These are used for native code injection
+LD_PRELOAD=./payload.so
+LD_LIBRARY_PATH=./malicious_libs
+DYLD_INSERT_LIBRARIES=./payload.dylib
+
+# Git environment variables
+GIT_CONFIG_GLOBAL=./.gitconfig-malicious
+GIT_DIR=./malicious_git_dir
+GIT_EDITOR=./malicious_editor
+GIT_EXTERNAL_DIFF=./malicious_diff
+GIT_EXEC_PATH=./.malicious_git_exec
+GIT_PAGER=./malicious_pager
+GIT_SSH=./malicious_ssh
+GIT_SSH_COMMAND=./malicious_ssh_command
+GIT_SSL_NO_VERIFY=true
+GIT_TEMPLATE_DIR=./malicious_templates # for persistence
+
+# Special exported variables
+PATH=./malicious_bin:$PATH
+EDITOR=./malicious
+VISUAL=./malicious
+PAGER=./malicious
+EOF
+)
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
