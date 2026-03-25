@@ -45,10 +45,11 @@ taken by another alias, function, or command, it is silently skipped.
 
 | Function (default) | Function (with `z`) | Command                            | Description            |
 | ------------------- | ------------------- | ---------------------------------- | ---------------------- |
-| `zja`               | `za`                | `zellij attach`                    | Attach to a session    |
-| `zjd`               | `zd`                | `zellij delete-session`            | Delete a session       |
-| `zjk`               | `zk`                | `zellij kill-session`              | Kill a session         |
-| `zjas`              | `zas`               | `zellij action switch-session`     | Switch to a session    |
+| `zja`               | `za`                | `zellij attach`                    | Attach to a session              |
+| `zjd`               | `zd`                | `zellij delete-session`            | Delete a session (exited only)   |
+| `zjdf`              | `zdf`               | `zellij delete-session --force`    | Force-delete any session         |
+| `zjk`               | `zk`                | `zellij kill-session`              | Kill a session                   |
+| `zjas`              | `zas`               | `zellij action switch-session`     | Switch to a session              |
 
 The following convenience functions are always available (unless the name is already taken):
 

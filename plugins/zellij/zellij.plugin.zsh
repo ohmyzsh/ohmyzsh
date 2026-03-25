@@ -64,6 +64,11 @@ if ! _omz_zellij_taken "${_zellij_short_prefix}d"; then
   _zellij_exited_session_targets+=("${_zellij_short_prefix}d")
 fi
 
+if ! _omz_zellij_taken "${_zellij_short_prefix}df"; then
+  eval "${_zellij_short_prefix}df() { command zellij delete-session --force \"\$@\"; }"
+  _zellij_all_session_targets+=("${_zellij_short_prefix}df")
+fi
+
 if ! _omz_zellij_taken "${_zellij_short_prefix}k"; then
   eval "${_zellij_short_prefix}k() { command zellij kill-session \"\$@\"; }"
   _zellij_running_session_targets+=("${_zellij_short_prefix}k")
@@ -92,6 +97,7 @@ if ! _omz_zellij_taken "${_zellij_short_prefix}h"; then
       '${_zellij_short_prefix}s:zellij -s <name>'
       '${_zellij_short_prefix}a:zellij attach <session>'
       '${_zellij_short_prefix}d:zellij delete-session <session>'
+      '${_zellij_short_prefix}df:zellij delete-session --force <session>'
       '${_zellij_short_prefix}k:zellij kill-session <session>'
       '${_zellij_short_prefix}da:zellij delete-all-sessions'
       '${_zellij_short_prefix}ka:zellij kill-all-sessions'
