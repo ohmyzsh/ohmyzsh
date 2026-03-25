@@ -38,15 +38,17 @@ taken by another alias, function, or command, it is silently skipped.
 | `zjs`            | `zs`             | `zs`                   | `zellij -s`                  | Start a named session    |
 | `zjda`           | `zda`            | `zda`                  | `zellij delete-all-sessions` | Delete all sessions      |
 | `zjka`           | `zka`            | `zka`                  | `zellij kill-all-sessions`   | Kill all sessions        |
-| `zjr`            | —                | —                      | `zellij run`                 | Run a command in a pane  |
+| `zjr`            | —                | —                      | `zellij run`                       | Run a command in a pane     |
+| `zjad`           | `zad`            | `zad`                  | `zellij action detach`             | Detach from current session |
 
 ## Functions
 
-| Function (default) | Function (with `z`) | Command                  | Description          |
-| ------------------- | ------------------- | ------------------------ | -------------------- |
-| `zja`               | `za`                | `zellij attach`          | Attach to a session  |
-| `zjd`               | `zd`                | `zellij delete-session`  | Delete a session     |
-| `zjk`               | `zk`                | `zellij kill-session`    | Kill a session       |
+| Function (default) | Function (with `z`) | Command                            | Description            |
+| ------------------- | ------------------- | ---------------------------------- | ---------------------- |
+| `zja`               | `za`                | `zellij attach`                    | Attach to a session    |
+| `zjd`               | `zd`                | `zellij delete-session`            | Delete a session       |
+| `zjk`               | `zk`                | `zellij kill-session`              | Kill a session         |
+| `zjas`              | `zas`               | `zellij action switch-session`     | Switch to a session    |
 
 The following convenience functions are always available (unless the name is already taken):
 

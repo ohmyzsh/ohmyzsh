@@ -69,6 +69,16 @@ if ! _omz_zellij_taken "${_zellij_short_prefix}k"; then
   _zellij_running_session_targets+=("${_zellij_short_prefix}k")
 fi
 
+if ! _omz_zellij_taken "${_zellij_short_prefix}ad"; then
+  alias ${_zellij_short_prefix}ad='zellij action detach'
+  _zellij_comp_targets+=("${_zellij_short_prefix}ad")
+fi
+
+if ! _omz_zellij_taken "${_zellij_short_prefix}as"; then
+  eval "${_zellij_short_prefix}as() { command zellij action switch-session \"\$@\"; }"
+  _zellij_all_session_targets+=("${_zellij_short_prefix}as")
+fi
+
 (( $+functions[zr] || $+aliases[zr] || $+commands[zr] )) || zr() { command zellij run -- "$@"; }
 (( $+functions[zrf] || $+aliases[zrf] || $+commands[zrf] )) || zrf() { command zellij run --floating -- "$@"; }
 (( $+functions[ze] || $+aliases[ze] || $+commands[ze] )) || ze() { command zellij edit "$@"; }
