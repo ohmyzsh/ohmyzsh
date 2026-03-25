@@ -58,6 +58,10 @@ The following convenience functions are always available (unless the name is alr
 | `zrf`    | `zellij run --floating --`   | Run a command in a floating pane   |
 | `ze`     | `zellij edit`                | Edit a file in a pane              |
 
+## Help
+
+Type `zjh` (or `zh` with `z` prefix) to see a summary of all available aliases and functions.
+
 ## Completions
 
 This plugin caches the zellij completion script. On first load the cache is generated

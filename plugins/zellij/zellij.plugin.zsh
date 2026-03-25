@@ -83,6 +83,35 @@ fi
 (( $+functions[zrf] || $+aliases[zrf] || $+commands[zrf] )) || zrf() { command zellij run --floating -- "$@"; }
 (( $+functions[ze] || $+aliases[ze] || $+commands[ze] )) || ze() { command zellij edit "$@"; }
 
+if ! _omz_zellij_taken "${_zellij_short_prefix}h"; then
+  eval "${_zellij_short_prefix}h() {
+    printf '\\e[1mzellij plugin aliases\\e[0m\\n'
+    local -a _entries=(
+      '${_zellij_root_alias}:zellij'
+      '${_zellij_short_prefix}l:zellij list-sessions'
+      '${_zellij_short_prefix}s:zellij -s <name>'
+      '${_zellij_short_prefix}a:zellij attach <session>'
+      '${_zellij_short_prefix}d:zellij delete-session <session>'
+      '${_zellij_short_prefix}k:zellij kill-session <session>'
+      '${_zellij_short_prefix}da:zellij delete-all-sessions'
+      '${_zellij_short_prefix}ka:zellij kill-all-sessions'
+      '${_zellij_short_prefix}ad:zellij action detach'
+      '${_zellij_short_prefix}as:zellij action switch-session <session>'
+      '${_zellij_short_prefix}r:zellij run'
+      'zr:zellij run -- <cmd>'
+      'zrf:zellij run --floating -- <cmd>'
+      'ze:zellij edit <file>'
+      '${_zellij_short_prefix}h:Show this help'
+    )
+    local entry name cmd
+    for entry in \"\${_entries[@]}\"; do
+      name=\"\${entry%%:*}\"
+      cmd=\"\${entry#*:}\"
+      (( \$+aliases[\$name] || \$+functions[\$name] )) && printf '  %-8s  %s\\n' \"\$name\" \"\$cmd\"
+    done
+  }"
+fi
+
 _ZELLIJ_COMP_DIR="${ZSH_CACHE_DIR}/completions"
 _ZELLIJ_COMP_FILE="${_ZELLIJ_COMP_DIR}/_zellij"
 
