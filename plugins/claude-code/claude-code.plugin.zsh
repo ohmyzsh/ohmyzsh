@@ -5,15 +5,19 @@
 # Prerequisite check
 
 if ! (( $+commands[claude] )); then
-  print "zsh claude-code plugin: claude not found. Install Claude Code: npm install -g @anthropic-ai/claude-code" >&2
+  print "zsh claude-code plugin: claude not found. Please install Claude Code before using this plugin." >&2
   return 1
 fi
 
 # Configuration variables
 
+# Default model for clm function (e.g., opus, sonnet, haiku, or full model ID)
 : ${ZSH_CLAUDE_DEFAULT_MODEL:=}
+# Default reasoning effort level (low, medium, high, max)
 : ${ZSH_CLAUDE_DEFAULT_EFFORT:=}
+# Default permission mode for claude sessions (e.g., plan, autoaccept)
 : ${ZSH_CLAUDE_DEFAULT_PERMISSION_MODE:=}
+# Auto-resume last conversation on new shell start (true/false)
 : ${ZSH_CLAUDE_AUTO_CONTINUE:=false}
 
 # Core aliases
