@@ -128,12 +128,16 @@ _omz_zellij_ls_raw() {
   command zellij list-sessions --no-formatting 2>/dev/null || command zellij list-sessions 2>/dev/null
 }
 
+_omz_zellij_session_names() {
+  # Use --short if available (zellij ≥0.44), fall back to sed parsing
+  command zellij list-sessions --short --no-formatting 2>/dev/null \
+    || printf '%s\n' "$(_omz_zellij_ls_raw)" | LC_ALL=C sed -nE 's/^([^[:space:]]+).*/\1/p'
+}
+
 _omz_zellij_all_sessions() {
   emulate -L zsh
-  local out
   local -a sessions
-  out="$(_omz_zellij_ls_raw)"
-  sessions=("${(@f)$(printf '%s\n' "$out" | LC_ALL=C sed -nE 's/^([^[:space:]]+).*/\1/p')}")
+  sessions=("${(@f)$(_omz_zellij_session_names)}")
   (( ${#sessions[@]} )) && compadd -Q -a sessions
 }
 
