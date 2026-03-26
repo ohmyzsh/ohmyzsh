@@ -473,7 +473,8 @@ EOF
   # be prompted for the password either way, so this shouldn't cause any issues.
   #
   if user_can_sudo; then
-    sudo -k chsh -s "$zsh" "$USER"  # -k forces the password prompt
+    sudo -k >/dev/null 2>&1         # -k forces the password prompt
+    sudo chsh -s "$zsh" "$USER"
   else
     chsh -s "$zsh" "$USER"          # run chsh normally
   fi
