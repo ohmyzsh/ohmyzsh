@@ -14,6 +14,7 @@ plugins=(... jj)
 | ------ | ----------------------------- |
 | jja    | `jj abandon`                  |
 | jjb    | `jj bookmark`                 |
+| jjba   | `jj bookmark advance`         |
 | jjbc   | `jj bookmark create`          |
 | jjbd   | `jj bookmark delete`          |
 | jjbf   | `jj bookmark forget`          |
