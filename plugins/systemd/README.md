@@ -10,44 +10,64 @@ plugins=(... systemd)
 
 ## Aliases
 
-| Alias                  | Command                            | Description                                                      |
-|:-----------------------|:-----------------------------------|:-----------------------------------------------------------------|
-| `sc-failed`            | `systemctl --failed`               | List failed systemd units                                        |
-| `sc-list-units`        | `systemctl list-units`             | List all units systemd has in memory                             |
-| `sc-is-active`         | `systemctl is-active`              | Show whether a unit is active                                    |
-| `sc-status`            | `systemctl status`                 | Show terse runtime status information about one or more units    |
-| `sc-show`              | `systemctl show`                   | Show properties of units, jobs, or the manager itself            |
-| `sc-help`              | `systemctl help`                   | Show man page of units                                           |
-| `sc-list-unit-files`   | `systemctl list-unit-files`        | List unit files installed on the system                          |
-| `sc-is-enabled`        | `systemctl is-enabled`             | Checks whether any of the specified unit files are enabled       |
-| `sc-list-jobs`         | `systemctl list-jobs`              | List jobs that are in progress                                   |
-| `sc-show-environment`  | `systemctl show-environment`       | Dump the systemd manager environment block                       |
-| `sc-cat`               | `systemctl cat`                    | Show backing files of one or more units                          |
-| `sc-list-timers`       | `systemctl list-timers`            | List timer units currently in memory                             |
-| **Aliases with sudo**                                                                                                        |||
-| `sc-start`             | `sudo systemctl start`             | Start Unit(s)                                                    |
-| `sc-stop`              | `sudo systemctl stop`              | Stop Unit(s)                                                     |
-| `sc-reload`            | `sudo systemctl reload`            | Reload Unit(s)                                                   |
-| `sc-restart`           | `sudo systemctl restart`           | Restart Unit(s)                                                  |
-| `sc-try-restart`       | `sudo systemctl try-restart`       | Restart Unit(s)                                                  |
-| `sc-isolate`           | `sudo systemctl isolate`           | Start a unit and its dependencies and stop all others            |
-| `sc-kill`              | `sudo systemctl kill`              | Kill unit(s)                                                     |
-| `sc-reset-failed`      | `sudo systemctl reset-failed`      | Reset the "failed" state of the specified units,                 |
-| `sc-enable`            | `sudo systemctl enable`            | Enable unit(s)                                                   |
-| `sc-disable`           | `sudo systemctl disable`           | Disable unit(s)                                                  |
-| `sc-reenable`          | `sudo systemctl reenable`          | Reenable unit(s)                                                 |
-| `sc-preset`            | `sudo systemctl preset`            | Reset the enable/disable status one or more unit files           |
-| `sc-mask`              | `sudo systemctl mask`              | Mask unit(s)                                                     |
-| `sc-unmask`            | `sudo systemctl unmask`            | Unmask unit(s)                                                   |
-| `sc-link`              | `sudo systemctl link`              | Link a unit file into the unit file search path                  |
-| `sc-load`              | `sudo systemctl load`              | Load unit(s)                                                     |
-| `sc-cancel`            | `sudo systemctl cancel`            | Cancel job(s)                                                    |
-| `sc-set-environment`   | `sudo systemctl set-environment`   | Set one or more systemd manager environment variables            |
-| `sc-unset-environment` | `sudo systemctl unset-environment` | Unset one or more systemd manager environment variables          |
-| `sc-edit`              | `sudo systemctl edit`              | Edit a drop-in snippet or a whole replacement file with `--full` |
-| `sc-enable-now`        | `sudo systemctl enable --now`      | Enable and start unit(s)                                         |
-| `sc-disable-now`       | `sudo systemctl disable --now`     | Disable and stop unit(s)                                         |
-| `sc-mask-now`          | `sudo systemctl mask --now`        | Mask and stop unit(s)                                            |
+| Alias                  | Command                             | Description                                                      |
+|:-----------------------|:------------------------------------|:-----------------------------------------------------------------|
+| `sc-failed`            | `systemctl --failed`                | List failed systemd units                                        |
+| `sc-list-units`        | `systemctl list-units`              | List all units systemd has in memory                             |
+| `sc-is-active`         | `systemctl is-active`               | Show whether a unit is active                                    |
+| `sc-status`            | `systemctl status`                  | Show terse runtime status information about one or more units    |
+| `sc-show`              | `systemctl show`                    | Show properties of units, jobs, or the manager itself            |
+| `sc-help`              | `systemctl help`                    | Show man page of units                                           |
+| `sc-list-unit-files`   | `systemctl list-unit-files`         | List unit files installed on the system                          |
+| `sc-is-enabled`        | `systemctl is-enabled`              | Checks whether any of the specified unit files are enabled       |
+| `sc-list-jobs`         | `systemctl list-jobs`               | List jobs that are in progress                                   |
+| `sc-show-environment`  | `systemctl show-environment`        | Dump the systemd manager environment block                       |
+| `sc-cat`               | `systemctl cat`                     | Show backing files of one or more units                          |
+| `sc-list-timers`       | `systemctl list-timers`             | List timer units currently in memory                             |
+| **Privileged aliases**                                                                                                        |||
+| `sc-start`             | `$SUDO systemctl start`             | Start Unit(s)                                                    |
+| `sc-stop`              | `$SUDO systemctl stop`              | Stop Unit(s)                                                     |
+| `sc-reload`            | `$SUDO systemctl reload`            | Reload Unit(s)                                                   |
+| `sc-restart`           | `$SUDO systemctl restart`           | Restart Unit(s)                                                  |
+| `sc-try-restart`       | `$SUDO systemctl try-restart`       | Restart Unit(s)                                                  |
+| `sc-isolate`           | `$SUDO systemctl isolate`           | Start a unit and its dependencies and stop all others            |
+| `sc-kill`              | `$SUDO systemctl kill`              | Kill unit(s)                                                     |
+| `sc-reset-failed`      | `$SUDO systemctl reset-failed`      | Reset the "failed" state of the specified units,                 |
+| `sc-enable`            | `$SUDO systemctl enable`            | Enable unit(s)                                                   |
+| `sc-disable`           | `$SUDO systemctl disable`           | Disable unit(s)                                                  |
+| `sc-reenable`          | `$SUDO systemctl reenable`          | Reenable unit(s)                                                 |
+| `sc-preset`            | `$SUDO systemctl preset`            | Reset the enable/disable status one or more unit files           |
+| `sc-mask`              | `$SUDO systemctl mask`              | Mask unit(s)                                                     |
+| `sc-unmask`            | `$SUDO systemctl unmask`            | Unmask unit(s)                                                   |
+| `sc-link`              | `$SUDO systemctl link`              | Link a unit file into the unit file search path                  |
+| `sc-load`              | `$SUDO systemctl load`              | Load unit(s)                                                     |
+| `sc-cancel`            | `$SUDO systemctl cancel`            | Cancel job(s)                                                    |
+| `sc-set-environment`   | `$SUDO systemctl set-environment`   | Set one or more systemd manager environment variables            |
+| `sc-unset-environment` | `$SUDO systemctl unset-environment` | Unset one or more systemd manager environment variables          |
+| `sc-edit`              | `$SUDO systemctl edit`              | Edit a drop-in snippet or a whole replacement file with `--full` |
+| `sc-enable-now`        | `$SUDO systemctl enable --now`      | Enable and start unit(s)                                         |
+| `sc-disable-now`       | `$SUDO systemctl disable --now`     | Disable and stop unit(s)                                         |
+| `sc-mask-now`          | `$SUDO systemctl mask --now`        | Mask and stop unit(s)                                            |
+
+### Privileged aliases
+
+systemd plugin supports multiple privilege elevation tools. When evaluating aliases `$SUDO`
+(`$privilege_tool` in code) gets expanded to the relevant command.
+
+You can choose which tool to use by setting `$ZSH_THEME_SYSTEMD_PRIVILEGE_TOOL`. The
+default, which is used when the variable is not set (or set incorrectrly) is `sudo`.
+
+Available options are:
+
+| Tool             | Command   | Comment                                                                                 | 
+|:-----------------|:----------|:----------------------------------------------------------------------------------------|
+| `builtin-polkit` | --        | Does no prepend any command, leaving authorization to systemd                           | 
+| `custom`         | varies    | Sets `$privilege_tool` to the value of `$ZSH_THEME_SYSTEMD_PRIVILEGE_TOOL_CUSTOM`       |
+| `sudo`           | `sudo`    | Default value                                                                           |
+| `sudo-rs`        | `sudo-rs` | Memory safe implementation of sudo                                                      | 
+| `doas`           | `doas`    | Fork of OpenBSD `doas` command                                                          |
+| `pkexec`         | `pkexec`  | Uses polkit for authorization                                                           |
+| `run0`           | `run0`    | Part of systemd, does not rely on suid. Uses the same polkit action as `builtin-polkit` | 
 
 ### User aliases
 
