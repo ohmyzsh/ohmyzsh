@@ -24,7 +24,7 @@ plugins=(... systemd)
 | `sc-show-environment`  | `systemctl show-environment`       | Dump the systemd manager environment block                       |
 | `sc-cat`               | `systemctl cat`                    | Show backing files of one or more units                          |
 | `sc-list-timers`       | `systemctl list-timers`            | List timer units currently in memory                             |
-| **Aliases with sudo**                                                                                                        |||
+| **Privileged aliases**                                                                                                       |||
 | `sc-start`             | `sudo systemctl start`             | Start Unit(s)                                                    |
 | `sc-stop`              | `sudo systemctl stop`              | Stop Unit(s)                                                     |
 | `sc-reload`            | `sudo systemctl reload`            | Reload Unit(s)                                                   |
@@ -49,6 +49,28 @@ plugins=(... systemd)
 | `sc-enable-now`        | `sudo systemctl enable --now`      | Enable and start unit(s)                                         |
 | `sc-disable-now`       | `sudo systemctl disable --now`     | Disable and stop unit(s)                                         |
 | `sc-mask-now`          | `sudo systemctl mask --now`        | Mask and stop unit(s)                                            |
+
+### Privileged aliases
+
+systemd plugin supports alternative privilege elevation tools. You can prepend an arbitrary string,
+replacing `sudo`, to the privileged aliases by setting `$ZSH_SYSTEMD_SUDO` variable. You can leave
+authorization to systemd by setting `$ZSH_SYSTEMD_SUDO` to an empty string.
+
+To use `doas` as your elevation tool you will need to add the following line to your zshrc;
+
+```zsh
+ZSH_SYSTEMD_SUDO="doas"
+```
+
+After shell restart, you will see that alias for `sc-enable` is changed:
+
+```sh
+$ which sc-enable
+sc-enable: aliased to doas systemctl enable
+```
+
+These aliases are evaluated during oh-my-zsh startup, and can't be changed interactively (you will
+need to restart shell to see changes).
 
 ### User aliases
 

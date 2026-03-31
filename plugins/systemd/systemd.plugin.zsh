@@ -67,22 +67,33 @@ power_commands=(
   suspend
 )
 
+if ! [[ -v ZSH_SYSTEMD_SUDO ]]; then
+  ZSH_SYSTEMD_SUDO="sudo"
+fi
+
 for c in $user_commands; do
   alias "sc-$c"="systemctl $c"
   alias "scu-$c"="systemctl --user $c"
 done
 
-for c in $sudo_commands; do
-  alias "sc-$c"="sudo systemctl $c"
-  alias "scu-$c"="systemctl --user $c"
-done
+# Avoids leading space in alias when using polkit
+if [[ -n "${ZSH_SYSTEMD_SUDO}" ]]; then
+  for c in $sudo_commands; do
+    alias "sc-$c"="$ZSH_SYSTEMD_SUDO systemctl $c"
+    alias "scu-$c"="systemctl --user $c"
+  done
+else
+  for c in $sudo_commands; do
+    alias "sc-$c"="systemctl $c"
+    alias "scu-$c"="systemctl --user $c"
+  done
+fi
 
 for c in $power_commands; do
   alias "sc-$c"="systemctl $c"
 done
 
 unset c user_commands sudo_commands power_commands
-
 
 # --now commands
 alias sc-enable-now="sc-enable --now"
