@@ -196,7 +196,7 @@ ${_km_cyan}GPG 命令:${_km_reset}
         usage_ssh_rm          "Usage: keyman ssh rm <keyfile>"
         key_not_found         "Key not found"
         # -- gpg quick-new --
-        usage_gpg_quick_new   "Usage: keyman gpg quick-new \"Name\" \"Email\" [expiry]"
+        usage_gpg_quick_new   "Usage: keyman gpg quick-new \"Name\" \"Email\" [exp]"
         email_has_gpg_key     "This email already has a GPG key:"
         confirm_create_new    "Continue creating new key? (y/N) "
         creating_gpg_key      "Creating GPG key..."
@@ -735,8 +735,23 @@ _keyman() {
                   ;;
                 pub|priv|copy|fp|rm)
                   local -a key_ids
-                  key_ids=(${(f)"$(gpg --list-keys --with-colons 2>/dev/null \
-                    | awk -F: '/^uid/{print $10}; /^pub/{print $5}')"})
+                  key_ids=(${(f)"$(gpg --list-keys --with-colons 2>/dev/null | awk -F: '
+                    /^pub/ { keyid = $5 }
+                    /^uid/ && keyid != "" {
+                      uid = $10
+                      if (uid != "") {
+                        print keyid ":" uid
+                        n = index(uid, "<")
+                        if (n > 0) {
+                          email = substr(uid, n + 1)
+                          p = index(email, ">")
+                          if (p > 0) email = substr(email, 1, p - 1)
+                          if (email != "") print email ":" uid
+                        }
+                        keyid = ""
+                      }
+                    }
+                  ')"})
                   _describe 'GPG key ID or email' key_ids
                   ;;
               esac
