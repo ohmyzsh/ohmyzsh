@@ -1,7 +1,14 @@
 #!/usr/bin/env zsh
 # keyman.plugin.zsh -- SSH & GPG key management plugin for oh-my-zsh
 #
+# Author:  keyman contributors
+# Version: 0.2.0
+# License: MIT (same as oh-my-zsh)
+#
 # Usage: add 'keyman' to plugins in ~/.zshrc
+#   keyman ssh <action> [args...]
+#   keyman gpg <action> [args...]
+#   keyman help
 #
 # Configuration (in .zshrc, before plugins=(...)):
 #   zstyle ':omz:plugins:keyman' lang en          # en (default) | zh
@@ -21,6 +28,7 @@ typeset -g _km_green=$'\033[0;32m'
 typeset -g _km_yellow=$'\033[0;33m'
 typeset -g _km_blue=$'\033[0;34m'
 typeset -g _km_cyan=$'\033[0;36m'
+typeset -g _km_bold=$'\033[1m'
 typeset -g _km_reset=$'\033[0m'
 
 _km_info()  { print -r -- "${_km_blue}[keyman]${_km_reset} $*" }
@@ -69,7 +77,7 @@ function {
         label_type            "类型:"
         label_fingerprint     "指纹:"
         label_comment         "注释:"
-        # -- km-ssh-new --
+        # -- ssh new --
         ssh_dir_created       "已创建 ~/.ssh 目录"
         file_exists           "文件已存在"
         confirm_overwrite     "是否覆盖？(y/N) "
@@ -78,19 +86,19 @@ function {
         key_created           "密钥已创建"
         added_to_agent        "已添加到 ssh-agent"
         key_creation_failed   "密钥创建失败"
-        # -- km-ssh-ls --
+        # -- ssh ls --
         ssh_dir_not_found     "~/.ssh 目录不存在"
         no_ssh_keys_found     "未找到任何 SSH 公钥"
-        # -- km-ssh-copy --
+        # -- ssh copy --
         pubkey_not_found      "公钥文件不存在"
         available_pubkeys     "可用的公钥："
         none                  "(无)"
         pubkey_copied         "公钥已复制到剪贴板"
-        # -- km-ssh-rm --
-        usage_ssh_rm          "用法: km-ssh-rm <keyfile>"
+        # -- ssh rm --
+        usage_ssh_rm          "用法: keyman ssh rm <keyfile>"
         key_not_found         "密钥不存在"
-        # -- km-gpg-quick-new --
-        usage_gpg_quick_new   "用法: km-gpg-quick-new \"姓名\" \"邮箱\" [过期时间]"
+        # -- gpg quick-new --
+        usage_gpg_quick_new   "用法: keyman gpg quick-new \"姓名\" \"邮箱\" [过期时间]"
         email_has_gpg_key     "该邮箱已有 GPG 密钥:"
         confirm_create_new    "继续创建新密钥？(y/N) "
         creating_gpg_key      "正在创建 GPG 密钥..."
@@ -99,54 +107,56 @@ function {
         label_expiry          "  过期:"
         gpg_key_created       "GPG 密钥已创建"
         gpg_key_creation_failed "GPG 密钥创建失败"
-        # -- km-gpg-ls --
+        # -- gpg ls --
         gpg_secret_key_list   "GPG 私钥列表:"
         gpg_public_key_list   "GPG 公钥列表:"
-        # -- km-gpg-pub --
-        usage_gpg_pub         "用法: km-gpg-pub <邮箱或KeyID>"
+        # -- gpg pub --
+        usage_gpg_pub         "用法: keyman gpg pub <邮箱或KeyID>"
         gpg_key_not_found     "未找到密钥"
         gpg_public_key        "GPG 公钥"
-        # -- km-gpg-priv --
-        usage_gpg_priv        "用法: km-gpg-priv <邮箱或KeyID>"
+        # -- gpg priv --
+        usage_gpg_priv        "用法: keyman gpg priv <邮箱或KeyID>"
         gpg_secret_not_found  "未找到私钥"
         warn_export_secret    "即将导出私钥！请确保在安全环境下操作"
         confirm_export        "确认导出？(y/N) "
-        # -- km-gpg-copy --
-        usage_gpg_copy        "用法: km-gpg-copy <邮箱或KeyID>"
+        # -- gpg copy --
+        usage_gpg_copy        "用法: keyman gpg copy <邮箱或KeyID>"
         gpg_pubkey_copied     "GPG 公钥已复制到剪贴板"
-        # -- km-gpg-fp --
-        usage_gpg_fp          "用法: km-gpg-fp <邮箱或KeyID>"
-        # -- km-gpg-rm --
-        usage_gpg_rm          "用法: km-gpg-rm <邮箱或KeyID>"
+        # -- gpg fp --
+        usage_gpg_fp          "用法: keyman gpg fp <邮箱或KeyID>"
+        # -- gpg rm --
+        usage_gpg_rm          "用法: keyman gpg rm <邮箱或KeyID>"
         about_to_delete_gpg   "即将删除 GPG 密钥"
         key_info              "密钥信息:"
+        # -- errors --
+        unknown_group         "未知命令组: %s (可用: ssh, gpg)"
+        unknown_ssh_action    "未知 SSH 操作: %s (可用: new, ls, copy, rm)"
+        unknown_gpg_action    "未知 GPG 操作: %s (可用: new, quick-new, ls, pub, priv, copy, fp, rm)"
         # -- debug --
-        loaded                "已加载，输入 keyman 查看帮助"
+        loaded                "已加载，输入 keyman help 查看帮助"
         # -- help --
         help_text \
-"╔═══════════════════════════════════════════════════════════════╗
-║                       keyman 密钥管理                        ║
-╠═══════════════════════════════════════════════════════════════╣
-║                                                               ║
-║  SSH 命令:                                                    ║
-║  ──────────────────────────────────────────────────────       ║
-║  km-ssh-new  [comment] [file] [type]  创建 SSH 密钥          ║
-║  km-ssh-ls                            列出所有 SSH 公钥      ║
-║  km-ssh-copy [pubkey_file]            复制公钥到剪贴板       ║
-║  km-ssh-rm   <keyfile>                删除 SSH 密钥对        ║
-║                                                               ║
-║  GPG 命令:                                                    ║
-║  ──────────────────────────────────────────────────────       ║
-║  km-gpg-new                           创建密钥（交互式）     ║
-║  km-gpg-quick-new \"姓名\" \"邮箱\" [期限] 创建密钥（快速）  ║
-║  km-gpg-ls [-s|--secret]              列出密钥               ║
-║  km-gpg-pub  <id>                     导出公钥               ║
-║  km-gpg-priv <id>                     导出私钥               ║
-║  km-gpg-copy <id>                     复制公钥到剪贴板       ║
-║  km-gpg-fp   <id>                     查看指纹               ║
-║  km-gpg-rm   <id>                     删除密钥               ║
-║                                                               ║
-╚═══════════════════════════════════════════════════════════════╝"
+"${_km_bold}keyman${_km_reset} — SSH & GPG 密钥管理
+
+${_km_cyan}用法:${_km_reset}
+  keyman <命令组> <操作> [参数...]
+  keyman help
+
+${_km_cyan}SSH 命令:${_km_reset}
+  keyman ssh new   [comment] [file] [type]  创建 SSH 密钥
+  keyman ssh ls                             列出所有 SSH 公钥
+  keyman ssh copy  [pubkey_file]            复制公钥到剪贴板
+  keyman ssh rm    <keyfile>                删除 SSH 密钥对
+
+${_km_cyan}GPG 命令:${_km_reset}
+  keyman gpg new                            创建密钥（交互式）
+  keyman gpg quick-new \"姓名\" \"邮箱\" [期限]  创建密钥（快速）
+  keyman gpg ls    [-s|--secret]            列出密钥
+  keyman gpg pub   <id>                     导出公钥
+  keyman gpg priv  <id>                     导出私钥
+  keyman gpg copy  <id>                     复制公钥到剪贴板
+  keyman gpg fp    <id>                     查看指纹
+  keyman gpg rm    <id>                     删除密钥"
       )
       ;;
     *)
@@ -165,7 +175,7 @@ function {
         label_type            "Type:"
         label_fingerprint     "Fingerprint:"
         label_comment         "Comment:"
-        # -- km-ssh-new --
+        # -- ssh new --
         ssh_dir_created       "Created ~/.ssh directory"
         file_exists           "File already exists"
         confirm_overwrite     "Overwrite? (y/N) "
@@ -174,19 +184,19 @@ function {
         key_created           "Key created"
         added_to_agent        "Added to ssh-agent"
         key_creation_failed   "Key creation failed"
-        # -- km-ssh-ls --
+        # -- ssh ls --
         ssh_dir_not_found     "~/.ssh directory does not exist"
         no_ssh_keys_found     "No SSH public keys found"
-        # -- km-ssh-copy --
+        # -- ssh copy --
         pubkey_not_found      "Public key file not found"
         available_pubkeys     "Available public keys:"
         none                  "(none)"
         pubkey_copied         "Public key copied to clipboard"
-        # -- km-ssh-rm --
-        usage_ssh_rm          "Usage: km-ssh-rm <keyfile>"
+        # -- ssh rm --
+        usage_ssh_rm          "Usage: keyman ssh rm <keyfile>"
         key_not_found         "Key not found"
-        # -- km-gpg-quick-new --
-        usage_gpg_quick_new   "Usage: km-gpg-quick-new \"Name\" \"Email\" [expiry]"
+        # -- gpg quick-new --
+        usage_gpg_quick_new   "Usage: keyman gpg quick-new \"Name\" \"Email\" [expiry]"
         email_has_gpg_key     "This email already has a GPG key:"
         confirm_create_new    "Continue creating new key? (y/N) "
         creating_gpg_key      "Creating GPG key..."
@@ -195,54 +205,56 @@ function {
         label_expiry          "  Expiry:"
         gpg_key_created       "GPG key created"
         gpg_key_creation_failed "GPG key creation failed"
-        # -- km-gpg-ls --
+        # -- gpg ls --
         gpg_secret_key_list   "GPG secret key list:"
         gpg_public_key_list   "GPG public key list:"
-        # -- km-gpg-pub --
-        usage_gpg_pub         "Usage: km-gpg-pub <email-or-KeyID>"
+        # -- gpg pub --
+        usage_gpg_pub         "Usage: keyman gpg pub <email-or-KeyID>"
         gpg_key_not_found     "Key not found"
         gpg_public_key        "GPG public key"
-        # -- km-gpg-priv --
-        usage_gpg_priv        "Usage: km-gpg-priv <email-or-KeyID>"
+        # -- gpg priv --
+        usage_gpg_priv        "Usage: keyman gpg priv <email-or-KeyID>"
         gpg_secret_not_found  "Secret key not found"
         warn_export_secret    "About to export secret key! Make sure you are in a secure environment"
         confirm_export        "Confirm export? (y/N) "
-        # -- km-gpg-copy --
-        usage_gpg_copy        "Usage: km-gpg-copy <email-or-KeyID>"
+        # -- gpg copy --
+        usage_gpg_copy        "Usage: keyman gpg copy <email-or-KeyID>"
         gpg_pubkey_copied     "GPG public key copied to clipboard"
-        # -- km-gpg-fp --
-        usage_gpg_fp          "Usage: km-gpg-fp <email-or-KeyID>"
-        # -- km-gpg-rm --
-        usage_gpg_rm          "Usage: km-gpg-rm <email-or-KeyID>"
+        # -- gpg fp --
+        usage_gpg_fp          "Usage: keyman gpg fp <email-or-KeyID>"
+        # -- gpg rm --
+        usage_gpg_rm          "Usage: keyman gpg rm <email-or-KeyID>"
         about_to_delete_gpg   "About to delete GPG key"
         key_info              "Key info:"
+        # -- errors --
+        unknown_group         "Unknown command group: %s (available: ssh, gpg)"
+        unknown_ssh_action    "Unknown SSH action: %s (available: new, ls, copy, rm)"
+        unknown_gpg_action    "Unknown GPG action: %s (available: new, quick-new, ls, pub, priv, copy, fp, rm)"
         # -- debug --
-        loaded                "Loaded. Type 'keyman' for help"
+        loaded                "Loaded. Type 'keyman help' for help"
         # -- help --
         help_text \
-"╔═══════════════════════════════════════════════════════════════╗
-║                     keyman - Key Manager                      ║
-╠═══════════════════════════════════════════════════════════════╣
-║                                                               ║
-║  SSH Commands:                                                ║
-║  ──────────────────────────────────────────────────────       ║
-║  km-ssh-new  [comment] [file] [type]  Create SSH key          ║
-║  km-ssh-ls                            List SSH public keys    ║
-║  km-ssh-copy [pubkey_file]            Copy pubkey to clipboard║
-║  km-ssh-rm   <keyfile>                Delete SSH key pair     ║
-║                                                               ║
-║  GPG Commands:                                                ║
-║  ──────────────────────────────────────────────────────       ║
-║  km-gpg-new                           Create key (interactive)║
-║  km-gpg-quick-new \"Name\" \"Email\" [exp] Create key (quick) ║
-║  km-gpg-ls [-s|--secret]              List keys               ║
-║  km-gpg-pub  <id>                     Export public key       ║
-║  km-gpg-priv <id>                     Export secret key       ║
-║  km-gpg-copy <id>                     Copy pubkey to clipboard║
-║  km-gpg-fp   <id>                     Show fingerprint        ║
-║  km-gpg-rm   <id>                     Delete key              ║
-║                                                               ║
-╚═══════════════════════════════════════════════════════════════╝"
+"${_km_bold}keyman${_km_reset} — SSH & GPG Key Manager
+
+${_km_cyan}Usage:${_km_reset}
+  keyman <group> <action> [args...]
+  keyman help
+
+${_km_cyan}SSH Commands:${_km_reset}
+  keyman ssh new   [comment] [file] [type]  Create SSH key
+  keyman ssh ls                             List SSH public keys
+  keyman ssh copy  [pubkey_file]            Copy pubkey to clipboard
+  keyman ssh rm    <keyfile>                Delete SSH key pair
+
+${_km_cyan}GPG Commands:${_km_reset}
+  keyman gpg new                            Create key (interactive)
+  keyman gpg quick-new \"Name\" \"Email\" [exp] Create key (quick)
+  keyman gpg ls    [-s|--secret]            List keys
+  keyman gpg pub   <id>                     Export public key
+  keyman gpg priv  <id>                     Export secret key
+  keyman gpg copy  <id>                     Copy pubkey to clipboard
+  keyman gpg fp    <id>                     Show fingerprint
+  keyman gpg rm    <id>                     Delete key"
       )
       ;;
   esac
@@ -252,12 +264,11 @@ function {
 }
 
 # =====================================================
-#  SSH Commands
+#  SSH Actions
 # =====================================================
 
-# Create SSH key
-# Usage: km-ssh-new [comment] [keyfile] [type]
-km-ssh-new() {
+# keyman ssh new [comment] [keyfile] [type]
+_km_ssh_new() {
   local comment="${1:-${USER:-$(whoami)}@${HOST:-$(hostname)}}"
   local keyfile="${2:-}"
   local keytype="${3:-}"
@@ -338,8 +349,8 @@ km-ssh-new() {
   fi
 }
 
-# List all SSH public keys
-km-ssh-ls() {
+# keyman ssh ls
+_km_ssh_ls() {
   local found=0
 
   if [[ ! -d "$HOME/.ssh" ]]; then
@@ -373,9 +384,8 @@ km-ssh-ls() {
   fi
 }
 
-# Copy SSH public key to clipboard
-# Usage: km-ssh-copy [keyfile]
-km-ssh-copy() {
+# keyman ssh copy [keyfile]
+_km_ssh_copy() {
   local pubkey="${1:-$HOME/.ssh/id_ed25519.pub}"
 
   [[ "$pubkey" != *.pub ]] && pubkey="${pubkey}.pub"
@@ -393,9 +403,8 @@ km-ssh-copy() {
   fi
 }
 
-# Delete SSH key pair
-# Usage: km-ssh-rm <keyfile>
-km-ssh-rm() {
+# keyman ssh rm <keyfile>
+_km_ssh_rm() {
   if [[ -z "${1:-}" ]]; then
     _km_err "${_km_msg[usage_ssh_rm]}"
     return 1
@@ -426,15 +435,16 @@ km-ssh-rm() {
 }
 
 # =====================================================
-#  GPG Commands
+#  GPG Actions
 # =====================================================
 
-# Create GPG key (interactive)
-alias km-gpg-new='gpg --full-generate-key'
+# keyman gpg new  (interactive)
+_km_gpg_new() {
+  gpg --full-generate-key
+}
 
-# Create GPG key (non-interactive)
-# Usage: km-gpg-quick-new "Name" "Email" [expiry]
-km-gpg-quick-new() {
+# keyman gpg quick-new "Name" "Email" [expiry]
+_km_gpg_quick_new() {
   if [[ -z "${1:-}" || -z "${2:-}" ]]; then
     _km_err "${_km_msg[usage_gpg_quick_new]}"
     return 1
@@ -479,9 +489,8 @@ EOF
   fi
 }
 
-# List GPG keys
-# Usage: km-gpg-ls [--secret|-s]
-km-gpg-ls() {
+# keyman gpg ls [--secret|-s]
+_km_gpg_ls() {
   if [[ "$1" == "--secret" || "$1" == "-s" ]]; then
     _km_info "${_km_msg[gpg_secret_key_list]}"
     echo ""
@@ -493,9 +502,8 @@ km-gpg-ls() {
   fi
 }
 
-# Export GPG public key
-# Usage: km-gpg-pub <email-or-KeyID>
-km-gpg-pub() {
+# keyman gpg pub <email-or-KeyID>
+_km_gpg_pub() {
   if [[ -z "${1:-}" ]]; then
     _km_err "${_km_msg[usage_gpg_pub]}"
     return 1
@@ -512,9 +520,8 @@ km-gpg-pub() {
   gpg --armor --export "$key_id"
 }
 
-# Export GPG secret key
-# Usage: km-gpg-priv <email-or-KeyID>
-km-gpg-priv() {
+# keyman gpg priv <email-or-KeyID>
+_km_gpg_priv() {
   if [[ -z "${1:-}" ]]; then
     _km_err "${_km_msg[usage_gpg_priv]}"
     return 1
@@ -537,9 +544,8 @@ km-gpg-priv() {
   fi
 }
 
-# Copy GPG public key to clipboard
-# Usage: km-gpg-copy <email-or-KeyID>
-km-gpg-copy() {
+# keyman gpg copy <email-or-KeyID>
+_km_gpg_copy() {
   if [[ -z "${1:-}" ]]; then
     _km_err "${_km_msg[usage_gpg_copy]}"
     return 1
@@ -557,9 +563,8 @@ km-gpg-copy() {
   fi
 }
 
-# Show GPG key fingerprint
-# Usage: km-gpg-fp <email-or-KeyID>
-km-gpg-fp() {
+# keyman gpg fp <email-or-KeyID>
+_km_gpg_fp() {
   if [[ -z "${1:-}" ]]; then
     _km_err "${_km_msg[usage_gpg_fp]}"
     return 1
@@ -567,9 +572,8 @@ km-gpg-fp() {
   gpg --fingerprint "$1"
 }
 
-# Delete GPG key
-# Usage: km-gpg-rm <email-or-KeyID>
-km-gpg-rm() {
+# keyman gpg rm <email-or-KeyID>
+_km_gpg_rm() {
   if [[ -z "${1:-}" ]]; then
     _km_err "${_km_msg[usage_gpg_rm]}"
     return 1
@@ -593,8 +597,154 @@ km-gpg-rm() {
 }
 
 # =====================================================
-#  Help
+#  Main dispatcher
 # =====================================================
 keyman() {
-  print -r -- "${_km_msg[help_text]}"
+  local group="${1:-help}"
+  local action="${2:-}"
+  shift 2 2>/dev/null
+
+  case "$group" in
+    help|-h|--help)
+      print -r -- "${_km_msg[help_text]}"
+      ;;
+    ssh)
+      case "$action" in
+        new)      _km_ssh_new "$@" ;;
+        ls)       _km_ssh_ls "$@" ;;
+        copy)     _km_ssh_copy "$@" ;;
+        rm)       _km_ssh_rm "$@" ;;
+        *)
+          _km_err "$(printf "${_km_msg[unknown_ssh_action]}" "$action")"
+          return 1
+          ;;
+      esac
+      ;;
+    gpg)
+      case "$action" in
+        new)       _km_gpg_new "$@" ;;
+        quick-new) _km_gpg_quick_new "$@" ;;
+        ls)        _km_gpg_ls "$@" ;;
+        pub)       _km_gpg_pub "$@" ;;
+        priv)      _km_gpg_priv "$@" ;;
+        copy)      _km_gpg_copy "$@" ;;
+        fp)        _km_gpg_fp "$@" ;;
+        rm)        _km_gpg_rm "$@" ;;
+        *)
+          _km_err "$(printf "${_km_msg[unknown_gpg_action]}" "$action")"
+          return 1
+          ;;
+      esac
+      ;;
+    *)
+      _km_err "$(printf "${_km_msg[unknown_group]}" "$group")"
+      return 1
+      ;;
+  esac
 }
+
+# =====================================================
+#  Zsh Completions
+# =====================================================
+_keyman() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  _arguments -C \
+    '1:command group:->group' \
+    '*::args:->args'
+
+  case "$state" in
+    group)
+      local -a groups=(
+        'ssh:Manage SSH keys'
+        'gpg:Manage GPG keys'
+        'help:Show help message'
+      )
+      _describe 'command group' groups
+      ;;
+    args)
+      case "${line[1]}" in
+        ssh)
+          _arguments -C \
+            '1:ssh action:->ssh_action' \
+            '*::ssh_args:->ssh_args'
+
+          case "$state" in
+            ssh_action)
+              local -a actions=(
+                'new:Create SSH key'
+                'ls:List SSH public keys'
+                'copy:Copy public key to clipboard'
+                'rm:Delete SSH key pair'
+              )
+              _describe 'ssh action' actions
+              ;;
+            ssh_args)
+              case "${line[1]}" in
+                new)
+                  _arguments \
+                    '1:comment:' \
+                    '2:keyfile:_files -W "$HOME/.ssh"' \
+                    '3:key type:(ed25519 rsa ecdsa)'
+                  ;;
+                copy)
+                  _arguments '1:public key file:_files -W "$HOME/.ssh" -g "*.pub"'
+                  ;;
+                rm)
+                  local -a keys
+                  if [[ -d "$HOME/.ssh" ]]; then
+                    keys=("$HOME"/.ssh/id_*(N:t))
+                    keys=(${keys:#*.pub})
+                  fi
+                  _describe 'SSH key' keys
+                  ;;
+              esac
+              ;;
+          esac
+          ;;
+        gpg)
+          _arguments -C \
+            '1:gpg action:->gpg_action' \
+            '*::gpg_args:->gpg_args'
+
+          case "$state" in
+            gpg_action)
+              local -a actions=(
+                'new:Create GPG key (interactive)'
+                'quick-new:Create GPG key (quick)'
+                'ls:List GPG keys'
+                'pub:Export public key'
+                'priv:Export secret key'
+                'copy:Copy public key to clipboard'
+                'fp:Show fingerprint'
+                'rm:Delete GPG key'
+              )
+              _describe 'gpg action' actions
+              ;;
+            gpg_args)
+              case "${line[1]}" in
+                ls)
+                  _arguments '1:option:(--secret -s)'
+                  ;;
+                quick-new)
+                  _arguments \
+                    '1:name:' \
+                    '2:email:' \
+                    '3:expiry:(1y 2y 3y 5y 0)'
+                  ;;
+                pub|priv|copy|fp|rm)
+                  local -a key_ids
+                  key_ids=(${(f)"$(gpg --list-keys --with-colons 2>/dev/null \
+                    | awk -F: '/^uid/{print $10}; /^pub/{print $5}')"})
+                  _describe 'GPG key ID or email' key_ids
+                  ;;
+              esac
+              ;;
+          esac
+          ;;
+      esac
+      ;;
+  esac
+}
+compdef _keyman keyman
