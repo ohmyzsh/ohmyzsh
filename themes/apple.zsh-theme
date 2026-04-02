@@ -1,7 +1,3 @@
-function toon {
-  echo -n ""
-}
-
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' unstagedstr '%F{red}*'   # display this when there are unstaged changes
@@ -15,10 +11,15 @@ zstyle ':vcs_info:*' enable git cvs svn
 
 theme_precmd () {
   vcs_info
+
+  local apple_colors=(red green yellow blue magenta cyan white)
+  local random_color=$apple_colors[$(( RANDOM % ${#apple_colors[@]} + 1 ))]
+
+  APPLE_PROMPT="%F{$random_color}%f"
 }
 
 setopt prompt_subst
-PROMPT='%{$fg[magenta]%}$(toon)%{$reset_color%} %~/ %{$reset_color%}${vcs_info_msg_0_}%{$reset_color%}'
+PROMPT='${APPLE_PROMPT} %~/ %{$reset_color%}${vcs_info_msg_0_}%{$reset_color%}'
 
 autoload -U add-zsh-hook
 add-zsh-hook precmd theme_precmd
