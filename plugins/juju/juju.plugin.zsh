@@ -3,12 +3,14 @@
 # ---------------------------------------------------------- #
 
 # Load TAB completions
-# You need juju's bash completion script installed. By default bash-completion's
-# location will be used (i.e. pkg-config --variable=completionsdir bash-completion).
-completion_file="$(pkg-config --variable=completionsdir bash-completion 2>/dev/null)/juju" || \
-  completion_file="/usr/share/bash-completion/completions/juju"
-[[ -f "$completion_file" ]] && source "$completion_file"
-unset completion_file
+source "${0:A:h}/_juju"
+
+# group-name '' enables visual separation between completion groups (e.g. models
+# vs controllers in juju switch <TAB>). This is a safe global setting that
+# improves completion display for all commands.
+zstyle ':completion:*' group-name ''
+# Show group headers only for juju completions.
+zstyle ':completion::complete:juju:*' format '%B%d%b'
 
 # ---------------------------------------------------------- #
 # Aliases (in alphabetic order)                              #
