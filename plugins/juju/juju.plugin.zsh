@@ -134,6 +134,7 @@ jclean() {
   fi
 
   echo
+  local controller
   for controller in ${=controllers}; do
     timeout 2m juju destroy-controller --destroy-all-models --destroy-storage --force --no-wait -y $controller
     timeout 2m juju kill-controller -y -t 0 $controller 2>/dev/null
@@ -167,10 +168,11 @@ jreld() {
 
 # Return Juju current controller
 jcontroller() {
-  local controller="$(awk '/current-controller/ {print $2}' ~/.local/share/juju/controllers.yaml)"
-  if [[ -z "$controller" ]]; then
-    return 1
-  fi
+  local file=${JUJU_DATA:=~/.local/share/juju}/controllers.yaml
+  [[ -f "$file" ]] || return 1
+
+  local controller="$(awk '/current-controller/ {print $2}' "$file")"
+  [[ -z "$controller" ]] && return 1
 
   echo $controller
   return 0
@@ -178,6 +180,9 @@ jcontroller() {
 
 # Return Juju current model
 jmodel() {
+  local file=${JUJU_DATA:=~/.local/share/juju}/models.yaml
+  [[ -f "$file" ]] || return 1
+
   local yqbin="$(whereis yq | awk '{print $2}')"
 
   if [[ -z "$yqbin" ]]; then
@@ -185,9 +190,10 @@ jmodel() {
     return 1
   fi
 
-  local model="$(yq e ".controllers.$(jcontroller).current-model" < ~/.local/share/juju/models.yaml | cut -d/ -f2)"
+  local controller="$(jcontroller)"
+  local model="$(yq e ".controllers.[\"${controller}\"].current-model" < "${file}" | cut -d/ -f2)"
 
-  if [[ -z "$model" ]]; then
+  if [[ -z "$model" || $model == "null" ]]; then
     echo "--"
     return 1
   fi
@@ -196,9 +202,10 @@ jmodel() {
   return 0
 }
 
-# Watch juju status, with optional interval (default: 5 sec)
+# Watch juju status, with optional interval (default: 1 sec)
 wjst() {
-  local interval="${1:-5}"
+  command -v juju >/dev/null 2>&1 || return 1
+  local interval="${1:-1}"
   shift $(( $# > 0 ))
   watch -n "$interval" --color juju status --relations --color "$@"
 }
