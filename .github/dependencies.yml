@@ -30,7 +30,7 @@ dependencies:
   plugins/kube-ps1:
     repo: jonmosco/kube-ps1
     branch: master
-    version: 9b41c091d5dd4a99e58cf58b5d98a4847937b1bb
+    version: e19c9ee867c5655814c384a6bf543e330e6ef1b7
     precopy: |
       set -e
       find . ! -name kube-ps1.sh ! -name LICENSE ! -name README.md -delete
