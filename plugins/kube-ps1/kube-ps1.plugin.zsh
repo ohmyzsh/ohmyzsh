@@ -55,7 +55,17 @@ _kube_ps1_shell_type() {
 _kube_ps1_init() {
   [[ -f "${_KUBE_PS1_DISABLE_PATH}" ]] && KUBE_PS1_ENABLED=off
 
-  case "$(_kube_ps1_shell_type)" in
+  # Detect shell type once and cache it
+  _KUBE_PS1_SHELL="$(_kube_ps1_shell_type)"
+
+  # Check tput availability once
+  if tput setaf 1 &> /dev/null; then
+    _KUBE_PS1_TPUT_AVAILABLE=true
+  else
+    _KUBE_PS1_TPUT_AVAILABLE=false
+  fi
+
+  case "${_KUBE_PS1_SHELL}" in
     "zsh")
       _KUBE_PS1_OPEN_ESC="%{"
       _KUBE_PS1_CLOSE_ESC="%}"
@@ -96,10 +106,10 @@ _kube_ps1_color_fg() {
   if [[ "${_KUBE_PS1_FG_CODE}" == "default" ]]; then
     _KUBE_PS1_FG_CODE="${_KUBE_PS1_DEFAULT_FG}"
     return
-  elif [[ "$(_kube_ps1_shell_type)" == "zsh" ]]; then
+  elif [[ "${_KUBE_PS1_SHELL}" == "zsh" ]]; then
     _KUBE_PS1_FG_CODE="%F{$_KUBE_PS1_FG_CODE}"
-  elif [[ "$(_kube_ps1_shell_type)" == "bash" ]]; then
-    if tput setaf 1 &> /dev/null; then
+  elif [[ "${_KUBE_PS1_SHELL}" == "bash" ]]; then
+    if [[ "${_KUBE_PS1_TPUT_AVAILABLE}" == "true" ]]; then
       _KUBE_PS1_FG_CODE="$(tput setaf "${_KUBE_PS1_FG_CODE}")"
     elif [[ $_KUBE_PS1_FG_CODE -ge 0 ]] && [[ $_KUBE_PS1_FG_CODE -le 256 ]]; then
       _KUBE_PS1_FG_CODE="\033[38;5;${_KUBE_PS1_FG_CODE}m"
@@ -129,15 +139,15 @@ _kube_ps1_color_bg() {
   if [[ "${_KUBE_PS1_BG_CODE}" == "default" ]]; then
     _KUBE_PS1_FG_CODE="${_KUBE_PS1_DEFAULT_BG}"
     return
-  elif [[ "$(_kube_ps1_shell_type)" == "zsh" ]]; then
+  elif [[ "${_KUBE_PS1_SHELL}" == "zsh" ]]; then
     _KUBE_PS1_BG_CODE="%K{$_KUBE_PS1_BG_CODE}"
-  elif [[ "$(_kube_ps1_shell_type)" == "bash" ]]; then
-    if tput setaf 1 &> /dev/null; then
+  elif [[ "${_KUBE_PS1_SHELL}" == "bash" ]]; then
+    if [[ "${_KUBE_PS1_TPUT_AVAILABLE}" == "true" ]]; then
       _KUBE_PS1_BG_CODE="$(tput setab "${_KUBE_PS1_BG_CODE}")"
     elif [[ $_KUBE_PS1_BG_CODE -ge 0 ]] && [[ $_KUBE_PS1_BG_CODE -le 256 ]]; then
       _KUBE_PS1_BG_CODE="\033[48;5;${_KUBE_PS1_BG_CODE}m"
     else
-      _KUBE_PS1_BG_CODE="${DEFAULT_BG}"
+      _KUBE_PS1_BG_CODE="${_KUBE_PS1_DEFAULT_BG}"
     fi
   fi
   echo "${_KUBE_PS1_OPEN_ESC}${_KUBE_PS1_BG_CODE}${_KUBE_PS1_CLOSE_ESC}"
@@ -174,7 +184,7 @@ _kube_ps1_symbol() {
       symbol="$(_kube_ps1_color_fg ${oc_symbol_color})${oc_glyph}${KUBE_PS1_RESET_COLOR}"
       ;;
     *)
-      case "$(_kube_ps1_shell_type)" in
+      case "${_KUBE_PS1_SHELL}" in
         bash)
           if ((BASH_VERSINFO[0] >= 4)) && [[ $'\u2388' != "\\u2388" ]]; then
             symbol="$(_kube_ps1_color_fg $custom_symbol_color)${symbol_default}${KUBE_PS1_RESET_COLOR}"
@@ -212,7 +222,7 @@ _kube_ps1_file_newer_than() {
   local file=$1
   local check_time=$2
 
-  if [[ "$(_kube_ps1_shell_type)" == "zsh" ]]; then
+  if [[ "${_KUBE_PS1_SHELL}" == "zsh" ]]; then
     # Use zstat '-F %s.%s' to make it compatible with low zsh version (eg: 5.0.2)
     mtime=$(zstat -L +mtime -F %s.%s "${file}")
   elif stat -c "%s" /dev/null &> /dev/null; then
@@ -292,13 +302,13 @@ _kube_ps1_get_ns() {
 
 _kube_ps1_get_context_ns() {
   # Set the command time
-  if [[ "$(_kube_ps1_shell_type)" == "bash" ]]; then
+  if [[ "${_KUBE_PS1_SHELL}" == "bash" ]]; then
     if ((BASH_VERSINFO[0] >= 4 && BASH_VERSINFO[1] >= 2)); then
       _KUBE_PS1_LAST_TIME=$(printf '%(%s)T')
     else
       _KUBE_PS1_LAST_TIME=$(date +%s)
     fi
-  elif [[ "$(_kube_ps1_shell_type)" == "zsh" ]]; then
+  elif [[ "${_KUBE_PS1_SHELL}" == "zsh" ]]; then
     _KUBE_PS1_LAST_TIME=$EPOCHREALTIME
   fi
 
@@ -325,7 +335,7 @@ Toggle kube-ps1 prompt on
 
 Usage: kubeon [-g | --global] [-h | --help]
 
-With no arguments, turn oon kube-ps1 status for this shell instance (default).
+With no arguments, turn on kube-ps1 status for this shell instance (default).
 
   -g --global  turn on kube-ps1 status globally
   -h --help    print this message
