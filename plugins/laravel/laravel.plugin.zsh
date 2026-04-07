@@ -30,6 +30,7 @@ alias pamcl='php artisan make:class'
 alias pamen='php artisan make:enum'
 alias pami='php artisan make:interface'
 alias pamtr='php artisan make:trait'
+alias pamv='php artisan make:view'
 
 
 # Clears
