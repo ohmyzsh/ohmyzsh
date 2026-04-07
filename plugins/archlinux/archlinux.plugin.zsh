@@ -22,45 +22,49 @@ alias pacfileupg='sudo pacman -Fy'
 alias pacfiles='pacman -F'
 alias pacls='pacman -Ql'
 alias pacown='pacman -Qo'
-alias pacupd="sudo pacman -Sy"
+alias pacupd='sudo pacman -Sy'
 
 function paclist() {
-  pacman -Qqe | xargs -I{} -P0 --no-run-if-empty pacman -Qs --color=auto "^{}\$"
+  emulate -L zsh -o extendedglob
+
+  local line
+  local -A info
+  while IFS= read -r line; do
+    [[ $line == (#b)(Name|Version|Description)[[:space:]]#:[[:space:]]#(*) ]] || continue
+    info[$match[1]]=$match[2]
+
+    [[ $match[1] == Description ]] || continue
+    print -r -- "local/${info[Name]} ${info[Version]}"
+    print -r -- "    ${info[Description]}"
+  done < <(LANG=C pacman -Qei)
 }
 
 function pacdisowned() {
-  local tmp_dir db fs
-  tmp_dir=$(mktemp --directory)
-  db=$tmp_dir/db
-  fs=$tmp_dir/fs
+  emulate -L zsh
 
-  trap "rm -rf $tmp_dir" EXIT
-
-  pacman -Qlq | sort -u > "$db"
-
-  find /etc /usr ! -name lost+found \
-    \( -type d -printf '%p/\n' -o -print \) | sort > "$fs"
-
-  comm -23 "$fs" "$db"
-
-  rm -rf $tmp_dir
+  LC_ALL=C comm -23 \
+    <(find /etc /usr ! -name lost+found \
+      \( -type d -printf '%p/\n' -o -print \) | LC_ALL=C sort) \
+    <(pacman -Qlq | LC_ALL=C sort -u)
 }
 
 alias pacmanallkeys='sudo pacman-key --refresh-keys'
 
 function pacmansignkeys() {
   local key
-  for key in $@; do
-    sudo pacman-key --recv-keys $key
-    sudo pacman-key --lsign-key $key
+  for key in "$@"; do
+    sudo pacman-key --recv-keys "$key"
+    sudo pacman-key --lsign-key "$key"
     printf 'trust\n3\n' | sudo gpg --homedir /etc/pacman.d/gnupg \
-      --no-permission-warning --command-fd 0 --edit-key $key
+      --no-permission-warning --command-fd 0 --edit-key "$key"
   done
 }
 
 if (( $+commands[xdg-open] )); then
   function pacweb() {
-    if [[ $# = 0 || "$1" =~ '--help|-h' ]]; then
+    emulate -L zsh -o extendedglob
+
+    if (( $# == 0 )) || [[ $1 == --help || $1 == -h ]]; then
       local underline_color="\e[${color[underline]}m"
       echo "$0 - open the website of an ArchLinux package"
       echo
@@ -69,13 +73,20 @@ if (( $+commands[xdg-open] )); then
       return 1
     fi
 
-    local pkg="$1"
-    local infos="$(LANG=C pacman -Si "$pkg")"
-    if [[ -z "$infos" ]]; then
-      return
-    fi
-    local repo="$(grep -m 1 '^Repo' <<< "$infos" | grep -oP '[^ ]+$')"
-    local arch="$(grep -m 1 '^Arch' <<< "$infos" | grep -oP '[^ ]+$')"
+    local pkg info_output line repo arch
+    local -A info
+
+    pkg=$1
+    info_output=$(LANG=C pacman -Si "$pkg") || return
+
+    while IFS= read -r line; do
+      [[ $line == (#b)([^:]##[^[:space:]])[[:space:]]#:[[:space:]]#(*) ]] || continue
+      info[$match[1]]=$match[2]
+    done <<< "$info_output"
+
+    repo=${info[Repository]:-${info[Repo]}}
+    arch=${info[Architecture]:-${info[Arch]}}
+    [[ -n $repo && -n $arch ]] || return 1
     xdg-open "https://www.archlinux.org/packages/$repo/$arch/$pkg/" &>/dev/null
   }
 fi
@@ -103,15 +114,23 @@ if (( $+commands[aura] )); then
   alias aurrep='aura -Ai'
   alias aureps='aura -As --both'
   alias auras='aura -As --both'
-  alias auupd="sudo aura -Sy"
-  alias auupg='sudo sh -c "aura -Syu              && aura -Au"'
+  alias auupd='sudo aura -Sy'
+  alias auupg='sudo sh -c "aura -Syu && aura -Au"'
   alias ausu='sudo sh -c "aura -Syu --no-confirm && aura -Au --no-confirm"'
 
   # extra bonus specially for aura
-  alias auown="aura -Qqo"
-  alias auls="aura -Qql"
-  function auownloc() { aura -Qi  $(aura -Qqo $@); }
-  function auownls () { aura -Qql $(aura -Qqo $@); }
+  alias auown='aura -Qqo'
+  alias auls='aura -Qql'
+  function auownloc() {
+    local -a pkgs
+    pkgs=("${(@f)$(aura -Qqo "$@")}") || return
+    aura -Qi "${pkgs[@]}"
+  }
+  function auownls() {
+    local -a pkgs
+    pkgs=("${(@f)$(aura -Qqo "$@")}") || return
+    aura -Qql "${pkgs[@]}"
+  }
 fi
 
 if (( $+commands[pacaur] )); then
@@ -131,7 +150,7 @@ if (( $+commands[pacaur] )); then
   alias paorph='pacaur -Qtd'
   alias painsd='pacaur -S --asdeps'
   alias pamir='pacaur -Syy'
-  alias paupd="pacaur -Sy"
+  alias paupd='pacaur -Sy'
 fi
 
 if (( $+commands[trizen] )); then
@@ -152,7 +171,7 @@ if (( $+commands[trizen] )); then
   alias trorph='trizen -Qtd'
   alias trinsd='trizen -S --asdeps'
   alias trmir='trizen -Syy'
-  alias trupd="trizen -Sy"
+  alias trupd='trizen -Sy'
 fi
 
 if (( $+commands[yay] )); then
@@ -173,16 +192,29 @@ if (( $+commands[yay] )); then
   alias yaorph='yay -Qtd'
   alias yainsd='yay -S --asdeps'
   alias yamir='yay -Syy'
-  alias yaupd="yay -Sy"
+  alias yaupd='yay -Sy'
 fi
 
 # Check Arch Linux PGP Keyring before System Upgrade to prevent failure.
 function upgrade() {
+  emulate -L zsh -o extendedglob
+
+  local installedver line
+  local -A info
+  local -a upgrade_cmd=(sudo pacman -Su)
+
   sudo pacman -Sy
   echo ":: Checking Arch Linux PGP Keyring..."
-  local installedver="$(LANG= sudo pacman -Qi archlinux-keyring | grep -Po '(?<=Version         : ).*')"
-  local currentver="$(LANG= sudo pacman -Si archlinux-keyring | grep -Po '(?<=Version         : ).*')"
-  if [ $installedver != $currentver ]; then
+
+  installedver=$(pacman -Q archlinux-keyring 2>/dev/null)
+  installedver=${installedver#archlinux-keyring }
+
+  while IFS= read -r line; do
+    [[ $line == (#b)([^:]##[^[:space:]])[[:space:]]#:[[:space:]]#(*) ]] || continue
+    info[$match[1]]=$match[2]
+  done < <(LANG=C pacman -Si archlinux-keyring)
+
+  if [[ $installedver != "${info[Version]}" ]]; then
     echo " Arch Linux PGP Keyring is out of date."
     echo " Updating before full system upgrade."
     sudo pacman -S --needed --noconfirm archlinux-keyring
@@ -190,15 +222,16 @@ function upgrade() {
     echo " Arch Linux PGP Keyring is up to date."
     echo " Proceeding with full system upgrade."
   fi
+
   if (( $+commands[yay] )); then
-    yay -Su
+    upgrade_cmd=(yay -Su)
   elif (( $+commands[trizen] )); then
-    trizen -Su
+    upgrade_cmd=(trizen -Su)
   elif (( $+commands[pacaur] )); then
-    pacaur -Su
+    upgrade_cmd=(pacaur -Su)
   elif (( $+commands[aura] )); then
-    sudo aura -Su
-  else
-    sudo pacman -Su
+    upgrade_cmd=(sudo aura -Su)
   fi
+
+  "${upgrade_cmd[@]}"
 }
