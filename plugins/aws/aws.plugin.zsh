@@ -239,9 +239,31 @@ function aws_regions() {
 }
 
 function aws_profiles() {
-  aws --no-cli-pager configure list-profiles 2> /dev/null && return
-  [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([^[:space:]]+)\][[:space:]]*$/\2/g'
+  local config_file="${AWS_CONFIG_FILE:-$HOME/.aws/config}"
+  local credentials_file="${AWS_SHARED_CREDENTIALS_FILE:-$HOME/.aws/credentials}"
+  local profiles=()
+
+  # Parse config file: only match [default] and [profile ...] sections,
+  # skipping [sso-session ...], [services ...], and other non-profile sections
+  if [[ -r "$config_file" ]]; then
+    profiles+=($(grep --color=never -E '^\[[ ]*(default|profile[ ]+)' "$config_file" \
+      | sed -nE 's/^\[[ ]*(profile[ ]+)?([^]]+[^ ])[ ]*\]$/\2/p'))
+  fi
+
+  # Parse credentials file (profiles have [name] format, no "profile" prefix)
+  if [[ -r "$credentials_file" ]]; then
+    profiles+=($(grep --color=never -Eo '\[.*\]' "$credentials_file" \
+      | sed -nE 's/^[[:space:]]*\[([^[:space:]]+)[[:space:]]*\]$/\1/p'))
+  fi
+
+  # Return unique profiles, or fall back to AWS CLI.
+  # Note: profiles only visible via AWS CLI (e.g. config plugins, SSO) will
+  # be missed when config files have entries. Intentional for performance.
+  if [[ ${#profiles[@]} -gt 0 ]]; then
+    printf '%s\n' "${profiles[@]}" | sort -u
+  else
+    aws --no-cli-pager configure list-profiles 2>/dev/null
+  fi
 }
 
 function _aws_regions() {
