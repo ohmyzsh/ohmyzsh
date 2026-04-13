@@ -25,7 +25,7 @@ jobs:
         id: generate-token
         uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
         with:
-          app-id: ${{ secrets.OHMYZSH_APP_ID }}
+          client-id: ${{ secrets.OHMYZSH_CLIENT_ID }}
           private-key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
       - name: Setup Python
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
