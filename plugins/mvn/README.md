@@ -33,6 +33,8 @@ if it's found, or the mvn command otherwise.
 | `mvnct`              | `mvn clean test`                                |
 | `mvncv`              | `mvn clean verify`                              |
 | `mvncvst`            | `mvn clean verify -DskipTests`                  |
+| `mvnv`               | `mvn verify`                                    |
+| `mvnvst`             | `mvn verify -DskipTests`                        |
 | `mvndp`              | `mvn deploy`                                    |
 | `mvndocs`            | `mvn dependency:resolve -Dclassifier=javadoc`   |
 | `mvndt`              | `mvn dependency:tree`                           |

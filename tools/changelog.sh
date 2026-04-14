@@ -400,6 +400,9 @@ function display-release {
   function display:breaking {
     (( $#breaking != 0 )) || return 0
 
+    # If we reach here we have shown commits, set flag
+    shown_commits=1
+
     case "$output" in
     text) printf '\e[31m'; fmt:header "BREAKING CHANGES" 3 ;;
     raw) fmt:header "BREAKING CHANGES" 3 ;;
@@ -427,6 +430,9 @@ function display-release {
     # If no commits found of type $type, go to next type
     (( $#hashes != 0 )) || return 0
 
+    # If we reach here we have shown commits, set flag
+    shown_commits=1
+
     fmt:header "${TYPES[$type]}" 3
     for hash in $hashes; do
       echo " - $(fmt:hash) $(fmt:scope)$(fmt:subject)"
@@ -443,6 +449,9 @@ function display-release {
 
     # If no commits found under "other" types, don't display anything
     (( $#changes != 0 )) || return 0
+
+    # If we reach here we have shown commits, set flag
+    shown_commits=1
 
     fmt:header "Other changes" 3
     for hash type in ${(kv)changes}; do
@@ -498,7 +507,7 @@ function main {
 
   # Commit classification arrays
   local -A types subjects scopes breaking reverts
-  local truncate=0 read_commits=0
+  local truncate=0 read_commits=0 shown_commits=0
   local version tag
   local hash refs subject body
 
@@ -568,6 +577,10 @@ function main {
   if (( truncate )); then
     echo " ...more commits omitted"
     echo
+  fi
+
+  if (( ! shown_commits )); then
+    echo "No changes to mention."
   fi
 }
 

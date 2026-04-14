@@ -9,25 +9,32 @@ jobs:
     name: Check for updates
     runs-on: ubuntu-latest
     if: github.repository == 'ohmyzsh/ohmyzsh'
+    permissions:
+      contents: write # this is needed to push commits and branches
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@f808768d1510423e83855289c910610ca9b43176 # v2.17.0
+        with:
+          egress-policy: audit
+
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
       - name: Authenticate as @ohmyzsh
-        id: generate_token
-        uses: ohmyzsh/github-app-token@v2
+        id: generate-token
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
         with:
-          app_id: ${{ secrets.OHMYZSH_APP_ID }}
-          private_key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
+          client-id: ${{ secrets.OHMYZSH_CLIENT_ID }}
+          private-key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: "3.12"
           cache: "pip"
       - name: Process dependencies
         env:
-          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           GIT_APP_NAME: ohmyzsh[bot]
           GIT_APP_EMAIL: 54982679+ohmyzsh[bot]@users.noreply.github.com
           TMP_DIR: ${{ runner.temp }}

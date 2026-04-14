@@ -8,7 +8,7 @@
 # @github.com/mfaerevaag/wd
 
 # version
-readonly WD_VERSION=0.9.2
+readonly WD_VERSION=0.10.1
 
 # colors
 readonly WD_BLUE="\033[96m"
@@ -86,6 +86,7 @@ Commands:
     show                 Print warp points to current directory
     list                 Print all stored warp points
     ls  <point>          Show files from given warp point (ls)
+    open <point>         Open the warp point in the default file explorer (open / xdg-open)
     path <point>         Show the path to given warp point (pwd)
     clean                Remove points warping to nonexistent directories (will prompt unless --force is used)
 
@@ -173,6 +174,11 @@ wd_add()
         point=$(basename "$PWD")
     fi
 
+    if [ ! -w "$wd_config_file" ]; then
+        wd_exit_fail "\'$wd_config_file\' is not writeable."
+        return
+    fi
+
     if [[ $point =~ "^[\.]+$" ]]
     then
         wd_exit_fail "Warp point cannot be just dots"
@@ -238,6 +244,11 @@ wd_remove()
         point_list=$(basename "$PWD")
     fi
 
+    if [ ! -w "$wd_config_file" ]; then
+        wd_exit_fail "\'$wd_config_file\' is not writeable."
+        return
+    fi
+
     for point_name in $point_list ; do
         if [[ ${points[$point_name]} != "" ]]
         then
@@ -256,20 +267,47 @@ wd_remove()
 }
 
 wd_browse() {
+    # Check if fzf is installed
     if ! command -v fzf >/dev/null; then
-        echo "This functionality requires fzf. Please install fzf first."
+        wd_print_msg "$WD_RED" "This functionality requires fzf. Please install fzf first."
         return 1
     fi
+
+    # Ensure wd_config_file is properly set
+    if [[ -z $wd_config_file ]]; then
+        wd_config_file="${WD_CONFIG:-$HOME/.warprc}"
+    fi
+
+    # Check if config file exists
+    if [[ ! -f $wd_config_file ]]; then
+        wd_print_msg "$WD_RED" "Config file $wd_config_file does not exist. Please create it first."
+        return 1
+    fi
+
+    # Read entries from the config file
     local entries=("${(@f)$(sed "s:${HOME}:~:g" "$wd_config_file" | awk -F ':' '{print $1 " -> " $2}')}")
+    if [[ -z $entries ]]; then
+        wd_print_msg "$WD_YELLOW" "You don't have any warp points to browse"
+        return 1
+    fi
+
+    # Temp file for remove operations
     local script_path="${${(%):-%x}:h}"
     local wd_remove_output=$(mktemp "${TMPDIR:-/tmp}/wd.XXXXXXXXXX")
+
+    # Create fzf bindings
     entries=("All warp points:" "Press enter to select. Press delete to remove" "${entries[@]}")
-    local fzf_bind="delete:execute(echo {} | awk -F ' -> ' '{print \$1}' | xargs -I {} "$script_path/wd.sh" rm {} > "$wd_remove_output")+abort"
+    local fzf_bind="delete:execute(echo {} | awk -F ' -> ' '{print \$1}' | xargs -I {} \"$script_path/wd.sh\" rm {} > \"$wd_remove_output\")+abort"
+
+    # Run fzf
     local selected_entry=$(printf '%s\n' "${entries[@]}" | fzf --height 100% --reverse --header-lines=2 --bind="$fzf_bind")
+
+    # Handle selection
     if [[ -e $wd_remove_output ]]; then
         cat "$wd_remove_output"
-        rm "$wd_remove_output"
+        rm -f "$wd_remove_output"
     fi
+
     if [[ -n $selected_entry ]]; then
         local selected_point="${selected_entry%% ->*}"
         selected_point=$(echo "$selected_point" | xargs)
@@ -278,14 +316,26 @@ wd_browse() {
 }
 
 wd_browse_widget() {
-  if [[ -e $wd_config_file ]]; then
+    # Ensure wd_config_file is properly set
+    if [[ -z $wd_config_file ]]; then
+        wd_config_file="${WD_CONFIG:-$HOME/.warprc}"
+    fi
+
+    # Check if config file exists
+    if [[ ! -f $wd_config_file ]]; then
+        wd_print_msg "$WD_RED" "Config file $wd_config_file does not exist. Please create it first."
+        return 1
+    fi
+
+    # Call wd_browse to handle the selection
     wd_browse
+
+    # Restore the zsh buffer and cursor after running wd_browse
     saved_buffer=$BUFFER
     saved_cursor=$CURSOR
     BUFFER=
     zle redisplay
     zle accept-line
-  fi
 }
 
 wd_restore_buffer() {
@@ -338,6 +388,21 @@ wd_ls()
     ls "${dir/#\~/$HOME}"
 }
 
+wd_open()
+{
+    wd_getdir "$1"
+    if command -v open >/dev/null 2>&1; then
+        # MacOS, Ubuntu (alias)
+        open "${dir/#\~/$HOME}"
+    elif command -v xdg-open >/dev/null 2>&1; then
+        # Most Linux desktops
+        xdg-open "${dir/#\~/$HOME}"
+    else
+        echo "No known file opener found (need 'open' or 'xdg-open')." >&2
+        exit 1
+    fi
+}
+
 wd_path()
 {
     wd_getdir "$1"
@@ -384,6 +449,11 @@ wd_clean() {
     local force=$1
     local count=0
     local wd_tmp=""
+
+    if [ ! -w "$wd_config_file" ]; then
+        wd_exit_fail "\'$wd_config_file\' is not writeable."
+        return
+    fi
 
     while read -r line
     do
@@ -482,20 +552,12 @@ do
 done < "$wd_config_file"
 
 # get opts
-args=$(getopt -o a:r:c:lhs -l add:,rm:,clean,list,ls:,path:,help,show -- $*)
+args=$(getopt -o a:r:c:lhs -l add:,rm:,clean,list,ls:,open:,path:,help,show -- $*)
 
 # check if no arguments were given, and that version is not set
 if [[ ($? -ne 0 || $#* -eq 0) && -z $wd_print_version ]]
 then
     wd_print_usage
-
-# check if config file is writeable
-elif [ ! -w "$wd_config_file" ]
-then
-    # do nothing
-    # can't run `exit`, as this would exit the executing shell
-    wd_exit_fail "\'$wd_config_file\' is not writeable."
-
 else
     # parse rest of options
     local wd_o
@@ -530,6 +592,10 @@ else
                 ;;
             "-ls"|"ls")
                 wd_ls "$2"
+                break
+                ;;
+            "-o"|"--open"|"open")
+                wd_open "$2"
                 break
                 ;;
             "-p"|"--path"|"path")
@@ -578,7 +644,7 @@ unset wd_print_msg
 unset wd_yesorno
 unset wd_print_usage
 unset wd_alt_config
-unset wd_config_file
+#unset wd_config_file do not unset this - breaks keybind
 unset wd_quiet_mode
 unset wd_print_version
 unset wd_force_mode

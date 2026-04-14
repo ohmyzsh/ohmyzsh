@@ -99,8 +99,8 @@ done
 
 # Figure out the SHORT hostname
 if [[ "$OSTYPE" = darwin* ]]; then
-  # macOS's $HOST changes with dhcp, etc. Use ComputerName if possible.
-  SHORT_HOST=$(scutil --get ComputerName 2>/dev/null) || SHORT_HOST="${HOST/.*/}"
+  # macOS's $HOST changes with dhcp, etc. Use LocalHostName if possible.
+  SHORT_HOST=$(scutil --get LocalHostName 2>/dev/null) || SHORT_HOST="${HOST/.*/}"
 else
   SHORT_HOST="${HOST/.*/}"
 fi
@@ -192,7 +192,7 @@ _omz_source() {
   fi
 }
 
-# Load all of the lib files in ~/oh-my-zsh/lib that end in .zsh
+# Load all of the lib files in ~/.oh-my-zsh/lib that end in .zsh
 # TIP: Add files you don't want in git to .gitignore
 for lib_file ("$ZSH"/lib/*.zsh); do
   _omz_source "lib/${lib_file:t}"

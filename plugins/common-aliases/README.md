@@ -114,13 +114,13 @@ that file will be open with `acroread`.
 
 ### Listing files inside a packed file
 
-| Alias  | Command    | Description                       |
-| ------ | ---------- | --------------------------------- |
-| zip    | `unzip -l` | Lists files inside a .zip file    |
-| rar    | `unrar l`  | Lists files inside a .rar file    |
-| tar    | `tar tf`   | Lists files inside a .tar file    |
-| tar.gz | `echo`     | Lists files inside a .tar.gz file |
-| ace    | `unace l`  | Lists files inside a .ace file    |
+| Alias  | Command      | Description                       |
+| ------ | ------------ | --------------------------------- |
+| zip    | `unzip -l`   | Lists files inside a .zip file    |
+| rar    | `unrar l`    | Lists files inside a .rar file    |
+| tar    | `tar tf`     | Lists files inside a .tar file    |
+| tar.gz | `tar -ztf`   | Lists files inside a .tar.gz file |
+| ace    | `unace l`    | Lists files inside a .ace file    |
 
 ### Some other features
 

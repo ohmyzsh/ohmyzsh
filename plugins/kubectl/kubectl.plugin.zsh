@@ -21,6 +21,9 @@ alias kca='_kca(){ kubectl "$@" --all-namespaces;  unset -f _kca; }; _kca'
 # Apply a YML file
 alias kaf='kubectl apply -f'
 
+# Apply a kustomization directory
+alias kapk='kubectl apply -k'
+
 # Drop into an interactive terminal on a container
 alias keti='kubectl exec -t -i'
 
@@ -36,6 +39,9 @@ alias kcgc='kubectl config get-contexts'
 # General aliases
 alias kdel='kubectl delete'
 alias kdelf='kubectl delete -f'
+alias kdelk='kubectl delete -k'
+alias kge='kubectl get events --sort-by=".lastTimestamp"'
+alias kgew='kubectl get events --sort-by=".lastTimestamp" --watch'
 
 # Pod management.
 alias kgp='kubectl get pods'
@@ -96,6 +102,7 @@ alias kdd='kubectl describe deployment'
 alias kdeld='kubectl delete deployment'
 alias ksd='kubectl scale deployment'
 alias krsd='kubectl rollout status deployment'
+alias krrd='kubectl rollout restart deployment'
 
 function kres(){
   kubectl set env $@ REFRESHED_AT=$(date +%Y%m%d%H%M%S)
@@ -118,6 +125,7 @@ alias kdss='kubectl describe statefulset'
 alias kdelss='kubectl delete statefulset'
 alias ksss='kubectl scale statefulset'
 alias krsss='kubectl rollout status statefulset'
+alias krrss='kubectl rollout restart statefulset'
 
 # Port forwarding
 alias kpf="kubectl port-forward"

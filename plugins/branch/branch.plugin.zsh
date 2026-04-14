@@ -8,7 +8,7 @@ function branch_prompt_info() {
   while [[ "$dir" != '/' ]]; do
     # Found .git directory
     if [[ -d "${dir}/.git" ]]; then
-      branch="${"$(<"${dir}/.git/HEAD")"##*/}"
+      branch="${"$(<"${dir}/.git/HEAD")"##ref: refs/heads/}"
       echo '±' "${branch:gs/%/%%}"
       return
     fi

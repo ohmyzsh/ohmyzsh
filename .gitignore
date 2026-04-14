@@ -4,9 +4,18 @@ custom/
 # temp files directories
 cache/
 log/
+
+# Vim swap/backup files
 *.swp
+*.swo
+
+# macOS system files
 .DS_Store
 
 # editor configs
 .vscode
 .idea
+
+# zcompile cached files
+*.zwc
+*.zwc.old

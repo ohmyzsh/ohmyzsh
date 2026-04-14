@@ -11,11 +11,11 @@ function _prompt_char() {
 # This theme works with both the "dark" and "light" variants of the
 # Solarized color schema.  Set the SOLARIZED_THEME variable to one of
 # these two values to choose.  If you don't specify, we'll assume you're
-# using the "dark" variant.
+# using neither variant.
 
 case ${SOLARIZED_THEME:-dark} in
     light) bkg=white;;
-    *)     bkg=black;;
+    *)  bkg=default;;
 esac
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" [%{%B%F{blue}%}"

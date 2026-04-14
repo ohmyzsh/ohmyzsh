@@ -146,6 +146,16 @@ case $state in
       (help)
          _arguments ':feature:__task_list'
          ;;
+      (format)
+        _arguments -C \
+          '--check-formatted' \
+          '--dot-formatter' \
+          '--dry-run' \
+          '--force' \
+          '--migrate' \
+          '--no-exit' \
+          '*::file:_files'
+          ;;
       (test)
          _files
          ;;

@@ -39,6 +39,10 @@ following setting. See https://github.com/ohmyzsh/ohmyzsh/issues/11789 for more 
 zstyle ':omz:plugins:docker' legacy-completion yes
 ```
 
+### For Podman's Docker wrapper users
+
+If you use Podman's Docker wrapper, you need to enable legacy completion. See above section.
+
 ## Aliases
 
 | Alias   | Command                       | Description                                                                              |
@@ -47,6 +51,7 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 | dcin    | `docker container inspect`    | Display detailed information on one or more containers                                   |
 | dcls    | `docker container ls`         | List all the running docker containers                                                   |
 | dclsa   | `docker container ls -a`      | List all running and stopped containers                                                  |
+| dcprune | `docker container prune`      | Remove all stopped containers                                                            |
 | dib     | `docker image build`          | Build an image from a Dockerfile (same as docker build)                                  |
 | dii     | `docker image inspect`        | Display detailed information on one or more images                                       |
 | dils    | `docker image ls`             | List docker images                                                                       |
@@ -60,6 +65,7 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 | dndcn   | `docker network disconnect`   | Disconnect a container from a network                                                    |
 | dni     | `docker network inspect`      | Return information about one or more networks                                            |
 | dnls    | `docker network ls`           | List all networks the engine daemon knows about, including those spanning multiple hosts |
+| dnprune | `docker network prune`        | Remove all unused networks                                                               |
 | dnrm    | `docker network rm`           | Remove one or more networks                                                              |
 | dpo     | `docker container port`       | List port mappings or a specific mapping for the container                               |
 | dps     | `docker ps`                   | List all the running docker containers                                                   |
@@ -69,10 +75,12 @@ zstyle ':omz:plugins:docker' legacy-completion yes
 | drit    | `docker container run -it`    | Create a new container and start it in an interactive shell                              |
 | drm     | `docker container rm`         | Remove the specified container(s)                                                        |
 | drm!    | `docker container rm -f`      | Force the removal of a running container (uses SIGKILL)                                  |
+| dsprune | `docker system prune`         | Remove unused data                                                                       |
 | dst     | `docker container start`      | Start one or more stopped containers                                                     |
 | drs     | `docker container restart`    | Restart one or more containers                                                           |
 | dsta    | `docker stop $(docker ps -q)` | Stop all running containers                                                              |
 | dstp    | `docker container stop`       | Stop one or more running containers                                                      |
+| dsts    | `docker stats`                | Display real-time streaming statistics for containers                                                    |
 | dtop    | `docker top`                  | Display the running processes of a container                                             |
 | dvi     | `docker volume inspect`       | Display detailed information about one or more volumes                                   |
 | dvls    | `docker volume ls`            | List all the volumes known to docker                                                     |

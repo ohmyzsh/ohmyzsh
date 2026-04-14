@@ -11,7 +11,7 @@
 ## Functions
 
 source_env() {
-  if [[ ! -f "$ZSH_DOTENV_FILE" ]]; then
+  if [[ ! -f "$ZSH_DOTENV_FILE" ]] && [[ ! -p "$ZSH_DOTENV_FILE" ]]; then
     return
   fi
 

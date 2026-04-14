@@ -65,12 +65,9 @@ Add the following to your `home.nix` then run `home-manager switch`:
 programs.zsh.plugins = [
   {
     name = "wd";
-    src = pkgs.fetchFromGitHub {
-      owner = "mfaerevaag";
-      repo = "wd";
-      rev = "v0.5.2";
-      sha256 = "sha256-4yJ1qhqhNULbQmt6Z9G22gURfDLe30uV1ascbzqgdhg=";
-    };
+    src = pkgs.zsh-wd;
+    file = "share/wd/wd.plugin.zsh";
+    completions = [ "share/zsh/site-functions" ];
   }
 ];
 ```

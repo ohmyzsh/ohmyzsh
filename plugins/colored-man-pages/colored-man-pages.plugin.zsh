@@ -43,7 +43,7 @@ function colored() {
     environment+=( PATH="${__colored_man_pages_dir}:$PATH" )
   fi
 
-  command env $environment "$@"
+  command env "${environment[@]}" "$@"
 }
 
 # Colorize man and dman/debman (from debian-goodies)

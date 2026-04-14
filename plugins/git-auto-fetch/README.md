@@ -18,7 +18,7 @@ You can change the fetch interval in your .zshrc:
 GIT_AUTO_FETCH_INTERVAL=1200 # in seconds
 ```
 
-A log of `git fetch --all` will be saved in `.git/FETCH_LOG`.
+A log of `git-fetch-all` will be saved in `.git/FETCH_LOG`.
 
 ## Toggle auto-fetch per folder
 

@@ -35,7 +35,7 @@ alias eeval="$EMACS_PLUGIN_LAUNCHER --eval"
 alias eframe='emacsclient --alternate-editor="" --create-frame'
 
 # Emacs ANSI Term tracking
-if [[ -n "$INSIDE_EMACS" ]]; then
+if [[ -n "$INSIDE_EMACS" ]] && [[ "$INSIDE_EMACS" != "vterm" ]]; then
   chpwd_emacs() { print -P "\033AnSiTc %d"; }
   print -P "\033AnSiTc %d"    # Track current working directory
   print -P "\033AnSiTu %n"    # Track username

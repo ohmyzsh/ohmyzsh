@@ -83,9 +83,9 @@ else
     }
     alias ac="su -ls '$apt_pref clean' root"
     alias ad="su -lc '$apt_pref update' root"
-    alias adg="su -lc '$apt_pref update && aptitude $apt_upgr' root"
-    alias adu="su -lc '$apt_pref update && aptitude dist-upgrade' root"
-    alias afu="su -lc '$apt-file update'"
+    alias adg="su -lc '$apt_pref update && $apt_pref $apt_upgr' root"
+    alias adu="su -lc '$apt_pref update && $apt_pref dist-upgrade' root"
+    alias afu="su -lc 'apt-file update'"
     alias au="su -lc '$apt_pref $apt_upgr' root"
     function ai() {
         cmd="su -lc '$apt_pref install $@' root"
