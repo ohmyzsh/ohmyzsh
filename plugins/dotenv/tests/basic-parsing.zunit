@@ -366,3 +366,23 @@ EOF
 
   assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
 }
+
+@test 'parse preserves escaped dollar signs before variable expansion' {
+  > "$fixture" <<'EOF'
+BAR=expanded
+ESCAPED_UNQUOTED=foo\$BAR
+ESCAPED_DOUBLE="foo\$BAR"
+ESCAPED_BRACED="\${BAR}"
+EOF
+
+  expected_vars=(
+    BAR 'expanded'
+    ESCAPED_UNQUOTED 'foo$BAR'
+    ESCAPED_DOUBLE 'foo$BAR'
+    ESCAPED_BRACED '${BAR}'
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}

@@ -143,17 +143,22 @@ _parse_dotenv_content() {
     fi
     ## END: FILTER COMMAND EXPANSION
 
-    # Unquote the value to handle special characters and multiline values
-    value="${(Q)value}"
-
     # Single-quoted values are fully literal and must not participate in expansion.
     if [[ "$raw_value" == \'*\' ]]; then
+      value="${(Q)value}"
       parsed_vars[$key]="$value"
       if [[ "$mode" == "export" ]]; then
         typeset -x "$key"="$value"
       fi
       continue
     fi
+
+    # Preserve escaped dollars so they remain literal after unquoting.
+    local escaped_dollar_placeholder=$'\001DOTENV_ESCAPED_DOLLAR\001'
+    value="${value//\\\$/$escaped_dollar_placeholder}"
+
+    # Unquote the value to handle special characters and multiline values.
+    value="${(Q)value}"
 
     # Expand previously parsed in-file variables without partial name matches.
     local expanded="" prefix remainder="$value" var_name
@@ -179,6 +184,7 @@ _parse_dotenv_content() {
       fi
     done
     value="${expanded}${remainder}"
+    value="${value//$escaped_dollar_placeholder/\$}"
 
     # Store in parsed vars (for in-file expansion)
     parsed_vars[$key]="$value"
