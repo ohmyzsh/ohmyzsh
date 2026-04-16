@@ -202,7 +202,7 @@ parse_dotenv() {
   # Fail if file is too large to avoid DoS
   zmodload -F zsh/stat b:zstat
   local -i file_size max_size=10485760  # 10MiB
-  if ! file_size=$(zstat -L +size "$filename" 2>/dev/null); then
+  if ! file_size=$(zstat +size "$filename" 2>/dev/null); then
     echo "dotenv: unable to determine size of file '$filename'" >&2
     return 1
   fi
@@ -214,6 +214,39 @@ parse_dotenv() {
 
   content="$(<"$filename")" || return 1
   _parse_dotenv_content "$content" "$mode"
+}
+
+_dotenv_read_limited() {
+  local filename="$1"
+  local chunk content=""
+  local -i max_size=10485760 total=0 read_size=0 fd read_status
+
+  zmodload zsh/system || return 1
+  exec {fd}<"$filename" || return 1
+
+  while true; do
+    sysread -i $fd -s 65536 -c read_size chunk
+    read_status=$?
+
+    if (( read_status == 5 )); then
+      break
+    elif (( read_status != 0 )); then
+      exec {fd}<&-
+      return 1
+    fi
+
+    (( total += read_size ))
+    if (( total > max_size )); then
+      exec {fd}<&-
+      echo "dotenv: file '$filename' is too large to parse (size: more than $max_size bytes)" >&2
+      return 1
+    fi
+
+    content+="$chunk"
+  done
+
+  exec {fd}<&-
+  REPLY="$content"
 }
 
 _dotenv_check_syntax() {
@@ -272,7 +305,8 @@ source_env() {
 
   local content
   if [[ -p "$ZSH_DOTENV_FILE" ]]; then
-    content="$(<"$ZSH_DOTENV_FILE")" || return 1
+    _dotenv_read_limited "$ZSH_DOTENV_FILE" || return 1
+    content="$REPLY"
     _dotenv_check_syntax "$ZSH_DOTENV_FILE" "$content" || return 1
 
     setopt localoptions allexport

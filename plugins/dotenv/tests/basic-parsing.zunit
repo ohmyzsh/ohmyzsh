@@ -82,6 +82,45 @@
   assert "$result" equals 'secret'
 }
 
+@test 'source_env rejects oversized named pipes' {
+  run zsh -fc '
+    source ./dotenv.plugin.zsh
+
+    tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv.XXXXXX")" || exit 1
+    fifo="$tmpdir/.env"
+    command mkfifo "$fifo" || exit 1
+
+    cleanup() {
+      kill $killer_pid 2>/dev/null || true
+      kill $writer_pid 2>/dev/null || true
+      wait $writer_pid 2>/dev/null || true
+      command rm -rf "$tmpdir"
+    }
+    trap cleanup EXIT
+
+    (
+      {
+        print -rn -- "BIG="
+        command dd if=/dev/zero bs=10485761 count=1 2>/dev/null | tr "\0" a
+      } > "$fifo"
+    ) &
+    writer_pid=$!
+
+    (
+      sleep 2
+      kill -0 $$ 2>/dev/null || exit 0
+      kill $$ 2>/dev/null || exit 0
+    ) &
+    killer_pid=$!
+
+    ZSH_DOTENV_PROMPT=false
+    ZSH_DOTENV_FILE="$fifo"
+    source_env >/dev/null 2>&1
+  '
+
+  assert $state equals 1
+}
+
 @test 'parse basic variable assignment' {
   > "$fixture" <<'EOF'
 # Basic assignments
