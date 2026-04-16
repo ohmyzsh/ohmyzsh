@@ -9,10 +9,10 @@
 
 ## Functions
 
-parse_dotenv() {
+_parse_dotenv_content() {
   setopt localoptions extendedglob
 
-  local filename="$1"
+  local content="$1"
   local mode="${2:-export}"
 
   # Validate mode argument
@@ -24,25 +24,9 @@ parse_dotenv() {
       ;;
   esac
 
-  # Fail if file is too large to avoid DoS
-  zmodload -F zsh/stat b:zstat
-  local -i file_size max_size=10485760  # 10MiB
-  if ! file_size=$(zstat -L +size "$filename" 2>/dev/null); then
-    echo "dotenv: unable to determine size of file '$filename'" >&2
-    return 1
-  fi
-
-  if (( file_size > max_size )); then
-    echo "dotenv: file '$filename' is too large to parse (size: $file_size bytes)" >&2
-    return 1
-  fi
-
-  local content node line key value
+  local node line key value
   local -A parsed_vars
   local -a nodes lines
-
-  # Read entire file
-  content="$(<$filename)" || return 1
 
   # Parse into command lines separated by `;`, with built-in support for multi-line commands.
   # (Z:C:) ignores comments and preserves quotes and escapes.
@@ -184,6 +168,41 @@ parse_dotenv() {
   DOTENV_TEST_VARS=("${(@kv)parsed_vars}")
 }
 
+parse_dotenv() {
+  local filename="$1"
+  local mode="${2:-export}"
+  local content
+
+  # Fail if file is too large to avoid DoS
+  zmodload -F zsh/stat b:zstat
+  local -i file_size max_size=10485760  # 10MiB
+  if ! file_size=$(zstat -L +size "$filename" 2>/dev/null); then
+    echo "dotenv: unable to determine size of file '$filename'" >&2
+    return 1
+  fi
+
+  if (( file_size > max_size )); then
+    echo "dotenv: file '$filename' is too large to parse (size: $file_size bytes)" >&2
+    return 1
+  fi
+
+  content="$(<"$filename")" || return 1
+  _parse_dotenv_content "$content" "$mode"
+}
+
+_dotenv_check_syntax() {
+  local filename="$1"
+
+  if (( $# == 2 )); then
+    printf '%s' "$2" | zsh -fn /dev/stdin
+  else
+    zsh -fn -- "$filename"
+  fi || {
+    echo "dotenv: error when sourcing '$filename' file" >&2
+    return 1
+  }
+}
+
 source_env() {
   if [[ ! -f "$ZSH_DOTENV_FILE" ]] && [[ ! -p "$ZSH_DOTENV_FILE" ]]; then
     return
@@ -225,11 +244,17 @@ source_env() {
     fi
   fi
 
-  # test .env syntax
-  zsh -fn $ZSH_DOTENV_FILE || {
-    echo "dotenv: error when sourcing '$ZSH_DOTENV_FILE' file" >&2
-    return 1
-  }
+  local content
+  if [[ -p "$ZSH_DOTENV_FILE" ]]; then
+    content="$(<"$ZSH_DOTENV_FILE")" || return 1
+    _dotenv_check_syntax "$ZSH_DOTENV_FILE" "$content" || return 1
+
+    setopt localoptions allexport
+    _parse_dotenv_content "$content"
+    return
+  fi
+
+  _dotenv_check_syntax "$ZSH_DOTENV_FILE" || return 1
 
   setopt localoptions allexport
   parse_dotenv "$ZSH_DOTENV_FILE"

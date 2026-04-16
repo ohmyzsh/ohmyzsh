@@ -39,6 +39,49 @@
   assert $state equals 1
 }
 
+@test 'source_env loads named pipes without blocking' {
+  local tmpdir fifo output result
+  local child_pid writer_pid killer_pid child_rc
+
+  tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv.XXXXXX")"
+  fifo="$tmpdir/.env"
+  output="$tmpdir/output"
+  command mkfifo "$fifo"
+
+  (
+    print -r -- 'TOKEN=secret' > "$fifo"
+  ) &
+  writer_pid=$!
+
+  (
+    ZSH_DOTENV_PROMPT=false
+    ZSH_DOTENV_FILE="$fifo"
+    source_env
+    print -r -- "${TOKEN-<unset>}" > "$output"
+  ) &
+  child_pid=$!
+
+  (
+    sleep 2
+    kill -0 $child_pid 2>/dev/null || exit 0
+    kill $child_pid 2>/dev/null || exit 0
+  ) &
+  killer_pid=$!
+
+  wait $child_pid
+  child_rc=$?
+
+  kill $killer_pid 2>/dev/null || true
+  kill $writer_pid 2>/dev/null || true
+  wait $writer_pid 2>/dev/null || true
+
+  [[ -f "$output" ]] && result="$(<"$output")"
+  command rm -rf "$tmpdir"
+
+  assert $child_rc equals 0
+  assert "$result" equals 'secret'
+}
+
 @test 'parse basic variable assignment' {
   > "$fixture" <<'EOF'
 # Basic assignments
