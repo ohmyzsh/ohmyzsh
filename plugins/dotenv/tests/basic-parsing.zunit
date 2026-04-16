@@ -305,3 +305,25 @@ EOF
 
   assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
 }
+
+@test 'parse in-file variable expansion prefers the longest matching variable name' {
+  > "$fixture" <<'EOF'
+A=1
+ABC=2
+X=$ABC
+Y=${ABC}
+Z=$ABCD
+EOF
+
+  expected_vars=(
+    A '1'
+    ABC '2'
+    X '2'
+    Y '2'
+    Z ''
+  )
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}

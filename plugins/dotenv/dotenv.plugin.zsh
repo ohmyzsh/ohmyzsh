@@ -97,6 +97,7 @@ _parse_dotenv_content() {
 
     key="${match[1]}"
     value="${match[2]}"
+    local raw_value="$value"
 
     # Filter out variables to be ignored for security reasons (best effort)
     if [[ "$key" == (${~forbidden}) ]]; then
@@ -145,14 +146,39 @@ _parse_dotenv_content() {
     # Unquote the value to handle special characters and multiline values
     value="${(Q)value}"
 
-    # Expand variables from in-file parsed vars (same as double-quoted)
-    local expanded="$value"
-    for var_name in "${(@k)parsed_vars}"; do
-      local var_value="${parsed_vars[$var_name]}"
-      expanded="${expanded//\$\{${var_name}\}/${var_value}}"
-      expanded="${expanded//\$${var_name}/${var_value}}"
+    # Single-quoted values are fully literal and must not participate in expansion.
+    if [[ "$raw_value" == \'*\' ]]; then
+      parsed_vars[$key]="$value"
+      if [[ "$mode" == "export" ]]; then
+        typeset -x "$key"="$value"
+      fi
+      continue
+    fi
+
+    # Expand previously parsed in-file variables without partial name matches.
+    local expanded="" prefix remainder="$value" var_name
+    while [[ "$remainder" == *'$'* ]]; do
+      prefix="${remainder%%\$*}"
+      expanded+="$prefix"
+      remainder="${remainder#$prefix}"
+
+      if [[ "$remainder" =~ '^\$\{([a-zA-Z_][a-zA-Z0-9_]*)\}(.*)$' ]]; then
+        var_name="${match[1]}"
+        remainder="${match[2]}"
+      elif [[ "$remainder" =~ '^\$([a-zA-Z_][a-zA-Z0-9_]*)(.*)$' ]]; then
+        var_name="${match[1]}"
+        remainder="${match[2]}"
+      else
+        expanded+='$'
+        remainder="${remainder#?}"
+        continue
+      fi
+
+      if [[ -v "parsed_vars[$var_name]" ]]; then
+        expanded+="${parsed_vars[$var_name]}"
+      fi
     done
-    value="$expanded"
+    value="${expanded}${remainder}"
 
     # Store in parsed vars (for in-file expansion)
     parsed_vars[$key]="$value"
