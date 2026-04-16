@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: "0 6 * * 0"
 
+permissions:
+  contents: read
+
 jobs:
   check:
     name: Check for updates
