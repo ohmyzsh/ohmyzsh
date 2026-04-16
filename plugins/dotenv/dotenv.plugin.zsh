@@ -25,6 +25,8 @@ _parse_dotenv_content() {
   esac
 
   local node line key value
+  local raw_value expanded prefix remainder var_name escaped_dollar_placeholder
+  local sq dq uq safe
   local -A parsed_vars
   local -a nodes lines
 
@@ -97,7 +99,7 @@ _parse_dotenv_content() {
 
     key="${match[1]}"
     value="${match[2]}"
-    local raw_value="$value"
+    raw_value="$value"
 
     # Filter out variables to be ignored for security reasons (best effort)
     if [[ "$key" == (${~forbidden}) ]]; then
@@ -127,7 +129,6 @@ _parse_dotenv_content() {
     # Output: DANGEROUS='$(echo this is a command)' (literal string, no command execution)
     #
     # Check for potential command substitution outside of safe contexts
-    local sq dq uq safe remainder
     # - single-quoted strings: command substitution is literal there
     sq="'[^']#'"
     # - double-quoted strings, but NOT unescaped ` or $(
@@ -154,14 +155,17 @@ _parse_dotenv_content() {
     fi
 
     # Preserve escaped dollars so they remain literal after unquoting.
-    local escaped_dollar_placeholder=$'\001DOTENV_ESCAPED_DOLLAR\001'
+    escaped_dollar_placeholder=$'\001DOTENV_ESCAPED_DOLLAR\001'
     value="${value//\\\$/$escaped_dollar_placeholder}"
 
     # Unquote the value to handle special characters and multiline values.
     value="${(Q)value}"
 
     # Expand previously parsed in-file variables without partial name matches.
-    local expanded="" prefix remainder="$value" var_name
+    expanded=""
+    prefix=""
+    remainder="$value"
+    var_name=""
     while [[ "$remainder" == *'$'* ]]; do
       prefix="${remainder%%\$*}"
       expanded+="$prefix"
