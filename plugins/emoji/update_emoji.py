@@ -5,8 +5,6 @@ Refreshes OMZ emoji database based on the latest Unicode spec
 import re
 import json
 
-spec = open("emoji-data.txt", "r")
-
 # Regexes
 # regex_emoji will return, respectively:
 # the code points, its type (status), the actual emoji, and its official name
@@ -120,29 +118,30 @@ def increment_name(_shortname):
 
 group, subgroup, short_name_buffer = "", "", ""
 emoji_database = []
-for line in spec:
-    # First, test if this line opens a group or subgroup
-    group_match = re.findall(regex_group, line)
-    if group_match != []:
-        gr_or_sub, name = group_match[0]
-        if gr_or_sub == "group":
-            group = name
-        elif gr_or_sub == "subgroup":
-            subgroup = name
-        continue # Moving on...
-    # Second, test if this line references one emoji
-    emoji_match = re.findall(regex_emoji, line)
-    if emoji_match != []:
-        code_points, status, emoji, name = emoji_match[0]
-        omz_codes = code_to_omz(code_points)
-        omz_name = name_to_omz(name, group, subgroup, status)
-        # If this emoji has the same shortname as the preceding one
-        if omz_name in short_name_buffer:
-            omz_name = increment_name(short_name_buffer)
-        short_name_buffer = omz_name
-        emoji_database.append(
-            [omz_codes, status, emoji, omz_name, group, subgroup])
-spec.close()
+
+with open("emoji-data.txt", "r") as spec:
+    for line in spec:
+        # First, test if this line opens a group or subgroup
+        group_match = re.findall(regex_group, line)
+        if group_match != []:
+            gr_or_sub, name = group_match[0]
+            if gr_or_sub == "group":
+                group = name
+            elif gr_or_sub == "subgroup":
+                subgroup = name
+            continue # Moving on...
+        # Second, test if this line references one emoji
+        emoji_match = re.findall(regex_emoji, line)
+        if emoji_match != []:
+            code_points, status, emoji, name = emoji_match[0]
+            omz_codes = code_to_omz(code_points)
+            omz_name = name_to_omz(name, group, subgroup, status)
+            # If this emoji has the same shortname as the preceding one
+            if omz_name in short_name_buffer:
+                omz_name = increment_name(short_name_buffer)
+            short_name_buffer = omz_name
+            emoji_database.append(
+                [omz_codes, status, emoji, omz_name, group, subgroup])
 
 ########
 # Write to emoji-char-definitions.zsh
@@ -152,62 +151,61 @@ spec.close()
 # Retrieved on Aug 9 2019 from the following URL:
 # https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json
 
-gemoji_db = open("gemoji_db.json")
-j = json.load(gemoji_db)
+with open("gemoji_db.json") as gemoji_db:
+    j = json.load(gemoji_db)
 aliases_map = {entry['emoji']: entry['aliases'] for entry in j}
 all_omz_names = [emoji_data[3] for emoji_data in emoji_database]
 
 # Let's begin writing to this file
-output = open("emoji-char-definitions.zsh", "w")
-output.write(headers)
+with open("emoji-char-definitions.zsh", "w") as output:
+    output.write(headers)
 
-emoji_groups = {"fruits": "\n", "vehicles": "\n", "hands": "\n",
-                "people": "\n", "animals": "\n", "faces": "\n",
-                "flags": "\n"}
+    emoji_groups = {"fruits": "\n", "vehicles": "\n", "hands": "\n",
+                    "people": "\n", "animals": "\n", "faces": "\n",
+                    "flags": "\n"}
 
-# First, write every emoji down
-for _omz_codes, _status, _emoji, _omz_name, _group, _subgroup in emoji_database:
+    # First, write every emoji down
+    for _omz_codes, _status, _emoji, _omz_name, _group, _subgroup in emoji_database:
 
-    # One emoji can be mapped to multiple names (aliases or country codes)
-    names_for_this_emoji = [_omz_name]
+        # One emoji can be mapped to multiple names (aliases or country codes)
+        names_for_this_emoji = [_omz_name]
 
-    # Variable that indicates in which map the emoji will be located
-    emoji_map = "emoji"
-    if _status == "component":
-        emoji_map = "emoji_mod"
-    if _group == "Flags":
-        emoji_map = "emoji_flags"
-        # Adding country codes (Optional, see above)
-        # names_for_this_emoji = country_iso(names_for_this_emoji, _omz_name)
+        # Variable that indicates in which map the emoji will be located
+        emoji_map = "emoji"
+        if _status == "component":
+            emoji_map = "emoji_mod"
+        if _group == "Flags":
+            emoji_map = "emoji_flags"
+            # Adding country codes (Optional, see above)
+            # names_for_this_emoji = country_iso(names_for_this_emoji, _omz_name)
 
-    # Check if there is an alias available in the Gemoji DB
-    if _emoji in aliases_map.keys():
-        for alias in aliases_map[_emoji]:
-            if alias not in all_omz_names:
-                names_for_this_emoji.append(alias)
+        # Check if there is an alias available in the Gemoji DB
+        if _emoji in aliases_map:
+            for alias in aliases_map[_emoji]:
+                if alias not in all_omz_names:
+                    names_for_this_emoji.append(alias)
 
-    # And now we write to the definitions file
-    for one_name in names_for_this_emoji:
-        output.write(f"{emoji_map}[{one_name}]=$'{_omz_codes}'\n")
+        # And now we write to the definitions file
+        for one_name in names_for_this_emoji:
+            output.write(f"{emoji_map}[{one_name}]=$'{_omz_codes}'\n")
 
-    # Storing the emoji in defined subgroups for the next step
-    if _status == "fully-qualified":
-        if _subgroup == "food-fruit":
-            emoji_groups["fruits"] += f"  {_omz_name}\n"
-        elif "transport-" in _subgroup:
-            emoji_groups["vehicles"] += f"  {_omz_name}\n"
-        elif "hand-" in _subgroup:
-            emoji_groups["hands"] += f"  {_omz_name}\n"
-        elif "person-" in _subgroup or _subgroup == "family":
-            emoji_groups["people"] += f"  {_omz_name}\n"
-        elif "animal-" in _subgroup:
-            emoji_groups["animals"] += f"  {_omz_name}\n"
-        elif "face-" in _subgroup:
-            emoji_groups["faces"] += f"  {_omz_name}\n"
-        elif _group == "Flags":
-            emoji_groups["flags"] += f"  {_omz_name}\n"
+        # Storing the emoji in defined subgroups for the next step
+        if _status == "fully-qualified":
+            if _subgroup == "food-fruit":
+                emoji_groups["fruits"] += f"  {_omz_name}\n"
+            elif "transport-" in _subgroup:
+                emoji_groups["vehicles"] += f"  {_omz_name}\n"
+            elif "hand-" in _subgroup:
+                emoji_groups["hands"] += f"  {_omz_name}\n"
+            elif "person-" in _subgroup or _subgroup == "family":
+                emoji_groups["people"] += f"  {_omz_name}\n"
+            elif "animal-" in _subgroup:
+                emoji_groups["animals"] += f"  {_omz_name}\n"
+            elif "face-" in _subgroup:
+                emoji_groups["faces"] += f"  {_omz_name}\n"
+            elif _group == "Flags":
+                emoji_groups["flags"] += f"  {_omz_name}\n"
 
-# Second, write the subgroups to the end of the file
-for name, string in emoji_groups.items():
-    output.write(f'\nemoji_groups[{name}]="{string}"\n')
-output.close()
+    # Second, write the subgroups to the end of the file
+    for name, string in emoji_groups.items():
+        output.write(f'\nemoji_groups[{name}]="{string}"\n')

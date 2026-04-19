@@ -5,10 +5,13 @@ import termcolor
 import argparse
 
 def parse(line):
-    left = line[0:line.find('=')].strip()
-    right = line[line.find('=')+1:].strip('\'"\n ')
+    eq_pos = line.find('=')
+    if eq_pos == -1:
+        return (line.strip(), "", "")
+    left = line[0:eq_pos].strip()
+    right = line[eq_pos+1:].strip('\'"\n ')
     try:
-        cmd = next(part for part in right.split() if len([char for char in '=<>' if char in part])==0)
+        cmd = next(part for part in right.split() if not any(char in part for char in '=<>'))
     except StopIteration:
         cmd = right
     return (left, right, cmd)
@@ -16,17 +19,17 @@ def parse(line):
 def cheatsheet(lines):
     exps = [ parse(line) for line in lines ]
     exps.sort(key=lambda exp:exp[2])
-    cheatsheet = {'_default': []}
+    cheatsheet_data = {'_default': []}
     for key, group in itertools.groupby(exps, lambda exp:exp[2]):
         group_list = [ item for item in group ]
         if len(group_list)==1:
-            target_aliases = cheatsheet['_default']
+            target_aliases = cheatsheet_data['_default']
         else:
-            if key not in cheatsheet:
-                cheatsheet[key] = []
-            target_aliases = cheatsheet[key]
+            if key not in cheatsheet_data:
+                cheatsheet_data[key] = []
+            target_aliases = cheatsheet_data[key]
         target_aliases.extend(group_list)
-    return cheatsheet
+    return cheatsheet_data
 
 def pretty_print_group(key, aliases, highlight=None, only_groupname=False):
     if len(aliases) == 0:

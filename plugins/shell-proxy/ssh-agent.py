@@ -8,7 +8,7 @@ ssh_proxy = os.path.join(os.path.dirname(__file__), "ssh-proxy.py")
 argv = [
     os.environ.get("__SSH_PROGRAM_NAME__", "ssh"),
     "-o",
-    "ProxyCommand={} %h %p".format(ssh_proxy),
+    f"ProxyCommand={ssh_proxy} %h %p",
     "-o",
     "Compression=yes",
 ]

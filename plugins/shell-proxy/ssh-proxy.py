@@ -4,7 +4,10 @@ import subprocess
 import sys
 from urllib.parse import urlparse
 
-proxy = next(os.environ[_] for _ in ("HTTP_PROXY", "HTTPS_PROXY") if _ in os.environ)
+proxy = next((os.environ[_] for _ in ("HTTP_PROXY", "HTTPS_PROXY") if _ in os.environ), None)
+if proxy is None:
+    sys.stderr.write("Error: Neither HTTP_PROXY nor HTTPS_PROXY environment variable is set\n")
+    sys.exit(1)
 
 parsed = urlparse(proxy)
 
@@ -34,4 +37,4 @@ def make_argv():
     yield sys.argv[1] # host
     yield sys.argv[2] # port
 
-subprocess.call(make_argv())
+sys.exit(subprocess.call(make_argv()))

@@ -28,18 +28,20 @@ def get_tagname_or_hash():
 def get_stash():
     cmd = Popen(['git', 'rev-parse', '--git-common-dir'], stdout=PIPE, stderr=PIPE)
     so, se = cmd.communicate()
+    if cmd.returncode != 0:
+        return 0
     stash_file = '%s%s' % (so.decode('utf-8').rstrip(), '/logs/refs/stash')
 
     try:
         with open(stash_file) as f:
             return sum(1 for _ in f)
-    except IOError:
+    except (IOError, OSError, FileNotFoundError):
         return 0
 
 # `git status --porcelain --branch` can collect all information
 # branch, remote_branch, untracked, staged, changed, conflicts, ahead, behind
 po = Popen(['git', 'status', '--porcelain', '--branch'], env=dict(os.environ, LANG="C"), stdout=PIPE, stderr=PIPE)
-stdout, sterr = po.communicate()
+stdout, _ = po.communicate()
 if po.returncode != 0:
     sys.exit(0)  # Not a git repository
 
