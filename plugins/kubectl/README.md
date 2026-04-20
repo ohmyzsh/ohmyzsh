@@ -35,13 +35,16 @@ plugins=(... kubectl)
 | kgpl     | `kgp -l`                                                | Get pods by label. Example: `kgpl "app=myapp" -n myns`                                           |
 | kgpn     | `kgp -n`                                                | Get pods by namespace. Example: `kgpn kube-system`                                               |
 | kgpsl    | `kubectl get pods --show-labels`                        | List all pods in ps output format with labels                                                    |
+| kgpa     | `kubectl get pods --all-namespaces`                     | List all pods in ps output format across all namespaces                                          |
 | kgpw     | `kgp --watch`                                           | After listing/getting the requested object, watch for changes                                    |
 | kgpwide  | `kgp -o wide`                                           | Output in plain-text format with any additional information. For pods, the node name is included |
+| kgpall   | `kubectl get pods --all-namespaces -o wide`             | List all pods across all namespaces in wide output format (including node name)                  |
 | kep      | `kubectl edit pods`                                     | Edit pods from the default editor                                                                |
 | kdp      | `kubectl describe pods`                                 | Describe all pods                                                                                |
 | kdelp    | `kubectl delete pods`                                   | Delete all pods matching passed arguments                                                        |
 |          |                                                         | **Service management**                                                                           |
 | kgs      | `kubectl get svc`                                       | List all services in ps output format                                                            |
+| kgsa     | `kubectl get svc --all-namespaces`                      | List all services across all namespaces                                                          |
 | kgsw     | `kgs --watch`                                           | After listing all services, watch for changes                                                    |
 | kgswide  | `kgs -o wide`                                           | After listing all services, output in plain-text format with any additional information          |
 | kes      | `kubectl edit svc`                                      | Edit services(svc) from the default editor                                                       |
@@ -49,6 +52,7 @@ plugins=(... kubectl)
 | kdels    | `kubectl delete svc`                                    | Delete all services matching passed argument                                                     |
 |          |                                                         | **Ingress management**                                                                           |
 | kgi      | `kubectl get ingress`                                   | List ingress resources in ps output format                                                       |
+| kgia     | `kubectl get ingress --all-namespaces`                  | List ingress resources across all namespaces                                                     |
 | kei      | `kubectl edit ingress`                                  | Edit ingress resource from the default editor                                                    |
 | kdi      | `kubectl describe ingress`                              | Describe ingress resource in detail                                                              |
 | kdeli    | `kubectl delete ingress`                                | Delete ingress resources matching passed argument                                                |
@@ -60,15 +64,18 @@ plugins=(... kubectl)
 | kdelns   | `kubectl delete namespace`                              | Delete the namespace. WARNING! This deletes everything in the namespace                          |
 |          |                                                         | **ConfigMap management**                                                                         |
 | kgcm     | `kubectl get configmaps`                                | List the configmaps in ps output format                                                          |
+| kgcma    | `kubectl get configmaps --all-namespaces`               | List configmaps across all namespaces                                                            |
 | kecm     | `kubectl edit configmap`                                | Edit configmap resource from the default editor                                                  |
 | kdcm     | `kubectl describe configmap`                            | Describe configmap resource in detail                                                            |
 | kdelcm   | `kubectl delete configmap`                              | Delete the configmap                                                                             |
 |          |                                                         | **Secret management**                                                                            |
 | kgsec    | `kubectl get secret`                                    | Get secret for decoding                                                                          |
+| kgseca   | `kubectl get secret --all-namespaces`                   | List secrets across all namespaces                                                               |
 | kdsec    | `kubectl describe secret`                               | Describe secret resource in detail                                                               |
 | kdelsec  | `kubectl delete secret`                                 | Delete the secret                                                                                |
 |          |                                                         | **Deployment management**                                                                        |
 | kgd      | `kubectl get deployment`                                | Get the deployment                                                                               |
+| kgda     | `kubectl get deployment --all-namespaces`               | List deployments across all namespaces                                                           |
 | kgdw     | `kgd --watch`                                           | After getting the deployment, watch for changes                                                  |
 | kgdwide  | `kgd -o wide`                                           | After getting the deployment, output in plain-text format with any additional information        |
 | ked      | `kubectl edit deployment`                               | Edit deployment resource from the default editor                                                 |
@@ -91,7 +98,13 @@ plugins=(... kubectl)
 | kgaa     | `kubectl get all --all-namespaces`                      | List the requested object(s) across all namespaces                                               |
 |          |                                                         | **Logs**                                                                                         |
 | kl       | `kubectl logs`                                          | Print the logs for a container or resource                                                       |
+| kl1h     | `kubectl logs --since 1h`                               | Print logs from the last hour for a container or resource                                        |
+| kl1m     | `kubectl logs --since 1m`                               | Print logs from the last minute for a container or resource                                      |
+| kl1s     | `kubectl logs --since 1s`                               | Print logs from the last second for a container or resource                                      |
 | klf      | `kubectl logs -f`                                       | Stream the logs for a container or resource (follow)                                             |
+| klf1h    | `kubectl logs --since 1h -f`                            | Stream logs from the last hour for a container or resource (follow)                              |
+| klf1m    | `kubectl logs --since 1m -f`                            | Stream logs from the last minute for a container or resource (follow)                            |
+| klf1s    | `kubectl logs --since 1s -f`                            | Stream logs from the last second for a container or resource (follow)                            |
 |          |                                                         | **File copy**                                                                                    |
 | kcp      | `kubectl cp`                                            | Copy files and directories to and from containers                                                |
 |          |                                                         | **Node management**                                                                              |
@@ -102,12 +115,14 @@ plugins=(... kubectl)
 | kdelno   | `kubectl delete node`                                   | Delete the node                                                                                  |
 |          |                                                         | **Persistent Volume Claim management**                                                           |
 | kgpvc    | `kubectl get pvc`                                       | List all PVCs                                                                                    |
+| kgpvca   | `kubectl get pvc --all-namespaces`                      | List all PVCs across all namespaces                                                              |
 | kgpvcw   | `kgpvc --watch`                                         | After listing/getting the requested object, watch for changes                                    |
 | kepvc    | `kubectl edit pvc`                                      | Edit pvcs from the default editor                                                                |
 | kdpvc    | `kubectl describe pvc`                                  | Describe all pvcs                                                                                |
 | kdelpvc  | `kubectl delete pvc`                                    | Delete all pvcs matching passed arguments                                                        |
 |          |                                                         | **StatefulSets management**                                                                      |
 | kgss     | `kubectl get statefulset`                               | List the statefulsets in ps format                                                               |
+| kgssa    | `kubectl get statefulset --all-namespaces`              | List statefulsets across all namespaces                                                          |
 | kgssw    | `kgss --watch`                                          | After getting the list of statefulsets, watch for changes                                        |
 | kgsswide | `kgss -o wide`                                          | After getting the statefulsets, output in plain-text format with any additional information      |
 | kess     | `kubectl edit statefulset`                              | Edit statefulset resource from the default editor                                                |
@@ -121,6 +136,7 @@ plugins=(... kubectl)
 | kdelsa   | `kubectl delete sa`                                     | Delete the service account                                                                       |
 |          |                                                         | **DaemonSet management**                                                                         |
 | kgds     | `kubectl get daemonset`                                 | List all DaemonSets in ps output format                                                          |
+| kgdsa    | `kubectl get daemonset --all-namespaces`                | List all DaemonSets across all namespaces                                                        |
 | kgdsw    | `kgds --watch`                                          | After listing all DaemonSets, watch for changes                                                  |
 | keds     | `kubectl edit daemonset`                                | Edit DaemonSets from the default editor                                                          |
 | kdds     | `kubectl describe daemonset`                            | Describe all DaemonSets in detail                                                                |
