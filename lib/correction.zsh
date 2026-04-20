@@ -1,4 +1,4 @@
-if [[ "$ENABLE_CORRECTION" == "true" ]]; then
+if [[ "${ENABLE_CORRECTION:-}" == "true" ]]; then
   alias cp='nocorrect cp'
   alias man='nocorrect man'
   alias mkdir='nocorrect mkdir'
