@@ -87,8 +87,8 @@ _build_tmux_alias "tkss" "kill-session" "-t"
 
 unfunction _build_tmux_alias
 
-# Determine if the terminal supports 256 colors
-if [[ $terminfo[colors] == 256 ]]; then
+# Determine if the terminal supports at least 256 colors
+if (( ${+terminfo[colors]} )) && [[ $terminfo[colors] -ge 256 ]]; then
   export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITH_256COLOR
 else
   export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR
