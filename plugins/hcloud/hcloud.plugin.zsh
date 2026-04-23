@@ -127,3 +127,20 @@ alias hcdc='hcloud datacenter list'
 alias hcloc='hcloud location list'
 alias hcst='hcloud server-type list'
 alias hcit='hcloud image list --type system'
+
+# Prompt function to display current hcloud context
+# Usage: add $(hcloud_prompt_info) to your PROMPT or RPROMPT
+function hcloud_prompt_info() {
+  # Check if HCLOUD_TOKEN is set (overrides context)
+  if [[ -n "$HCLOUD_TOKEN" ]]; then
+    echo "${ZSH_THEME_HCLOUD_PREFIX=<hcloud:}${ZSH_THEME_HCLOUD_TOKEN_TEXT=HCLOUD_TOKEN}${ZSH_THEME_HCLOUD_SUFFIX=>}"
+    return
+  fi
+
+  # Get active context
+  local context
+  context=$(hcloud context active 2>/dev/null)
+  [[ -n "$context" ]] || return
+
+  echo "${ZSH_THEME_HCLOUD_PREFIX=<hcloud:}${context}${ZSH_THEME_HCLOUD_SUFFIX=>}"
+}
