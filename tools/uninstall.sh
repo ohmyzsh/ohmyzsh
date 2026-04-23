@@ -61,20 +61,20 @@ fi
 
 echo "Removing $OMZ_DIR"
 if [ -d "$OMZ_DIR" ]; then
-  rm -rf "$OMZ_DIR"
+  rm -rf -- "$OMZ_DIR"
 fi
 
 if [ -e "$zdot/.zshrc" ]; then
   ZSHRC_SAVE="$zdot/.zshrc.omz-uninstalled-$(date +%Y-%m-%d_%H-%M-%S)"
   echo "Found $zdot/.zshrc -- Renaming to ${ZSHRC_SAVE}"
-  mv "$zdot/.zshrc" "${ZSHRC_SAVE}"
+  mv -- "$zdot/.zshrc" "${ZSHRC_SAVE}"
 fi
 
 echo "Looking for original zsh config..."
 ZSHRC_ORIG="$zdot/.zshrc.pre-oh-my-zsh"
 if [ -e "$ZSHRC_ORIG" ]; then
   echo "Found $ZSHRC_ORIG -- Restoring to $zdot/.zshrc"
-  mv "$ZSHRC_ORIG" "$zdot/.zshrc"
+  mv -- "$ZSHRC_ORIG" "$zdot/.zshrc"
   echo "Your original zsh config was restored."
 else
   echo "No original zsh config found"
