@@ -32,6 +32,7 @@
 #
 # You can also pass some arguments to the install script to set some these options:
 #   --skip-chsh: has the same behavior as setting CHSH to 'no'
+#   --skip-runzsh: has the same behavior as setting RUNZSH to 'no'
 #   --unattended: sets both CHSH and RUNZSH to 'no'
 #   --keep-zshrc: sets KEEP_ZSHRC to 'yes'
 # For example:
@@ -343,7 +344,7 @@ setup_zshrc() {
       echo "${FMT_YELLOW}Found ${zdot}/.zshrc.${FMT_RESET} ${FMT_GREEN}Keeping...${FMT_RESET}"
       return
     fi
-    
+
     if [ $OVERWRITE_CONFIRMATION != "no" ]; then
       # Ask user for confirmation before backing up and overwriting
       echo "${FMT_YELLOW}Found ${zdot}/.zshrc."
@@ -522,6 +523,7 @@ main() {
   while [ $# -gt 0 ]; do
     case $1 in
       --unattended) RUNZSH=no; CHSH=no; OVERWRITE_CONFIRMATION=no ;;
+      --skip-runzsh) RUNZSH=no ;;
       --skip-chsh) CHSH=no ;;
       --keep-zshrc) KEEP_ZSHRC=yes ;;
     esac
