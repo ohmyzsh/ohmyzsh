@@ -103,6 +103,11 @@ function _omz_git_prompt_status() {
   local status_lines
   status_lines=("${(@f)${status_text}}")
 
+  # Use C locale for regex matching to avoid "illegal byte sequence" errors
+  # when branch names or file paths contain non-ASCII characters (e.g. Chinese)
+  local _omz_lc_all=$LC_ALL
+  LC_ALL=C
+
   # If the tracking line exists, get and parse it
   if [[ "$status_lines[1]" =~ "^## [^ ]+ \[(.*)\]" ]]; then
     local branch_statuses
@@ -125,6 +130,8 @@ function _omz_git_prompt_status() {
       statuses_seen[$status_constant]=1
     fi
   done
+
+  LC_ALL=$_omz_lc_all
 
   # Display the seen statuses in the order specified
   local status_prompt
