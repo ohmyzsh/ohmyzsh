@@ -2,15 +2,33 @@ if (( ! $+commands[pipenv] )); then
   return
 fi
 
-# If the completion file doesn't exist yet, we need to autoload it and
-# bind it to `pipenv`. Otherwise, compinit will have already done that.
-if [[ ! -f "$ZSH_CACHE_DIR/completions/_pipenv" ]]; then
-  typeset -g -A _comps
-  autoload -Uz _pipenv
-  _comps[pipenv]=_pipenv
-fi
+# Compatibility note:
+# pipenv < 2026.5.0 used Click-based shell completion driven by the
+# _PIPENV_COMPLETE environment variable.
+#
+# pipenv >= 2026.5.0 removed this mechanism and switched to argcomplete-based
+# completion using register-python-argcomplete instead.
 
-_PIPENV_COMPLETE=zsh_source pipenv >| "$ZSH_CACHE_DIR/completions/_pipenv" &|
+if (( $+commands[register-python-argcomplete] )); then
+  # pipenv >= 2026.5.0 (argcomplete-based completion)
+  autoload -U bashcompinit
+  bashcompinit
+
+  eval "$(register-python-argcomplete pipenv)"
+
+else
+  # pipenv < 2026.5.0 (legacy Click-based completion via _PIPENV_COMPLETE)
+
+  # If the completion file doesn't exist yet, we need to autoload it and
+  # bind it to `pipenv`. Otherwise, compinit will have already done that.
+  if [[ ! -f "$ZSH_CACHE_DIR/completions/_pipenv" ]]; then
+    typeset -g -A _comps
+    autoload -Uz _pipenv
+    _comps[pipenv]=_pipenv
+  fi
+
+  _PIPENV_COMPLETE=zsh_source pipenv >| "$ZSH_CACHE_DIR/completions/_pipenv" &|
+fi
 
 if zstyle -T ':omz:plugins:pipenv' auto-shell; then
   # Automatic pipenv shell activation/deactivation
@@ -34,6 +52,7 @@ if zstyle -T ':omz:plugins:pipenv' auto-shell; then
       fi
     fi
   }
+
   autoload -U add-zsh-hook
   add-zsh-hook chpwd _togglePipenvShell
   _togglePipenvShell
