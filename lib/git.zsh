@@ -36,7 +36,19 @@ function _omz_git_prompt_info() {
     && upstream=" -> ${upstream}"
   fi
 
-  echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref:gs/%/%%}${upstream:gs/%/%%}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+  local escaped_ref="${ref:gs/%/%%}${upstream:gs/%/%%}"
+  local dirty="$(parse_git_dirty)"
+
+  # In async context, output ref and dirty indicator separated by Unit Separator
+  # (U+001F) so the renderer can assemble the prompt and apply pending-state
+  # styling without needing to decompose a pre-formatted string.
+  # Check for the specific handler key to avoid false positives when the
+  # associative array exists but this handler hasn't been registered.
+  if (( ${+_OMZ_ASYNC_PENDING[_omz_git_prompt_info]} )); then
+    printf '%s\x1f%s' "$escaped_ref" "$dirty"
+  else
+    echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${escaped_ref}${dirty}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+  fi
 }
 
 function _omz_git_prompt_status() {
@@ -143,21 +155,95 @@ function _omz_git_prompt_status() {
 # - https://github.com/ohmyzsh/ohmyzsh/issues/12331
 # - https://github.com/ohmyzsh/ohmyzsh/issues/12360
 # TODO(2024-06-12): @mcornella remove workaround when CentOS 7 reaches EOL
+
+# Helper functions for async pending-state rendering (used by _omz_render_git_prompt_info).
+
+# Detect whether bold is the active terminal state at the end of a prompt string.
+# Expands zsh prompt escapes (%B, %b) then parses ANSI SGR sequences in order.
+# NOTE: Only standard SGR sequences (\e[...m) are parsed. Non-SGR CSI sequences
+# (e.g. cursor movement) in the prefix may cause incorrect results.
+function _omz_is_bold_at_end() {
+  local expanded=$(print -Pn -- "$1")
+  local is_bold=0 remaining="$expanded"
+  local params p
+  while [[ "$remaining" == *$'\e['*'m'* ]]; do
+    remaining="${remaining#*$'\e['}"
+    params="${remaining%%m*}"
+    remaining="${remaining#*m}"
+    # Bare \e[m (empty params) is equivalent to \e[0m (full reset)
+    if [[ -z "$params" ]]; then
+      is_bold=0
+    else
+      for p in ${(s/;/)params}; do
+        case "$p" in
+          0) is_bold=0 ;;
+          1|01) is_bold=1 ;;
+          22) is_bold=0 ;;
+        esac
+      done
+    fi
+  done
+  return $(( ! is_bold ))
+}
+
+function _omz_render_git_prompt_info() {
+  local raw="${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}"
+  [[ -z "$raw" ]] && return
+
+  # Backward compat: if output has no Unit Separator, it's the old single-line format
+  if [[ "$raw" != *$'\x1f'* ]]; then
+    echo -n "$raw"
+    return
+  fi
+
+  # Async output is two fields separated by Unit Separator (U+001F): ref and dirty indicator.
+  # Assemble the prompt from these parts and the current theme variables.
+  local ref="${raw%%$'\x1f'*}"
+  local dirty="${raw#*$'\x1f'}"
+
+  if (( _OMZ_ASYNC_PENDING[_omz_git_prompt_info] )); then
+    local stale_prefix="${ZSH_THEME_GIT_PROMPT_STALE_PREFIX-}"
+    local stale_suffix="${ZSH_THEME_GIT_PROMPT_STALE_SUFFIX-}"
+
+    # If user hasn't set custom stale vars, auto-detect from the theme prefix:
+    # only apply unbold/rebold if the ref text would actually be rendered bold.
+    # Cache the result keyed on the prefix value to avoid re-parsing SGR on every render.
+    if (( ! ${+ZSH_THEME_GIT_PROMPT_STALE_PREFIX} && ! ${+ZSH_THEME_GIT_PROMPT_STALE_SUFFIX} )); then
+      if [[ "$ZSH_THEME_GIT_PROMPT_PREFIX" != "$_OMZ_CACHED_BOLD_PREFIX" ]]; then
+        typeset -g _OMZ_CACHED_BOLD_PREFIX="$ZSH_THEME_GIT_PROMPT_PREFIX"
+        if _omz_is_bold_at_end "$ZSH_THEME_GIT_PROMPT_PREFIX"; then
+          typeset -g _OMZ_CACHED_BOLD_RESULT=1
+        else
+          typeset -g _OMZ_CACHED_BOLD_RESULT=0
+        fi
+      fi
+      if (( _OMZ_CACHED_BOLD_RESULT )); then
+        stale_prefix=$'%{\e[22m%}'
+        stale_suffix=$'%{\e[1m%}'
+      fi
+    fi
+
+    echo -n "${ZSH_THEME_GIT_PROMPT_PREFIX}${stale_prefix}${ref}${dirty}${stale_suffix}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+  else
+    echo -n "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref}${dirty}${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+  fi
+}
+
+# Async prompt functions — used by both the auto-detect and "force" branches below.
+# Overridden with synchronous versions if async is disabled.
+function git_prompt_info() {
+  _omz_render_git_prompt_info
+}
+
+function git_prompt_status() {
+  if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}" ]]; then
+    echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}"
+  fi
+}
+
 local _style
 if zstyle -t ':omz:alpha:lib:git' async-prompt \
   || { is-at-least 5.0.6 && zstyle -T ':omz:alpha:lib:git' async-prompt }; then
-  function git_prompt_info() {
-    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}" ]]; then
-      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}"
-    fi
-  }
-
-  function git_prompt_status() {
-    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}" ]]; then
-      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}"
-    fi
-  }
-
   # Conditionally register the async handler, only if it's needed in $PROMPT
   # or any of the other prompt variables
   function _defer_async_git_register() {
@@ -182,18 +268,6 @@ if zstyle -t ':omz:alpha:lib:git' async-prompt \
   # the async request prompt is run
   precmd_functions=(_defer_async_git_register $precmd_functions)
 elif zstyle -s ':omz:alpha:lib:git' async-prompt _style && [[ $_style == "force" ]]; then
-  function git_prompt_info() {
-    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}" ]]; then
-      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}"
-    fi
-  }
-
-  function git_prompt_status() {
-    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}" ]]; then
-      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}"
-    fi
-  }
-
   _omz_register_handler _omz_git_prompt_info
   _omz_register_handler _omz_git_prompt_status
 else
