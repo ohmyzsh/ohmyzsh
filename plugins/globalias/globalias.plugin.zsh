@@ -3,6 +3,10 @@ globalias() {
    # (z) splits into words using shell parsing
    # (A) makes it an array even if there's only one element
    local word=${${(Az)LBUFFER}[-1]}
+   if [[ $word[1] == '\' ]]; then
+     zle self-insert
+     return
+   fi
    if [[ $GLOBALIAS_FILTER_VALUES[(Ie)$word] -eq 0 ]]; then
       zle _expand_alias
       zle expand-word
