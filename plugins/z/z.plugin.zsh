@@ -960,8 +960,15 @@ add-zsh-hook chpwd _zshz_chpwd
 
 (( ${fpath[(ie)${0:A:h}]} <= ${#fpath} )) || fpath=( "${0:A:h}" "${fpath[@]}" )
 
-# Save the existing Tab binding
-ZSHZ[TAB_BINDING]="${$(bindkey -M main '^I')##* }"
+# Save the existing Tab binding (only on first load to avoid self-reference
+# if the plugin is sourced more than once)
+if [[ -z ${ZSHZ[TAB_BINDING]} ]] || \
+   [[ ${ZSHZ[TAB_BINDING]} == _zshz_zle_completion_widget ]]; then
+  ZSHZ[TAB_BINDING]="${$(bindkey -M main '^I')##* }"
+  # If we somehow captured our own widget (race condition), fall back to default
+  [[ ${ZSHZ[TAB_BINDING]} == _zshz_zle_completion_widget ]] && \
+    ZSHZ[TAB_BINDING]=expand-or-complete
+fi
 
 ############################################################
 # ZLE widget to fix spaces-as-wildcards completion
