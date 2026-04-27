@@ -5,7 +5,7 @@
 #
 # https://github.com/agkozak/zsh-z
 #
-# Copyright (c) 2018-2023 Alexandros Kozak
+# Copyright (c) 2018-2026 Alexandros Kozak
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -37,25 +37,10 @@ emulate -L zsh
 (( ZSHZ_DEBUG )) &&
   setopt LOCAL_OPTIONS WARN_CREATE_GLOBAL NO_WARN_NESTED_VAR 2> /dev/null
 
-# TODO: This routine currently reproduces z's feature of allowing spaces to be
-# used as wildcards in completions, so that
-#
-#   z us lo bi
-#
-# can expand to
-#
-#   z /usr/local/bin
-#
-# but it also reproduces z's buggy display on the commandline, viz.
-#
-#   z us lo /usr/local/bin
-#
-# Address.
-
 local completions expl completion
 local -a completion_list
 
-completions=$(zshz --complete ${(@)words:1})
+completions=$(zshz --complete "${(@)words:1}")
 [[ -z $completions ]] && return 1
 
 for completion in ${(f)completions[@]}; do
