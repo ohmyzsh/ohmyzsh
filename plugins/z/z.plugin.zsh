@@ -960,8 +960,13 @@ add-zsh-hook chpwd _zshz_chpwd
 
 (( ${fpath[(ie)${0:A:h}]} <= ${#fpath} )) || fpath=( "${0:A:h}" "${fpath[@]}" )
 
-# Save the existing Tab binding
-ZSHZ[TAB_BINDING]="${$(bindkey -M main '^I')##* }"
+
+# Save the existing Tab binding so that the completion widget can invoke it,
+# but being careful not to create a situation where the widget ends up calling
+# itself and causing infinite recursion if this script is re-sourced.
+if (( ! ${+widgets[_zshz_zle_completion_widget]} )); then
+  ZSHZ[TAB_BINDING]="${$(bindkey -M main '^I')##* }"
+fi
 
 ############################################################
 # ZLE widget to fix spaces-as-wildcards completion
@@ -976,7 +981,9 @@ ZSHZ[TAB_BINDING]="${$(bindkey -M main '^I')##* }"
 #   ZSHZ_CMD
 ############################################################
 _zshz_zle_completion_widget() {
-  emulate -L zsh
+
+  setopt LOCAL_OPTIONS EXTENDED_GLOB NO_KSH_ARRAYS NO_SH_WORD_SPLIT
+
   local cmd=${ZSHZ_CMD:-${_Z_CMD:-z}}
 
   # If a trailing space was added after an already-completed absolute path
@@ -994,7 +1001,7 @@ _zshz_zle_completion_widget() {
 
     parts=( ${(z)after} )
     for p in $parts; do
-      if (( ! past_flags )) && [[ $p == -[cehlrRtx]## ]]; then
+      if (( ! past_flags )) && [[ $p == (-[cehlrRtx]##|--add|--complete|--help) ]]; then
         flag_parts+=( $p )
       else
         past_flags=1
@@ -1012,9 +1019,12 @@ _zshz_zle_completion_widget() {
   zle ${ZSHZ[TAB_BINDING]:-expand-or-complete}
 }
 
-zle -N _zshz_zle_completion_widget
-
-bindkey -M main '^I' _zshz_zle_completion_widget
+# Register the widget and bind to Tab, but only if this script has not already
+# been sourced -- avoid infinite recursion.
+if (( ! ${+widgets[_zshz_zle_completion_widget]} )); then
+  zle -N _zshz_zle_completion_widget
+  bindkey -M main '^I' _zshz_zle_completion_widget
+fi
 
 ############################################################
 # zsh-z functions
