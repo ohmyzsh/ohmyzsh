@@ -11,3 +11,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_fnm" ]]; then
 fi
 
 fnm completions --shell=zsh >| "$ZSH_CACHE_DIR/completions/_fnm" &|
+
+if zstyle -t ':omz:plugins:fnm' autostart; then
+  local -a fnm_env_cmd
+  if zstyle -T ':omz:plugins:fnm' use-on-cd; then
+    fnm_env_cmd+=("--use-on-cd")
+  fi
+  eval "$(fnm env --shell=zsh $fnm_env_cmd)"
+fi
