@@ -8,6 +8,19 @@ To use it, add `brew` to the plugins array of your zshrc file:
 plugins=(... brew)
 ```
 
+## Settings
+
+### Aliases
+
+If you don't want to use the aliases provided by this plugin, you can disable them by setting the following style
+in your `.zshrc` file, before Oh My Zsh is sourced:
+
+```zsh
+zstyle ':omz:plugins:brew' aliases no
+```
+
+Default: `yes`.
+
 ## Shellenv
 
 If `brew` is not found in the PATH, this plugin will attempt to find it in common locations, and execute
