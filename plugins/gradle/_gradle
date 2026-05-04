@@ -34,18 +34,16 @@ __gradle-set-build-file() {
 
     local default_gradle_build_file_name="build.gradle"
     if [[ -r $gradle_settings_file ]]; then
-        default_gradle_build_file_name=${$(grep "^rootProject\.buildFileName" $gradle_settings_file | \
+        local build_file_name=${$(grep "^rootProject\.buildFileName" $gradle_settings_file | \
             sed -n -e "s/rootProject\.buildFileName = [\'\"]\(.*\)[\'\"]/\1/p")}
 
-        default_gradle_build_file_name="${default_gradle_build_file:-build.gradle}"
+        default_gradle_build_file_name="${build_file_name:-build.gradle}"
     fi
 
-    local default_gradle_build_file="$project_root_dir/$default_gradle_build_file_name"
-    if [[ ! -f $default_gradle_build_file ]]; then
-        default_gradle_build_file="$project_root_dir/build.gradle.kts"
+    gradle_build_file="$project_root_dir/$default_gradle_build_file_name"
+    if [[ ! -f $gradle_build_file ]]; then
+        gradle_build_file="$project_root_dir/build.gradle.kts"
     fi
-
-    gradle_build_file=$default_gradle_build_file
 }
 
 __gradle-set-cache-name() {
@@ -214,6 +212,7 @@ __gradle_subcommand() {
                 '--dsl=[Set the build script DSL to be used in generated scripts.]' \
                 '--incubating[Allow the generated build to use new features and APIs.]' \
                 '--insecure-protocol=[How to handle insecure URLs used for Maven Repositories.]' \
+                '--into=[Set the directory where the project is generated.]' \
                 '--java-version=[Provides java version to use in the project.]' \
                 '--overwrite[Allow existing files in the build directory to be overwritten?]' \
                 '--package=[Set the package for source files.]' \
@@ -228,6 +227,7 @@ __gradle_subcommand() {
                 '--all[Show additional tasks and detail.]' \
                 '--group=[Show tasks for a specific group.]' \
                 '--groups=[Show tasks for specific groups (can be used multiple times to specify multiple groups).]' \
+                '--provenance[Show task provenance information]' \
                 '--types[Show task class types]' && ret=0
             ;;
         (test)
@@ -245,11 +245,15 @@ __gradle_subcommand() {
                 '--gradle-distribution-url=[The URL to download the Gradle distribution from.]' \
                 '--gradle-version=[The version of the Gradle distribution required by the wrapper. The following labels are allowed: latest, release-candidate, release-milestone, release-nightly, and nightly.]' \
                 '--network-timeout=[Timeout in ms to use when the wrapper is performing network operations.]' \
+                '--retries=[The number of download retries.]' \
+                '--retry-back-off-ms=[The initial back off in milliseconds between retries (doubles on each failure).]' \
                 '--validate-url[Sets task to validate the configured distribution url.]' && ret=0
             ;;
         (*)
             _arguments -C \
-                '-Dgradle.user.home=[Specifies the Gradle user home directory. Defaults to ~/.gradle]:gradle.user.home:_directories' \
+                '-Dcom.gradle.develocity.plugin.version=[Version of the Develocity plugin to auto-apply, must be 4.4.0 or higher if Develocity URL is specified as well.]' \
+                '-Dcom.gradle.develocity.url=[Default URL of the Develocity server to publish Build Scan to. Triggers auto-application of the Develocity plugin if not already applied.]' \
+                '-Dgradle.user.home=[Specifies the Gradle user home directory. Default is ~/.gradle.]:gradle.user.home:_directories' \
                 '-Dorg.gradle.caching.debug=[]' \
                 '-Dorg.gradle.caching=[Enables the Gradle build cache. Gradle will try to reuse outputs from previous builds.]:org.gradle.caching:(true false)' \
                 '-Dorg.gradle.configuration-cache.entries-per-key=[]' \
@@ -260,25 +264,25 @@ __gradle_subcommand() {
                 '-Dorg.gradle.configuration-cache.integrity-check=[]' \
                 '-Dorg.gradle.configuration-cache.max-problems=[]' \
                 '-Dorg.gradle.configuration-cache.parallel=[]' \
-                '-Dorg.gradle.configuration-cache.problems=[Configures how the configuration cache handles problems (fail or warn). Defaults to fail.]:org.gradle.configuration cache.problems:(fail warn)' \
+                '-Dorg.gradle.configuration-cache.problems=[Configures how the configuration cache handles problems (fail or warn). Supported values are 'warn', or 'fail' (default).]:org.gradle.configuration cache.problems:(fail warn)' \
                 '-Dorg.gradle.configuration-cache.read-only=[]' \
                 '-Dorg.gradle.configuration-cache.unsafe.ignore.unsupported-build-events-listeners=[]' \
                 '-Dorg.gradle.configuration-cache=[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]' \
-                '-Dorg.gradle.configureondemand=[Configure necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]' \
-                '-Dorg.gradle.console.unicode=[Specifies which character types are allowed in console output to generate. Values are 'auto' (default), 'disable' or 'enable'.]' \
-                '-Dorg.gradle.console=[Specifies which type of console output to generate. Values are 'plain', 'colored', 'auto' (default), 'rich' or 'verbose'.]:org.gradle.console:(plain auto rich verbose)' \
-                '-Dorg.gradle.continue=[Continue task execution after a task failure.]' \
+                '-Dorg.gradle.configureondemand=[Configures necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]' \
+                '-Dorg.gradle.console.unicode=[Specifies which character types are allowed in the console output. Supported values are 'auto' (default), 'disable', or 'enable'.]' \
+                '-Dorg.gradle.console=[Specifies which type of console output to generate. Supported values are 'plain', 'colored', 'auto' (default), 'rich', or 'verbose'.]:org.gradle.console:(plain auto rich verbose)' \
+                '-Dorg.gradle.continue=[Continues task execution after a task failure.]' \
                 '-Dorg.gradle.continuous.quietperiod=[]' \
                 '-Dorg.gradle.daemon.healthcheckinterval=[]' \
                 '-Dorg.gradle.daemon.idletimeout=[]' \
                 '-Dorg.gradle.daemon.registry.base=[]:org.gradle.daemon.registry.base:_directories' \
-                '-Dorg.gradle.daemon=[Uses the Gradle daemon to run the build. Starts the daemon if not running.]' \
+                '-Dorg.gradle.daemon=[Uses the Gradle daemon to run the build. Starts the daemon if it is not running.]' \
                 '-Dorg.gradle.debug.host=[]' \
                 '-Dorg.gradle.debug.port=[]' \
                 '-Dorg.gradle.debug.server=[]' \
                 '-Dorg.gradle.debug.suspend=[]' \
                 '-Dorg.gradle.debug=[]:org.gradle.debug:(true false)' \
-                '-Dorg.gradle.dependency.verification=[Configures the dependency verification mode. Values are 'strict', 'lenient' or 'off'.]:org.gradle.dependency.verification:(strict lenient off)' \
+                '-Dorg.gradle.dependency.verification=[Configures the dependency verification mode. Supported values are 'strict', 'lenient', or 'off'.]:org.gradle.dependency.verification:(strict lenient off)' \
                 '-Dorg.gradle.java.home=[]:org.gradle.java.home:_directories' \
                 '-Dorg.gradle.java.installations.auto-detect=[]' \
                 '-Dorg.gradle.java.installations.auto-download=[]' \
@@ -289,71 +293,73 @@ __gradle_subcommand() {
                 '-Dorg.gradle.logging.level=[]:org.gradle.logging.level:(quiet warn info debug)' \
                 '-Dorg.gradle.logging.stacktrace=[]' \
                 '-Dorg.gradle.native=[]' \
-                '-Dorg.gradle.parallel=[Build projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]:org.gradle.parallel:(true false)' \
-                '-Dorg.gradle.priority=[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Values are 'normal' (default) or 'low']:org.gradle.priority:(normal low)' \
-                '-Dorg.gradle.problems.report=[(Experimental) enables HTML problems report]' \
-                '-Dorg.gradle.projectcachedir=[Specify the project-specific cache directory. Defaults to .gradle in the root project directory.]:org.gradle.projectcachedir:_directories' \
+                '-Dorg.gradle.parallel=[Builds projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]:org.gradle.parallel:(true false)' \
+                '-Dorg.gradle.priority=[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Supported values are 'normal' (default) or 'low'.]:org.gradle.priority:(normal low)' \
+                '-Dorg.gradle.problems.report=[Enables the HTML problems report.]' \
+                '-Dorg.gradle.projectcachedir=[Specifies the project-specific cache directory. Default is .gradle in the root project directory.]:org.gradle.projectcachedir:_directories' \
                 '-Dorg.gradle.tooling.parallel=[]' \
                 '-Dorg.gradle.unsafe.isolated-projects=[]' \
                 '-Dorg.gradle.vfs.verbose=[]' \
-                '-Dorg.gradle.vfs.watch=[Enables watching the file system for changes, allowing data about the file system to be re-used for the next build.]:org.gradle.vfs.watch:(true false)' \
-                '-Dorg.gradle.warning.mode=[Specifies which mode of warnings to generate. Values are 'all', 'fail', 'summary'(default) or 'none']' \
+                '-Dorg.gradle.vfs.watch=[Enables file system watching. Reuses file system data for subsequent builds.]:org.gradle.vfs.watch:(true false)' \
+                '-Dorg.gradle.warning.mode=[Specifies which mode of warnings to generate. Supported values are 'all', 'fail', 'summary' (default), or 'none'.]' \
                 '-Dorg.gradle.welcome=[]:org.gradle.welcome:(once never)' \
-                '-Dorg.gradle.workers.max=[Configure the number of concurrent workers Gradle is allowed to use.]' \
+                '-Dorg.gradle.workers.max=[Configures the maximum number of concurrent workers Gradle is allowed to use.]' \
                 (--no-build-cache)'--build-cache[Enables the Gradle build cache. Gradle will try to reuse outputs from previous builds.]' \
                 (--no-configuration-cache)'--configuration-cache[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]' \
-                '--configuration-cache-problems[Configures how the configuration cache handles problems (fail or warn). Defaults to fail.]:configuration cache problems:(fail warn)' \
-                (--no-configure-on-demand)'--configure-on-demand[Configure necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds. (incubating)]' \
-                '--console[Specifies which type of console output to generate. Values are 'plain', 'colored', 'auto' (default), 'rich' or 'verbose'.]:console:(plain auto rich verbose)' \
-                '--console-unicode[Specifies which character types are allowed in console output to generate. Values are 'auto' (default), 'disable' or 'enable'.]' \
-                (--no-continue)'--continue[Continue task execution after a task failure.]' \
+                '--configuration-cache-problems[Configures how the configuration cache handles problems (fail or warn). Supported values are 'warn', or 'fail' (default).]:configuration cache problems:(fail warn)' \
+                (--no-configure-on-demand)'--configure-on-demand[Configures necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds. (incubating)]' \
+                '--console[Specifies which type of console output to generate. Supported values are 'plain', 'colored', 'auto' (default), 'rich', or 'verbose'.]:console:(plain auto rich verbose)' \
+                '--console-unicode[Specifies which character types are allowed in the console output. Supported values are 'auto' (default), 'disable', or 'enable'.]' \
+                (--no-continue)'--continue[Continues task execution after a task failure.]' \
                 {-t,--continuous}'[Enables continuous build. Gradle does not exit and will re-execute tasks when task file inputs change.]' \
-                (--no-daemon)'--daemon[Uses the Gradle daemon to run the build. Starts the daemon if not running.]' \
-                (--quiet,-q,--warn,-w,--info,-i){-d,--debug}'[Log in debug mode (includes normal stacktrace).]' \
-                {-F,--dependency-verification}'[Configures the dependency verification mode. Values are 'strict', 'lenient' or 'off'.]:dependency verification:(strict lenient off)' \
-                {-m,--dry-run}'[Run the builds with all task actions disabled.]' \
-                \*{-x,--exclude-task}'[Specify a task to be excluded from execution.]' \
+                (--no-daemon)'--daemon[Uses the Gradle daemon to run the build. Starts the daemon if it is not running.]' \
+                (--quiet,-q,--warn,-w,--info,-i){-d,--debug}'[Sets log level to debug. Includes the normal stacktrace.]' \
+                {-F,--dependency-verification}'[Configures the dependency verification mode. Supported values are 'strict', 'lenient', or 'off'.]:dependency verification:(strict lenient off)' \
+                '--develocity-plugin-version[Version of the Develocity plugin to auto-apply, must be 4.4.0 or higher if Develocity URL is specified as well.]' \
+                '--develocity-url[Default URL of the Develocity server to publish Build Scan to. Triggers auto-application of the Develocity plugin if not already applied.]' \
+                {-m,--dry-run}'[Runs the build with all task actions disabled.]' \
+                \*{-x,--exclude-task}'[Specifies a task to exclude from execution.]' \
                 '--export-keys[Exports the public keys used for dependency verification.]' \
                 '--foreground[Starts the Gradle daemon in the foreground.]' \
-                (--stacktrace,-s){-S,--full-stacktrace}'[Print out the full (very verbose) stacktrace for all exceptions.]' \
-                {-g,--gradle-user-home}'[Specifies the Gradle user home directory. Defaults to ~/.gradle]:gradle user home:_directories' \
-                \*'--include-build[Include the specified build in the composite.]:include build:_directories' \
-                (--quiet,-q,--warn,-w,--debug,-d){-i,--info}'[Set log level to info.]' \
-                \*{-I,--init-script}'[Specify an initialization script.]:init script:_files -g \*.gradle(|.kts)' \
-                '--max-workers[Configure the number of concurrent workers Gradle is allowed to use.]' \
+                (--stacktrace,-s){-S,--full-stacktrace}'[Prints the full (very verbose) stacktrace for all exceptions.]' \
+                {-g,--gradle-user-home}'[Specifies the Gradle user home directory. Default is ~/.gradle.]:gradle user home:_directories' \
+                \*'--include-build[Includes the specified build in the composite.]:include build:_directories' \
+                (--quiet,-q,--warn,-w,--debug,-d){-i,--info}'[Sets the log level to info.]' \
+                \*{-I,--init-script}'[Specifies an initialization script.]:init script:_files -g \*.gradle(|.kts)' \
+                '--max-workers[Configures the maximum number of concurrent workers Gradle is allowed to use.]' \
                 (--build-cache)'--no-build-cache[Disables the Gradle build cache.]' \
                 (--configuration-cache)'--no-configuration-cache[Disables the configuration cache.]' \
                 (--configure-on-demand)'--no-configure-on-demand[Disables the use of configuration on demand. (incubating)]' \
-                (--continue)'--no-continue[Stop task execution after a task failure.]' \
-                (--daemon)'--no-daemon[Do not use the Gradle daemon to run the build. Useful occasionally if you have configured Gradle to always run with the daemon by default.]' \
-                (--parallel)'--no-parallel[Disables parallel execution to build projects.]' \
-                (--problems-report)'--no-problems-report[(Experimental) disables HTML problems report]' \
-                {-a,--no-rebuild}'[Do not rebuild project dependencies.]' \
+                (--continue)'--no-continue[Stops task execution after a task failure.]' \
+                (--daemon)'--no-daemon[Runs the build without the Gradle daemon. Useful occasionally if you have configured Gradle to always run with the daemon by default.]' \
+                (--parallel)'--no-parallel[Disables parallel project execution.]' \
+                (--problems-report)'--no-problems-report[Disables the HTML problems report. (incubating)]' \
+                {-a,--no-rebuild}'[Disables rebuilding of project dependencies.]' \
                 (--scan)'--no-scan[Disables the creation of a Build Scan.]' \
-                (--watch-fs)'--no-watch-fs[Disables watching the file system.]' \
-                '--offline[Execute the build without accessing network resources.]' \
-                (--no-parallel)'--parallel[Build projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]' \
-                '--priority[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Values are 'normal' (default) or 'low']' \
-                (--no-problems-report)'--problems-report[(Experimental) enables HTML problems report]' \
-                '--profile[Profile build execution time and generates a report in the <build_dir>/reports/profile directory.]' \
-                '--project-cache-dir[Specify the project-specific cache directory. Defaults to .gradle in the root project directory.]:project cache dir:_directories' \
-                {-p,--project-dir}'[Specifies the start directory for Gradle. Defaults to current directory.]:project dir:_directories' \
-                '--property-upgrade-report[(Experimental) Runs build with experimental property upgrade report.]' \
-                (--warn,-w,--info,-i,--debug,-d){-q,--quiet}'[Log errors only.]' \
-                {-U,--refresh-dependencies}'[Refresh the state of dependencies.]' \
-                '--refresh-keys[Refresh the public keys used for dependency verification.]' \
+                (--watch-fs)'--no-watch-fs[Disables file system watching.]' \
+                '--offline[Runs the build without accessing network resources.]' \
+                (--no-parallel)'--parallel[Builds projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]' \
+                '--priority[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Supported values are 'normal' (default) or 'low'.]' \
+                (--no-problems-report)'--problems-report[Enables the HTML problems report. (incubating)]' \
+                '--profile[Profiles build execution time. Generates a report in the <build_dir>/reports/profile directory.]' \
+                '--project-cache-dir[Specifies the project-specific cache directory. Default is .gradle in the root project directory.]:project cache dir:_directories' \
+                {-p,--project-dir}'[Specifies the start directory for Gradle. Default is the current directory.]:project dir:_directories' \
+                '--property-upgrade-report[Runs the build with the experimental property upgrade report. (incubating)]' \
+                (--warn,-w,--info,-i,--debug,-d){-q,--quiet}'[Logs errors only.]' \
+                {-U,--refresh-dependencies}'[Refreshes the state of dependencies.]' \
+                '--refresh-keys[Refreshes the public keys used for dependency verification.]' \
                 '--rerun[Causes the task to be re-run even if up-to-date.]' \
-                '--rerun-tasks[Ignore previously cached task results.]' \
-                (--no-scan)'--scan[Generate a Build Scan (powered by Develocity).]' \
+                '--rerun-tasks[Ignores previously cached task results.]' \
+                (--no-scan)'--scan[Generates a Build Scan (powered by Develocity).]' \
                 {-V,--show-version}'[Print version info and continue.]' \
-                (--full-stacktrace,-S){-s,--stacktrace}'[Print out the stacktrace for all exceptions.]' \
-                '--task-graph[Print task graph instead of executing tasks.]' \
-                \*'--update-locks[Perform a partial update of the dependency lock, letting passed in module notations change version. (incubating)]' \
-                (--quiet,-q,--info,-i,--debug,-d){-w,--warn}'[Set log level to warn.]' \
-                '--warning-mode[Specifies which mode of warnings to generate. Values are 'all', 'fail', 'summary'(default) or 'none']:warning mode:(all summary none)' \
-                (--no-watch-fs)'--watch-fs[Enables watching the file system for changes, allowing data about the file system to be re-used for the next build.]' \
-                '--write-locks[Persists dependency resolution for locked configurations, ignoring existing locking information if it exists]' \
-                {-M,--write-verification-metadata}'[Generates checksums for dependencies used in the project (comma-separated list)]' && ret=0
+                (--full-stacktrace,-S){-s,--stacktrace}'[Prints the stacktrace for all exceptions.]' \
+                '--task-graph[Prints the task graph instead of executing tasks.]' \
+                \*'--update-locks[Performs a partial update of the dependency lock. Allows passed-in module notations to change version. (incubating)]' \
+                (--quiet,-q,--info,-i,--debug,-d){-w,--warn}'[Sets the log level to warn.]' \
+                '--warning-mode[Specifies which mode of warnings to generate. Supported values are 'all', 'fail', 'summary' (default), or 'none'.]:warning mode:(all summary none)' \
+                (--no-watch-fs)'--watch-fs[Enables file system watching. Reuses file system data for subsequent builds.]' \
+                '--write-locks[Persists dependency resolution for locked configurations. Ignores existing locking information if it exists.]' \
+                {-M,--write-verification-metadata}'[Generates checksums for dependencies used in the project. Accepts a comma-separated list.]' && ret=0
             ;;
     esac
 
@@ -379,7 +385,9 @@ _gradle() {
     typeset -A opt_args
 
     _arguments -C \
-'-Dgradle.user.home=[Specifies the Gradle user home directory. Defaults to ~/.gradle]:gradle.user.home:_directories:->argument-expected' \
+'-Dcom.gradle.develocity.plugin.version=[Version of the Develocity plugin to auto-apply, must be 4.4.0 or higher if Develocity URL is specified as well.]:->argument-expected' \
+        '-Dcom.gradle.develocity.url=[Default URL of the Develocity server to publish Build Scan to. Triggers auto-application of the Develocity plugin if not already applied.]:->argument-expected' \
+        '-Dgradle.user.home=[Specifies the Gradle user home directory. Default is ~/.gradle.]:gradle.user.home:_directories:->argument-expected' \
         '-Dorg.gradle.caching.debug=[]:->argument-expected' \
         '-Dorg.gradle.caching=[Enables the Gradle build cache. Gradle will try to reuse outputs from previous builds.]:org.gradle.caching:(true false):->argument-expected' \
         '-Dorg.gradle.configuration-cache.entries-per-key=[]:->argument-expected' \
@@ -390,25 +398,25 @@ _gradle() {
         '-Dorg.gradle.configuration-cache.integrity-check=[]:->argument-expected' \
         '-Dorg.gradle.configuration-cache.max-problems=[]:->argument-expected' \
         '-Dorg.gradle.configuration-cache.parallel=[]:->argument-expected' \
-        '-Dorg.gradle.configuration-cache.problems=[Configures how the configuration cache handles problems (fail or warn). Defaults to fail.]:org.gradle.configuration cache.problems:(fail warn):->argument-expected' \
+        '-Dorg.gradle.configuration-cache.problems=[Configures how the configuration cache handles problems (fail or warn). Supported values are 'warn', or 'fail' (default).]:org.gradle.configuration cache.problems:(fail warn):->argument-expected' \
         '-Dorg.gradle.configuration-cache.read-only=[]:->argument-expected' \
         '-Dorg.gradle.configuration-cache.unsafe.ignore.unsupported-build-events-listeners=[]:->argument-expected' \
         '-Dorg.gradle.configuration-cache=[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]:->argument-expected' \
-        '-Dorg.gradle.configureondemand=[Configure necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]:->argument-expected' \
-        '-Dorg.gradle.console.unicode=[Specifies which character types are allowed in console output to generate. Values are 'auto' (default), 'disable' or 'enable'.]:->argument-expected' \
-        '-Dorg.gradle.console=[Specifies which type of console output to generate. Values are 'plain', 'colored', 'auto' (default), 'rich' or 'verbose'.]:org.gradle.console:(plain auto rich verbose):->argument-expected' \
-        '-Dorg.gradle.continue=[Continue task execution after a task failure.]:->argument-expected' \
+        '-Dorg.gradle.configureondemand=[Configures necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]:->argument-expected' \
+        '-Dorg.gradle.console.unicode=[Specifies which character types are allowed in the console output. Supported values are 'auto' (default), 'disable', or 'enable'.]:->argument-expected' \
+        '-Dorg.gradle.console=[Specifies which type of console output to generate. Supported values are 'plain', 'colored', 'auto' (default), 'rich', or 'verbose'.]:org.gradle.console:(plain auto rich verbose):->argument-expected' \
+        '-Dorg.gradle.continue=[Continues task execution after a task failure.]:->argument-expected' \
         '-Dorg.gradle.continuous.quietperiod=[]:->argument-expected' \
         '-Dorg.gradle.daemon.healthcheckinterval=[]:->argument-expected' \
         '-Dorg.gradle.daemon.idletimeout=[]:->argument-expected' \
         '-Dorg.gradle.daemon.registry.base=[]:org.gradle.daemon.registry.base:_directories:->argument-expected' \
-        '-Dorg.gradle.daemon=[Uses the Gradle daemon to run the build. Starts the daemon if not running.]:->argument-expected' \
+        '-Dorg.gradle.daemon=[Uses the Gradle daemon to run the build. Starts the daemon if it is not running.]:->argument-expected' \
         '-Dorg.gradle.debug.host=[]:->argument-expected' \
         '-Dorg.gradle.debug.port=[]:->argument-expected' \
         '-Dorg.gradle.debug.server=[]:->argument-expected' \
         '-Dorg.gradle.debug.suspend=[]:->argument-expected' \
         '-Dorg.gradle.debug=[]:org.gradle.debug:(true false):->argument-expected' \
-        '-Dorg.gradle.dependency.verification=[Configures the dependency verification mode. Values are 'strict', 'lenient' or 'off'.]:org.gradle.dependency.verification:(strict lenient off):->argument-expected' \
+        '-Dorg.gradle.dependency.verification=[Configures the dependency verification mode. Supported values are 'strict', 'lenient', or 'off'.]:org.gradle.dependency.verification:(strict lenient off):->argument-expected' \
         '-Dorg.gradle.java.home=[]:org.gradle.java.home:_directories:->argument-expected' \
         '-Dorg.gradle.java.installations.auto-detect=[]:->argument-expected' \
         '-Dorg.gradle.java.installations.auto-download=[]:->argument-expected' \
@@ -419,75 +427,77 @@ _gradle() {
         '-Dorg.gradle.logging.level=[]:org.gradle.logging.level:(quiet warn info debug):->argument-expected' \
         '-Dorg.gradle.logging.stacktrace=[]:->argument-expected' \
         '-Dorg.gradle.native=[]:->argument-expected' \
-        '-Dorg.gradle.parallel=[Build projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]:org.gradle.parallel:(true false):->argument-expected' \
-        '-Dorg.gradle.priority=[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Values are 'normal' (default) or 'low']:org.gradle.priority:(normal low):->argument-expected' \
-        '-Dorg.gradle.problems.report=[(Experimental) enables HTML problems report]:->argument-expected' \
-        '-Dorg.gradle.projectcachedir=[Specify the project-specific cache directory. Defaults to .gradle in the root project directory.]:org.gradle.projectcachedir:_directories:->argument-expected' \
+        '-Dorg.gradle.parallel=[Builds projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]:org.gradle.parallel:(true false):->argument-expected' \
+        '-Dorg.gradle.priority=[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Supported values are 'normal' (default) or 'low'.]:org.gradle.priority:(normal low):->argument-expected' \
+        '-Dorg.gradle.problems.report=[Enables the HTML problems report.]:->argument-expected' \
+        '-Dorg.gradle.projectcachedir=[Specifies the project-specific cache directory. Default is .gradle in the root project directory.]:org.gradle.projectcachedir:_directories:->argument-expected' \
         '-Dorg.gradle.tooling.parallel=[]:->argument-expected' \
         '-Dorg.gradle.unsafe.isolated-projects=[]:->argument-expected' \
         '-Dorg.gradle.vfs.verbose=[]:->argument-expected' \
-        '-Dorg.gradle.vfs.watch=[Enables watching the file system for changes, allowing data about the file system to be re-used for the next build.]:org.gradle.vfs.watch:(true false):->argument-expected' \
-        '-Dorg.gradle.warning.mode=[Specifies which mode of warnings to generate. Values are 'all', 'fail', 'summary'(default) or 'none']:->argument-expected' \
+        '-Dorg.gradle.vfs.watch=[Enables file system watching. Reuses file system data for subsequent builds.]:org.gradle.vfs.watch:(true false):->argument-expected' \
+        '-Dorg.gradle.warning.mode=[Specifies which mode of warnings to generate. Supported values are 'all', 'fail', 'summary' (default), or 'none'.]:->argument-expected' \
         '-Dorg.gradle.welcome=[]:org.gradle.welcome:(once never):->argument-expected' \
-        '-Dorg.gradle.workers.max=[Configure the number of concurrent workers Gradle is allowed to use.]:->argument-expected' \
+        '-Dorg.gradle.workers.max=[Configures the maximum number of concurrent workers Gradle is allowed to use.]:->argument-expected' \
         (--no-build-cache)'--build-cache[Enables the Gradle build cache. Gradle will try to reuse outputs from previous builds.]' \
         (--no-configuration-cache)'--configuration-cache[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]' \
-        '--configuration-cache-problems[Configures how the configuration cache handles problems (fail or warn). Defaults to fail.]:configuration cache problems:(fail warn):->argument-expected' \
-        (--no-configure-on-demand)'--configure-on-demand[Configure necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds. (incubating)]' \
-        '--console[Specifies which type of console output to generate. Values are 'plain', 'colored', 'auto' (default), 'rich' or 'verbose'.]:console:(plain auto rich verbose):->argument-expected' \
-        '--console-unicode[Specifies which character types are allowed in console output to generate. Values are 'auto' (default), 'disable' or 'enable'.]:->argument-expected' \
-        (--no-continue)'--continue[Continue task execution after a task failure.]' \
+        '--configuration-cache-problems[Configures how the configuration cache handles problems (fail or warn). Supported values are 'warn', or 'fail' (default).]:configuration cache problems:(fail warn):->argument-expected' \
+        (--no-configure-on-demand)'--configure-on-demand[Configures necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds. (incubating)]' \
+        '--console[Specifies which type of console output to generate. Supported values are 'plain', 'colored', 'auto' (default), 'rich', or 'verbose'.]:console:(plain auto rich verbose):->argument-expected' \
+        '--console-unicode[Specifies which character types are allowed in the console output. Supported values are 'auto' (default), 'disable', or 'enable'.]:->argument-expected' \
+        (--no-continue)'--continue[Continues task execution after a task failure.]' \
         {-t,--continuous}'[Enables continuous build. Gradle does not exit and will re-execute tasks when task file inputs change.]' \
-        (--no-daemon)'--daemon[Uses the Gradle daemon to run the build. Starts the daemon if not running.]' \
-        (--quiet,-q,--warn,-w,--info,-i){-d,--debug}'[Log in debug mode (includes normal stacktrace).]' \
-        {-F,--dependency-verification}'[Configures the dependency verification mode. Values are 'strict', 'lenient' or 'off'.]:dependency verification:(strict lenient off):->argument-expected' \
-        {-m,--dry-run}'[Run the builds with all task actions disabled.]' \
-        \*{-x,--exclude-task}'[Specify a task to be excluded from execution.]' \
+        (--no-daemon)'--daemon[Uses the Gradle daemon to run the build. Starts the daemon if it is not running.]' \
+        (--quiet,-q,--warn,-w,--info,-i){-d,--debug}'[Sets log level to debug. Includes the normal stacktrace.]' \
+        {-F,--dependency-verification}'[Configures the dependency verification mode. Supported values are 'strict', 'lenient', or 'off'.]:dependency verification:(strict lenient off):->argument-expected' \
+        '--develocity-plugin-version[Version of the Develocity plugin to auto-apply, must be 4.4.0 or higher if Develocity URL is specified as well.]:->argument-expected' \
+        '--develocity-url[Default URL of the Develocity server to publish Build Scan to. Triggers auto-application of the Develocity plugin if not already applied.]:->argument-expected' \
+        {-m,--dry-run}'[Runs the build with all task actions disabled.]' \
+        \*{-x,--exclude-task}'[Specifies a task to exclude from execution.]' \
         '--export-keys[Exports the public keys used for dependency verification.]' \
         '--foreground[Starts the Gradle daemon in the foreground.]' \
-        (--stacktrace,-s){-S,--full-stacktrace}'[Print out the full (very verbose) stacktrace for all exceptions.]' \
-        {-g,--gradle-user-home}'[Specifies the Gradle user home directory. Defaults to ~/.gradle]:gradle user home:_directories:->argument-expected' \
+        (--stacktrace,-s){-S,--full-stacktrace}'[Prints the full (very verbose) stacktrace for all exceptions.]' \
+        {-g,--gradle-user-home}'[Specifies the Gradle user home directory. Default is ~/.gradle.]:gradle user home:_directories:->argument-expected' \
         {-h,--help}'[Shows a help message.]' \
-        \*'--include-build[Include the specified build in the composite.]:include build:_directories:->argument-expected' \
-        (--quiet,-q,--warn,-w,--debug,-d){-i,--info}'[Set log level to info.]' \
-        \*{-I,--init-script}'[Specify an initialization script.]:init script:_files -g \*.gradle(|.kts):->argument-expected' \
-        '--max-workers[Configure the number of concurrent workers Gradle is allowed to use.]:->argument-expected' \
+        \*'--include-build[Includes the specified build in the composite.]:include build:_directories:->argument-expected' \
+        (--quiet,-q,--warn,-w,--debug,-d){-i,--info}'[Sets the log level to info.]' \
+        \*{-I,--init-script}'[Specifies an initialization script.]:init script:_files -g \*.gradle(|.kts):->argument-expected' \
+        '--max-workers[Configures the maximum number of concurrent workers Gradle is allowed to use.]:->argument-expected' \
         (--build-cache)'--no-build-cache[Disables the Gradle build cache.]' \
         (--configuration-cache)'--no-configuration-cache[Disables the configuration cache.]' \
         (--configure-on-demand)'--no-configure-on-demand[Disables the use of configuration on demand. (incubating)]' \
-        (--continue)'--no-continue[Stop task execution after a task failure.]' \
-        (--daemon)'--no-daemon[Do not use the Gradle daemon to run the build. Useful occasionally if you have configured Gradle to always run with the daemon by default.]' \
-        (--parallel)'--no-parallel[Disables parallel execution to build projects.]' \
-        (--problems-report)'--no-problems-report[(Experimental) disables HTML problems report]' \
-        {-a,--no-rebuild}'[Do not rebuild project dependencies.]' \
+        (--continue)'--no-continue[Stops task execution after a task failure.]' \
+        (--daemon)'--no-daemon[Runs the build without the Gradle daemon. Useful occasionally if you have configured Gradle to always run with the daemon by default.]' \
+        (--parallel)'--no-parallel[Disables parallel project execution.]' \
+        (--problems-report)'--no-problems-report[Disables the HTML problems report. (incubating)]' \
+        {-a,--no-rebuild}'[Disables rebuilding of project dependencies.]' \
         (--scan)'--no-scan[Disables the creation of a Build Scan.]' \
-        (--watch-fs)'--no-watch-fs[Disables watching the file system.]' \
-        '--offline[Execute the build without accessing network resources.]' \
-        (--no-parallel)'--parallel[Build projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]' \
-        '--priority[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Values are 'normal' (default) or 'low']:->argument-expected' \
-        (--no-problems-report)'--problems-report[(Experimental) enables HTML problems report]' \
-        '--profile[Profile build execution time and generates a report in the <build_dir>/reports/profile directory.]' \
-        '--project-cache-dir[Specify the project-specific cache directory. Defaults to .gradle in the root project directory.]:project cache dir:_directories:->argument-expected' \
-        {-p,--project-dir}'[Specifies the start directory for Gradle. Defaults to current directory.]:project dir:_directories:->argument-expected' \
-        '--property-upgrade-report[(Experimental) Runs build with experimental property upgrade report.]' \
-        (--warn,-w,--info,-i,--debug,-d){-q,--quiet}'[Log errors only.]' \
-        {-U,--refresh-dependencies}'[Refresh the state of dependencies.]' \
-        '--refresh-keys[Refresh the public keys used for dependency verification.]' \
+        (--watch-fs)'--no-watch-fs[Disables file system watching.]' \
+        '--offline[Runs the build without accessing network resources.]' \
+        (--no-parallel)'--parallel[Builds projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]' \
+        '--priority[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Supported values are 'normal' (default) or 'low'.]:->argument-expected' \
+        (--no-problems-report)'--problems-report[Enables the HTML problems report. (incubating)]' \
+        '--profile[Profiles build execution time. Generates a report in the <build_dir>/reports/profile directory.]' \
+        '--project-cache-dir[Specifies the project-specific cache directory. Default is .gradle in the root project directory.]:project cache dir:_directories:->argument-expected' \
+        {-p,--project-dir}'[Specifies the start directory for Gradle. Default is the current directory.]:project dir:_directories:->argument-expected' \
+        '--property-upgrade-report[Runs the build with the experimental property upgrade report. (incubating)]' \
+        (--warn,-w,--info,-i,--debug,-d){-q,--quiet}'[Logs errors only.]' \
+        {-U,--refresh-dependencies}'[Refreshes the state of dependencies.]' \
+        '--refresh-keys[Refreshes the public keys used for dependency verification.]' \
         '--rerun[Causes the task to be re-run even if up-to-date.]' \
-        '--rerun-tasks[Ignore previously cached task results.]' \
-        (--no-scan)'--scan[Generate a Build Scan (powered by Develocity).]' \
+        '--rerun-tasks[Ignores previously cached task results.]' \
+        (--no-scan)'--scan[Generates a Build Scan (powered by Develocity).]' \
         {-V,--show-version}'[Print version info and continue.]' \
-        (--full-stacktrace,-S){-s,--stacktrace}'[Print out the stacktrace for all exceptions.]' \
-        '--status[Shows status of running and recently stopped Gradle daemon(s).]' \
+        (--full-stacktrace,-S){-s,--stacktrace}'[Prints the stacktrace for all exceptions.]' \
+        '--status[Shows the status of running and recently stopped Gradle daemons.]' \
         '--stop[Stops the Gradle daemon if it is running.]' \
-        '--task-graph[Print task graph instead of executing tasks.]' \
-        \*'--update-locks[Perform a partial update of the dependency lock, letting passed in module notations change version. (incubating)]' \
+        '--task-graph[Prints the task graph instead of executing tasks.]' \
+        \*'--update-locks[Performs a partial update of the dependency lock. Allows passed-in module notations to change version. (incubating)]' \
         {-v,--version}'[Print version info and exit.]' \
-        (--quiet,-q,--info,-i,--debug,-d){-w,--warn}'[Set log level to warn.]' \
-        '--warning-mode[Specifies which mode of warnings to generate. Values are 'all', 'fail', 'summary'(default) or 'none']:warning mode:(all summary none):->argument-expected' \
-        (--no-watch-fs)'--watch-fs[Enables watching the file system for changes, allowing data about the file system to be re-used for the next build.]' \
-        '--write-locks[Persists dependency resolution for locked configurations, ignoring existing locking information if it exists]' \
-        {-M,--write-verification-metadata}'[Generates checksums for dependencies used in the project (comma-separated list)]:->argument-expected' \
+        (--quiet,-q,--info,-i,--debug,-d){-w,--warn}'[Sets the log level to warn.]' \
+        '--warning-mode[Specifies which mode of warnings to generate. Supported values are 'all', 'fail', 'summary' (default), or 'none'.]:warning mode:(all summary none):->argument-expected' \
+        (--no-watch-fs)'--watch-fs[Enables file system watching. Reuses file system data for subsequent builds.]' \
+        '--write-locks[Persists dependency resolution for locked configurations. Ignores existing locking information if it exists.]' \
+        {-M,--write-verification-metadata}'[Generates checksums for dependencies used in the project. Accepts a comma-separated list.]:->argument-expected' \
 '(-)*:: :->task-or-option' && ret=0
 
     if [[ $words[CURRENT] != -* && $state != "argument-expected" ]]; then
