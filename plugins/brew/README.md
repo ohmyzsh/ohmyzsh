@@ -40,7 +40,7 @@ the `brew` binary before sourcing `oh-my-zsh.sh` and it'll set up the environmen
 | `bo`     | `brew outdated`                         | List installed formulae that have an updated version available.       |
 | `br`     | `brew reinstall`                        | Reinstall a formula.                                                  |
 | `brewp`  | `brew pin`                              | Pin a specified formula so that it's not upgraded.                    |
-| `brews`  | `brew list -1`                          | List installed formulae or the installed files for a given formula.   |
+| `brews`  | _function_                              | List installed leaf formulae with their dependencies, then casks.     |
 | `brewsp` | `brew list --pinned`                    | List pinned formulae, or show the version of a given formula.         |
 | `brh`    | `brew reinstall --HEAD`                 | Reinstall a formula with --HEAD                                       |
 | `bs`     | `brew search`                           | Perform a substring search of cask tokens and formula names for text. |
