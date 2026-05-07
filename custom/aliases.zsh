@@ -50,6 +50,7 @@ alias gar="killall -HUP -u \"$USER\" zsh"         #global alias reload
 
 # git
 alias gs='git status -uno'
+alias gbcd='for branch in `git branch -r | grep -v HEAD`;do echo -e `git show --format="%ci %cr" $branch | head -n 1` \\t$branch; done | sort -r'
 
 # vim using
 mvim --version > /dev/null 2>&1
