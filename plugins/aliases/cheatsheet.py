@@ -6,7 +6,9 @@ import argparse
 
 def parse(line):
     left = line[0:line.find('=')].strip()
-    right = line[line.find('=')+1:].strip('\'"\n ')
+    right = line[line.find('=')+1:].strip('\n ')
+    if len(right) >= 2 and right[0] == right[-1] and right[0] in ("'", '"'):
+        right = right[1:-1]
     try:
         cmd = next(part for part in right.split() if len([char for char in '=<>' if char in part])==0)
     except StopIteration:
