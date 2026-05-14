@@ -120,3 +120,9 @@ if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
   add-zsh-hook chpwd auto_vrun
   auto_vrun
 fi
+
+function pyver() {
+  echo "Python: $(python3 --version 2>&1)"
+  echo "pip: $(pip --version 2>&1)"
+  echo "Venv: ${VIRTUAL_ENV:-none}"
+}
