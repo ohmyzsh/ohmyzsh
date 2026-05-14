@@ -1,0 +1,236 @@
+#compdef juju
+(( $+functions[compdef] )) && compdef _juju juju
+
+# zsh completion for juju                                  -*- shell-script -*-
+
+__juju_debug()
+{
+    local file="$BASH_COMP_DEBUG_FILE"
+    if [[ -n ${file} ]]; then
+        echo "$*" >> "${file}"
+    fi
+}
+
+__juju_help_options()
+{
+    local out line token cleaned desc f
+    local -a opts pending
+    typeset -U opts
+
+    __juju_debug "[options] called with args: $*"
+    out=$(command juju help "$@" 2>/dev/null)
+    local rc=$?
+    __juju_debug "[options] juju help exit code: $rc, output length: ${#out}"
+    (( rc )) && return 1
+
+    while IFS= read -r line; do
+        if [[ "$line" =~ '^[[:space:]]{0,3}-' ]]; then
+            for f in "${pending[@]}"; do opts+=("$f"); done
+            pending=()
+            for token in ${(z)line}; do
+                cleaned="${token%%,*}"
+                cleaned="${cleaned%%;*}"
+                cleaned="${cleaned%%]*}"
+                cleaned="${cleaned%%)*}"
+                cleaned="${cleaned%%=<*}"
+                cleaned="${cleaned%%=*}"
+                cleaned="${cleaned%%<*}"
+                cleaned="${cleaned%%\[*}"
+                cleaned="${cleaned%%\(*}"
+                [[ "$cleaned" == --* || "$cleaned" == -[[:alnum:]] ]] || continue
+                [[ "$cleaned" == "-" || "$cleaned" == "--" ]] && continue
+                __juju_debug "[options] found flag: $cleaned"
+                pending+=("$cleaned")
+            done
+        elif (( ${#pending} )) && [[ -n "$line" ]]; then
+            desc="${line#"${line%%[![:space:]]*}"}"
+            desc="${desc//:/\\:}"
+            __juju_debug "[options] desc for ${pending[*]}: $desc"
+            for f in "${pending[@]}"; do opts+=("${f}:${desc}"); done
+            pending=()
+        elif [[ -z "$line" ]]; then
+            for f in "${pending[@]}"; do opts+=("$f"); done
+            pending=()
+        fi
+    done < <(printf "%s\n" "$out")
+
+    for f in "${pending[@]}"; do opts+=("$f"); done
+    __juju_debug "[options] total opts: ${#opts}, first few: ${opts[1]} ${opts[2]} ${opts[3]}"
+
+    printf "%s\n" "${opts[@]}"
+}
+
+
+__juju_help_commands()
+{
+    local line cmd desc out
+    out=$(command juju help commands 2>/dev/null) || return 1
+
+    while IFS= read -r line; do
+        # Strip leading whitespace
+        line="${line#"${line%%[![:space:]]*}"}"
+        # Only process lines starting with an alphanumeric (command names)
+        [[ "$line" =~ '^[[:alnum:]]' ]] || continue
+        # Split on the first run of 2+ spaces: left = cmd, right = description
+        cmd="${line%%  *}"
+        # Validate it's a clean command token (no spaces, only alnum and dash)
+        [[ "$cmd" =~ '^[[:alnum:]][[:alnum:]-]*$' ]] || continue
+        desc="${line#"$cmd"}"
+        desc="${desc#"${desc%%[![:space:]]*}"}"
+        if [[ -n "$desc" ]]; then
+            printf "%s:%s\n" "$cmd" "$desc"
+        else
+            printf "%s\n" "$cmd"
+        fi
+    done <<< "$out"
+}
+
+__juju_models()
+{
+    # Optional argument: controller name. If given, fetch models for that controller.
+    if [[ -n "$1" ]]; then
+        command juju models -c "$1" --format=json 2>/dev/null \
+            | command jq -r '.models[]."short-name"' 2>/dev/null
+    else
+        command juju models --format=json 2>/dev/null \
+            | command jq -r '.models[]."short-name"' 2>/dev/null
+    fi
+}
+
+# Complete a model token that may be prefixed with "controller:" — if a colon is
+# present, fetch models for that controller and offer "ctrl:model" completions.
+__juju_complete_model()
+{
+    local current="$1"
+    local -a completions
+
+    __juju_debug "[complete_model] current='${current}'"
+
+    if [[ "$current" == *:* ]]; then
+        local ctrl="${current%%:*}"
+        local models
+        models=("${(@f)$(__juju_models "$ctrl")}")
+        completions=("${models[@]/#/${ctrl}:}")
+        __juju_debug "[complete_model] ctrl=${ctrl} completions=${#completions}: ${completions[*]}"
+        compadd -S '' -q -- "${completions[@]}"
+    else
+        local -a models ctrls
+        models=("${(@f)$(__juju_models)}")
+        ctrls=("${(@f)$(__juju_controllers)}")
+        __juju_debug "[complete_model] models=${#models}: ${models[*]}"
+        __juju_debug "[complete_model] ctrls=${#ctrls}: ${ctrls[*]}"
+        __juju_debug "[complete_model] calling _alternative"
+        _alternative \
+            'models:models:{__juju_debug "[complete_model] compadd models"; compadd "$expl[@]" -a models}' \
+            'controllers:controllers:{__juju_debug "[complete_model] compadd ctrls"; compadd "$expl[@]" -S : -q -a ctrls}'
+        __juju_debug "[complete_model] _alternative returned $?"
+    fi
+}
+
+# Commands whose first positional argument is a model name.
+_juju_model_commands=(
+    destroy-model
+    grant-model
+    revoke-model
+    switch
+)
+
+# Flags that take a model name as their value.
+_juju_model_flags=(
+    -m
+    --model
+)
+
+__juju_controllers()
+{
+    command juju controllers --format=json 2>/dev/null \
+        | command jq -r '.controllers | keys | .[]' 2>/dev/null
+}
+
+# Commands whose first positional argument is a controller name.
+_juju_controller_commands=(
+    destroy-controller
+    kill-controller
+    login
+    logout
+    unregister
+)
+
+# Flags that take a controller name as their value.
+_juju_controller_flags=(
+    -c
+    --controller
+)
+
+_juju()
+{
+    __juju_debug "[_juju] curcontext: ${curcontext}"
+    local -a completions
+
+    # Must be set at completion time (not just at sourcing time) so the
+    # completion system picks it up when rendering groups.
+    zstyle ':completion:*' group-name ''
+    zstyle ':completion::complete:juju:*' format '%B%d%b'
+
+    __juju_debug "[_juju] words: ${words[*]}, CURRENT: $CURRENT"
+
+    # Find the subcommand: first non-flag word typed after "juju", excluding the
+    # word currently being completed (words[CURRENT]).
+    local subcmd=""
+    local i
+    for (( i = 2; i < CURRENT; i++ )); do
+        if [[ "${words[i]}" != -* ]]; then
+            subcmd="${words[i]}"
+            break
+        fi
+    done
+
+    local current="${words[CURRENT]}"
+    local prev="${words[CURRENT-1]}"
+
+    __juju_debug "[_juju] subcmd: '${subcmd}', current: '${current}', prev: '${prev}'"
+
+    # Controller name completion: flag value (e.g. juju status -c <TAB>)
+    if (( ${_juju_controller_flags[(I)$prev]} )); then
+        completions=("${(@f)$(__juju_controllers)}")
+        __juju_debug "[_juju] controller flag completions: ${#completions}"
+        (( ${#completions} )) && _describe "controller" completions && return 0
+        return 1
+    fi
+
+    # Model name completion: flag value (e.g. juju status -m <TAB> or -m ctrl:<TAB>)
+    if (( ${_juju_model_flags[(I)$prev]} )); then
+        __juju_debug "[_juju] model flag completion, current: '${current}'"
+        __juju_complete_model "$current" && return 0
+        return 1
+    fi
+
+    if [[ -z "$subcmd" ]]; then
+        # No subcommand yet — complete subcommand names.
+        completions=("${(@f)$(__juju_help_commands)}")
+        __juju_debug "[_juju] command completions count: ${#completions}"
+        (( ${#completions} )) && _describe "command" completions && return 0
+        return 1
+    fi
+
+    # Controller name completion: positional arg (e.g. juju destroy-controller <TAB>)
+    if (( ${_juju_controller_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
+        completions=("${(@f)$(__juju_controllers)}")
+        __juju_debug "[_juju] controller command completions: ${#completions}"
+        (( ${#completions} )) && _describe "controller" completions && return 0
+        return 1
+    fi
+
+    # Model name completion: positional arg (e.g. juju destroy-model <TAB> or ctrl:<TAB>)
+    if (( ${_juju_model_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
+        __juju_debug "[_juju] model command completion, current: '${current}'"
+        __juju_complete_model "$current" && return 0
+        return 1
+    fi
+
+    # Flag completion for all other subcommands (also shown without leading dash)
+    completions=("${(@f)$(__juju_help_options "$subcmd")}")
+    __juju_debug "[_juju] option completions count: ${#completions}"
+    (( ${#completions} )) && _describe "option" completions && return 0
+    return 1
+}
