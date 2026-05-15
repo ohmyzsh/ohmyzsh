@@ -1,0 +1,3 @@
+# ~/.oh-my-zsh/custom/plugins/printc/printc
+
+zsh $ZSH/plugins/printc/printc_scpt $@
