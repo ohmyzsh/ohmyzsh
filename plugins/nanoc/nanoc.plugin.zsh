@@ -1,0 +1,6 @@
+alias n='nanoc'
+alias nco='nanoc compile'
+alias ncs='nanoc create-site'
+alias nd='nanoc deploy'
+alias np='nanoc prune'
+alias nv='nanoc view'

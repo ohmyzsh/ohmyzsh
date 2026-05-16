@@ -1,0 +1,23 @@
+{
+  "headers": [
+    {
+      "source": "/(|install.sh)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "inline; filename=\"install.sh\""
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/install.sh"
+    }
+  ]
+}

@@ -1,0 +1,538 @@
+#compdef rails
+# ------------------------------------------------------------------------------
+# Copyright (c) 2016 GitHub zsh-users - https://github.com/zsh-users
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of the zsh-users nor the
+#       names of its contributors may be used to endorse or promote products
+#       derived from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL ZSH-USERS BE LIABLE FOR ANY
+# DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+# ------------------------------------------------------------------------------
+# Description
+# -----------
+#
+#  Completion script for Ruby on Rails 7.1.0 (https://rubyonrails.org/).
+#
+# ------------------------------------------------------------------------------
+# Authors
+# -------
+#
+#  * Kazuya Takeshima (https://github.com/mitukiii)
+#  * Shohei Yoshida (https://github.com/syohex)
+#
+# ------------------------------------------------------------------------------
+
+_rails() {
+  local context state state_descr line curcontext="$curcontext"
+  typeset -A opt_args
+
+  local -a runtime_options rails_options
+  runtime_options=(
+    '(- *)'{-h,--help}'[Show this help message and quit]'
+    '(- *)'{-v,--version}'[Show Rails version and quit]'
+  )
+
+  runtime_options=(
+    '(-f --force)'{-f,--force}'[Overwrite files that already exist]'
+    '(-p --pretend)'{-p,--pretend}'[Run but do not make any changes]'
+    '(-q --quiet)'{-q,--quiet}'[Suppress status output]'
+    '(-s --skip)'{-s,--skip}'[Skip files that already exist]'
+  )
+
+  local ret=1
+
+  _arguments -C \
+    $rails_options \
+    '1: :_rails_subcommands' \
+    '*:: :->command' && ret=0
+
+  case "$state" in
+    (command)
+      case $words[1] in
+        (new)
+          _rails_new && ret=0
+          ;;
+        (generate|g|destroy|d)
+          _rails_generate && ret=0
+          ;;
+        (console|c)
+          _arguments \
+            '(- *)'{-h,--help}'[Show this help message and quit]' \
+            '(-e --environment)'{-e,--environment=}'[The environment to run "console" in]:env:(test development production)' \
+            '(-s --sandbox)'{-s,--sandbox}'[Rollback database modifications on exit]' \
+            && ret=0
+          ;;
+        (server|s)
+          _arguments \
+            '(- *)'{-h,--help}'[Show this help message and quit]' \
+            '(-e --environment)'{-e,--environment=}'[The environment to run "server" in]:env:(test development production)' \
+            '(-p --port)'{-p,--port}'[Run Rails on the specified port]:port' \
+            '(-b --binding)'{-b,--binding=}'[Bind Rails to the specified IP]:binding' \
+            '(-c --config)'{-c,--config=}'[Use a custom rackup configuration]:config file:_files -g "*.ru"' \
+            '(-d --daemon)'{-d,--daemon}'[Run server as a Daemon]' \
+            '(-u --using)'{-u,--using=}'[Specify the Rack server used to run the application]:server:(thin puma webrick)' \
+            '(-P --pid)'{-P,--pid=}'[Specify the PID file]:pid file:_files -g "*.pid"' \
+            '(-C --dev-caching --no-dev-caching)'{-C,--dev-caching}'[Perform caching in development]' \
+            '(-C --dev-caching --no-dev-caching)--no-dev-caching[Not perform caching in development]' \
+            '--early-hints[Enable HTTP/2 early hints]' \
+            '(--log-to-stdout --no-log-to-stdout)--log-to-stdout[Log to stdout]' \
+            '(--log-to-stdout --no-log-to-stdout)--no-log-to-stdout[Not log to stdout]' \
+            && ret=0
+          ;;
+        (dbconsole|db)
+          _arguments \
+            '(- *)'{-h,--help}'[Show this help message and quit]' \
+            '(-e --environment)'{-e,--environment=}'[The environment to run "server" in]:env:(test development production)' \
+            '(-p --include-password)'{-p,--include-password}'[Automatically provide the password from database.yml]' \
+            '--mode=[Automatically put the sqlite3 database in the specified mode]:mode:(html list line column)' \
+            '(--header --no-header)--header[Display header]' \
+            '(--header --no-header)--no-header[Not display header]' \
+            '(--db --database)'{--db=,--database=}'[Specify the database to use]:database:_files' \
+            && ret=0
+          ;;
+        (test|t|test:system)
+          _arguments \
+            '(- *)'{-h,--help}'[Show this help message and quit]' \
+            '--no-plugins[Bypass minitest plugin auto-loading]' \
+            '(-s --seed)'{-s,--seed=}'[Sets random seed]:seed' \
+            '(-v -verbose)'{-v,--verbose}'[Show progress processing files]' \
+            '--show-skips[Show skipped at the end of run]' \
+            \*{-n,--name=}'[Filter run on /regexp/ or string]:pattern' \
+            *--exclude='[Exclude /regexp/ or string from run]:pattern' \
+            \*{-S,--skip=}'[Skip reporting of certain types of results]' \
+            '(-w --warnings)'{-w,--warnings}'[Run with Ruby warnings enabled]' \
+            '(-e --environment)'{-e,--environment=}'[Run tests in the given environment]' \
+            '(-b --backtrace)'{-b,--backtrace}'[Show the complete backtrace]' \
+            '(-d --defer-output)'{-d,--defer-output}'[Output test failures and errors after the test run]' \
+            '(-f --fail-fast)'{-f,--fail-fast}'[Abort test run on first failure or error]' \
+            '(-c --color --no-color)'{-c,--color}'[Enable color in the output]' \
+            '(-c --color --no-color)--no-color[Disable color in the output]' \
+            '--profile=[Enable profiling of tests and list the slowest test cases]:count' \
+            '(-p --pride)'{-p,--pride}'[Show your testing pride]' \
+            '*:: :_files -g "*.rb"' \
+            && ret=0
+          ;;
+        (runner|r)
+          _arguments \
+            '(- *)'{-h,--help}'[Show this help message and quit]' \
+            '(-e --environment)'{-e,--environment=}'[The environment to run "runner"]:env:(test development production)' \
+            '*:: :_files -g "*.rb"' \
+            && ret=0
+          ;;
+        (plugin)
+          _arguments \
+            '1: :(new)' \
+            '*:: :_rails_new' \
+            && ret=0
+          ;;
+        (routes)
+          _arguments \
+            '(- *)'{-h,--help}'[Show this help message and quit]' \
+            '(-c --controller)'{-c,--controller=}'[Filter by a specific controller]:controller' \
+            '(-g --grep)'{-g,--grep}'[Grep routes by a specific pattern]' \
+            '(-E --expanded)'{-E,--expanded}'[Print routes expanded vertically with parts explained]' \
+            '(-u --unused)'{-u,--unused}'[Print unused routes]' \
+            && ret=0
+          ;;
+        (*)
+          _arguments \
+            '(- *)'{-h,--help}'[Show help message and quit]' \
+            '*:: :_files' \
+            && ret=0
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+(( $+functions[_rails_subcommands] )) ||
+_rails_subcommands() {
+  local -a commands
+
+  _rails_is_in_app
+
+  if (( $? == 1 )); then
+    # is not in rails app directory
+    commands=(
+      new'[Create a new Rails application]'
+    )
+  else
+    commands=(
+      {generate,g}'[Generate new code]'
+      {console,c}'[Start the Rails console]'
+      {server,s}'[Start the Rails server]'
+      {test,t}'[Run tests]'
+      "test\\:system[Run systems test only]"
+      {dbconsole,db}'[Start a console for the database specified in config/database.yml]'
+      plugin'[Install a plugin]'
+
+      # generated by ./bin/rails --help | ruby -ne '(b=$2;printf("%s[%s]\n", $1.gsub(/:/,"\\:"),b.strip)) if /^([a-z0-9_:]+)\S*\s+([^(\n]+)/'
+      "about[List versions of all Rails frameworks and the environment]"
+      "action_mailbox\:ingress\:exim[Relay an inbound email from Exim to Action Mailbox]"
+      "action_mailbox\:ingress\:postfix[Relay an inbound email from Postfix to Action Mailbox]"
+      "action_mailbox\:ingress\:qmail[Relay an inbound email from Qmail to Action Mailbox]"
+      "action_mailbox\:install[Install Action Mailbox and its dependencies]"
+      "action_mailbox\:install\:migrations[Copy migrations from action_mailbox to application]"
+      "action_text\:install[Copy over the migration, stylesheet, and JavaScript files]"
+      "action_text\:install\:migrations[Copy migrations from action_text to application]"
+      "active_storage\:install[Copy over the migration needed to the application]"
+      "app\:template[Apply the template supplied by LOCATION=]"
+      "app\:update[Update configs and some other initially generated files]"
+      "assets\:clean[Remove old compiled assets]"
+      "assets\:clobber[Remove compiled assets]"
+      "assets\:environment[Load asset compile environment]"
+      "assets\:precompile[Compile all the assets named in config.assets.precompile]"
+      "cache_digests\:dependencies[Lookup first-level dependencies for TEMPLATE]"
+      "cache_digests\:nested_dependencies[Lookup nested dependencies for TEMPLATE]"
+      "credentials\:diff[Enroll/disenroll in decrypted diffs of credentials using git]"
+      "credentials\:edit[Open the decrypted credentials in $VISUAL or $EDITOR for editing]"
+      "credentials\:show[Show the decrypted credentials]"
+      "db\:create[Create the database from DATABASE_URL or config/database.yml for the current RAILS_ENV]"
+      "db\:drop[Drop the database from DATABASE_URL or config/database.yml for the current RAILS_ENV]"
+      "db\:encryption\:init[Generate a set of keys for configuring Active Record encryption in a given environment]"
+      "db\:environment\:set[Set the environment value for the database]"
+      "db\:fixtures\:load[Load fixtures into the current environment's database]"
+      "db\:migrate[Migrate the database]"
+      "db\:migrate\:down[Run the 'down' for a given migration VERSION]"
+      "db\:migrate\:redo[Roll back the database one migration and re-migrate up]"
+      "db\:migrate\:status[Display status of migrations]"
+      "db\:migrate\:up[Run the 'up' for a given migration VERSION]"
+      "db\:prepare[Run setup if database does not exist, or run migrations if it does]"
+      "db\:reset[Drop and recreate all databases from their schema for the current environment and load the seeds]"
+      "db\:rollback[Roll the schema back to the previous version]"
+      "db\:schema\:cache\:clear[Clear a db/schema_cache.yml file]"
+      "db\:schema\:cache\:dump[Create a db/schema_cache.yml file]"
+      "db\:schema\:dump[Create a database schema file]"
+      "db\:schema\:load[Load a database schema file]"
+      "db\:seed[Load the seed data from db/seeds.rb]"
+      "db\:seed\:replant[Truncate tables of each database for current environment and load the seeds]"
+      "db\:setup[Create all databases, load all schemas, and initialize with the seed data]"
+      "db\:system\:change[Change 'config/database.yml' and your database gem to the target database]"
+      "db\:version[Retrieve the current schema version number]"
+      "destroy[Remove code generated by 'bin/rails generate']"
+      "dev\:cache[Toggle development mode caching on/off]"
+      "encrypted\:edit[Open the decrypted file in $VISUAL or $EDITOR for editing]"
+      "encrypted\:show[Show the decrypted contents of the file]"
+      "importmap\:install[Setup Importmap for the app]"
+      "initializers[Print out all defined initializers in the order they are invoked by Rails.]"
+      "log\:clear[Truncate all/specified *.log files in log/ to zero bytes]"
+      "middleware[Print out your Rack middleware stack]"
+      "notes[Show comments in your code annotated with FIXME, OPTIMIZE, and TODO]"
+      "restart[Restart app by touching tmp/restart.txt]"
+      "routes[List all the defined routes]"
+      "runner[Run Ruby code in the context of your application]"
+      "secret[Generate a cryptographically secure secret key]"
+      "secrets\:edit[**deprecated** Open the secrets in $VISUAL or $EDITOR for editing]"
+      "secrets\:show[**deprecated** Show the decrypted secrets]"
+      "stats[Report code statistics]"
+      "stimulus\:install[Install Stimulus into the app]"
+      "stimulus\:install\:importmap[Install Stimulus on an app running importmap-rails]"
+      "stimulus\:install\:node[Install Stimulus on an app running node]"
+      "test\:all[Run all tests, including system tests]"
+      "test\:channels[Run tests in test/channels]"
+      "test\:controllers[Run tests in test/controllers]"
+      "test\:db[Reset the database and run 'bin/rails test']"
+      "test\:functionals[Run tests in test/controllers, test/mailers, and test/functional]"
+      "test\:generators[Run tests in test/lib/generators]"
+      "test\:helpers[Run tests in test/helpers]"
+      "test\:integration[Run tests in test/integration]"
+      "test\:jobs[Run tests in test/jobs]"
+      "test\:mailboxes[Run tests in test/mailboxes]"
+      "test\:mailers[Run tests in test/mailers]"
+      "test\:models[Run tests in test/models]"
+      "test\:units[Run tests in test/models, test/helpers, and test/unit]"
+      "time\:zones[List all time zones, list by two-letter country code]"
+      "tmp\:clear[Clear cache, socket and screenshot files from tmp/]"
+      "tmp\:create[Create tmp directories for cache, sockets, and pids]"
+      "turbo\:install[Install Turbo into the app]"
+      "turbo\:install\:importmap[Install Turbo into the app with asset pipeline]"
+      "turbo\:install\:node[Install Turbo into the app with webpacker]"
+      "turbo\:install\:redis[Switch on Redis and use it in development]"
+      "version[Show the Rails version]"
+      "yarn\:install[Install all JavaScript dependencies as specified via Yarn]"
+      "zeitwerk\:check[Check project structure for Zeitwerk compatibility]"
+    )
+  fi
+
+  _values 'command' $commands
+}
+
+# rails new
+(( $+functions[_rails_new] )) ||
+_rails_new() {
+  local ret=1
+
+  _arguments \
+    $runtime_options \
+    $rails_options \
+    --skip-namespace'[Skip namespace]' \
+    '(-n --name)'{-n,--name=}'[Name of the app]:name' \
+    '(-r --ruby)'{-r,--ruby=}'[Path to the Ruby binary of your choice]:path:_files' \
+    '(-b --builder)'{-b,--builder=}'[Path to a application builder(can be a filesystem path or URL)]: :_rails_path_or_url' \
+    '(-m --template)'{-m,--template=}'[Path to an application template(can be a filesystem path or URL)]: :_rails_path_or_url' \
+    '(-d --database)'{-d,--database=}'[Preconfigure for selected database]:database:(mysql trilogy oracle postgresql sqlite3 frontbase ibm_db sqlserver jdbcmysql jdbcsqlite3 jdbcpostgresql jdbc)' \
+    --skip-gemfile"[Don't create a Gemfile]" \
+    --skip-bundle"[Don't run bundle install]" \
+    '(-G --skip-git)'{-G,--skip-git}'[Skip git init]' \
+    --skip-docker'[Skip Dockerfile]' \
+    --skip-keeps'[Skip source control .keep files]' \
+    '(-M --skip-action-mailer)'{-M,--skip-action-mailer}'[Skip Action Mailer files]' \
+    --skip-action-mailbox'[Skip Action Mailbox gem]' \
+    --skip-action-text'[Skip Action Text gem]' \
+    '(-O --skip-active-record)'{-O,--skip-active-record}'[Skip Active Record files]' \
+    --skip-active-job'[Skip Active Job]' \
+    --skip-active-storage'[Skip Active Storage files]' \
+    '(-C --skip-action-cable)'{-C,--skip-action-cable}'[Skip Action Cable files]' \
+    '(-A --skip-asset-pipeline)'{-A,--skip-asset-pipeline}'[Skip asset pipeline]' \
+    '(-a --asset-pipeline)'{-a,--asset-pipeline=}'[Choose your asset pipeline]:asset pipeline:(sprockets propshaft)' \
+    '(-J --skip-js)'{-J,--skip-js}'[Skip JavaScript files]' \
+    --skip-hotwire'[Skip Hotwire integration]' \
+    --skip-jbuilder'[Skip jbuilder gem]' \
+    '(-T --skip-test)'{-T,--skip-test}'[Skip test files]' \
+    --skip-system-test'[Skip system test files]' \
+    --skip-bootsnap'[Skip bootsnap gem]' \
+    --skip-dev-gems'[Skip development gems(e.g. web-console)]' \
+    --dev'[Setup the application with Gemfile pointing to your Rails checkout]' \
+    --edge'[Setup the application with Gemfile pointing to Rails repository]' \
+    --master'[Set up the application with Gemfile pointing to Rails repository main branch]' \
+    --rc='[Path to file containing extra configuration options for rails command]:rc:_files' \
+    --api'[Preconfigure smaller stack for API only apps]' \
+    --minimal'[Preconfigure a minimal rails app]' \
+    '(-j --js)'{-j,--js=}'[Choose JavaScript approach]:javascript:(importmap bun webpack esbuild rollup)' \
+    '(-c --css)'{-c,--css=}'[Choose CSS processor]:css processor:(tailwind bootstrap bulma postcss sass)' \
+    '(-B --skip-bundle)'{-B,--skip-bundle}"[Don't run bundle install]" \
+    --skip-decrypted-diffs"[Don't configure git to show decrypted diffs of encrypted credentials]" \
+    ':app path:_directories' && ret=0
+
+  return ret
+}
+
+# rails generate
+(( $+functions[_rails_generate] )) ||
+_rails_generate() {
+  local ret=1
+
+  _arguments -C \
+    '(- *)'{-h,--help}"[Print generator's options and usage]" \
+    $runtime_options \
+    '1:generator:_rails_generate_generator' \
+    '*:: :->generate' && ret=0
+
+  case "$state" in
+    (generate)
+      local -a opts
+      opts=(
+        '(- *)'{-h,--help}'[Show this help message and quit]'
+        $runtime_options
+        '--skip-namespace[Skip namespace]'
+        '--skip-collision-check[Skip collision check]'
+      )
+
+      case $words[1] in
+        (application_record|migration|model|resource|scaffold|scaffold_controller)
+          opts+=(
+            '(-o --orm)'{-o,--orm=}'[ORM to be invoked]:orm:(active_record)'
+          )
+          ;|
+        (channel)
+          opts+=(
+            '--no-assets[Not generate assets]'
+          )
+          ;|
+        (controller|resource|scaffold|scaffold_controller)
+          opts+=(
+            '--skip-routes[Do not add routes to config/routes.rb]'
+            '--no-helper[Not generate helper]'
+          )
+          ;|
+        (controller|job|model|resource|scaffold)
+          opts+=(
+            '--parent=[The parent class for the generated controller]:parent class'
+          )
+          ;|
+        (controller|mailer|resource|scaffold|scaffold_controller)
+          opts+=(
+            '(-e --template-engine)'{-e,--template-engine=}'[Template engine to be invoked]:engine:(erb)'
+          )
+          ;|
+        (channel|controller|generator|helper|job|mailbox|mailer|model|scaffold|scaffold_controller)
+          opts+=(
+            '(-t --test-framework)'{-t,--test-framework=}'[Test framework to be invoked]:test_framework:(test_unit)'
+          )
+          ;|
+        (generator|test_unit:channel)
+          opts+=(
+            '--no-namespace[Not generate namespace generate]'
+          )
+          ;|
+        (integration_test)
+          opts+=(
+            '--integration-tool=[Integration tool to be invoked]:tool:(test_unit)'
+          )
+          ;|
+        (jbuilder|resource|scaffold|scaffold_controller)
+          opts+=(
+            '--model-name=[ModelName to be used]:name'
+          )
+          ;|
+        (jbuilder|model|resource|scaffold|scaffold_controller)
+          opts+=(
+            '--force-plural[Do not singularize the model name]'
+          )
+          ;|
+        (jbuilder|migration|model|resource|scaffold_controller)
+          opts+=(
+            '--no-timestamps[Not generate timestamps]'
+          )
+          ;|
+        (job)
+          opts+=(
+            '--queue=[The queue name for the generated job]:name'
+          )
+          ;|
+        (migration|model|resource|scaffold)
+          opts+=(
+            '--primary-key-type=[The type for primary key]'
+            '(--db --database)'{--db,--database=}'[The database for your migration]:db'
+          )
+          ;|
+        (model|resource|scaffold)
+          opts+=(
+            '--no-migration[Not generate migration]'
+            '--no-indexes[Not add indexes for references and belongs_to columns]'
+            '--no-fixture[Not generate fixture]'
+            '(-r --fixture-replacement)'{-r,--fixture-replacement=}'[Fixture replacement to be invoked]:fixture'
+          )
+          ;|
+        (resource)
+          opts+=(
+            '(-c --resource-controller)'{-c,--resource-controller=}'[Resource controller to be invoked]:controller:(controller)'
+            '(-a --actions)'{-a,--actions=}'[Actions for the source controller]:action'
+          )
+          ;|
+        (resource|scaffold|scaffold_controller)
+          opts+=(
+            '--no-resource-route[Not generate resource route]'
+          )
+          ;|
+        (scaffold)
+          opts+=(
+            '(-c --scaffold-controller)'{-c,--scaffold-controller=}'[Scaffold controller to be invoked]:controller:(scaffold_controller)'
+
+          )
+          ;|
+        (scaffold|scaffold_controller)
+          opts+=(
+            '--api[Generate API-only controller and tests, with no view templates]'
+            '--no-jbuilder[Not generate jbuilder]'
+          )
+          ;|
+        (scaffold|scaffold_controller|system_test)
+          opts+=(
+            '--system-tests=[System test framework to be invoked]:framework:(test_unit)'
+          )
+          ;|
+        (stimulus)
+          opts+=(
+            '--skip-manifest[Do not update the stimulus manifest]'
+          )
+          ;|
+        (jbuilder|migration|resource|scaffold)
+          opts+=(
+            '*:field:_rails_migration_fields'
+          )
+          ;|
+      esac
+
+      _arguments $opts && ret=0
+      ;;
+  esac
+
+  return ret
+}
+
+(( $+functions[_rails_generate_generator] )) ||
+_rails_generate_generator() {
+  local -a generators=(
+    # rails
+    application_record benchmark channel controller generator helper integration_test
+    jbuilder job mailbox mailer migration model resource scaffold scaffold_controller
+    system_test task
+
+    # active record
+    "active_record\\:application_record"
+    "active_record\\:multi_db"
+
+    # Stimulus
+    stimulus
+
+    # TestUnit
+    "test_unit\\:channel" "test_unit\\:generator" "test_unit\\:install"
+    "test_unit\\:mailbox" "test_unit\\:plugin"
+  )
+
+  _values 'generators' $generators
+}
+
+# Utilities
+(( $+functions[_rails_is_in_app] )) ||
+_rails_is_in_app() {
+  local dir="$PWD"
+  while [ -n "$dir" ]; do
+    if [[ -f "${dir}/bin/rails" ]]; then
+      return 0
+    fi
+    dir="${dir/*}"
+  done
+
+  return 1
+}
+
+(( $+functions[_rails_path_or_url] )) ||
+_rails_path_or_url() {
+  _alternative \
+    'files:path:_files -g "*.rb"' \
+    'url:url:_urls'
+}
+
+(( $+functions[_rails_migration_fields] )) ||
+_rails_migration_fields() {
+  if compset -P '*:*:'; then
+    _values 'index' 'index' 'uniq'
+  else
+    if compset -P '*:'; then
+      _values -s ':' 'type' 'string' 'text' 'integer' 'float' 'decimal' 'datetime' 'timestamp' 'time' 'date' 'binary' 'boolean' 'references'
+    else
+      _guard '[[:alnum:]_]#' 'field'
+    fi
+  fi
+}
+
+_rails "$@"
+
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

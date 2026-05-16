@@ -1,0 +1,170 @@
+#compdef mix
+#autoload
+
+# Elixir mix zsh completion
+
+local -a _1st_arguments
+_1st_arguments=(
+    'app.config:Configures all registered apps'
+    'app.start:Start all registered apps'
+    'app.tree:Prints the application tree'
+    'archive:Lists installed archives'
+    'archive.build:Archive this project into a .ez file'
+    'archive.install:Install an archive locally'
+    'archive.uninstall:Uninstall archives'
+    'clean:Delete generated application files'
+    'cmd:Executes the given command'
+    'compile:Compile source files'
+    'compile.protocols:Consolidates all protocols in all paths'
+    'deps:List dependencies and their status'
+    "deps.clean:Remove the given dependencies' files"
+    'deps.compile:Compile dependencies'
+    'deps.get:Get all out of date dependencies'
+    'deps.tree:Prints the dependency tree'
+    'deps.unlock:Unlock the given dependencies'
+    'deps.update:Update the given dependencies'
+    'do:Executes the tasks separated by comma'
+    'ecto.create:Create Ecto database'
+    'ecto.drop:Drop the storage for the given repository'
+    'ecto.dump:Dumps the current environment’s database structure'
+    'ecto.gen.migration:Generates a migration'
+    'ecto.gen.repo:Generates a new repository'
+    'ecto.load:Loads the current environment’s database structure'
+    'ecto.migrate:Runs Ecto migration'
+    'ecto.migrations:Displays the up / down migration status'
+    'ecto.rollback:Reverts applied migrations'
+    'escript:Lists installed escripts'
+    'escript.build:Builds an escript for the project'
+    'escript.install:Installs an escript locally'
+    'escript.uninstall:Uninstalls escripts'
+    'firmware:Nerves - Build a firmware image for the selected target platform'
+    'firmware.burn:Nerves - Writes the generated firmware image to an attached SDCard or file'
+    'firmware.image:Nerves - Create a firmware image file that can be copied byte-for-byte'
+    'format:Formats the given files and patterns'
+    'help:Print help information for tasks'
+    'hex:Print hex help information'
+    'hex.audit:Shows retired Hex deps for the current project'
+    'hex.build:Builds a new package version locally'
+    'hex.config:Reads, updates or deletes local Hex config'
+    'hex.docs:Fetches or opens documentation of a package'
+    'hex.info:Print hex information'
+    'hex.organization:Manages Hex.pm organizations'
+    'hex.key:Hex API key tasks'
+    'hex.outdated:Shows outdated Hex deps for the current project'
+    'hex.owner:Manages Hex package ownership'
+    'hex.package:Fetches or diffs packages'
+    'hex.publish:Publish a new package version'
+    'hex.registry:Manages local Hex registries'
+    'hex.repo:Manages Hex repositories'
+    'hex.retire:Retires a package version'
+    'hex.search:Search for package names'
+    'hex.sponsor:Show Hex packages accepting sponsorships'
+    'hex.user:Manages your Hex user account'
+    'loadconfig:Loads and persists the given configuration'
+    'local:List local tasks'
+    'local.hex:Install hex locally'
+    'local.phoenix:Updates Phoenix locally'
+    'local.phx:Updates the Phoenix project generator locally'
+    'local.public_keys:Manages public keys'
+    'local.rebar:Install rebar locally'
+    'nerves.artifact:Create an artifact for a specified Nerves package'
+    'nerves.artifact.get:Nerves get artifacts'
+    'nerves.info:Prints Nerves system information'
+    'nerves.new:Create a new Nerves application'
+    'nerves.release.init:Prepare a new Nerves project for use with releases'
+    'new:Create a new Elixir project'
+    'phoenix.digest:Digests and compress static files'
+    'phoenix.gen.channel:Generates a Phoenix channel'
+    'phoenix.gen.html:Generates controller, model and views for an HTML based resource'
+    'phoenix.gen.json:Generates a controller and model for a JSON based resource'
+    'phoenix.gen.model:Generates an Ecto model'
+    'phoenix.gen.secret:Generates a secret'
+    'phoenix.new:Creates a new Phoenix v1.2.1 application'
+    'phoenix.routes:Prints all routes'
+    'phoenix.server:Starts applications and their servers'
+    'phx.digest:Digests and compresses static files'
+    'phx.digest.clean:Removes old versions of static assets.'
+    'phx.gen.auth:Generates authentication logic for a resource'
+    'phx.gen.cert:Generates a self-signed certificate for HTTPS testing'
+    'phx.gen.channel:Generates a Phoenix channel'
+    'phx.gen.context:Generates a context with functions around an Ecto schema'
+    'phx.gen.embedded:Generates an embedded Ecto schema file'
+    'phx.gen.html:Generates controller, views, and context for an HTML resource'
+    'phx.gen.json:Generates controller, views, and context for a JSON resource'
+    'phx.gen.live:Generates LiveView, templates, and context for a resource'
+    'phx.gen.notifier:Generates a notifier that delivers emails by default'
+    'phx.gen.presence:Generates a Presence tracker'
+    'phx.gen.schema:Generates an Ecto schema and migration file'
+    'phx.gen.secret:Generates a secret'
+    'phx.gen.socket:Generates a Phoenix socket handler'
+    'phx.new:Creates a new Phoenix application'
+    'phx.new.ecto:Creates a new Ecto project within an umbrella project'
+    'phx.new.web:Creates a new Phoenix web project within an umbrella project'
+    'phx.routes:Prints all routes'
+    'phx.server:Starts applications and their servers'
+    'profile.cprof:Profiles the given file or expression with cprof'
+    'profile.eprof:Profiles the given file or expression with eprof'
+    'profile.fprof:Profiles the given file or expression with fprof'
+    'release:Assembles a self-contained release'
+    'release.init:Generates sample files for releases'
+    'run:Run the given file or expression'
+    "test:Run a project's tests"
+    "test.watch:Run a project's tests continuously using hex package mix_test_watch"
+    'test.coverage:Build report from exported test coverage'
+    'xref:Prints cross reference information'
+    '--help:Describe available tasks'
+    '--version:Prints the Elixir version information'
+)
+
+__task_list ()
+{
+    local expl
+    declare -a tasks
+
+    tasks=(app.config app.start app.tree archive archive.build archive.install archive.uninstall clean cmd compile compile.protocols deps deps.clean deps.compile deps.get deps.tree deps.unlock deps.update do ecto.create ecto.drop ecto.dump ecto.gen.migration ecto.gen.repo ecto.load ecto.migrate ecto.migrations ecto.rollback escript escript.build escript.install escript.uninstall firmware firmware.burn firmware.image format help hex hex.audit hex.build hex.config hex.docs hex.info hex.organization hex.key hex.outdated hex.owner hex.package hex.publish hex.registry hex.repo hex.retire hex.search hex.sponsor hex.user loadconfig local local.hex local.phoenix local.phx local.public_keys local.rebar nerves.artifact nerves.artifact.get nerves.info nerves.new nerves.release.init new phoenix.digest phoenix.gen.channel phoenix.gen.html phoenix.gen.json phoenix.gen.model phoenix.gen.secret phoenix.new phoenix.routes phoenix.server phx.digest phx.digest.clean phx.gen.auth phx.gen.cert phx.gen.channel phx.gen.context phx.gen.embedded phx.gen.html phx.gen.json phx.gen.live phx.gen.notifier phx.gen.presence phx.gen.schema phx.gen.secret phx.gen.socket phx.new phx.new.ecto phx.new.web phx.routes phx.server profile.cprof profile.eprof profile.fprof release release.init run test test.watch test.coverage xref)
+
+    _wanted tasks expl 'help' compadd $tasks
+}
+
+local expl
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+      _describe -t commands "mix subcommand" _1st_arguments
+      return
+  ;;
+
+  (options)
+    case $line[1] in
+      (help)
+         _arguments ':feature:__task_list'
+         ;;
+      (format)
+        _arguments -C \
+          '--check-formatted' \
+          '--dot-formatter' \
+          '--dry-run' \
+          '--force' \
+          '--migrate' \
+          '--no-exit' \
+          '*::file:_files'
+          ;;
+      (test)
+         _files
+         ;;
+      (test.watch)
+         _files
+         ;;
+      (run)
+         _files
+         ;;
+    esac
+  ;;
+esac
