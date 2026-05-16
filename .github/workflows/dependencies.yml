@@ -1,0 +1,46 @@
+name: Update dependencies
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 6 * * 0"
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Check for updates
+    runs-on: ubuntu-latest
+    if: github.repository == 'ohmyzsh/ohmyzsh'
+    permissions:
+      contents: write # this is needed to push commits and branches
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+      - name: Authenticate as @ohmyzsh
+        id: generate-token
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        with:
+          client-id: ${{ secrets.OHMYZSH_CLIENT_ID }}
+          private-key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
+      - name: Setup Python
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: Process dependencies
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GIT_APP_NAME: ohmyzsh[bot]
+          GIT_APP_EMAIL: 54982679+ohmyzsh[bot]@users.noreply.github.com
+          TMP_DIR: ${{ runner.temp }}
+        run: |
+          pip install -r .github/workflows/dependencies/requirements.txt
+          python3 .github/workflows/dependencies/updater.py

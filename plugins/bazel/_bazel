@@ -1,0 +1,341 @@
+#compdef bazel bazelisk
+
+# Copyright 2015 The Bazel Authors. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Installation
+# ------------
+#
+# 1. Add this script to a directory on your $fpath:
+#     fpath[1,0]=~/.zsh/completion/
+#     mkdir -p ~/.zsh/completion/
+#     cp scripts/zsh_completion/_bazel ~/.zsh/completion
+#
+# 2. Optionally, add the following to your .zshrc.
+#     zstyle ':completion:*' use-cache on
+#     zstyle ':completion:*' cache-path ~/.zsh/cache
+#
+#   This way, the completion script does not have to parse Bazel's options
+#   repeatedly.  The directory in cache-path must be created manually.
+#
+# 3. Restart the shell
+#
+# Options
+# -------
+#  completion:init:bazel:* cache-lifetime
+#    Lifetime for the completion cache (if turned on, default: 1 week)
+
+local curcontext="$curcontext" state line
+
+: ${BAZEL_COMPLETION_PACKAGE_PATH:=%workspace%}
+: ${BAZEL:=bazel}
+_bazel_b() { ${BAZEL} --noblock_for_lock "$@" 2>/dev/null; }
+
+# Default cache lifetime is 1 week
+zstyle -s ":completion:${curcontext}:" cache-lifetime lifetime
+if [[ -z "${lifetime}" ]]; then
+  lifetime=$((60*60*24*7))
+fi
+
+_bazel_cache_policy() {
+  local -a oldp
+  oldp=( "$1"(Nms+${lifetime}) )
+  (( $#oldp ))
+}
+
+_set_cache_policy() {
+  zstyle -s ":completion:*:$curcontext*" cache-policy update_policy
+
+  if [[ -z "$update_policy" ]]; then
+    zstyle ":completion:$curcontext*" cache-policy _bazel_cache_policy
+  fi
+}
+
+# Skips over all global arguments.  After invocation, OFFSET contains the
+# position of the bazel command in $words.
+_adapt_subcommand_offset() {
+  OFFSET=2
+  for w in ${words[2,-1]}; do
+    if [[ $w == (#b)-* ]]; then
+      (( OFFSET++ ))
+    else
+      return
+    fi
+  done
+}
+
+# Retrieve the cache but also check that the value is not empty.
+_bazel_safe_retrieve_cache() {
+  _retrieve_cache $1 && [[ ${(P)#2} -gt 0 ]]
+}
+
+# Puts the name of the variable that contains the options for the bazel
+# subcommand handed in as the first argument into the global variable
+# _bazel_cmd_options.
+_bazel_get_options() {
+  local lcmd=$1
+  _bazel_cmd_options=_bazel_${lcmd}_options
+  _bazel_cmd_args=_bazel_${lcmd}_args
+  if [[ ${(P)#_bazel_cmd_options} != 0 ]]; then
+    return
+  fi
+  if _cache_invalid BAZEL_${lcmd}_options || _cache_invalid BAZEL_${lcmd}_args \
+    || ! _bazel_safe_retrieve_cache BAZEL_${lcmd}_options ${_bazel_cmd_options} \
+    || ! _retrieve_cache BAZEL_${lcmd}_args ${_bazel_cmd_args}; then
+    if ! eval "$(_bazel_b help completion)"; then
+      return
+    fi
+    local opts_var
+    if [[ $lcmd == "startup_options" ]]; then
+      opts_var="BAZEL_STARTUP_OPTIONS"
+    else
+      opts_var="BAZEL_COMMAND_${lcmd:u}_FLAGS"
+    fi
+    local -a raw_options
+    if ! eval "raw_options=(\${(@f)$opts_var})"; then
+      return
+    fi
+
+    local -a option_list
+    for opt in $raw_options; do
+      case $opt in
+        --*"={"*)
+          local lst="${${opt##*"={"}%"}"}"
+          local opt="${opt%%=*}="
+          option_list+=("${opt}:string:_values '' ${lst//,/ }") ;;
+        --*=path)
+          option_list+=("${opt%path}:path:_files") ;;
+        --*=label)
+          option_list+=("${opt%label}:target:_bazel_complete_target") ;;
+        --*=*)
+          option_list+=("${opt}:string:") ;;
+        *)
+          option_list+=("$opt") ;;
+      esac
+    done
+
+    local -a cmd_args
+    local cmd_type
+    if eval "cmd_type=\${BAZEL_COMMAND_${lcmd:u}_ARGUMENT}" && [[ -n $cmd_type ]]; then
+      case $cmd_type in
+        label|label-*)
+          cmd_args+=("*::${cmd_type}:_bazel_complete_target_${cmd_type//-/_}") ;;
+        info-key)
+          cmd_args+=('1::key:_bazel_info_key') ;;
+        path)
+          cmd_args+=('1::profile:_path_files') ;;
+        "command|{"*"}")
+          local lst=${${cmd_type#"command|{"}%"}"}
+          cmd_args+=("1::topic:_bazel_help_topic -- ${lst//,/ }") ;;
+      esac
+    fi
+
+    typeset -g "${_bazel_cmd_options}"="${(pj:|:)option_list[*]}"
+    _store_cache BAZEL_${lcmd}_options ${_bazel_cmd_options}
+    typeset -g "${_bazel_cmd_args}"="${(pj:|:)cmd_args[*]}"
+    _store_cache BAZEL_${lcmd}_args ${_bazel_cmd_args}
+  fi
+}
+
+_get_build_targets() {
+  local pkg=$1
+  local rule_re
+  typeset -a completions
+  case $target_type in
+    test)
+      rule_re=".*_test"
+      ;;
+    build)
+      rule_re=".*"
+      ;;
+    bin)
+      rule_re=".*_test|.*_binary"
+      ;;
+  esac
+  completions=(${$(_bazel_b query "kind(\"${rule_re}\", ${pkg}:all)" 2>/dev/null)##*:})
+  if ( (( ${#completions} > 0 )) && [[ $target_type != bin ]] ); then
+    completions+=(all)
+  fi
+  echo ${completions[*]}
+}
+
+# Returns all packages that match $PREFIX.  PREFIX may start with //, in which
+# case the workspace roots are searched.  Otherwise, they are completed based on
+# PWD.
+_get_build_packages() {
+  local workspace pfx
+  typeset -a package_roots paths final_paths
+  workspace=$PWD
+  package_roots=(${(ps.:.)BAZEL_COMPLETION_PACKAGE_PATH})
+  package_roots=(${^package_roots//\%workspace\%/$workspace})
+  if [[ "${(e)PREFIX}" == //* ]]; then
+    pfx=${(e)PREFIX[2,-1]}
+  else
+    pfx=${(e)PREFIX}
+  fi
+  paths=(${^package_roots}/${pfx}*(/))
+  for p in ${paths[*]}; do
+    if [[ -f ${p}/BUILD || -f ${p}/BUILD.bazel ]]; then
+      final_paths+=(${p##*/}:)
+    fi
+    final_paths+=(${p##*/}/)
+  done
+  echo ${final_paths[*]}
+}
+
+_package_remove_slash() {
+  if [[ $KEYS == ':' && $LBUFFER == */ ]]; then
+    LBUFFER=${LBUFFER[1,-2]}
+  fi
+}
+
+# Completion function for BUILD targets, called by the completion system.
+_bazel_complete_target() {
+  local expl
+  typeset -a packages targets
+  if [[ "${(e)PREFIX}" != *:* ]]; then
+    # There is no : in the prefix, completion can be either
+    # a package or a target, if the cwd is a package itself.
+    if [[ -f $PWD/BUILD || -f $PWD/BUILD.bazel ]]; then
+      targets=($(_get_build_targets ""))
+      _description build_target expl "BUILD target"
+      compadd "${expl[@]}" -a targets
+    fi
+    packages=($(_get_build_packages))
+    _description build_package expl "BUILD package"
+    # Chop of the leading path segments from the prefix for display.
+    compset -P '*/'
+    compadd -R _package_remove_slash -S '' "${expl[@]}" -a packages
+  else
+    targets=($(_get_build_targets "${${(e)PREFIX}%:*}"))
+    _description build_target expl "BUILD target"
+    # Ignore the current prefix for the upcoming completion, since we only list
+    # the names of the targets, not the full path.
+    compset -P '*:'
+    compadd "${expl[@]}" -a targets
+  fi
+}
+
+_bazel_complete_target_label() {
+  typeset -g target_type=build
+  _bazel_complete_target
+}
+
+_bazel_complete_target_label_test() {
+  typeset -g target_type=test
+  _bazel_complete_target
+}
+
+_bazel_complete_target_label_bin() {
+  typeset -g target_type=bin
+  _bazel_complete_target
+}
+
+### Actual completion commands
+
+_bazel() {
+  _adapt_subcommand_offset
+  if (( CURRENT - OFFSET > 0 )); then
+    # Remember the subcommand name, stored globally so we can access it
+    # from any subsequent function
+    cmd=${words[OFFSET]//-/_}
+
+    # Set the context for the subcommand.
+    curcontext="${curcontext%:*:*}:bazel-$cmd:"
+    _set_cache_policy
+
+    # Narrow the range of words we are looking at to exclude cmd
+    # name and any leading options
+    (( CURRENT = CURRENT - OFFSET + 1 ))
+    shift $((OFFSET - 1)) words
+    # Run the completion for the subcommand
+    _bazel_get_options $cmd
+    _arguments : \
+      ${(Pps:|:)_bazel_cmd_options} \
+      ${(Pps:|:)_bazel_cmd_args}
+  else
+    _set_cache_policy
+    # Start special handling for global options,
+    # which can be retrieved by calling
+    # $ bazel help startup_options
+    _bazel_get_options startup_options
+    _arguments : \
+      ${(Pps:|:)_bazel_cmd_options} \
+      "*:commands:_bazel_commands"
+  fi
+  return
+}
+
+_get_commands() {
+  # bazel_cmd_list is a global (g) array (a)
+  typeset -ga _bazel_cmd_list
+  # Use `bazel help` instead of `bazel help completion` to get command
+  # descriptions.
+  if _bazel_cmd_list=("${(@f)$(_bazel_b help | awk '
+/Available commands/ { command=1; }
+/  [-a-z]+[ \t]+.+/ { if (command) { printf "%s:", $1; for (i=2; i<=NF; i++) printf "%s ", $i; print "" } }
+/^$/ { command=0; }')}"); then
+    _store_cache BAZEL_commands _bazel_cmd_list
+  fi
+}
+
+# Completion function for bazel subcommands, called by the completion system.
+_bazel_commands() {
+  if [[ ${#_bazel_cmd_list} == 0 ]]; then
+    if _cache_invalid BAZEL_commands \
+      || ! _bazel_safe_retrieve_cache BAZEL_commands _bazel_cmd_list; then
+      _get_commands
+    fi
+  fi
+
+  _describe -t bazel-commands 'Bazel command' _bazel_cmd_list
+}
+
+# Completion function for bazel help options, called by the completion system.
+_bazel_help_topic() {
+  if [[ ${#_bazel_cmd_list} == 0 ]]; then
+    if _cache_invalid BAZEL_commands \
+      || ! _bazel_safe_retrieve_cache BAZEL_commands _bazel_cmd_list; then
+      _get_commands
+    fi
+  fi
+
+  while [[ $# -gt 0 ]]; do
+    if [[ $1 == -- ]]; then
+      shift
+      break
+    fi
+    shift
+  done
+  _bazel_help_list=($@)
+  _bazel_help_list+=($_bazel_cmd_list)
+  _describe -t bazel-help 'Help topic' _bazel_help_list
+}
+
+# Completion function for bazel info keys, called by the completion system.
+_bazel_info_key() {
+  if [[ ${#_bazel_info_keys_list} == 0 ]]; then
+    if _cache_invalid BAZEL_info_keys \
+      || ! _bazel_safe_retrieve_cache BAZEL_info_keys _bazel_info_keys_list; then
+      typeset -ga _bazel_info_keys_list
+      # Use `bazel help` instead of `bazel help completion` to get info-key
+      # descriptions.
+      if _bazel_info_keys_list=("${(@f)$(_bazel_b help info-keys | awk '
+  { printf "%s:", $1; for (i=2; i<=NF; i++) printf "%s ", $i; print "" }')}"); then
+        _store_cache BAZEL_info_keys _bazel_info_keys_list
+      fi
+    fi
+  fi
+  _describe -t bazel-info 'Key' _bazel_info_keys_list
+}

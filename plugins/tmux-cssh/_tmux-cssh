@@ -1,0 +1,25 @@
+#compdef tmux-cssh
+
+# tmux-cssh autocompletion for oh-my-zsh
+# Requires: tmux-cssh installed
+# Author: Manfred Touron (@moul)
+
+_arguments \
+  '(-h --help)'{-h,--help}'[This help.]' \
+  '(-u --user)'{-u,--user}'[User to use.]' \
+  '(-c --certificate)'{-c,--certificate}'[Path to ssh-certificate to use.]' \
+  '(-sc --ssh)'{-sc,--ssh}'[SSH-connection-string, multiple.]' \
+  '(-sa --ssh)'{-sa,--ssh}'[SSH connection arguments, used on every session.]' \
+  '(-ts --tmux)'{-ts,--tmux}'[Alternative tmux-session-name, default: tmux-cssh]' \
+  '(-ns --new)'{-ns,--new}'[Initializes a new session, like -ts \[name\].]' \
+  '(-q --quiet)'{-q,--quiet}'[Quiet-mode.]' \
+  '(-f --filename)'{-f,--filename}'[Filename of textfile to get -sc connection-strings from, line separated.]' \
+  '(-cs --config)'{-cs,--config}'[Name of config-settings which should be get from config-file "$HOME/.tmux-cssh". Which can be a grep-regular expression to find the name(s).]' \
+  ':hosts:_hosts' \
+  '*:: :->subcmds' \
+  && return 0
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "tmux-cssh command"
+  return
+fi

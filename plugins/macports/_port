@@ -1,0 +1,92 @@
+#compdef port
+
+local subcmds
+
+# we cache the list of ports
+# we shall use some cache policy to avoid problems with new ports
+if (( ! $+portlist )); then
+	portlist=($(port echo all; echo "all current active inactive installed uninstalled outdated"))
+fi
+
+subcmds=(
+'activate'
+'archive'
+'build'
+'cat'
+'clean'
+'configure'
+'contents'
+'deactivate'
+'dependents'
+'deps'
+'destroot'
+'dir'
+'distcheck'
+'distclean'
+'dmg'
+'echo'
+'edit'
+'extract'
+'fetch'
+'file'
+'help'
+'info'
+'install'
+'installed'
+'list'
+'livecheck'
+'location'
+'mpkg'
+'outdated'
+'patch'
+'pkg'
+'provides'
+'rdependents'
+'rdeps'
+'reclaim'
+'rpmpackage'
+'search'
+'selfupdate'
+'sync'
+'test'
+'unarchive'
+'uninstall'
+'upgrade'
+'variants'
+'version'
+)
+
+_arguments -C \
+'-v[verbose mode (generate verbose messages)]' \
+'-d[debug mode (generate debugging messages)]' \
+'-q[quiet mode (suppress messages)]' \
+'-D[specify portdir]' \
+'-k[keep mode (do not autoclean after install)]' \
+'-n[dont follow dependencies in upgrade (only for upgrading)]' \
+'-a[upgrade all installed ports (only for upgrading)]' \
+'-u[uninstall non-active ports when upgrading and uninstalling]' \
+'-f[force mode (ignore state file)]' \
+'-s[source-only mode]' \
+'-b[binary-only mode]' \
+'-o[honor state files older than Portfile]' \
+'*::command:->command' \
+&& return 0
+
+case $state in
+	command)
+	if ((CURRENT == 1)); then
+		state=subcommands
+	else
+		state=portname
+	fi
+	;;
+esac
+
+case $state in
+	subcommands)
+	_describe -t commands 'port commands' subcmds
+	;;
+	portname)
+	_describe -t commands 'available ports' portlist
+	;;
+esac

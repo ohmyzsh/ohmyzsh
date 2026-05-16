@@ -1,0 +1,691 @@
+#compdef kamal
+
+# Description
+# -----------
+#  zsh completion for Kamal (https://kamal-deploy.org/)
+# -------------------------------------------------------------------------
+# Authors
+# -------
+#  * Igor Aleksandrov <igor.alexandrov@gmail.com>
+# -------------------------------------------------------------------------
+# Inspiration
+# -----------
+#  * docker-compose ohmyzsh completion script by @sdurrheimer Steve Durrheimer
+# -------------------------------------------------------------------------
+
+# _kamal_commands() {
+#   # Only initialize if empty
+#   if (( ${#kamal_commands} == 0 )); then
+#     kamal_commands=(
+#       accessory
+#       app
+#       audit
+#       build
+#       config
+#       deploy
+#       details
+#       docs
+#       help
+#       init
+#       lock
+#       proxy
+#       prune
+#       redeploy
+#       registry
+#       remove
+#       rollback
+#       secrets
+#       server
+#       setup
+#       upgrade
+#       version
+#     )
+#   fi
+
+#   _values 'Kamal commands' $kamal_commands
+# }
+
+typeset -gr _kamal_commands=(
+  'accessory:Control accessory services'
+  'app:Control application deployment'
+  'audit:Audit security of deployment'
+  'build:Build and manage app images'
+  'config:Show effective configuration'
+  'deploy:Deploy app to servers'
+  'details:Show details about deployment'
+  'docs:Open documentation in browser'
+  'help:Show command help'
+  'init:Initialize new Kamal project'
+  'lock:Manage deployment locks'
+  'proxy:Control reverse proxy'
+  'prune:Clean up containers and images'
+  'redeploy:Redeploy current version'
+  'registry:Manage Docker registry access'
+  'remove:Remove app from servers'
+  'rollback:Rollback to a previous version'
+  'secrets:Manage deployment secrets'
+  'server:Control server configuration'
+  'setup:Setup initial deployment'
+  'upgrade:Upgrade deployment'
+  'version:Show Kamal version'
+)
+
+# Helper function to display messages
+_kamal_message() {
+  local msg="$1"
+  _kamal_message "==> $msg"
+}
+
+# Helper function to extract destination names from ./config/deploy.*.yml
+_kamal_destinations() {
+  local -a dests
+  local file
+
+  # Check if config directory exists
+  if [[ ! -d "config" ]]; then
+    _kamal_message "Cannot find Kamal configuration directory at ./config" && return 1
+  fi
+
+  for file in config/deploy.*.yml(N); do
+    [[ $file =~ config/deploy\.(.+)\.yml ]] && dests+=("${match[1]}")
+  done
+
+  _values 'Destination' $dests
+}
+
+# Define global _kamal_flags array
+typeset -ga _kamal_flags
+_kamal_flags=(
+  '(-v --verbose )'{-v,--verbose}'[Detailed logging]'
+  '(--no-verbose --skip-verbose)'{--no-verbose,--skip-verbose}'[No detailed logging]'
+  '(-q --quiet --no-quiet --skip-quiet)'{-q,--quiet}'[Minimal logging]'
+  '(-q --quiet --no-quiet --skip-quiet)'{--no-quiet,--skip-quiet}'[No minimal logging]'
+  '--version=[Run commands against a specific app version]:version'
+  '(-p --primary --no-primary --skip-primary)'{-p,--primary}'[Run commands only on primary host instead of all]'
+  '(-p --primary --no-primary --skip-primary)'{--no-primary,--skip-primary}'[Do not run commands only on primary host]'
+  '(-h --hosts)'{-h,--hosts=}'[Run commands on these hosts instead of all]:hosts'
+  '(-r --roles)'{-r,--roles=}'[Run commands on these roles instead of all]:roles'
+  '(-c --config-file)'{-c,--config-file=}'[Path to config file]:config file:_files'
+  '(-d --destination)'{-d,--destination=}'[Specify destination to be used for config file]:destination:_kamal_destinations'
+  '(-H --skip-hooks)'{-H,--skip-hooks}'[Do not run hooks]'
+)
+
+_kamal() {
+  local context state state_descr line curcontext="$curcontext"
+  typeset -A opt_args
+
+  local ret=1
+
+  _arguments -C \
+    $_kamal_flags \
+    '1: :->command' \
+    '*:: :->args' && ret=0
+
+  case $state in
+    (command)
+      # First argument - show available commands
+      _describe -t kamal-commands "Kamal commands" _kamal_commands && ret=0
+      ;;
+    (args)
+      # Subsequent arguments - handle based on the command
+      case $words[1] in
+        (accessory)
+          _kamal_accessory && ret=0
+          ;;
+        (app)
+          _kamal_app && ret=0
+          ;;
+        (audit)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (build)
+          _kamal_build && ret=0
+          ;;
+        (config)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (deploy)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (details)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (docs)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (help)
+          _kamal_help && ret=0
+          ;;
+        (init)
+          local -a init_flags
+          init_flags=(
+            $_kamal_flags
+            '(--bundle --no-bundle --skip-bundle)--bundle[Add Kamal to the Gemfile and create a bin/kamal binstub]'
+            '(--bundle --no-bundle --skip-bundle)--no-bundle[Do not add Kamal to the Gemfile and create a bin/kamal binstub]'
+            '(--bundle --no-bundle --skip-bundle)--skip-bundle[Skip add Kamal to the Gemfile and create a bin/kamal binstub]'
+          )
+          _arguments $init_flags && ret=0
+          ;;
+        (lock)
+          _kamal_lock && ret=0
+          ;;
+        (proxy)
+          _kamal_proxy && ret=0
+          ;;
+        (prune)
+          _kamal_prune && ret=0
+          ;;
+        (redeploy)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (registry)
+          _kamal_registry && ret=0
+          ;;
+        (remove)
+          local -a remove_flags
+          remove_flags=(
+            $_kamal_flags
+            '(-y --confirmed --no-confirmed --skip-confirmed)'{-y,--confirmed}'[Proceed without confirmation question]'
+            '(-y --confirmed --no-confirmed --skip-confirmed)--no-confirmed[Proceed without confirmation question]'
+            '(-y --confirmed --no-confirmed --skip-confirmed)--skip-confirmed[Proceed without confirmation question]'
+          )
+          _arguments $remove_flags && ret=0
+          ;;
+        (rollback)
+          if (( CURRENT == 2 )); then
+            _kamal_message "Enter the version to rollback to" && ret=0
+          else
+            _values $_kamal_flags && ret=0
+          fi
+          ;;
+        (secrets)
+          _kamal_secrets && ret=0
+          ;;
+        (server)
+          _kamal_server && ret=0
+          ;;
+        (setup)
+          local -a setup_flags
+          setup_flags=(
+            $_kamal_flags
+            '(-P --skip-push)'{-P,--skip-push}'[Skip image build and push]'
+          )
+          _arguments $setup_flags && ret=0
+          ;;
+        (upgrade)
+          local -a upgrade_flags
+          upgrade_flags=(
+            $_kamal_flags
+            '(-y --confirmed --no-confirmed --skip-confirmed)'{-y,--confirmed}'[Proceed without confirmation question]'
+            '(-y --confirmed --no-confirmed --skip-confirmed)--no-confirmed[Do not proceed without confirmation question]'
+            '(-y --confirmed --no-confirmed --skip-confirmed)--skip-confirmed[Skip confirmation question]'
+            '(--rolling --no-rolling --skip-rolling)--rolling[Upgrade one host at a time]'
+            '(--rolling --no-rolling --skip-rolling)--no-rolling[Do not upgrade one host at a time]'
+            '(--rolling --no-rolling --skip-rolling)--skip-rolling[Skip rolling upgrade]'
+          )
+          _arguments $upgrade_flags && ret=0
+          ;;
+        (version)
+          _arguments $_kamal_flags && ret=0
+      esac
+    ;;
+  esac
+
+  return ret
+}
+
+_kamal_accessory() {
+  local context state line
+  typeset -A opt_args
+  local ret=1
+
+  # Define accessory subcommands
+  local -a accessory_subcommands
+  accessory_subcommands=(
+    "boot:Boot new accessory service on host (use NAME=all to boot all accessories)"
+    "details:Show details about accessory on host (use NAME=all to show all accessories)"
+    "exec:Execute a custom command on servers within the accessory container (use --help to show options)"
+    "help:Describe subcommands or one specific subcommand"
+    "logs:Show log lines from accessory on host (use --help to show options)"
+    "reboot:Reboot existing accessory on host (stop container, remove container, start new container; use NAME=all to boot all accessories)"
+    "remove:Remove accessory container, image and data directory from host (use NAME=all to remove all accessories)"
+    "restart:Restart existing accessory container on host"
+    "start:Start existing accessory container on host"
+    "stop:Stop existing accessory container on host"
+    "upgrade:Upgrade accessories from Kamal 1.x to 2.0 (restart them in 'kamal' network)"
+  )
+
+  _arguments -C \
+    '1: :->subcmd' \
+    '*:: :->args' && ret=0
+
+  case $state in
+    (subcmd)
+      _describe -t accessory-commands "Kamal accessory commands" accessory_subcommands && ret=0
+      ;;
+    (args)
+      case $words[1] in
+        (boot|details|exec|logs|reboot|remove|restart|start|stop)
+          # These commands require a NAME parameter
+          if (( CURRENT == 2 )); then
+            # At the NAME position - we could add accessory name completion here
+            # if we had a way to list available accessories
+            _kamal_message "Specify an accessory name (or 'all' for all accessories)" && ret=0
+          elif [[ "$words[1]" == "exec" && CURRENT == 3 ]]; then
+            # For exec, the 3rd argument is a command
+            _kamal_message "Enter a command to execute" && ret=0
+          elif (( CURRENT > 2 )) && [[ "$words[1]" != "exec" || CURRENT > 3 ]]; then
+            _values $_kamal_flags && ret=0
+          fi
+          ;;
+        (help)
+          # Remove help itself from the list of commands
+          accessory_subcommands=("${(@)accessory_subcommands:#help*}")
+          _describe -t accessory-help-commands "Kamal accessory help commands" accessory_subcommands
+          ;;
+        (upgrade)
+          # For upgrade, show flags immediately
+          _arguments $_kamal_flags && ret=0
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_kamal_app() {
+  local context state line
+  typeset -A opt_args
+  local ret=1
+
+  local -a app_subcommands
+  app_subcommands=(
+    "boot:Boot app on servers (or reboot app if already running)"
+    "containers:Show app containers on servers"
+    "details:Show details about app containers"
+    "exec:Execute a custom command on servers within the app container (use --help to show options)"
+    "help:Describe subcommands or one specific subcommand"
+    "images:Show app images on servers"
+    "logs:Show log lines from app on servers (use --help to show options)"
+    "remove:Remove app containers and images from servers"
+    "stale_containers:Detect app stale containers"
+    "start:Start existing app container on servers"
+    "stop:Stop app container on servers"
+    "version:Show app version currently running on servers"
+  )
+
+  _arguments -C \
+    '1: :->subcmd' \
+    '*:: :->args' && ret=0
+
+  case $state in
+    (subcmd)
+      _describe -t app-commands "Kamal app commands" app_subcommands && ret=0
+      ;;
+    (args)
+      case $words[1] in
+        (boot|containers|details|images|logs|remove|stale_containers|start|stop)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (exec)
+          # For exec, the next argument is a command
+          if (( CURRENT == 2 )); then
+            _kamal_message "Enter a command to execute" && ret=0
+          else
+            _values $_kamal_flags && ret=0
+          fi
+          ;;
+        (help)
+          # Remove help itself from the list of commands
+          app_subcommands=("${(@)app_subcommands:#help*}")
+          _describe -t app-help-commands "Kamal app help commands" app_subcommands
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_kamal_build() {
+  local context state line
+  typeset -A opt_args
+  local ret=1
+
+  local -a build_subcommands
+  build_subcommands=(
+    "create:Create a build setup"
+    "deliver:Build app and push app image to registry then pull image on servers"
+    "details:Show build setup"
+    "dev:Build using the working directory, tag it as dirty, and push to local image store."
+    "help:Describe subcommands or one specific subcommand"
+    "pull:Pull app image from registry onto servers"
+    "push:Build and push app image to registry"
+    "remove:Remove build setup"
+  )
+
+  _arguments -C \
+    '1: :->subcmd' \
+    '*:: :->args' && ret=0
+
+  case $state in
+    (subcmd)
+      _describe -t build-commands "Kamal build commands" build_subcommands && ret=0
+      ;;
+    (args)
+      case $words[1] in
+        (create|deliver|details|dev|pull|push|remove)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (help)
+          # Remove help itself from the list of commands
+          build_subcommands=("${(@)build_subcommands:#help*}")
+          _describe -t build-help-commands "Kamal build help commands" build_subcommands
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_kamal_help() {
+  local ret=1
+
+  # Make sure kamal_commands is initialized properly
+  # if (( ${#kamal_commands} == 0 )); then
+  #   _kamal_commands >/dev/null
+  # fi
+
+  # If we already have a command after "help", return without suggestions
+  if (( CURRENT > 2 )); then
+    ret=0
+  else
+    local -a help_commands
+    # Filter out help from the list of commands
+    help_commands=("${(@)_kamal_commands:#help}")
+
+    _values 'Kamal help' $help_commands && ret=0
+  fi
+
+  return ret
+}
+
+_kamal_lock() {
+  local context state line
+  typeset -A opt_args
+  local ret=1
+
+  local -a lock_subcommands
+  lock_subcommands=(
+    "acquire:Acquire the deploy lock"
+    "help:Describe subcommands or one specific subcommand"
+    "release:Release the deploy lock"
+    "status:Report lock status"
+  )
+
+  _arguments -C \
+    '1: :->subcmd' \
+    '*:: :->args' && ret=0
+
+  case $state in
+    (subcmd)
+      _describe -t lock-commands "Kamal lock commands" lock_subcommands && ret=0
+      ;;
+    (args)
+      case $words[1] in
+        (acquire)
+          local -a acquire_flags
+          acquire_flags=(
+            $_kamal_flags
+            '(-m --message)'{-m,--message=}'[A lock message]:message:' # Required flag
+          )
+          _arguments $acquire_flags && ret=0
+          ;;
+        (release|status)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (help)
+          # Remove help itself from the list of commands
+          lock_subcommands=("${(@)lock_subcommands:#help*}")
+          _describe -t lock-help-commands "Kamal lock help commands" lock_subcommands
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_kamal_proxy() {
+  local context state line
+  typeset -A opt_args
+  local ret=1
+
+  local -a proxy_subcommands
+  proxy_subcommands=(
+    "boot:Boot proxy on servers"
+    "boot_config:Manage kamal-proxy boot configuration"
+    "details:Show details about proxy container from servers"
+    "help:Describe subcommands or one specific subcommand"
+    "logs:Show log lines from proxy on servers"
+    "reboot:Reboot proxy on servers (stop container, remove container, start new container)"
+    "remove:Remove proxy container and image from servers"
+    "restart:Restart existing proxy container on servers"
+    "start:Start existing proxy container on servers"
+    "stop:Stop existing proxy container on servers"
+  )
+
+  _arguments -C \
+    '1: :->subcmd' \
+    '*:: :->args' && ret=0
+
+  case $state in
+    (subcmd)
+      _describe -t proxy-commands "Kamal proxy commands" proxy_subcommands && ret=0
+      ;;
+    (args)
+      case $words[1] in
+        (boot|details|logs|reboot|remove|restart|start|stop)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (boot_config)
+          if (( CURRENT == 2 )); then
+            local -a boot_config_commands=(
+              "set:Set boot configuration"
+              "get:Get boot configuration"
+              "reset:Reset boot configuration"
+            )
+            _describe -t boot-config-commands "Boot config commands" boot_config_commands && ret=0
+          else
+            _values $_kamal_flags && ret=0
+          fi
+          ;;
+        (help)
+          # Remove help itself from the list of commands
+          proxy_subcommands=("${(@)proxy_subcommands:#help*}")
+          _describe -t proxy-help-commands "Kamal proxy help commands" proxy_subcommands
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_kamal_prune() {
+  local context state line
+  typeset -A opt_args
+  local ret=1
+
+  local -a prune_subcommands
+  prune_subcommands=(
+    "all:Prune unused images and stopped containers"
+    "containers:Prune all stopped containers, except the last n (default 5)"
+    "help:Describe subcommands or one specific subcommand"
+    "images:Prune unused images"
+  )
+
+  _arguments -C \
+    '1: :->subcmd' \
+    '*:: :->args' && ret=0
+
+  case $state in
+    (subcmd)
+      _describe -t prune-commands "Kamal prune commands" prune_subcommands && ret=0
+      ;;
+    (args)
+      case $words[1] in
+        (all|containers|images)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (help)
+          # Remove help itself from the list of commands
+          prune_subcommands=("${(@)prune_subcommands:#help*}")
+          _describe -t prune-help-commands "Kamal prune help commands" prune_subcommands
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_kamal_registry() {
+  local context state line
+  typeset -A opt_args
+  local ret=1
+
+  local -a registry_subcommands
+  registry_subcommands=(
+    "help:Describe subcommands or one specific subcommand"
+    "login:Log in to registry locally and remotely"
+    "logout:Log out of registry locally and remotely"
+  )
+
+  _arguments -C \
+    '1: :->subcmd' \
+    '*:: :->args' && ret=0
+
+  case $state in
+    (subcmd)
+      _describe -t registry-commands "Kamal registry commands" registry_subcommands && ret=0
+      ;;
+    (args)
+      case $words[1] in
+        (help)
+          # Remove help itself from the list of commands
+          registry_subcommands=("${(@)registry_subcommands:#help*}")
+          _describe -t registry-help-commands "Kamal registry help commands" registry_subcommands
+          ;;
+        (login|logout)
+          _arguments $_kamal_flags && ret=0
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_kamal_secrets() {
+  local context state line
+  typeset -A opt_args
+  local ret=1
+
+  local -a secrets_subcommands
+  secrets_subcommands=(
+    "extract:Extract a single secret from the results of a fetch call"
+    "fetch:Fetch secrets from a vault"
+    "help:Describe subcommands or one specific subcommand"
+    "print:Print the secrets (for debugging)"
+  )
+
+  _arguments -C \
+    '1: :->subcmd' \
+    '*:: :->args' && ret=0
+
+  case $state in
+    (subcmd)
+      _describe -t secrets-commands "Kamal secrets commands" secrets_subcommands && ret=0
+      ;;
+    (args)
+      case $words[1] in
+        (fetch)
+          local -a fetch_flags
+          fetch_flags=(
+            $_kamal_flags
+            '(-a --adapter)'{-a,--adapter=}'[Secret storage adapter]:adapter:(aws-parameter-store)'
+          )
+          _arguments $fetch_flags && ret=0
+          ;;
+        (extract|print)
+          _arguments $_kamal_flags && ret=0
+          ;;
+        (help)
+          # Remove help itself from the list of commands
+          secrets_subcommands=("${(@)secrets_subcommands:#help*}")
+          _describe -t secrets-help-commands "Kamal secrets help commands" secrets_subcommands
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_kamal_server() {
+  local context state line
+  typeset -A opt_args
+  local ret=1
+
+  local -a server_subcommands
+  server_subcommands=(
+    "bootstrap:Set up Docker to run Kamal apps"
+    "exec:Run a custom command on the server (use --help to show options)"
+    "help:Describe subcommands or one specific subcommand"
+  )
+
+  local -a server_flags
+  server_flags=(
+    $_kamal_flags
+    '(-i --interactive --no-interactive --skip-interactive)'{-i,--interactive}'[Run the command interactively]'
+    '(-i --interactive --no-interactive --skip-interactive)--no-interactive[Do not run the command interactively]'
+    '(-i --interactive --no-interactive --skip-interactive)--skip-interactive[Skip interactive mode]'
+  )
+
+  _arguments -C \
+    '1: :->subcmd' \
+    '*:: :->args' && ret=0
+
+  case $state in
+    (subcmd)
+      _describe -t server-commands "Kamal server commands" server_subcommands && ret=0
+      ;;
+    (args)
+      case $words[1] in
+        (bootstrap)
+          _arguments $server_flags && ret=0
+          ;;
+        (exec)
+          if (( CURRENT == 2 )); then
+            # For exec, the next argument is a command
+            _kamal_message "Enter a command to execute" && ret=0
+          else
+            _values $server_flags && ret=0
+          fi
+          ;;
+        (help)
+          # Remove help itself from the list of commands
+          server_subcommands=("${(@)server_subcommands:#help*}")
+          _describe -t server-help-commands "Kamal server help commands" server_subcommands
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_kamal "$@"

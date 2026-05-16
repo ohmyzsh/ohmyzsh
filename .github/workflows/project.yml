@@ -1,0 +1,155 @@
+name: Project tracking
+on:
+  issues:
+    types: [opened, reopened]
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions: {}
+jobs:
+  add-to-project:
+    name: Add to project
+    runs-on: ubuntu-latest
+    if: github.repository == 'ohmyzsh/ohmyzsh'
+    steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
+        with:
+          egress-policy: audit
+      - name: Authenticate as @ohmyzsh
+        id: generate-token
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3.1.1
+        with:
+          client-id: ${{ secrets.OHMYZSH_CLIENT_ID }}
+          private-key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
+      - name: Read project data
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          ORGANIZATION: ohmyzsh
+          PROJECT_NUMBER: "1"
+        run: |
+          # Get Project data
+          gh api graphql -f query='
+            query($org: String!, $number: Int!) {
+              organization(login: $org){
+                projectV2(number: $number) {
+                  id
+                  fields(first:20) {
+                    nodes {
+                      ... on ProjectV2Field {
+                        id
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+
+          # Parse project data
+          cat >> "$GITHUB_ENV" <<EOF
+          PROJECT_ID=$(jq '.data.organization.projectV2.id' project_data.json)
+          PLUGIN_FIELD_ID=$(jq '.data.organization.projectV2.fields.nodes[] | select(.name == "Plugin") | .id' project_data.json)
+          THEME_FIELD_ID=$(jq '.data.organization.projectV2.fields.nodes[] | select(.name == "Theme") | .id' project_data.json)
+          EOF
+      - name: Add to project
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          ISSUE_OR_PR_ID: ${{ github.event.issue.node_id || github.event.pull_request.node_id }}
+        run: |
+          item_id="$(gh api graphql -f query='
+            mutation($project: ID!, $content: ID!) {
+              addProjectV2ItemById(input: {projectId: $project, contentId: $content}) {
+                item {
+                  id
+                }
+              }
+            }
+          ' -f project="$PROJECT_ID" -f content="$ISSUE_OR_PR_ID" --jq '.data.addProjectV2ItemById.item.id')"
+
+          echo "ITEM_ID=$item_id" >> $GITHUB_ENV
+      - name: Classify Pull Request
+        if: github.event_name == 'pull_request_target'
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # Get the list of modified files in the PR, and extract plugins and themes
+          gh pr view "$PR_NUMBER" \
+            --repo "$GITHUB_REPOSITORY" \
+            --json files --jq '.files.[].path' | awk -F/ '
+            BEGIN {
+              plugins = 0
+              themes = 0
+            }
+            /^plugins\// {
+              if (plugin == $2) next
+              plugin = $2
+              plugins++
+            }
+            /^themes\// {
+              gsub(/\.zsh-theme$/, "", $2)
+              if (theme == $2) next
+              theme = $2
+              themes++
+            }
+            END {
+              # plugin and theme are values controlled by the PR author
+              # so we should sanitize them before using anywhere else
+              if (plugins == 1) {
+                gsub(/[^a-zA-Z0-9._-]/, "", plugin)
+                print "PLUGIN=" plugin
+              }
+              if (themes == 1) {
+                gsub(/[^a-zA-Z0-9._-]/, "", theme)
+                print "THEME=" theme
+              }
+            }
+          ' >> "$GITHUB_ENV"
+      - name: Fill Pull Request fields in project
+        if: github.event_name == 'pull_request_target'
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          gh api graphql -f query='
+            mutation (
+              $project: ID!
+              $item: ID!
+              $plugin_field: ID!
+              $plugin_value: String!
+              $theme_field: ID!
+              $theme_value: String!
+            ) {
+              set_plugin: updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $plugin_field
+                value: {
+                  text: $plugin_value
+                }
+              }) {
+                projectV2Item {
+                  id
+                }
+              }
+              set_theme: updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $theme_field
+                value: {
+                  text: $theme_value
+                }
+              }) {
+                projectV2Item {
+                  id
+                }
+              }
+            }
+          ' -f project="$PROJECT_ID" -f item="$ITEM_ID" \
+            -f plugin_field="$PLUGIN_FIELD_ID" -f plugin_value="$PLUGIN" \
+            -f theme_field="$THEME_FIELD_ID" -f theme_value="$THEME" \
+            --silent

@@ -1,0 +1,56 @@
+#compdef ng
+
+setopt localoptions extendedglob
+
+if (( CURRENT == 2 )); then
+  local -a cmds alias
+  # Sample output (ng help):
+  # Available Commands:
+  #   add Adds support for an external library to your project.
+  for line in ${(@f)"$(ng help 2>/dev/null | sed -n '/^  /p')"}; do
+    if [[ "$line" =~ '^  ([^ ]+) \(([^)]+)\) (.*)$' ]]; then
+      alias=(${match[1]} ${(s:, :)match[2]})
+      cmds+=(${^alias}:"${match[3]//:/}")
+    elif [[ "$line" =~ '^  ([^ ]+) (.*)$' ]]; then
+      cmds+=("${match[1]}:${match[2]//:/}")
+    fi
+  done
+  _describe commands cmds && return 0
+elif (( CURRENT == 3 )); then
+  local -a flags args
+  local section description
+  # Sample output (ng build --help):
+  # --configuration (-c)
+  #   One or more named builder configurations as a comma-separated list as specified in the "configurations" section of angular.json.
+  #   The builder uses the named configurations to run the given target.
+  #   For more information, see https://angular.io/guide/workspace-config#alternate-build-configurations.
+  # Prefix --flags with literal \0, and split on that to get each flag section
+  for section in ${(s:\0:)"$(ng ${words[2]} --help 2>/dev/null | sed -e '1,/^options/ d;s/^  --/\\0--/')"}; do
+    # Split by newline and discard extra description lines (lines > 2)
+    for args description in ${${(@f)section}[1,2]}; do
+      args=(${(s: :)${${args%% #}## #}//[(),]/})
+      description=${${description%% #}## #}
+      flags+=(${^args}":$description")
+    done
+  done
+  _describe flags flags
+
+  case "$words[2]" in
+  b|build|l|lint|t|test)
+    # Sample output (ng config projects):
+    # {
+    #   "angular-project-1": {
+    #     ...
+    #   },
+    #   "angular-project-2": {
+    #     ...
+    #   }
+    # }
+    # In absence of a proper JSON parser, just grab the lines with
+    # a 2-space indentation and only the stuff inside quotes
+    local -a projects
+    projects=(${(@f)"$(ng config projects 2>/dev/null | sed -n 's/^  "\([^"]\+\)".*$/\1/p')"})
+    _describe projects projects
+    ;;
+  esac
+fi

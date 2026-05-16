@@ -1,0 +1,8 @@
+autoload znt-usetty-wrapper n-cd
+local NLIST_START_IN_SEARCH_MODE=0
+local NLIST_START_IN_UNIQ_MODE=0
+
+znt-usetty-wrapper n-cd "$@"
+
+unset NLIST_START_IN_SEARCH_MODE
+unset NLIST_START_IN_UNIQ_MODE
