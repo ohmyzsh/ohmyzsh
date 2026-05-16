@@ -100,8 +100,12 @@ fi
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 # Set the correct local config file to use.
-if [[ "$ZSH_TMUX_ITERM2" == "false" && -e "$ZSH_TMUX_CONFIG" ]]; then
+# Always export ZSH_TMUX_CONFIG so tmux can source it when processing
+# the fixed config (tmux.extra.conf) via $ZSH_TMUX_CONFIG.
+if [[ -e "$ZSH_TMUX_CONFIG" ]]; then
   export ZSH_TMUX_CONFIG
+fi
+if [[ "$ZSH_TMUX_ITERM2" == "false" && -e "$ZSH_TMUX_CONFIG" ]]; then
   export _ZSH_TMUX_FIXED_CONFIG="${0:h:a}/tmux.extra.conf"
 else
   export _ZSH_TMUX_FIXED_CONFIG="${0:h:a}/tmux.only.conf"
@@ -143,10 +147,16 @@ function _zsh_tmux_plugin_run() {
 
   # If failed, just run tmux, fixing the TERM variable if requested.
   if [[ $? -ne 0 ]]; then
+    # Always load the user's config first when it exists, regardless of
+    # whether TERM fix is enabled. This ensures custom configs (e.g. from
+    # oh-my-tmux) are not overridden by the plugin's fixed config.
+    if [[ -e "$ZSH_TMUX_CONFIG" ]]; then
+      tmux_cmd+=(-f "$ZSH_TMUX_CONFIG")
+    fi
+    # Apply the TERM fix on top, which will also source-file the user's config
+    # (via tmux.extra.conf) to preserve custom settings.
     if [[ "$ZSH_TMUX_FIXTERM" == "true" ]]; then
       tmux_cmd+=(-f "$_ZSH_TMUX_FIXED_CONFIG")
-    elif [[ -e "$ZSH_TMUX_CONFIG" ]]; then
-      tmux_cmd+=(-f "$ZSH_TMUX_CONFIG")
     fi
 
     if [[ -n "$session_name" ]]; then
