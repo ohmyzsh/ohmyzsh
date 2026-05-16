@@ -1,0 +1,844 @@
+#compdef swift
+local context state state_descr line
+_swift_commandname=$words[1]
+typeset -A opt_args
+
+_swift() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+    case $state in
+        (command)
+            local subcommands
+            subcommands=(
+                'run:Build and run an executable product'
+                'build:Build sources into binary products'
+                'test:Build and run tests'
+                'package:Perform operations on Swift packages'
+                'help:Show subcommand help information.'
+            )
+            _describe "subcommand" subcommands
+            ;;
+        (arg)
+            case ${words[1]} in
+                (run)
+                    _swift_run
+                    ;;
+                (build)
+                    _swift_build
+                    ;;
+                (test)
+                    _swift_test
+                    ;;
+                (package)
+                    _swift_package
+                    ;;
+                (help)
+                    _swift_help
+                    ;;
+            esac
+            ;;
+    esac
+
+    return ret
+}
+
+_swift_run() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--package-path[Specify the package path to operate on (default current directory). This changes the working directory before any other operation]:package-path:_files -/'
+        '--cache-path[Specify the shared cache directory path]:cache-path:_files -/'
+        '--config-path[Specify the shared configuration directory path]:config-path:_files -/'
+        '--security-path[Specify the shared security directory path]:security-path:_files -/'
+        '--scratch-path[Specify a custom scratch directory path (default .build)]:scratch-path:_files -/'
+        '--pkg-config-path[Specify alternative path to search for pkg-config `.pc` files. Use the option multiple times to
+        specify more than one path.]:pkg-config-path:_files -/'
+        '--enable-dependency-cache[Use a shared cache when fetching dependencies]'
+        '--disable-dependency-cache[Use a shared cache when fetching dependencies]'
+        '--enable-build-manifest-caching'
+        '--disable-build-manifest-caching'
+        '--manifest-cache[Caching mode of Package.swift manifests (shared: shared cache, local: package'"'"'s build directory, none: disabled]:manifest-cache:'
+        '(--verbose -v)'{--verbose,-v}'[Increase verbosity to include informational output]'
+        '(--very-verbose --vv)'{--very-verbose,--vv}'[Increase verbosity to include debug output]'
+        '(--quiet -q)'{--quiet,-q}'[Decrease verbosity to only include error output.]'
+        '--disable-sandbox[Disable using the sandbox when executing subprocesses]'
+        '--netrc[Use netrc file even in cases where other credential stores are preferred]'
+        '--enable-netrc[Load credentials from a netrc file]'
+        '--disable-netrc[Load credentials from a netrc file]'
+        '--netrc-file[Specify the netrc file path]:netrc-file:_files'
+        '--enable-keychain[Search credentials in macOS keychain]'
+        '--disable-keychain[Search credentials in macOS keychain]'
+        '--resolver-fingerprint-checking:resolver-fingerprint-checking:'
+        '--resolver-signing-entity-checking:resolver-signing-entity-checking:'
+        '--enable-signature-validation[Validate signature of a signed package release downloaded from registry]'
+        '--disable-signature-validation[Validate signature of a signed package release downloaded from registry]'
+        '--enable-prefetching'
+        '--disable-prefetching'
+        '(--force-resolved-versions --disable-automatic-resolution --only-use-versions-from-resolved-file)'{--force-resolved-versions,--disable-automatic-resolution,--only-use-versions-from-resolved-file}'[Only use versions from the Package.resolved file and fail resolution if it is out-of-date]'
+        '--skip-update[Skip updating dependencies from their remote during a resolution]'
+        '--disable-scm-to-registry-transformation[disable source control to registry transformation]'
+        '--use-registry-identity-for-scm[look up source control dependencies in the registry and use their registry identity when possible to help deduplicate across the two origins]'
+        '--replace-scm-with-registry[look up source control dependencies in the registry and use the registry to retrieve them instead of source control when possible]'
+        '--default-registry-url[Default registry URL to use, instead of the registries.json configuration file]:default-registry-url:'
+        '(--configuration -c)'{--configuration,-c}'[Build with configuration]:configuration:(debug release)'
+        '-Xcc[Pass flag through to all C compiler invocations]:Xcc:'
+        '-Xswiftc[Pass flag through to all Swift compiler invocations]:Xswiftc:'
+        '-Xlinker[Pass flag through to all linker invocations]:Xlinker:'
+        '-Xcxx[Pass flag through to all C++ compiler invocations]:Xcxx:'
+        '--triple:triple:'
+        '--sdk:sdk:_files -/'
+        '--toolchain:toolchain:_files -/'
+        '--sanitize[Turn on runtime checks for erroneous behavior, possible values: address, thread, undefined, scudo]:sanitize:(address thread undefined scudo)'
+        '--auto-index-store[Enable or disable indexing-while-building feature]'
+        '--enable-index-store[Enable or disable indexing-while-building feature]'
+        '--disable-index-store[Enable or disable indexing-while-building feature]'
+        '--enable-parseable-module-interfaces'
+        '(--jobs -j)'{--jobs,-j}'[The number of jobs to spawn in parallel during the build process]:jobs:'
+        '--emit-swift-module-separately'
+        '--use-integrated-swift-driver'
+        '--explicit-target-dependency-import-check:explicit-target-dependency-import-check:'
+        '--experimental-explicit-module-build'
+        '--build-system:build-system:(native xcode)'
+        '--enable-dead-strip[Disable/enable dead code stripping by the linker]'
+        '--disable-dead-strip[Disable/enable dead code stripping by the linker]'
+        '--static-swift-stdlib[Link Swift stdlib statically]'
+        '--no-static-swift-stdlib[Link Swift stdlib statically]'
+        '--repl[Launch Swift REPL for the package]'
+        '--debugger[Launch the executable in a debugger session]'
+        '--run[Launch the executable with the provided arguments]'
+        '--skip-build[Skip building the executable product]'
+        '--build-tests[Build both source and test targets]'
+        ':executable:{local -a list; list=(${(f)"$(swift package completion-tool list-executables)"}); _describe '''' list}'
+        ':arguments:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_build() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--package-path[Specify the package path to operate on (default current directory). This changes the working directory before any other operation]:package-path:_files -/'
+        '--cache-path[Specify the shared cache directory path]:cache-path:_files -/'
+        '--config-path[Specify the shared configuration directory path]:config-path:_files -/'
+        '--security-path[Specify the shared security directory path]:security-path:_files -/'
+        '--scratch-path[Specify a custom scratch directory path (default .build)]:scratch-path:_files -/'
+        '--pkg-config-path[Specify alternative path to search for pkg-config `.pc` files. Use the option multiple times to
+        specify more than one path.]:pkg-config-path:_files -/'
+        '--enable-dependency-cache[Use a shared cache when fetching dependencies]'
+        '--disable-dependency-cache[Use a shared cache when fetching dependencies]'
+        '--enable-build-manifest-caching'
+        '--disable-build-manifest-caching'
+        '--manifest-cache[Caching mode of Package.swift manifests (shared: shared cache, local: package'"'"'s build directory, none: disabled]:manifest-cache:'
+        '(--verbose -v)'{--verbose,-v}'[Increase verbosity to include informational output]'
+        '(--very-verbose --vv)'{--very-verbose,--vv}'[Increase verbosity to include debug output]'
+        '(--quiet -q)'{--quiet,-q}'[Decrease verbosity to only include error output.]'
+        '--disable-sandbox[Disable using the sandbox when executing subprocesses]'
+        '--netrc[Use netrc file even in cases where other credential stores are preferred]'
+        '--enable-netrc[Load credentials from a netrc file]'
+        '--disable-netrc[Load credentials from a netrc file]'
+        '--netrc-file[Specify the netrc file path]:netrc-file:_files'
+        '--enable-keychain[Search credentials in macOS keychain]'
+        '--disable-keychain[Search credentials in macOS keychain]'
+        '--resolver-fingerprint-checking:resolver-fingerprint-checking:'
+        '--resolver-signing-entity-checking:resolver-signing-entity-checking:'
+        '--enable-signature-validation[Validate signature of a signed package release downloaded from registry]'
+        '--disable-signature-validation[Validate signature of a signed package release downloaded from registry]'
+        '--enable-prefetching'
+        '--disable-prefetching'
+        '(--force-resolved-versions --disable-automatic-resolution --only-use-versions-from-resolved-file)'{--force-resolved-versions,--disable-automatic-resolution,--only-use-versions-from-resolved-file}'[Only use versions from the Package.resolved file and fail resolution if it is out-of-date]'
+        '--skip-update[Skip updating dependencies from their remote during a resolution]'
+        '--disable-scm-to-registry-transformation[disable source control to registry transformation]'
+        '--use-registry-identity-for-scm[look up source control dependencies in the registry and use their registry identity when possible to help deduplicate across the two origins]'
+        '--replace-scm-with-registry[look up source control dependencies in the registry and use the registry to retrieve them instead of source control when possible]'
+        '--default-registry-url[Default registry URL to use, instead of the registries.json configuration file]:default-registry-url:'
+        '(--configuration -c)'{--configuration,-c}'[Build with configuration]:configuration:(debug release)'
+        '-Xcc[Pass flag through to all C compiler invocations]:Xcc:'
+        '-Xswiftc[Pass flag through to all Swift compiler invocations]:Xswiftc:'
+        '-Xlinker[Pass flag through to all linker invocations]:Xlinker:'
+        '-Xcxx[Pass flag through to all C++ compiler invocations]:Xcxx:'
+        '--triple:triple:'
+        '--sdk:sdk:_files -/'
+        '--toolchain:toolchain:_files -/'
+        '--sanitize[Turn on runtime checks for erroneous behavior, possible values: address, thread, undefined, scudo]:sanitize:(address thread undefined scudo)'
+        '--auto-index-store[Enable or disable indexing-while-building feature]'
+        '--enable-index-store[Enable or disable indexing-while-building feature]'
+        '--disable-index-store[Enable or disable indexing-while-building feature]'
+        '--enable-parseable-module-interfaces'
+        '(--jobs -j)'{--jobs,-j}'[The number of jobs to spawn in parallel during the build process]:jobs:'
+        '--emit-swift-module-separately'
+        '--use-integrated-swift-driver'
+        '--explicit-target-dependency-import-check:explicit-target-dependency-import-check:'
+        '--experimental-explicit-module-build'
+        '--build-system:build-system:(native xcode)'
+        '--enable-dead-strip[Disable/enable dead code stripping by the linker]'
+        '--disable-dead-strip[Disable/enable dead code stripping by the linker]'
+        '--static-swift-stdlib[Link Swift stdlib statically]'
+        '--no-static-swift-stdlib[Link Swift stdlib statically]'
+        '--build-tests[Build both source and test targets]'
+        '--show-bin-path[Print the binary output path]'
+        '--print-manifest-job-graph[Write the command graph for the build manifest as a graphviz file]'
+        '--target[Build the specified target]:target:'
+        '--product[Build the specified product]:product:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_test() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--package-path[Specify the package path to operate on (default current directory). This changes the working directory before any other operation]:package-path:_files -/'
+        '--cache-path[Specify the shared cache directory path]:cache-path:_files -/'
+        '--config-path[Specify the shared configuration directory path]:config-path:_files -/'
+        '--security-path[Specify the shared security directory path]:security-path:_files -/'
+        '--scratch-path[Specify a custom scratch directory path (default .build)]:scratch-path:_files -/'
+        '--pkg-config-path[Specify alternative path to search for pkg-config `.pc` files. Use the option multiple times to
+        specify more than one path.]:pkg-config-path:_files -/'
+        '--enable-dependency-cache[Use a shared cache when fetching dependencies]'
+        '--disable-dependency-cache[Use a shared cache when fetching dependencies]'
+        '--enable-build-manifest-caching'
+        '--disable-build-manifest-caching'
+        '--manifest-cache[Caching mode of Package.swift manifests (shared: shared cache, local: package'"'"'s build directory, none: disabled]:manifest-cache:'
+        '(--verbose -v)'{--verbose,-v}'[Increase verbosity to include informational output]'
+        '(--very-verbose --vv)'{--very-verbose,--vv}'[Increase verbosity to include debug output]'
+        '(--quiet -q)'{--quiet,-q}'[Decrease verbosity to only include error output.]'
+        '--disable-sandbox[Disable using the sandbox when executing subprocesses]'
+        '--netrc[Use netrc file even in cases where other credential stores are preferred]'
+        '--enable-netrc[Load credentials from a netrc file]'
+        '--disable-netrc[Load credentials from a netrc file]'
+        '--netrc-file[Specify the netrc file path]:netrc-file:_files'
+        '--enable-keychain[Search credentials in macOS keychain]'
+        '--disable-keychain[Search credentials in macOS keychain]'
+        '--resolver-fingerprint-checking:resolver-fingerprint-checking:'
+        '--resolver-signing-entity-checking:resolver-signing-entity-checking:'
+        '--enable-signature-validation[Validate signature of a signed package release downloaded from registry]'
+        '--disable-signature-validation[Validate signature of a signed package release downloaded from registry]'
+        '--enable-prefetching'
+        '--disable-prefetching'
+        '(--force-resolved-versions --disable-automatic-resolution --only-use-versions-from-resolved-file)'{--force-resolved-versions,--disable-automatic-resolution,--only-use-versions-from-resolved-file}'[Only use versions from the Package.resolved file and fail resolution if it is out-of-date]'
+        '--skip-update[Skip updating dependencies from their remote during a resolution]'
+        '--disable-scm-to-registry-transformation[disable source control to registry transformation]'
+        '--use-registry-identity-for-scm[look up source control dependencies in the registry and use their registry identity when possible to help deduplicate across the two origins]'
+        '--replace-scm-with-registry[look up source control dependencies in the registry and use the registry to retrieve them instead of source control when possible]'
+        '--default-registry-url[Default registry URL to use, instead of the registries.json configuration file]:default-registry-url:'
+        '(--configuration -c)'{--configuration,-c}'[Build with configuration]:configuration:(debug release)'
+        '-Xcc[Pass flag through to all C compiler invocations]:Xcc:'
+        '-Xswiftc[Pass flag through to all Swift compiler invocations]:Xswiftc:'
+        '-Xlinker[Pass flag through to all linker invocations]:Xlinker:'
+        '-Xcxx[Pass flag through to all C++ compiler invocations]:Xcxx:'
+        '--triple:triple:'
+        '--sdk:sdk:_files -/'
+        '--toolchain:toolchain:_files -/'
+        '--sanitize[Turn on runtime checks for erroneous behavior, possible values: address, thread, undefined, scudo]:sanitize:(address thread undefined scudo)'
+        '--auto-index-store[Enable or disable indexing-while-building feature]'
+        '--enable-index-store[Enable or disable indexing-while-building feature]'
+        '--disable-index-store[Enable or disable indexing-while-building feature]'
+        '--enable-parseable-module-interfaces'
+        '(--jobs -j)'{--jobs,-j}'[The number of jobs to spawn in parallel during the build process]:jobs:'
+        '--emit-swift-module-separately'
+        '--use-integrated-swift-driver'
+        '--explicit-target-dependency-import-check:explicit-target-dependency-import-check:'
+        '--experimental-explicit-module-build'
+        '--build-system:build-system:(native xcode)'
+        '--enable-dead-strip[Disable/enable dead code stripping by the linker]'
+        '--disable-dead-strip[Disable/enable dead code stripping by the linker]'
+        '--static-swift-stdlib[Link Swift stdlib statically]'
+        '--no-static-swift-stdlib[Link Swift stdlib statically]'
+        '--skip-build[Skip building the test target]'
+        '--test-product[Test the specified product.]:test-product:'
+        '--parallel[Run the tests in parallel.]'
+        '--num-workers[Number of tests to execute in parallel.]:num-workers:'
+        '(--list-tests -l)'{--list-tests,-l}'[Lists test methods in specifier format]'
+        '(--show-codecov-path --show-code-coverage-path --show-coverage-path)'{--show-codecov-path,--show-code-coverage-path,--show-coverage-path}'[Print the path of the exported code coverage JSON file]'
+        '(-s --specifier)'{-s,--specifier}':specifier:'
+        '--filter[Run test cases matching regular expression, Format: <test-target>.<test-case> or <test-target>.<test-case>/<test>]:filter:'
+        '--skip[Skip test cases matching regular expression, Example: --skip PerformanceTests]:skip:'
+        '--xunit-output[Path where the xUnit xml file should be generated.]:xunit-output:_files -/'
+        '--enable-testable-imports[Enable or disable testable imports. Enabled by default.]'
+        '--disable-testable-imports[Enable or disable testable imports. Enabled by default.]'
+        '--enable-code-coverage[Enable code coverage]'
+        '--disable-code-coverage[Enable code coverage]'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+    case $state in
+        (command)
+            local subcommands
+            subcommands=(
+                'list:Lists test methods in specifier format'
+                'generate-linuxmain:Generate LinuxMain.swift (deprecated)'
+            )
+            _describe "subcommand" subcommands
+            ;;
+        (arg)
+            case ${words[1]} in
+                (list)
+                    _swift_test_list
+                    ;;
+                (generate-linuxmain)
+                    _swift_test_generate-linuxmain
+                    ;;
+            esac
+            ;;
+    esac
+
+    return ret
+}
+
+_swift_test_list() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--skip-build[Skip building the test target]'
+        '--test-product[Test the specified product.]:test-product:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_test_generate-linuxmain() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--package-path[Specify the package path to operate on (default current directory). This changes the working directory before any other operation]:package-path:_files -/'
+        '--cache-path[Specify the shared cache directory path]:cache-path:_files -/'
+        '--config-path[Specify the shared configuration directory path]:config-path:_files -/'
+        '--security-path[Specify the shared security directory path]:security-path:_files -/'
+        '--scratch-path[Specify a custom scratch directory path (default .build)]:scratch-path:_files -/'
+        '--pkg-config-path[Specify alternative path to search for pkg-config `.pc` files. Use the option multiple times to
+        specify more than one path.]:pkg-config-path:_files -/'
+        '--enable-dependency-cache[Use a shared cache when fetching dependencies]'
+        '--disable-dependency-cache[Use a shared cache when fetching dependencies]'
+        '--enable-build-manifest-caching'
+        '--disable-build-manifest-caching'
+        '--manifest-cache[Caching mode of Package.swift manifests (shared: shared cache, local: package'"'"'s build directory, none: disabled]:manifest-cache:'
+        '(--verbose -v)'{--verbose,-v}'[Increase verbosity to include informational output]'
+        '(--very-verbose --vv)'{--very-verbose,--vv}'[Increase verbosity to include debug output]'
+        '(--quiet -q)'{--quiet,-q}'[Decrease verbosity to only include error output.]'
+        '--disable-sandbox[Disable using the sandbox when executing subprocesses]'
+        '--netrc[Use netrc file even in cases where other credential stores are preferred]'
+        '--enable-netrc[Load credentials from a netrc file]'
+        '--disable-netrc[Load credentials from a netrc file]'
+        '--netrc-file[Specify the netrc file path]:netrc-file:_files'
+        '--enable-keychain[Search credentials in macOS keychain]'
+        '--disable-keychain[Search credentials in macOS keychain]'
+        '--resolver-fingerprint-checking:resolver-fingerprint-checking:'
+        '--resolver-signing-entity-checking:resolver-signing-entity-checking:'
+        '--enable-signature-validation[Validate signature of a signed package release downloaded from registry]'
+        '--disable-signature-validation[Validate signature of a signed package release downloaded from registry]'
+        '--enable-prefetching'
+        '--disable-prefetching'
+        '(--force-resolved-versions --disable-automatic-resolution --only-use-versions-from-resolved-file)'{--force-resolved-versions,--disable-automatic-resolution,--only-use-versions-from-resolved-file}'[Only use versions from the Package.resolved file and fail resolution if it is out-of-date]'
+        '--skip-update[Skip updating dependencies from their remote during a resolution]'
+        '--disable-scm-to-registry-transformation[disable source control to registry transformation]'
+        '--use-registry-identity-for-scm[look up source control dependencies in the registry and use their registry identity when possible to help deduplicate across the two origins]'
+        '--replace-scm-with-registry[look up source control dependencies in the registry and use the registry to retrieve them instead of source control when possible]'
+        '--default-registry-url[Default registry URL to use, instead of the registries.json configuration file]:default-registry-url:'
+        '(--configuration -c)'{--configuration,-c}'[Build with configuration]:configuration:(debug release)'
+        '-Xcc[Pass flag through to all C compiler invocations]:Xcc:'
+        '-Xswiftc[Pass flag through to all Swift compiler invocations]:Xswiftc:'
+        '-Xlinker[Pass flag through to all linker invocations]:Xlinker:'
+        '-Xcxx[Pass flag through to all C++ compiler invocations]:Xcxx:'
+        '--triple:triple:'
+        '--sdk:sdk:_files -/'
+        '--toolchain:toolchain:_files -/'
+        '--sanitize[Turn on runtime checks for erroneous behavior, possible values: address, thread, undefined, scudo]:sanitize:(address thread undefined scudo)'
+        '--auto-index-store[Enable or disable indexing-while-building feature]'
+        '--enable-index-store[Enable or disable indexing-while-building feature]'
+        '--disable-index-store[Enable or disable indexing-while-building feature]'
+        '--enable-parseable-module-interfaces'
+        '(--jobs -j)'{--jobs,-j}'[The number of jobs to spawn in parallel during the build process]:jobs:'
+        '--emit-swift-module-separately'
+        '--use-integrated-swift-driver'
+        '--explicit-target-dependency-import-check:explicit-target-dependency-import-check:'
+        '--experimental-explicit-module-build'
+        '--build-system:build-system:(native xcode)'
+        '--enable-dead-strip[Disable/enable dead code stripping by the linker]'
+        '--disable-dead-strip[Disable/enable dead code stripping by the linker]'
+        '--static-swift-stdlib[Link Swift stdlib statically]'
+        '--no-static-swift-stdlib[Link Swift stdlib statically]'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+    case $state in
+        (command)
+            local subcommands
+            subcommands=(
+                'clean:Delete build artifacts'
+                'purge-cache:Purge the global repository cache.'
+                'reset:Reset the complete cache/build directory'
+                'update:Update package dependencies'
+                'describe:Describe the current package'
+                'init:Initialize a new package'
+                'diagnose-api-breaking-changes:Diagnose API-breaking changes to Swift modules in a package'
+                'dump-symbol-graph:Dump Symbol Graph'
+                'dump-package:Print parsed Package.swift as JSON'
+                'edit:Put a package in editable mode'
+                'unedit:Remove a package from editable mode'
+                'config:Manipulate configuration of the package'
+                'resolve:Resolve package dependencies'
+                'show-dependencies:Print the resolved dependency graph'
+                'tools-version:Manipulate tools version of the current package'
+                'compute-checksum:Compute the checksum for a binary artifact.'
+                'archive-source:Create a source archive for the package'
+                'completion-tool:Completion tool (for shell completions)'
+                'plugin:Invoke a command plugin or perform other actions on command plugins'
+            )
+            _describe "subcommand" subcommands
+            ;;
+        (arg)
+            case ${words[1]} in
+                (clean)
+                    _swift_package_clean
+                    ;;
+                (purge-cache)
+                    _swift_package_purge-cache
+                    ;;
+                (reset)
+                    _swift_package_reset
+                    ;;
+                (update)
+                    _swift_package_update
+                    ;;
+                (describe)
+                    _swift_package_describe
+                    ;;
+                (init)
+                    _swift_package_init
+                    ;;
+                (diagnose-api-breaking-changes)
+                    _swift_package_diagnose-api-breaking-changes
+                    ;;
+                (dump-symbol-graph)
+                    _swift_package_dump-symbol-graph
+                    ;;
+                (dump-package)
+                    _swift_package_dump-package
+                    ;;
+                (edit)
+                    _swift_package_edit
+                    ;;
+                (unedit)
+                    _swift_package_unedit
+                    ;;
+                (config)
+                    _swift_package_config
+                    ;;
+                (resolve)
+                    _swift_package_resolve
+                    ;;
+                (show-dependencies)
+                    _swift_package_show-dependencies
+                    ;;
+                (tools-version)
+                    _swift_package_tools-version
+                    ;;
+                (compute-checksum)
+                    _swift_package_compute-checksum
+                    ;;
+                (archive-source)
+                    _swift_package_archive-source
+                    ;;
+                (completion-tool)
+                    _swift_package_completion-tool
+                    ;;
+                (plugin)
+                    _swift_package_plugin
+                    ;;
+            esac
+            ;;
+    esac
+
+    return ret
+}
+
+_swift_package_clean() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_purge-cache() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_reset() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_update() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(--dry-run -n)'{--dry-run,-n}'[Display the list of dependencies that can be updated]'
+        ':packages:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_describe() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--type[json | text]:type:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_init() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--type[Package type:]:type:'
+        '--name[Provide custom package name]:name:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_diagnose-api-breaking-changes() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--breakage-allowlist-path[The path to a text file containing breaking changes which should be ignored by the API comparison. Each ignored breaking change in the file should appear on its own line and contain the exact message to be ignored (e.g. '"'"'API breakage: func foo() has been removed'"'"').]:breakage-allowlist-path:_files -/'
+        ':treeish:'
+        '--products[One or more products to include in the API comparison. If present, only the specified products (and any targets specified using `--targets`) will be compared.]:products:'
+        '--targets[One or more targets to include in the API comparison. If present, only the specified targets (and any products specified using `--products`) will be compared.]:targets:'
+        '--baseline-dir[The path to a directory used to store API baseline files. If unspecified, a temporary directory will be used.]:baseline-dir:_files -/'
+        '--regenerate-baseline[Regenerate the API baseline, even if an existing one is available.]'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_dump-symbol-graph() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--pretty-print[Pretty-print the output JSON.]'
+        '--skip-synthesized-members[Skip members inherited through classes or default implementations.]'
+        '--minimum-access-level[Include symbols with this access level or more. Possible values: private | fileprivate | internal | public | open]:minimum-access-level:(private fileprivate internal public open)'
+        '--skip-inherited-docs[Skip emitting doc comments for members inherited through classes or default implementations.]'
+        '--include-spi-symbols[Add symbols with SPI information to the symbol graph.]'
+        '--emit-extension-block-symbols[Emit extension block symbols for extensions to external types or directly associate members and conformances with the extended nominal.]'
+        '--omit-extension-block-symbols[Emit extension block symbols for extensions to external types or directly associate members and conformances with the extended nominal.]'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_dump-package() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_edit() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--revision[The revision to edit]:revision:'
+        '--branch[The branch to create]:branch:'
+        '--path[Create or use the checkout at this path]:path:_files -/'
+        ':package-name:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_unedit() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--force[Unedit the package even if it has uncommitted and unpushed changes]'
+        ':package-name:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_config() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+    case $state in
+        (command)
+            local subcommands
+            subcommands=(
+                'set-mirror:Set a mirror for a dependency'
+                'unset-mirror:Remove an existing mirror'
+                'get-mirror:Print mirror configuration for the given package dependency'
+            )
+            _describe "subcommand" subcommands
+            ;;
+        (arg)
+            case ${words[1]} in
+                (set-mirror)
+                    _swift_package_config_set-mirror
+                    ;;
+                (unset-mirror)
+                    _swift_package_config_unset-mirror
+                    ;;
+                (get-mirror)
+                    _swift_package_config_get-mirror
+                    ;;
+            esac
+            ;;
+    esac
+
+    return ret
+}
+
+_swift_package_config_set-mirror() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--original[The original url or identity]:original:'
+        '--mirror[The mirror url or identity]:mirror:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_config_unset-mirror() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--original[The original url or identity]:original:'
+        '--mirror[The mirror url or identity]:mirror:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_config_get-mirror() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--original[The original url or identity]:original:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_resolve() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--version[The version to resolve at]:version:'
+        '--branch[The branch to resolve at]:branch:'
+        '--revision[The revision to resolve at]:revision:'
+        ':package-name:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_show-dependencies() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--format[text | dot | json | flatlist]:format:'
+        '(--output-path -o)'{--output-path,-o}'[The absolute or relative path to output the resolved dependency graph.]:output-path:_files -/'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_tools-version() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--set-current[Set tools version of package to the current tools version in use]'
+        '--set[Set tools version of package to the given value]:set:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_compute-checksum() {
+    integer ret=1
+    local -a args
+    args+=(
+        ':path:_files -/'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_archive-source() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(-o --output)'{-o,--output}'[The absolute or relative path for the generated source archive]:output:_files -/'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_completion-tool() {
+    integer ret=1
+    local -a args
+    args+=(
+        ':mode:(generate-bash-script generate-zsh-script generate-fish-script list-dependencies list-executables list-snippets)'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_package_plugin() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--list[List the available command plugins]'
+        '--allow-writing-to-package-directory[Allow the plugin to write to the package directory]'
+        '--allow-writing-to-directory[Allow the plugin to write to an additional directory]:allow-writing-to-directory:'
+        '--allow-network-connections:allow-network-connections:(none local all docker unixDomainSocket)'
+        ':command:'
+        ':arguments:'
+        '--version[Show the version.]'
+        '(-help -h --help)'{-help,-h,--help}'[Show help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_swift_help() {
+    integer ret=1
+    local -a args
+    args+=(
+        ':subcommands:'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+
+_custom_completion() {
+    local completions=("${(@f)$($*)}")
+    _describe '' completions
+}
+
+_swift

@@ -1,0 +1,56 @@
+dependencies:
+  plugins/gitfast:
+    repo: felipec/git-completion
+    branch: master
+    version: tag:v2.2
+    postcopy: |
+      set -e
+      rm -rf git-completion.plugin.zsh Makefile t tools
+      mv README.adoc MANUAL.adoc
+      mv -f src/* .
+      rmdir src
+  plugins/gradle:
+    repo: gradle/gradle-completion
+    branch: master
+    version: d8bc301a1fdeed8dc1dd9675138e1d9b7ddc5e4e
+    precopy: |
+      set -e
+      find . ! -name _gradle ! -name LICENSE -delete
+  plugins/history-substring-search:
+    repo: zsh-users/zsh-history-substring-search
+    branch: master
+    version: 14c8d2e0ffaee98f2df9850b19944f32546fdea5
+    precopy: |
+      set -e
+      rm -f zsh-history-substring-search.plugin.zsh
+      test -e zsh-history-substring-search.zsh && mv zsh-history-substring-search.zsh history-substring-search.zsh
+    postcopy: |
+      set -e
+      test -e dependencies/OMZ-README.md && cat dependencies/OMZ-README.md >> README.md
+  plugins/kube-ps1:
+    repo: jonmosco/kube-ps1
+    branch: master
+    version: e19c9ee867c5655814c384a6bf543e330e6ef1b7
+    precopy: |
+      set -e
+      find . ! -name kube-ps1.sh ! -name LICENSE ! -name README.md -delete
+      test -e kube-ps1.sh && mv kube-ps1.sh kube-ps1.plugin.zsh
+  plugins/wd:
+    repo: mfaerevaag/wd
+    branch: master
+    version: tag:v0.10.1
+    precopy: |
+      set -e
+      rm -r test
+      rm install.sh tty.gif wd.1
+  plugins/z:
+    branch: master
+    repo: agkozak/zsh-z
+    version: acd0e1984df350c189f8f9c4956ec586b6c73fca
+    precopy: |
+      set -e
+      test -e README.md && mv -f README.md MANUAL.md
+    postcopy: |
+      set -e
+      test -e _zshz && mv -f _zshz _z
+      test -e zsh-z.plugin.zsh && mv -f zsh-z.plugin.zsh z.plugin.zsh

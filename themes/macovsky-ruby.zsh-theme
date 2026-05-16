@@ -1,0 +1,1 @@
+macovsky.zsh-theme

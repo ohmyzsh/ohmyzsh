@@ -1,0 +1,73 @@
+#compdef multipass
+
+_multipass_get_command_list () {
+  # Sample output:
+  # $ multipass --help
+  # ...
+  # Options:
+  #   -h, --help     Display this help
+  #   -v, --verbose  Increase logging verbosity. Repeat the 'v' in the short option
+  #                  for more detail. Maximum verbosity is obtained with 4 (or more)
+  #                  v's, i.e. -vvvv.
+  # ...
+  # Available commands:
+  #   alias     Create an alias
+  #   aliases   List available aliases
+  #   ...
+  #
+  $_comp_command1 --help | sed '1,/Available commands/d' | awk '/^[ \t]*[a-z]+/ { print $1 }'
+}
+
+_multipass_get_args_list () {
+  # Sample output:
+  # $ multpass help stop
+  # ...
+  # Options:
+  # -h, --help         Display this help
+  # -v, --verbose      Increase logging verbosity. Repeat the 'v' in the short
+  #                     option for more detail. Maximum verbosity is obtained with
+  #                     4 (or more) v's, i.e. -vvvv.
+  # --all              Stop all instances
+  # -t, --time <time>  Time from now, in minutes, to delay shutdown of the
+  #                     instance
+  # -c, --cancel       Cancel a pending delayed shutdown
+  #
+  # Arguments:
+  # name               Names of instances to stop. If omitted, and without the
+  #                     --all option, 'primary' will be assumed.
+  #
+  local arg_name=$($_comp_command1 help ${words[2]} | sed '1,/Arguments/d' | awk '/^[ \t]*[a-z]+/ { print $1; exit }')
+
+  case $arg_name in
+    name)
+      # Sample output:
+      # $ multipass list
+      # Name                    State             IPv4             Image
+      # workable-poacher        Running           10.2.0.28        Ubuntu openHAB Home Appliance
+      #
+      $_comp_command1 list | sed '1d' | awk '/^[ \t]*[^ ]+/ { print $1 }'
+    ;;
+    command)
+      _multipass_get_command_list
+    ;;
+  esac
+}
+
+_multipass () {
+  typeset -A opt_args
+
+  _arguments \
+    '1: :->command'\
+    '*: :->args'
+
+  case $state in
+    command)
+      compadd $(_multipass_get_command_list)
+    ;;
+    *)
+      compadd $(_multipass_get_args_list)
+    ;;
+  esac
+}
+
+_multipass "$@"

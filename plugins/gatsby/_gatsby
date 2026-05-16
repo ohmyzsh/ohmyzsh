@@ -1,0 +1,24 @@
+#compdef gatsby
+#autoload
+
+# in order to make this work, you will need to have gatsby
+# https://www.gatsbyjs.org/
+
+local -a _1st_arguments
+_1st_arguments=(
+'develop:Start development server. Watches files, rebuilds, and hot reloads if something changes'
+'build:Build a Gatsby project.'
+'serve:Serve previously built Gatsby site.'
+'info:Get environment information for debugging and issue reporting'
+'clean:Wipe the local gatsby environment including built assets and cache'
+'repl:Get a node repl with context of Gatsby environment, see (add docs link here)'
+'new: [rootPath] [starter]  Create new Gatsby project.'
+'telemetry:Enable or disable Gatsby anonymous analytics collection.'
+)
+
+_arguments -C '*:: :->subcmds' && return 0
+
+if (( CURRENT == 1 )); then
+    _describe -t commands "gatsby subcommand" _1st_arguments
+    return
+fi

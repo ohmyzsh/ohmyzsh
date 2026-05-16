@@ -1,0 +1,133 @@
+#compdef vagrant
+#autoload
+
+# vagrant zsh completion
+
+local -a _1st_arguments
+_1st_arguments=(
+    'box:Box commands'
+    'cloud:Manages everything related to Vagrant Cloud'
+    'connect:Connects to a remotely shared Vagrant environment'
+    'destroy:Destroys the vagrant environment'
+    'docker-logs:Outputs the logs from the Docker container'
+    'docker-run:Run a one-off command in the context of a container'
+    'global-status:Reports the status of all active Vagrant environments on the system'
+    'halt:Halts the currently running vagrant environment'
+    'help:Shows the help for a subcommand'
+    'init:[box_name] [box_url] Initializes current folder for Vagrant usage'
+    'list-commands:Outputs all available Vagrant subcommands, even non-primary ones'
+    'login:Authenticates against a Vagrant Cloud server to access protected boxes'
+    'package:Packages a vagrant environment for distribution'
+    'plugin:Plugin commands'
+    'port:Displays information about guest port mappings'
+    'provision:Run the provisioner'
+    'push:Deploys code in this environment to a configured destination'
+    'rdp:Connects to machine via RDP'
+    'reload:Reload the vagrant environment'
+    'resume:Resumes a suspended vagrant environment'
+    'rsync:Syncs rsync synced folders to remote machine'
+    'rsync-auto:Syncs rsync synced folders automatically when files change'
+    'share:Shares your Vagrant environment with anyone in the world'
+    'snapshot:Manage snapshots with the guest machine'
+    'ssh:SSH into the currently running environment'
+    'ssh-config:Outputs .ssh/config valid syntax for connecting to this environment via ssh'
+    'status:Shows the status of the current Vagrant environment'
+    'suspend:Suspends the currently running vagrant environment'
+    'snapshot:Used to manage snapshots with the guest machine'
+    'up:Creates the vagrant environment'
+    'validate:Validates the Vagrantfile'
+    'version:Prints current and latest Vagrant version'
+    '--help:[TASK] Describe available tasks or one specific task'
+    '--version:Prints the Vagrant version information'
+)
+
+local -a _box_arguments
+_box_arguments=(
+    'add:ADDRESS Adds a box to the system'
+    'help:COMMAND List subcommands'
+    'list:Lists all installed boxes'
+    'outdated:Checks if a box has newer version'
+    'remove:NAME Removes a box from the system'
+    'repackage:NAME PROVIDER VERSION Repackages an installed box into a `.box` file'
+    'update:Updates box to a newer version, if available'
+)
+
+__task_list ()
+{
+    local expl
+    declare -a tasks
+
+    tasks=(box destroy halt init package port provision reload resume ssh ssh_config status suspend up version)
+
+    _wanted tasks expl 'help' compadd $tasks
+}
+
+__box_list ()
+{
+    _wanted application expl 'command' compadd $(command vagrant box list | sed -e 's/  *(.*)//g;s/ /\\ /g')
+}
+
+__vm_list ()
+{
+    _wanted application expl 'command' compadd $(command grep "${VAGRANT_CWD:-.}/Vagrantfile" -oe '^[^#]*\.vm\.define *[:"]\([a-zA-Z0-9\._-]\+\)' 2>/dev/null | awk '{print substr($2, 2)}')
+    _wanted application expl 'command' compadd $(command ls "${VAGRANT_CWD:-.}/.vagrant/machines/" 2>/dev/null)
+}
+
+__vagrant-box ()
+{
+    local curcontext="$curcontext" state line
+    typeset -A opt_args
+
+    _arguments -C \
+        ':command:->command' \
+        '*::options:->options'
+
+   case $state in
+       (command)
+           _describe -t commands "vagrant subcommand" _box_arguments
+           return
+       ;;
+
+       (options)
+           case $line[1] in
+               (repackage|remove)
+                   _arguments ':feature:__box_list'
+               ;;
+           esac
+       ;;
+    esac
+}
+
+
+
+
+local expl
+local -a boxes installed_boxes
+
+local curcontext="$curcontext" state line
+typeset -A opt_args
+
+_arguments -C \
+    ':command:->command' \
+    '*::options:->options'
+
+case $state in
+  (command)
+      _describe -t commands "vagrant subcommand" _1st_arguments
+      return
+  ;;
+
+  (options)
+    case $line[1] in
+      (help)
+         _arguments ':feature:__task_list'
+      ;;
+
+      (box)
+          __vagrant-box
+      ;;
+      (up|provision|port|package|destroy|reload|ssh|ssh-config|halt|resume|status)
+      _arguments ':feature:__vm_list'
+    esac
+  ;;
+esac
