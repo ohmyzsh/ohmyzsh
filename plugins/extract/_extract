@@ -1,0 +1,57 @@
+#compdef extract
+#autoload
+
+local -a exts=(
+  7z
+  aar
+  apk
+  bz2
+  cab
+  cpio
+  crx
+  deb
+  ear
+  gz
+  ipa
+  ipsw
+  jar
+  lrz
+  lz4
+  lzma
+  obscpio
+  pk3
+  pk4
+  pk7
+  rar
+  rpm
+  sublime-package
+  tar
+  tar.bz2
+  tar.gz
+  tar.lrz
+  tar.lz
+  tar.lz4
+  tar.xz
+  tar.zma
+  tar.zst
+  tbz
+  tbz2
+  tgz
+  tlz
+  txz
+  tzst
+  vsix
+  war
+  whl
+  xpi
+  xz
+  Z
+  zip
+  zpaq
+  zst
+)
+
+_arguments \
+  '(-r --remove)'{-r,--remove}'[Remove archive.]' \
+  "*::archive file:_files -g '(#i)*.(${(j:|:)exts})(-.)'" \
+    && return 0

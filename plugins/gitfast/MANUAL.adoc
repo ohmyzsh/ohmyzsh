@@ -1,0 +1,40 @@
+This project is a friendly fork of the official Git completion
+(`contrib/completion`) and prompt scripts for Bash, Zsh, and possibly other
+shells.
+
+Most Git developers use the Bash shell, for which the completion scripts work
+rather well, however, Zsh is typically neglected. I've sent many patches to fix
+the issues, many have been merged, but many have been ignored, thus the need for
+a canonical location of a good, working Zsh completion.
+
+There are advantages for Bash users too. Currently the scripts under `contrib` are tied to the
+specific Git version, for example the completion scripts of version v2.40
+(https://git.kernel.org/pub/scm/git/git.git/plain/contrib/completion/git-completion.bash?h=v2.40.0[git-completion.bash])
+have issues with older versions of Git (e.g. v2.33); the ones in
+this project don't.
+
+With `git-completion` you can be sure you are using the latest completion that
+works in both shells, and any Git version.
+
+This is a sister project of the
+https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gitfast[Oh My Zsh
+gitfast] plugin (that I also maintain), which has similar needs.
+
+== Installation ==
+
+* https://github.com/felipec/git-completion/wiki/Bash[Bash instructions]
+* https://github.com/felipec/git-completion/wiki/Zsh[Zsh instructions]
+
+== Improvements from upstream ==
+
+This is a short list of the benefits you get:
+
+* Easier installation
+* Tons of bug fixes
+* Works with older versions of git
+* Zsh: much more options
+* Zsh: quoting works properly
+* Zsh: automatic suffix removal
+
+For a full list of all the patches on top of upstream git check
+https://github.com/felipec/git-completion/wiki/Patches[Patches].
