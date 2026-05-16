@@ -30,6 +30,13 @@ if [[ -z "$HOMEBREW_PREFIX" ]]; then
   export HOMEBREW_PREFIX="$(brew --prefix)"
 fi
 
+# Ensure Homebrew's sbin directory is in PATH, as brew shellenv may not always
+# be sourced (e.g. when brew is already on PATH from a prior shellenv call).
+# This avoids "Homebrew's sbin was not found in your PATH" warnings.
+if [[ -d "$HOMEBREW_PREFIX/sbin" ]] && [[ ":$PATH:" != *":$HOMEBREW_PREFIX/sbin:"* ]]; then
+  export PATH="$HOMEBREW_PREFIX/sbin:$PATH"
+fi
+
 if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
   fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
 fi
