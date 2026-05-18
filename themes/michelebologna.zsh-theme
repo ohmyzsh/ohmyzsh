@@ -44,7 +44,7 @@ local current_dir="%~"
 local username_output="%(!..${username_color}${username}${reset}@)"
 local hostname_output="${hostname_color}${hostname}${reset}"
 local current_dir_output="${current_dir_color}${current_dir}${reset}"
-local jobs_bg="${red}fg: %j$reset"
+local jobs_bg="${red}jobs: %j$reset"
 local last_command_output="%(?.%(!.$red.$green).$yellow)"
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
