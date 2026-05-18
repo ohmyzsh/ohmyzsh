@@ -9,15 +9,19 @@ fi
 # pipenv >= 2026.5.0 removed this mechanism and switched to argcomplete-based
 # completion using register-python-argcomplete instead.
 
-if (( $+commands[register-python-argcomplete] )); then
-  # pipenv >= 2026.5.0 (argcomplete-based completion)
-  autoload -U bashcompinit
+autoload -Uz is-at-least
+
+_pipenv_version="${$(pipenv --version 2>/dev/null)#pipenv, version }"
+
+if is-at-least 2026.5.0 "$_pipenv_version" && (( $+commands[register-python-argcomplete] )); then
+  # argcomplete-based completion
+  autoload -Uz bashcompinit
   bashcompinit
 
   eval "$(register-python-argcomplete pipenv)"
 
 else
-  # pipenv < 2026.5.0 (legacy Click-based completion via _PIPENV_COMPLETE)
+  # legacy Click-based completion via _PIPENV_COMPLETE
 
   # If the completion file doesn't exist yet, we need to autoload it and
   # bind it to `pipenv`. Otherwise, compinit will have already done that.
