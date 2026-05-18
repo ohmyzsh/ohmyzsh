@@ -9,14 +9,41 @@ Usage: extract [-option] [file ...]
 
 Options:
     -r, --remove    Remove archive after unpacking.
+    -t, --to-directory <dir>  Extract to a specific directory instead of the current one.
 EOF
   fi
 
   local remove_archive=1
-  if [[ "$1" == "-r" ]] || [[ "$1" == "--remove" ]]; then
-    remove_archive=0
-    shift
-  fi
+  local target_directory=""
+
+  while (( $# > 0 )); do
+    case "$1" in
+      -r|--remove)
+        remove_archive=0
+        shift
+        ;;
+      -t|--to-directory)
+        shift
+        if (( $# == 0 )); then
+          echo "extract: -t/--to-directory requires a directory argument" >&2
+          return 1
+        fi
+
+        target_directory="$1"
+        shift
+
+        if [[ ! -d "$target_directory" ]]; then
+          echo "extract: '$target_directory' is not a valid directory" >&2
+          return 1
+        fi
+
+        target_directory="${target_directory%/}"
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
 
   local pwd="$PWD"
   while (( $# > 0 )); do
@@ -33,6 +60,10 @@ EOF
     # Remove the .tar extension if the file name is .tar.*
     if [[ $extract_dir =~ '\.tar$' ]]; then
       extract_dir="${extract_dir:r}"
+    fi
+
+    if [[ -n "$target_directory" ]]; then
+      extract_dir="$target_directory/${extract_dir:t}"
     fi
 
     # If there's a file or directory with the same name as the archive
