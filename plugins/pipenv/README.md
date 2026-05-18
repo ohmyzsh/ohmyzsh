@@ -10,7 +10,7 @@ plugins=(... pipenv ...)
 
 ## Features
 
-- Adds completion for pipenv
+- Adds completion for pipenv ([install the `argcomplete` package to get it working with pipenv >= 2026.5.0](https://pipenv.pypa.io/en/latest/shell.html#shell-completion))
 - Auto activates and deactivates pipenv shell
 - Adds short aliases for common pipenv commands
   - `pch` is aliased to `pipenv check`
