@@ -34,7 +34,7 @@ local reset="%{$reset_color%}"
 local -a color_array=($green $red $cyan $yellow $blue $magenta)
 
 local username_color=$blue
-local hostname_color=$color_array[$[((#HOST))%6+1]] # choose hostname color based on first character
+local hostname_color=$color_array[$(( (#HOST) % 6 + 1 ))] # choose hostname color based on first character
 local current_dir_color=$blue
 
 local username="%n"
