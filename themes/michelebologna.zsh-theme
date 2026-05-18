@@ -31,8 +31,7 @@ local blue="%{$fg_bold[blue]%}"
 local magenta="%{$fg_bold[magenta]%}"
 local reset="%{$reset_color%}"
 
-local -a color_array
-color_array=($green $red $cyan $yellow $blue $magenta)
+local -a color_array=($green $red $cyan $yellow $blue $magenta)
 
 local username_color=$blue
 local hostname_color=$color_array[$[((#HOST))%6+1]] # choose hostname color based on first character
