@@ -121,14 +121,22 @@ function _per-directory-history-addhistory() {
       true
   else
       print -Sr -- "${1%%$'\n'}"
-      # instantly write history if set options require it.
+      # always write to both history files so history is always
+      # preserved regardless of which mode the user is in.
+      fc -AI $HISTFILE
+      fc -AI $_per_directory_history_directory
       if [[ -o share_history ]] || \
          [[ -o inc_append_history ]] || \
          [[ -o inc_append_history_time ]]; then
-          fc -AI $HISTFILE
-          fc -AI $_per_directory_history_directory
+          : # already saved via fc -AI above
       fi
-      fc -p $_per_directory_history_directory
+      # When in directory mode, push the current history stack so
+      # subsequent searches use the per-directory history file.
+      # In global mode, skip the push so the global history remains
+      # active — the command was already saved to both files above.
+      if [[ $_per_directory_history_is_global == false ]]; then
+          fc -p $_per_directory_history_directory
+      fi
   fi
 }
 
