@@ -66,7 +66,7 @@ if [[ "$OSTYPE" = darwin* ]]; then
       if [[ "${BATTERY_SHOW_WATTS}" = "true" ]] ; then
         watts=$(get_charger_power)
       fi
-      echo "${watts}${BATTERY_CHARGING-⚡️}"
+      echo "${watts:-}${BATTERY_CHARGING-⚡️}"
     fi
   }
 
