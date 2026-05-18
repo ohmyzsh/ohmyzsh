@@ -31,11 +31,10 @@ local blue="%{$fg_bold[blue]%}"
 local magenta="%{$fg_bold[magenta]%}"
 local reset="%{$reset_color%}"
 
-local -a color_array
-color_array=($green $red $cyan $yellow $blue $magenta)
+local -a color_array=($green $red $cyan $yellow $blue $magenta)
 
 local username_color=$blue
-local hostname_color=$color_array[$[((#HOST))%6+1]] # choose hostname color based on first character
+local hostname_color=$color_array[$(( (#HOST) % 6 + 1 ))] # choose hostname color based on first character
 local current_dir_color=$blue
 
 local username="%n"
@@ -45,7 +44,7 @@ local current_dir="%~"
 local username_output="%(!..${username_color}${username}${reset}@)"
 local hostname_output="${hostname_color}${hostname}${reset}"
 local current_dir_output="${current_dir_color}${current_dir}${reset}"
-local jobs_bg="${red}fg: %j$reset"
+local jobs_bg="${red}jobs: %j$reset"
 local last_command_output="%(?.%(!.$red.$green).$yellow)"
 
 ZSH_THEME_GIT_PROMPT_PREFIX=""
@@ -55,10 +54,10 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 ZSH_THEME_GIT_PROMPT_UNTRACKED="$blue%%"
 ZSH_THEME_GIT_PROMPT_MODIFIED="$red*"
 ZSH_THEME_GIT_PROMPT_ADDED="$green+"
-ZSH_THEME_GIT_PROMPT_STASHED="$blue$"
+ZSH_THEME_GIT_PROMPT_STASHED="${blue}\$"
 ZSH_THEME_GIT_PROMPT_EQUAL_REMOTE="$green="
-ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE=">"
-ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="<"
+ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE="${green}>"
+ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE="${yellow}<"
 ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE="$red<>"
 
 function michelebologna_git_prompt {
