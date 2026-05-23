@@ -219,6 +219,7 @@ class Dependency:
             if status["has_updates"] is True:
                 short_sha = status["head_ref"][:8]
                 new_version = status["version"] if is_tag else short_sha
+                source_ref = new_version if is_tag else remote_branch
 
                 try:
                     branch_name = f"update/{self.path}/{new_version}"
@@ -227,7 +228,7 @@ class Dependency:
                     branch = Git.checkout_or_create_branch(branch_name)
 
                     # Update dependency files
-                    self.__apply_upstream_changes()
+                    self.__apply_upstream_changes(source_ref)
 
                     if not Git.repo_is_clean():
                         # Update dependencies.yml file
@@ -297,7 +298,7 @@ Check out the [list of changes]({status["compare_url"]}).
         dep_yaml = DependencyStore.update_dependency_version(self.path, new_version)
         DependencyStore.write_store(DEPS_YAML_FILE, dep_yaml)
 
-    def __apply_upstream_changes(self) -> None:
+    def __apply_upstream_changes(self, ref: str) -> None:
         # Patterns to ignore in copying files from upstream repo
         GLOBAL_IGNORE = [".git", ".github", ".gitignore"]
 
@@ -306,12 +307,11 @@ Check out the [list of changes]({status["compare_url"]}).
         postcopy = self.values.get("postcopy")
 
         repo = self.values["repo"]
-        branch = self.values["branch"]
         remote_url = f"https://github.com/{repo}.git"
         repo_dir = os.path.join(TMP_DIR, repo)
 
         # Clone repository
-        Git.clone(remote_url, branch, repo_dir, reclone=True)
+        Git.clone(remote_url, ref, repo_dir, reclone=True)
 
         # Run precopy on tmp repo
         if precopy is not None:
