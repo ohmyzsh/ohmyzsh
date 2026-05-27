@@ -1,19 +1,5 @@
 # ---------------------------------------------------------- #
 # Aliases and functions for juju (https://juju.is)           #
-# ---------------------------------------------------------- #
-
-# Load TAB completions
-source "${0:A:h}/_juju"
-
-# group-name '' enables visual separation between completion groups (e.g. models
-# vs controllers in juju switch <TAB>). This is a safe global setting that
-# improves completion display for all commands.
-zstyle ':completion:*' group-name ''
-# Show group headers only for juju completions.
-zstyle ':completion::complete:juju:*' format '%B%d%b'
-
-# ---------------------------------------------------------- #
-# Aliases (in alphabetic order)                              #
 #                                                            #
 # Generally,                                                 #
 #   - `!` means --force --no-wait -y                         #
@@ -168,7 +154,7 @@ jreld() {
 
 # Return Juju current controller
 jcontroller() {
-  local file=${JUJU_DATA:=~/.local/share/juju}/controllers.yaml
+  local file="${JUJU_DATA:-$HOME/.local/share/juju}/controllers.yaml"
   [[ -f "$file" ]] || return 1
 
   local controller="$(awk '/current-controller/ {print $2}' "$file")"
@@ -180,7 +166,7 @@ jcontroller() {
 
 # Return Juju current model
 jmodel() {
-  local file=${JUJU_DATA:=~/.local/share/juju}/models.yaml
+  local file="${JUJU_DATA:-$HOME/.local/share/juju}/models.yaml"
   [[ -f "$file" ]] || return 1
 
   local yqbin="$(whereis yq | awk '{print $2}')"

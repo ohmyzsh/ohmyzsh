@@ -167,11 +167,6 @@ _juju()
     __juju_debug "[_juju] curcontext: ${curcontext}"
     local -a completions
 
-    # Must be set at completion time (not just at sourcing time) so the
-    # completion system picks it up when rendering groups.
-    zstyle ':completion:*' group-name ''
-    zstyle ':completion::complete:juju:*' format '%B%d%b'
-
     __juju_debug "[_juju] words: ${words[*]}, CURRENT: $CURRENT"
 
     # Find the subcommand: first non-flag word typed after "juju", excluding the
