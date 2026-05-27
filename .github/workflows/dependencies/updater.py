@@ -391,11 +391,15 @@ class Git:
         Returns `True` if the repo is clean.
         Returns `False` if the repo is dirty.
         """
-        result = CommandRunner.run_or_fail(
-            ["git", "status", "--porcelain", "--untracked-files=normal"],
-            stage="CheckRepoClean",
-        )
-        return result.stdout.decode("utf-8").strip() == ""
+        try:
+            result = CommandRunner.run_or_fail(
+                ["git", "status", "--porcelain", "--untracked-files=normal"],
+                stage="CheckRepoClean",
+            )
+        except CommandRunner.Exception:
+            return False
+
+        return result.stdout.strip() == b""
 
     @staticmethod
     def add_and_commit(scope: str, version: str) -> bool:
