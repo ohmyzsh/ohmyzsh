@@ -107,11 +107,14 @@ No additional configuration is required — the plugin automatically detects and
 
 ## Tests
 
-The tests use [zunit](https://github.com/zunit-zsh/zunit). Install it per its documentation, then run:
+The tests use [zunit](https://github.com/zunit-zsh/zunit). Install it per its [documentation](https://github.com/zunit-zsh/zunit#installation), then run:
 
 ```sh
 cd plugins/dotenv && zunit
 ```
+
+> [NOTE!]
+> zunit also requires installing [Revolver](https://github.com/molovo/revolver).
 
 ## Version Control
 
