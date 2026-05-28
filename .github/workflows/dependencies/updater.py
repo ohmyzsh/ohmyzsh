@@ -219,7 +219,7 @@ class Dependency:
             if status["has_updates"] is True:
                 short_sha = status["head_ref"][:8]
                 new_version = status["version"] if is_tag else short_sha
-                source_ref = new_version if is_tag else remote_branch
+                source_ref = new_version if is_tag else status["head_ref"]
 
                 try:
                     branch_name = f"update/{self.path}/{new_version}"
