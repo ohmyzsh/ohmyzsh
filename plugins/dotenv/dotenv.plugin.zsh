@@ -55,7 +55,7 @@ _parse_dotenv_content() {
     fi
 
     [[ -z "$line" ]] || line+=" "
-    line="$node"
+    line+="$node"
   done
 
   local -a forbidden_vars=(

@@ -250,6 +250,16 @@ EOF
   assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
 }
 
+@test 'parse ignores non-assignment commands with assignment-looking arguments' {
+  > "$fixture" <<'EOF'
+print SHOULD_NOT_PARSE=value
+EOF
+
+  _parse_dotenv_test "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
 @test 'parse special characters' {
   > "$fixture" <<'EOF'
 # Special characters

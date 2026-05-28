@@ -23,7 +23,7 @@ _parse_dotenv_export() {
   done
 }
 
-# Helper: Run parse_dotenv supressing stderr
+# Helper: Run parse_dotenv suppressing stderr
 _parse_dotenv_quiet() {
   parse_dotenv "$@" 2>/dev/null
 }
