@@ -235,7 +235,7 @@ __git_ps1_show_upstream ()
 			if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
 				upstream="$upstream \${__git_ps1_upstream_name}"
 			else
-				upstream="$upstream ${__git_ps1_upstream_name}"
+				upstream="$upstream ${__git_ps1_upstream_name//\%/%%}"
 				# not needed anymore; keep user's
 				# environment clean
 				unset __git_ps1_upstream_name
@@ -570,6 +570,9 @@ __git_ps1 ()
 	if [ $pcmode = yes ] && [ $ps1_expanded = yes ]; then
 		__git_ps1_branch_name=$b
 		b="\${__git_ps1_branch_name}"
+	else
+		# escape % in branch name to avoid prompt expansion issues
+		b="${b//\%/%%}"
 	fi
 
 	if [ -n "${GIT_PS1_SHOWCOLORHINTS-}" ]; then
