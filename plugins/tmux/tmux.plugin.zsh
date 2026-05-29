@@ -183,7 +183,10 @@ function _tmux_directory_session() {
   # human friendly unique session name for this directory
   local session_name="${dir}-${md5:0:6}"
   # create or attach to the session
-  tmux new -As "$session_name"
+  local -a tmux_cmd
+  tmux_cmd=(command tmux)
+  [[ "$ZSH_TMUX_UNICODE" == "true" ]] && tmux_cmd+=(-u)
+  $tmux_cmd new -As "$session_name"
 }
 
 alias tds=_tmux_directory_session

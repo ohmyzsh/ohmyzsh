@@ -18,7 +18,7 @@ of `dnf5` and uses it as drop-in alternative to the slower `dnf`.
 | Alias | Command                 | Description              |
 |-------|-------------------------|--------------------------|
 | dnfl  | `dnf list`              | List packages            |
-| dnfli | `dnf list installed`    | List installed packages  |
+| dnfli | `dnf list --installed`  | List installed packages  |
 | dnfgl | `dnf grouplist`         | List package groups      |
 | dnfmc | `dnf makecache`         | Generate metadata cache  |
 | dnfp  | `dnf info`              | Show package information |

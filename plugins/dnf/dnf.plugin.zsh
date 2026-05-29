@@ -5,7 +5,7 @@ local dnfprog="dnf"
 command -v dnf5 > /dev/null && dnfprog=dnf5
 
 alias dnfl="${dnfprog} list"                       # List packages
-alias dnfli="${dnfprog} list installed"            # List installed packages
+alias dnfli="${dnfprog} list --installed"          # List installed packages
 alias dnfmc="${dnfprog} makecache"                 # Generate metadata cache
 alias dnfp="${dnfprog} info"                       # Show package information
 alias dnfs="${dnfprog} search"                     # Search package

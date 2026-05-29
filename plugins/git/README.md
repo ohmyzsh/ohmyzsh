@@ -181,6 +181,8 @@ plugins=(... git)
 | `grst`                 | `git restore --staged`                                                                                                          |
 | `gunwip`               | `git rev-list --max-count=1 --format="%s" HEAD \| grep -q "--wip--" && git reset HEAD~1`                                        |
 | `grev`                 | `git revert`                                                                                                                    |
+| `greva`                | `git revert --abort`                                                                                                            |
+| `grevc`                | `git revert --continue`                                                                                                         |
 | `grm`                  | `git rm`                                                                                                                        |
 | `grmc`                 | `git rm --cached`                                                                                                               |
 | `gcount`               | `git shortlog --summary -n`                                                                                                     |
@@ -215,6 +217,7 @@ plugins=(... git)
 | `gunignore`            | `git update-index --no-assume-unchanged`                                                                                        |
 | `gwch`                 | `git log --patch --abbrev-commit --pretty=medium --raw`                                                                         |
 | `gwt`                  | `git worktree`                                                                                                                  |
+| `gwta`                 | `git worktree add`                                                                                                              |
 | `gwtls`                | `git worktree list`                                                                                                             |
 | `gwtmv`                | `git worktree move`                                                                                                             |
 | `gwtrm`                | `git worktree remove`                                                                                                           |
