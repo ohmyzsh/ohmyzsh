@@ -157,7 +157,7 @@ EOF
       # 1. Move and rename the extracted file/folder to a temporary random name
       # 2. Delete the empty folder
       # 3. Rename the extracted file/folder to the original name
-      if [[ "${content[1]:t}" == "$extract_dir" ]]; then
+      if [[ "${content[1]:t}" == "${extract_dir:t}" ]]; then
         # =(:) gives /tmp/zsh<random>, with :t it gives zsh<random>
         local tmp_name==(:); tmp_name="${tmp_name:t}"
         command mv "${content[1]}" "$tmp_name" \
@@ -165,9 +165,9 @@ EOF
         && command mv "$tmp_name" "$extract_dir"
       # Otherwise, if the extracted folder name already exists in the current
       # directory (because of a previous file / folder), keep the extract_dir
-      elif [[ ! -e "${content[1]:t}" ]]; then
-        command mv "${content[1]}" . \
-        && command rmdir "$extract_dir"
+      elif [[ ! -e "${target_directory:-.}/${content[1]:t}" ]]; then
+        command mv -- "${content[1]}" "${target_directory:-.}/" \
+        && command rmdir -- "$extract_dir"
       fi
     elif [[ ${#content} -eq 0 ]]; then
       command rmdir "$extract_dir"
