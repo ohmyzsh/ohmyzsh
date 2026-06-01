@@ -348,7 +348,7 @@ class Git:
     default_branch = "master"
 
     @staticmethod
-    def clone(remote_url: str, branch: str, repo_dir: str, reclone=False):
+    def clone(remote_url: str, ref: str, repo_dir: str, reclone=False):
         # If repo needs to be fresh
         if reclone and os.path.exists(repo_dir):
             shutil.rmtree(repo_dir)
@@ -356,11 +356,11 @@ class Git:
         # Clone repo in tmp directory and checkout branch
         if not os.path.exists(repo_dir):
             print(
-                f"Cloning {remote_url} to {repo_dir} and checking out {branch}",
+                f"Cloning {remote_url} to {repo_dir} and checking out {ref}",
                 file=sys.stderr,
             )
             CommandRunner.run_or_fail(
-                ["git", "clone", "--depth=1", "-b", branch, remote_url, repo_dir],
+                ["git", "clone", "--depth=1", "--revision", ref, remote_url, repo_dir],
                 stage="Clone",
             )
 
