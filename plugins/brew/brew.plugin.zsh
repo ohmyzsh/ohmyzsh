@@ -30,6 +30,16 @@ if [[ -z "$HOMEBREW_PREFIX" ]]; then
   export HOMEBREW_PREFIX="$(brew --prefix)"
 fi
 
+# Add Homebrew sbin to PATH if it exists and is not already in PATH.
+# Homebrew's shellenv only adds bin directories, not sbin. Some formulae
+# (e.g. mtr) install executables to sbin, and brew doctor warns if it's
+# missing from PATH.
+if [[ -d "$HOMEBREW_PREFIX/sbin" ]]; then
+  if [[ ! "$PATH" == *"$HOMEBREW_PREFIX/sbin"* ]]; then
+    export PATH="$HOMEBREW_PREFIX/sbin:$PATH"
+  fi
+fi
+
 if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
   fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
 fi
