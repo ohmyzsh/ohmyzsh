@@ -13,9 +13,28 @@ _gitignoreio_get_command_list() {
   _gi_curl "list" | tr "," "\n"
 }
 
-_gitignoreio () {
+__gitignoreio_caching_policy() {
+  local -a oldp
+  oldp=("$1"(Nm+7))
+  (($#oldp))
+}
+
+_gitignoreio() {
   compset -P '*,'
-  compadd -S '' $(_gitignoreio_get_command_list)
+
+  local cache_policy
+  zstyle -s ":completion:${curcontext}:" cache-policy cache_policy
+  if [[ -z "$cache_policy" ]]; then
+    zstyle ":completion:${curcontext}:" cache-policy __gitignoreio_caching_policy
+  fi
+
+  local -a _gi_list
+  if _cache_invalid gi-list || ! _retrieve_cache gi-list; then
+    _gi_list=(${(f)"$(_gitignoreio_get_command_list)"})
+    _store_cache gi-list _gi_list
+  fi
+
+  compadd -S '' -a _gi_list
 }
 
 compdef _gitignoreio gi
