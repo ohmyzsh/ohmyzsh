@@ -39,6 +39,7 @@ function current_epoch() {
   echo $(( EPOCHSECONDS / 60 / 60 / 24 ))
 }
 
+# TODO: change this to support stable releases
 function is_update_available() {
   local branch
   branch=${"$(builtin cd -q "$ZSH"; git config --local oh-my-zsh.branch)":-master}
@@ -210,6 +211,8 @@ function handle_update() {
       echo >&2 "[oh-my-zsh] Can't update: not a git repository."
       return
     fi
+
+    # TODO: somewhere like here we should support fast-tracking of security patches
 
     # Check if there are updates available before proceeding
     if ! is_update_available; then
