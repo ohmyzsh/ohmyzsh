@@ -78,7 +78,7 @@ sudo-command-line() {
     # - $realcmd is "cmd" and $EDITOR is /alternative/path/to/cmd that appears in $PATH
     if [[ "$realcmd" = (\$EDITOR|$editorcmd|${editorcmd:c}) \
       || "${realcmd:c}" = ($editorcmd|${editorcmd:c}) ]] \
-      || builtin which -a "$realcmd" | command grep -Fx -q "$editorcmd"; then
+      || builtin which -a "$realcmd" | command grep -Fx -q -- "$editorcmd"; then
       __sudo-replace-buffer "$cmd" "sudo -e"
       return
     fi
