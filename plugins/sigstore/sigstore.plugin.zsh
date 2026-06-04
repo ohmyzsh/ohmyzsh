@@ -16,7 +16,6 @@ function install_autocompletion {
 }
 
 install_autocompletion cosign
-install_autocompletion sget
 install_autocompletion rekor-cli
 
 unfunction install_autocompletion
