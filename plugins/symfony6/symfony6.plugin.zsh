@@ -8,6 +8,14 @@
 # https://symfony.com/doc/current/contributing/code/license.html
 
 #
+# DEPRECATION WARNING: This plugin is deprecated and will be removed in a future release.
+# Please migrate to the unified 'symfony' plugin which supports all Symfony versions.
+# Simply change 'symfony6' to 'symfony' in your .zshrc plugins list.
+#
+echo "⚠️  WARNING: The 'symfony6' plugin is deprecated. Please use the unified 'symfony' plugin instead." >&2
+echo "   Change 'symfony6' to 'symfony' in your .zshrc plugins list." >&2
+
+#
 # zsh completions for console
 #
 # References:
