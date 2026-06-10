@@ -184,6 +184,7 @@ To use a different theme, simply change the value to match the name of your desi
 
 ```sh
 ZSH_THEME="agnoster" # (this is one of the fancy ones)
+
 # see https://github.com/ohmyzsh/ohmyzsh/wiki/Themes#agnoster
 ```
 
@@ -372,16 +373,19 @@ the settings below in your `~/.zshrc` file, **before Oh My Zsh is loaded**. Note
 ways to skip aliases, depending on your needs.
 
 ```sh
+
 # Skip all aliases, in lib files and enabled plugins
 zstyle ':omz:*' aliases no
 
 # Skip all aliases in lib files
 zstyle ':omz:lib:*' aliases no
+
 # Skip only aliases defined in the directories.zsh lib file
 zstyle ':omz:lib:directories' aliases no
 
 # Skip all plugin aliases
 zstyle ':omz:plugins:*' aliases no
+
 # Skip only the aliases from the git plugin
 zstyle ':omz:plugins:git' aliases no
 ```
@@ -389,6 +393,7 @@ zstyle ':omz:plugins:git' aliases no
 You can combine these in other ways taking into account that more specific scopes take precedence:
 
 ```sh
+
 # Skip all plugin aliases, except for the git plugin
 zstyle ':omz:plugins:*' aliases no
 zstyle ':omz:plugins:git' aliases yes
@@ -460,8 +465,10 @@ adding a line to your `~/.zshrc` file, **before Oh My Zsh is loaded**:
 NOTE: you can control how often Oh My Zsh checks for updates with the following setting:
 
 ```sh
+
 # This will check for updates every 7 days
 zstyle ':omz:update' frequency 7
+
 # This will check for updates every time you open the terminal (not recommended)
 zstyle ':omz:update' frequency 0
 ```
