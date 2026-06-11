@@ -82,6 +82,10 @@ plugins=(... git)
 | `gcfu`                 | `git commit --fixup`                                                                                                            |
 | `gdct`                 | `git describe --tags $(git rev-list --tags --max-count=1)`                                                                      |
 | `gd`                   | `git diff`                                                                                                                      |
+| `gdd` |   `git diff $(git_develop_branch)`    |
+| `gdm` |   `git diff $(git_main_branch)`   |
+| `gddn`    |   `git diff $(git_develop_branch) --name-only`    |
+| `gdmn`    |   `git diff $(git_main_branch) --name-only`   |
 | `gdca`                 | `git diff --cached`                                                                                                             |
 | `gdcw`                 | `git diff --cached --word-diff`                                                                                                 |
 | `gds`                  | `git diff --staged`                                                                                                             |
