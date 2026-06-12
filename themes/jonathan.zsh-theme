@@ -60,7 +60,14 @@ ZSH_THEME_GIT_PROMPT_UNMERGED="%{$fg[yellow]%} %{%G═%}"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg[cyan]%} %{%G✭%}"
 
 # Use extended characters to look nicer if supported.
-if [[ "${langinfo[CODESET]}" = UTF-8 ]]; then
+if [[ "${TERM_PROGRAM:-}" = ghostty ]]; then
+  PR_SET_CHARSET=""
+  PR_HBAR="-"
+  PR_ULCORNER="-"
+  PR_LLCORNER="-"
+  PR_LRCORNER="-"
+  PR_URCORNER="-"
+elif [[ "${langinfo[CODESET]}" = UTF-8 ]]; then
   PR_SET_CHARSET=""
   PR_HBAR="─"
   PR_ULCORNER="┌"
