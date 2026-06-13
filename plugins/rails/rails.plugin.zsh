@@ -47,18 +47,8 @@ alias rc='rails console'
 alias rcs='rails console --sandbox'
 alias rd='rails destroy'
 alias rdb='rails dbconsole'
-alias rdc='rails db:create'
-alias rdd='rails db:drop'
-alias rdm='rails db:migrate'
-alias rdmd='rails db:migrate:down'
-alias rdmr='rails db:migrate:redo'
-alias rdms='rails db:migrate:status'
 alias rdmtc='rails db:migrate db:test:clone'
-alias rdmu='rails db:migrate:up'
-alias rdr='rails db:rollback'
-alias rdrs='rails db:reset'
 alias rds='rails db:seed'
-alias rdsl='rails db:schema:load'
 alias rdtc='rails db:test:clone'
 alias rdtp='rails db:test:prepare'
 alias rgen='rails generate'
@@ -104,6 +94,147 @@ alias rkmd='rake middleware'
 alias rkn='rake notes'
 alias rksts='rake stats'
 alias rkt='rake test'
+
+# Multi-database functions
+# Usage: rdc [database] - rails db:create[:database]
+function rdc() {
+  if [ $# -eq 0 ]; then
+    echo "Running: rails db:create" >&2
+    rails db:create
+  else
+    echo "Running: rails db:create:$1" >&2
+    rails db:create:"$1"
+  fi
+}
+
+# Usage: rdd [database] - rails db:drop[:database]
+function rdd() {
+  if [ $# -eq 0 ]; then
+    echo "Running: rails db:drop" >&2
+    rails db:drop
+  else
+    echo "Running: rails db:drop:$1" >&2
+    rails db:drop:"$1"
+  fi
+}
+
+# Usage: rdm [database] [VERSION=x VERBOSE=false SCOPE=blog] - rails db:migrate[:database]
+function rdm() {
+  if [ $# -eq 0 ]; then
+    echo "Running: rails db:migrate" >&2
+    rails db:migrate
+  elif [[ "$1" == *"="* ]]; then
+    echo "Running: rails db:migrate $*" >&2
+    rails db:migrate "$@"
+  else
+    local database="$1"
+    shift
+    echo "Running: rails db:migrate:$database $*" >&2
+    rails db:migrate:"$database" "$@"
+  fi
+}
+
+# Usage: rdmd [database] [VERSION=x] - rails db:migrate:down[:database]
+function rdmd() {
+  if [ $# -eq 0 ]; then
+    echo "Running: rails db:migrate:down" >&2
+    rails db:migrate:down
+  elif [[ "$1" == *"="* ]]; then
+    echo "Running: rails db:migrate:down $*" >&2
+    rails db:migrate:down "$@"
+  else
+    local database="$1"
+    shift
+    echo "Running: rails db:migrate:down:$database $*" >&2
+    rails db:migrate:down:"$database" "$@"
+  fi
+}
+
+# Usage: rdmr [database] [STEP=x VERSION=x] - rails db:migrate:redo[:database]
+function rdmr() {
+  if [ $# -eq 0 ]; then
+    echo "Running: rails db:migrate:redo" >&2
+    rails db:migrate:redo
+  elif [[ "$1" == *"="* ]]; then
+    echo "Running: rails db:migrate:redo $*" >&2
+    rails db:migrate:redo "$@"
+  else
+    local database="$1"
+    shift
+    echo "Running: rails db:migrate:redo:$database $*" >&2
+    rails db:migrate:redo:"$database" "$@"
+  fi
+}
+
+# Usage: rdms [database] - rails db:migrate:status[:database]
+function rdms() {
+  if [ $# -eq 0 ]; then
+    echo "Running: rails db:migrate:status" >&2
+    rails db:migrate:status
+  else
+    echo "Running: rails db:migrate:status:$1" >&2
+    rails db:migrate:status:"$1"
+  fi
+}
+
+# Usage: rdmu [database] [VERSION=x] - rails db:migrate:up[:database]
+function rdmu() {
+  if [ $# -eq 0 ]; then
+    echo "Running: rails db:migrate:up" >&2
+    rails db:migrate:up
+  elif [[ "$1" == *"="* ]]; then
+    echo "Running: rails db:migrate:up $*" >&2
+    rails db:migrate:up "$@"
+  else
+    local database="$1"
+    shift
+    echo "Running: rails db:migrate:up:$database $*" >&2
+    rails db:migrate:up:"$database" "$@"
+  fi
+}
+
+# Usage: rdr [database] [STEP=n] - rails db:rollback[:database]
+function rdr() {
+  if [ $# -eq 0 ]; then
+    echo "Running: rails db:rollback" >&2
+    rails db:rollback
+  elif [[ "$1" == *"="* ]]; then
+    echo "Running: rails db:rollback $*" >&2
+    rails db:rollback "$@"
+  else
+    local database="$1"
+    shift
+    echo "Running: rails db:rollback:$database $*" >&2
+    rails db:rollback:"$database" "$@"
+  fi
+}
+
+# Usage: rdrs [database] - rails db:reset[:database]
+function rdrs() {
+  if [ $# -eq 0 ]; then
+    echo "Running: rails db:reset" >&2
+    rails db:reset
+  else
+    echo "Running: rails db:reset:$1" >&2
+    rails db:reset:"$1"
+  fi
+}
+
+# Usage: rdsl [database] [SCHEMA_FORMAT=ruby|sql] - rails db:schema:load[:database]
+function rdsl() {
+  if [ $# -eq 0 ]; then
+    echo "Running: rails db:schema:load" >&2
+    rails db:schema:load
+  elif [[ "$1" == *"="* ]]; then
+    echo "Running: rails db:schema:load $*" >&2
+    rails db:schema:load "$@"
+  else
+    local database="$1"
+    shift
+    echo "Running: rails db:schema:load:$database $*" >&2
+    rails db:schema:load:"$database" "$@"
+  fi
+}
 
 # legacy stuff
 alias sc='ruby script/console'
