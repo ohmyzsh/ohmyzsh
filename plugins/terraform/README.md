@@ -21,6 +21,7 @@ plugins=(... terraform)
 | `tfa`   | `terraform apply`                      |
 | `tfa!`  | `terraform apply -auto-approve`        |
 | `tfap`  | `terraform apply -parallelism=1`       |
+| `tfapp` | `terraform apply tfplan`               |
 | `tfc`   | `terraform console`                    |
 | `tfd`   | `terraform destroy`                    |
 | `tfd!`  | `terraform destroy -auto-approve`      |
@@ -33,6 +34,7 @@ plugins=(... terraform)
 | `tfiur` | `terraform init -upgrade -reconfigure` |
 | `tfo`   | `terraform output`                     |
 | `tfp`   | `terraform plan`                       |
+| `tfpo`  | `terraform plan -out tfplan`           |
 | `tfv`   | `terraform validate`                   |
 | `tfs`   | `terraform state`                      |
 | `tft`   | `terraform test`                       |

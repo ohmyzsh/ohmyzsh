@@ -1,3 +1,8 @@
+# Return immediately if terraform is not found
+if (( ! ${+commands[terraform]} )); then
+  return
+fi
+
 function tf_prompt_info() {
   # dont show 'default' workspace in home dir
   [[ "$PWD" != ~ ]] || return
