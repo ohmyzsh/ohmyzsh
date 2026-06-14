@@ -21,7 +21,7 @@ if command diff --color /dev/null{,} &>/dev/null; then
 fi
 
 # Don't set ls coloring if disabled
-[[ "$DISABLE_LS_COLORS" != true ]] || return 0
+[[ "${DISABLE_LS_COLORS:-}" != true ]] || return 0
 
 # Default coloring for BSD-based ls
 export LSCOLORS="Gxfxcxdxbxegedabagacad"

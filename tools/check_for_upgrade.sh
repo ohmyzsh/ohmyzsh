@@ -15,8 +15,8 @@ zstyle -s ':omz:update' mode update_mode || {
   update_mode=prompt
 
   # If the mode zstyle setting is not set, support old-style settings
-  [[ "$DISABLE_UPDATE_PROMPT" != true ]] || update_mode=auto
-  [[ "$DISABLE_AUTO_UPDATE" != true ]] || update_mode=disabled
+  [[ "${DISABLE_UPDATE_PROMPT:-}" != true ]] || update_mode=auto
+  [[ "${DISABLE_AUTO_UPDATE:-}" != true ]] || update_mode=disabled
 }
 
 # Cancel update if:

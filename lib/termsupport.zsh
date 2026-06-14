@@ -104,7 +104,7 @@ function omz_termsupport_preexec {
 
 autoload -Uz add-zsh-hook
 
-if [[ -z "$INSIDE_EMACS" || "$INSIDE_EMACS" = vterm ]]; then
+if [[ -z "${INSIDE_EMACS:-}" || "$INSIDE_EMACS" = vterm ]]; then
   add-zsh-hook precmd omz_termsupport_precmd
   add-zsh-hook preexec omz_termsupport_preexec
 fi
@@ -122,7 +122,7 @@ fi
 # As of May 2021 mlterm, PuTTY, rxvt, screen, termux & xterm simply ignore the unknown OSC.
 
 # Don't define the function if we're inside Emacs or in an SSH session (#11696)
-if [[ -n "$INSIDE_EMACS" || -n "$SSH_CLIENT" || -n "$SSH_TTY" ]]; then
+if [[ -n "${INSIDE_EMACS:-}" || -n "${SSH_CLIENT:-}" || -n "${SSH_TTY:-}" ]]; then
   return
 fi
 
@@ -152,7 +152,7 @@ function omz_termsupport_cwd {
   URL_PATH="$(omz_urlencode -P $PWD)" || return 1
 
   # Konsole errors if the HOST is provided
-  [[ -z "$KONSOLE_PROFILE_NAME" && -z "$KONSOLE_DBUS_SESSION"  ]] || URL_HOST=""
+  [[ -z "${KONSOLE_PROFILE_NAME:-}" && -z "${KONSOLE_DBUS_SESSION:-}"  ]] || URL_HOST=""
 
   # common control sequence (OSC 7) to set current host and path
   printf "\e]7;file://%s%s\e\\" "${URL_HOST}" "${URL_PATH}"
