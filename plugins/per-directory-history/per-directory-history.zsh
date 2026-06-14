@@ -128,7 +128,6 @@ function _per-directory-history-addhistory() {
           fc -AI $HISTFILE
           fc -AI $_per_directory_history_directory
       fi
-      fc -p $_per_directory_history_directory
   fi
 }
 
@@ -153,6 +152,7 @@ function _per-directory-history-set-directory-history() {
   HISTSIZE=$original_histsize
   if [[ -e "$_per_directory_history_directory" ]]; then
     fc -R "$_per_directory_history_directory"
+    fc -p "$_per_directory_history_directory"
   fi
 }
 
@@ -163,6 +163,7 @@ function _per-directory-history-set-global-history() {
   HISTSIZE=$original_histsize
   if [[ -e "$HISTFILE" ]]; then
     fc -R "$HISTFILE"
+    fc -p "$HISTFILE"
   fi
 }
 
