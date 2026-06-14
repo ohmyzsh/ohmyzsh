@@ -10,7 +10,12 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_pipenv" ]]; then
   _comps[pipenv]=_pipenv
 fi
 
-_PIPENV_COMPLETE=zsh_source pipenv >| "$ZSH_CACHE_DIR/completions/_pipenv" &|
+# pipenv >= 2026.5.0 dropped _PIPENV_COMPLETE in favor of argcomplete
+if (( $+commands[register-python-argcomplete] )); then
+  register-python-argcomplete pipenv >| "$ZSH_CACHE_DIR/completions/_pipenv" &|
+else
+  _PIPENV_COMPLETE=zsh_source pipenv >| "$ZSH_CACHE_DIR/completions/_pipenv" &|
+fi
 
 if zstyle -T ':omz:plugins:pipenv' auto-shell; then
   # Automatic pipenv shell activation/deactivation
