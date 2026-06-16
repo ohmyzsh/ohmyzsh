@@ -11,7 +11,18 @@ fi
 
 autoload -Uz is-at-least
 
-_pipenv_version="${$(pipenv --version 2>/dev/null)#pipenv, version }"
+_pipenv_version_cache="$ZSH_CACHE_DIR/pipenv_version"
+
+if [[ -f "$_pipenv_version_cache" ]]; then
+  _pipenv_version="$(< "$_pipenv_version_cache" 2>/dev/null)"
+else
+  _pipenv_version="${$(pipenv --version 2>/dev/null)#pipenv, version }"
+fi
+
+{
+  _pipenv_fresh_version="${$(pipenv --version 2>/dev/null)#pipenv, version }"
+  [[ -n "$_pipenv_fresh_version" ]] && print -r -- "$_pipenv_fresh_version" >| "$_pipenv_version_cache"
+} &|
 
 if is-at-least 2026.5.0 "$_pipenv_version" && (( $+commands[register-python-argcomplete] )); then
   # argcomplete-based completion
