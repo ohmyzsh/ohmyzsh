@@ -18,13 +18,47 @@ function _start_agent() {
     return 1
   fi
 
+  # ssh-agent extra launch flags
+  local -a agent_extra_flags
+
+  # override $SSH_AUTH_SOCK path option
+  if zstyle -t :omz:plugins:ssh-agent override-agent-socket-path; then
+    local ssh_auth_sock_path
+    local sock_path_reply
+    zstyle -g sock_path_reply :omz:plugins:ssh-agent override-agent-socket-path
+    ssh_auth_sock_path="$sock_path_reply"
+    
+    # set fallback path by $OSTYPE
+    if [[ -z "$ssh_auth_sock_path" ]]; then
+      if [[ "$OSTYPE" == "linux"* ]]; then
+        ssh_auth_sock_path="/var/run/user/$UID/ssh-agent"
+      elif [[ "$OSTYPE" == "darwin"* ]]; then
+        ssh_auth_sock_path="${TMPDIR:-/tmp}/ssh-agent.socket"
+      else
+        ssh_auth_sock_path="$HOME/.ssh/ssh-agent.socket"
+      fi
+    fi
+
+    # check the socket dir and create if needed
+    local socket_dir="${ssh_auth_sock_path:h}"
+    if [[ ! -d "$socket_dir" ]]; then
+      mkdir -p "$socket_dir" || \
+      { echo "Error: can't create ssh socket parent directory." && return 1 }
+      chmod 700 "$socket_dir" || \
+      { echo "Error: can't change permissions of the ssh socket parent directory." && return 1 }
+    fi
+
+    # set extra flags array
+    agent_extra_flags=(-a "$ssh_auth_sock_path")
+  fi
+
   # Set a maximum lifetime for identities added to ssh-agent
   local lifetime
   zstyle -s :omz:plugins:ssh-agent lifetime lifetime
 
   # start ssh-agent and setup environment
   zstyle -t :omz:plugins:ssh-agent quiet || echo >&2 "Starting ssh-agent ..."
-  ssh-agent -s ${lifetime:+-t} ${lifetime} | sed '/^echo/d' >! "$ssh_env_cache"
+  ssh-agent "${agent_extra_flags[@]}"  -s ${lifetime:+-t} ${lifetime} | sed '/^echo/d' >! "$ssh_env_cache"
   chmod 600 "$ssh_env_cache"
   . "$ssh_env_cache" > /dev/null
 }
