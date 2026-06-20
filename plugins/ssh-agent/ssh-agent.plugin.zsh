@@ -23,24 +23,22 @@ function _start_agent() {
 
   # override $SSH_AUTH_SOCK path option
   if zstyle -t :omz:plugins:ssh-agent override-agent-socket-path; then
-    local ssh_auth_sock_path
-    local sock_path_reply
-    zstyle -g sock_path_reply :omz:plugins:ssh-agent override-agent-socket-path
-    ssh_auth_sock_path="$sock_path_reply"
+    local ssh_agent_sock_path
+    zstyle -s :omz:plugins:ssh-agent ssh_agent_sock_path ssh_agent_sock_path
     
     # set fallback path by $OSTYPE
-    if [[ -z "$ssh_auth_sock_path" ]]; then
+    if [[ -z "$ssh_agent_sock_path" ]]; then
       if [[ "$OSTYPE" == "linux"* ]]; then
-        ssh_auth_sock_path="/var/run/user/$UID/ssh-agent"
+        ssh_agent_sock_path="/var/run/user/$UID/ssh-agent"
       elif [[ "$OSTYPE" == "darwin"* ]]; then
-        ssh_auth_sock_path="${TMPDIR:-/tmp}/ssh-agent.socket"
+        ssh_agent_sock_path="${TMPDIR:-/tmp}/ssh-agent.socket"
       else
-        ssh_auth_sock_path="$HOME/.ssh/ssh-agent.socket"
+        ssh_agent_sock_path="$HOME/.ssh/ssh-agent.socket"
       fi
     fi
 
     # check the socket dir and create if needed
-    local socket_dir="${ssh_auth_sock_path:h}"
+    local socket_dir="${ssh_agent_sock_path:h}"
     if [[ ! -d "$socket_dir" ]]; then
       mkdir -p "$socket_dir" || \
       { echo "Error: can't create ssh socket parent directory." && return 1 }
@@ -49,7 +47,7 @@ function _start_agent() {
     fi
 
     # set extra flags array
-    agent_extra_flags=(-a "$ssh_auth_sock_path")
+    agent_extra_flags=(-a "$ssh_agent_sock_path")
   fi
 
   # Set a maximum lifetime for identities added to ssh-agent
