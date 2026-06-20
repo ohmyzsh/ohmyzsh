@@ -108,14 +108,15 @@ By default its name is randomly generated in form of `$TMPDIR/ssh-XXXXXXXXXX/age
 To override the `$SSH_AUTH_SOCK` path, use `override-agent-socket-path` style.
 
 ```zsh
-zstyle :omz:plugins:ssh-agent override-agent-socket-path "/your/custom/path/socket_name"
+zstyle :omz:plugins:ssh-agent override-agent-socket-path yes
+zstyle :omz:plugins:ssh-agent ssh_agent_sock_path "YOUR_CUSTOM_SOCKET_PATH"
 ```
 
 Of course you should double-quote the path itself.
-Also there are few builtin default for Linux and MacOS, so you could simply add:
+There are few builtin defaults for Linux and MacOS, so you could simply add:
 
 ```zsh
-zstyle :omz:plugins:ssh-agent override-agent-socket-path
+zstyle :omz:plugins:ssh-agent override-agent-socket-path yes
 ```
 
 These are the defaults:
