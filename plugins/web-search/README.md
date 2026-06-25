@@ -53,7 +53,7 @@ Available search contexts are:
 | `gopkg`               | `https://pkg.go.dev/search?m=package&q=`        |
 | `chatgpt`             | `https://chatgpt.com/?q=`                       |
 | `claudeai`            | `https://claude.ai/new?q=`                      |
-| `grok`                | `https://grok.com/?q=`                          |
+| `grokcom`             | `https://grok.com/?q=`                          |
 | `reddit`              | `https://www.reddit.com/search/?q=`             |
 | `ppai`                | `https://www.perplexity.ai/search/new?q=`       |
 | `rscrate`             | `https://crates.io/search?q=`                   |

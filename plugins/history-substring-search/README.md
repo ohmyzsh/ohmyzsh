@@ -20,7 +20,7 @@ Requirements
 Install
 ------------------------------------------------------------------------------
 
-Using the [Homebrew]( https://brew.sh ) package manager:
+Using the [Homebrew](https://brew.sh) package manager:
 
     brew install zsh-history-substring-search
     echo 'source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh' >> ~/.zshrc
