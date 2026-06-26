@@ -51,7 +51,7 @@ USER=${USER:-$(id -u -n)}
 # POSIX: https://pubs.opengroup.org/onlinepubs/009696899/basedefs/xbd_chap08.html#tag_08_03
 HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
 # macOS does not have getent, but this works even if $HOME is unset
-HOME="${HOME:-$(eval echo ~$USER)}"
+HOME="${HOME:-$(eval echo ~"$USER")}"
 
 
 # Track if $ZSH was provided
@@ -344,7 +344,7 @@ setup_zshrc() {
       return
     fi
     
-    if [ $OVERWRITE_CONFIRMATION != "no" ]; then
+    if [ "$OVERWRITE_CONFIRMATION" != "no" ]; then
       # Ask user for confirmation before backing up and overwriting
       echo "${FMT_YELLOW}Found ${zdot}/.zshrc."
       echo "The existing .zshrc will be backed up to .zshrc.pre-oh-my-zsh if overwritten."
@@ -475,12 +475,14 @@ EOF
   if user_can_sudo; then
     sudo -k >/dev/null 2>&1 || true # -k forces the password prompt when supported
     sudo chsh -s "$zsh" "$USER"
+    chsh_status=$?
   else
     chsh -s "$zsh" "$USER"          # run chsh normally
+    chsh_status=$?
   fi
 
   # Check if the shell change was successful
-  if [ $? -ne 0 ]; then
+  if [ "$chsh_status" -ne 0 ]; then
     fmt_error "chsh command unsuccessful. Change your default shell manually."
   else
     export SHELL="$zsh"
