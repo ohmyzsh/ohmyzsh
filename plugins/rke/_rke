@@ -1,0 +1,169 @@
+#compdef rke
+
+typeset -A opt_args
+
+_arguments -C \
+  '1:cmd:->cmds' \
+  '2:subcmd:->subcmds' \
+  '*:: :->args' \
+  && ret=0
+
+case "$state" in
+  (cmds)
+    local commands; commands=(
+      'up:Bring the cluster up'
+      'remove:Teardown the cluster and clean cluster nodes'
+      'version:Show cluster Kubernetes version'
+      'config:Setup cluster configuration'
+      'etcd:etcd snapshot save/restore operations in k8s cluster'
+      'cert:Certificates management for RKE cluster'
+      'encrypt:Manage cluster encryption provider keys'
+      'help:Shows a list of commands or help for one command'
+    )
+    _describe -t commands 'command' commands && ret=0
+  ;;
+  (subcmds)
+    case $line[1] in
+      (up)
+        local ups; ups=(
+          '--config:Specify an alternate cluster YAML file (default: "cluster.yml") $RKE_CONFIG'
+          '--local:Deploy Kubernetes cluster locally'
+          '--dind:Deploy Kubernetes cluster in docker containers (experimental)'
+          '--dind-storage-driver:Storage driver for the docker in docker containers (experimental)'
+          '--dind-dns-server:DNS resolver to be used by docker in docker container. Useful if host is running systemd-resovld (default: "8.8.8.8")'
+          '--update-only:Skip idempotent deployment of control and etcd plane'
+          '--disable-port-check:Disable port check validation between nodes'
+          '--init:Initiate RKE cluster'
+          '--cert-dir:Specify a certificate dir path'
+          '--custom-certs:Use custom certificates from a cert dir'
+          '--ssh-agent-auth:Use SSH Agent Auth defined by SSH_AUTH_SOCK'
+          '--ignore-docker-version:Disable Docker version check'
+        )
+        _describe -t ups 'up' ups && ret=0
+      ;;
+      (remove)
+        local removes; removes=(
+          '--config:Specify an alternate cluster YAML file (default: "cluster.yml") $RKE_CONFIG'
+          '--force:Force removal of the cluster'
+          '--local:Remove Kubernetes cluster locally'
+          '--dind:Remove Kubernetes cluster deplozed in dind mode'
+          '--ssh-agent-auth:Use SSH Agent Auth defined by SSH_AUTH_SOCK'
+          '--ignore-docker-version:Disable Docker version check'
+        )
+        _describe -t removes 'remove' removes && ret=0
+      ;;
+      (version)
+        local versions; versions=(
+          '--config:Specify an alternate cluster YAML file (default: "cluster.yml") $RKE_CONFIG'
+        )
+        _describe -t versions 'version' versions && ret=0
+      ;;
+      (config)
+        local configs; configs=(
+          '--name:Name of the configuration file (default: "cluster.yml")'
+          '-n:Name of the configuration file (default: "cluster.yml")'
+          '--empty:Generate Empty configuration file'
+          '-e:Generate Empty configuration file'
+          '--print:Print configuration'
+          '-p:Print configuration'
+          '--system-images:Generate the default system images'
+          '-s:Generate the default system images'
+          '--list-version:List the default kubernetes version'
+          '-l:List the default kubernetes version'
+          '--all:Used with -s and -l, get all available versions'
+          '-a:Used with -s and -l, get all available versions'
+          '--version:Generate the default system images for specific k8s versions'
+        )
+        _describe -t configs 'config' configs && ret=0
+      ;;
+      (etcd)
+        local etcds; etcds=(
+          'snapshot-save:Take snapshot on all etcd hosts'
+          'snapshot-restore:Restore existing snapshot'
+        )
+        _describe -t etcds 'etcd' etcds && ret=0
+      ;;
+      (cert)
+        local certs; certs=(
+          'rotate:Rotate RKE cluster certificates'
+          'generate-csr:Generate certificate sign requests for k8s components'
+        )
+        _describe -t certs 'cert' certs && ret=0
+      ;;
+      (encrypt)
+        local encrypts; encrypts=(
+          'rotate-key:Rotate cluster encryption provider key'
+        )
+        _describe -t encrypts "encrypts" encrypts && ret=0
+      ;;
+    esac
+  ;;
+  (args)
+    case $line[2] in
+      (snapshot-save)
+        local saveopts; saveopts=(
+          '--name:Specify snapshot name'
+          '--config:Specify an alternate cluster YAML file (default: "cluster.yml") $RKE_CONFIG'
+          '--s3:Enabled backup to s3'
+          '--s3-endpoint:Specify s3 endpoint url (default: "s3.amazonaws.com")'
+          '--s3-endpoint-ca:Specify a custom CA cert to connect to S3 endpoint'
+          '--access-key:Specify s3 accessKey'
+          '--secret-key:Specify s3 secretKey'
+          '--bucket-name:Specify s3 bucket name'
+          '--region:Specify the s3 bucket location (optional)'
+          '--folder:Specify s3 folder name'
+          '--ssh-agent-auth:Use SSH Agent Auth defined by SSH_AUTH_SOCK'
+          '--ignore-docker-version:Disable Docker version check'
+        )
+        _describe -t saveopts 'snapshot-save' saveopts && ret=0
+      ;;
+      (snapshot-restore)
+        local restoreopts; restoreopts=(
+          '--name:Specify snapshot name'
+          '--config:Specify an alternate cluster YAML file (default: "cluster.yml") $RKE_CONFIG'
+          '--s3:Enabled backup to s3'
+          '--s3-endpoint:Specify s3 endpoint url (default: "s3.amazonaws.com")'
+          '--s3-endpoint-ca:Specify a custom CA cert to connect to S3 endpoint'
+          '--access-key:Specify s3 accessKey'
+          '--secret-key:Specify s3 secretKey'
+          '--bucket-name:Specify s3 bucket name'
+          '--region:Specify the s3 bucket location (optional)'
+          '--folder:Specify s3 folder name'
+          '--cert-dir value:Specify a certificate dir path'
+          '--custom-certs:Use custom certificates from a cert dir'
+          '--use-local-state:Use local state file (do not check or use snapshot archive for state file)'
+          '--ssh-agent-auth:Use SSH Agent Auth defined by SSH_AUTH_SOCK'
+          '--ignore-docker-version:Disable Docker version check'
+        )
+        _describe -t restoreopts 'snapshot-restore' restoreopts && ret=0
+      ;;
+      (rotate)
+        local rotateopts; rotateopts=(
+          '--config:Specify an alternate cluster YAML file (default: "cluster.yml") $RKE_CONFIG'
+          '--service:Specify a k8s service to rotate certs, (allowed values: kube-apiserver, kube-controller-manager, kube-scheduler, kubelet, kube-proxy, etcd)'
+          '--rotate-ca:Rotate all certificates including CA certs'
+          '--ssh-agent-auth:Use SSH Agent Auth defined by SSH_AUTH_SOCK'
+          '--ignore-docker-version:Disable Docker version check'
+        )
+        _describe -t rotateopts 'rotate' rotateopts && ret=0
+      ;;
+      (generate-csr)
+        local generatecsropts; generatecsropts=(
+          '--config:Specify an alternate cluster YAML file (default: "cluster.yml") $RKE_CONFIG'
+          '--cert-dir: Specify a certificate dir path'
+        )
+        _describe -t generatecsropts 'generate-csr' generatecsropts && ret=0
+      ;;
+      (rotate-key)
+        local rotatekeyopts; rotatekeyopts=(
+          '--config:Specify an alternate cluster YAML file (default: "cluster.yml") $RKE_CONFIG'
+          '--ssh-agent-auth:Use SSH Agent Auth defined by SSH_AUTH_SOCK'
+          '--ignore-docker-version:Disable Docker version check'
+        )
+        _describe -t rotatekeyopts 'rotate-key' rotatekeyopts && ret=0
+      ;;
+    esac
+  ;;
+esac
+
+return ret
