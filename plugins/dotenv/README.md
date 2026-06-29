@@ -90,41 +90,58 @@ ZSH_DOTENV_ALLOWED_LIST=/path/to/dotenv/allowed/list
 ZSH_DOTENV_DISALLOWED_LIST=/path/to/dotenv/disallowed/list
 ```
 
-The file is just a list of directories, separated by a newline character. If you want
-to change your decision, just edit the file and remove the line for the directory you want to
-change.
+The plugin creates these files automatically. You can inspect or update them with:
+
+- `dotenv-list [allowed|disallowed]`: show the list file location and entries. Without an
+  argument, it shows both lists.
+- `dotenv-edit [allowed|disallowed]`: open a list in `$VISUAL`, `$EDITOR` or `vi`.
+  Without an argument, it opens the allowed list.
+- `dotenv-allow [path]`: add a directory to the allowed list. Without an argument, it
+  adds the current directory.
+- `dotenv-disallow [path]`: add a directory to the disallowed list. Without an argument,
+  it adds the current directory.
+- `dotenv-allow --pattern 'pattern'` and `dotenv-disallow --pattern 'pattern'`: add a
+  zsh filename pattern instead of a literal path.
+
+Paths added by `dotenv-allow`, `dotenv-disallow`, [a]lways or n[e]ver are escaped so glob
+metacharacters in real directory names are treated literally. Use `--pattern` only when you
+intentionally want wildcard matching.
+
+If you edit the files directly, use one absolute directory path or pattern per line.
+Lines starting with `#` are treated as comments. Blank lines are ignored, and leading and
+trailing whitespace around an entry is stripped.
 
 NOTE: if a directory is found in both the allowed and disallowed lists, the disallowed list
 takes preference, _i.e._ the .env file will never be sourced.
 
 ### Glob/Wildcard Patterns
 
-Entries in the allowed and disallowed list files are matched as zsh patterns against the
-directory path, so wildcards work in addition to exact paths. This is useful when you want
-to allow or disallow entire directory trees at once.
+Exact absolute directory paths still match literally. Other entries in the allowed and
+disallowed list files are expanded with zsh filename globbing and matched against the
+current directory's absolute path. This keeps wildcard matching limited to actual directory
+paths instead of arbitrary string prefixes.
 
 For example, if you use [git worktrees](https://git-scm.com/docs/git-worktree) and all your
-worktrees live under a common prefix, you can add a single pattern instead of allowing each
-one individually:
+worktrees live under a common prefix, add a single pattern instead of allowing each one
+individually:
 
 ```sh
-# In your dotenv-allowed.list file:
-/Users/me/Dev/my-project-wt-*
+dotenv-allow --pattern '/Users/me/Dev/my-project-wt-*'
 ```
 
-Note that entries are matched against the whole path as a string (as in
-`[[ $dir == pattern ]]`), not with filename globbing: `*` and `?` match any characters
-**including `/`**, so `/Users/me/*` also matches nested directories like `/Users/me/a/b`.
-The basic zsh pattern operators are supported: `*`, `?`, character classes like `[abc]`,
-and alternation like `(foo|bar)`. Operators that require `EXTENDED_GLOB` (such as `#`,
-`^` and `~`) are **not** enabled by the plugin.
+With filename globbing, `*` matches one path component: `/Users/me/Dev/my-project-wt-*`
+matches `/Users/me/Dev/my-project-wt-auth`, but not
+`/Users/me/Dev/my-project-wt-auth/api`. To match nested directories, include the nested
+path component in the pattern, for example `/Users/me/Dev/my-project-wt-*/*`.
 
-If a literal path contains pattern metacharacters (`*`, `?`, `[`, `(`, etc.), escape them
-with a backslash to match the path exactly. Paths added by answering [a]lways or n[e]ver
-at the prompt are escaped automatically. Malformed patterns are treated as non-matching.
+Patterns must be absolute paths or start with `~`. The basic zsh filename pattern operators
+are supported, such as `*`, `?`, character classes like `[abc]`, and alternation like
+`(foo|bar)`. Operators that require `EXTENDED_GLOB` (such as `#`, `^` and pattern
+exclusion `~`) are not enabled by the plugin.
 
-Lines starting with `#` are treated as comments. Blank lines are ignored, and leading and
-trailing whitespace around an entry is stripped.
+If a manually edited literal path contains pattern metacharacters (`*`, `?`, `[`, `(`,
+etc.), escape them with a backslash to match the path exactly. Malformed patterns are
+treated as non-matching.
 
 ## Named Pipe (FIFO) Support
 

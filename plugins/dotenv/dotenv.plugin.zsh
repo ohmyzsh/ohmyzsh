@@ -274,8 +274,8 @@ _dotenv_check_syntax() {
 
 _dotenv_list_match() {
   emulate -L zsh
-  local dirpath=$1 list_file=$2 line
-  local -i matched
+  local dirpath="${1:A}" list_file=$2 line match
+  local -a matches
 
   [[ -r $list_file ]] || return 1
 
@@ -285,19 +285,184 @@ _dotenv_list_match() {
     line="${line#"${line%%[![:space:]]*}"}"
     line="${line%"${line##*[![:space:]]}"}"
     [[ -z "$line" || "$line" == \#* ]] && continue
+    [[ "$line" == /* || "$line" == ~* ]] || continue
+    [[ "$line" == /* && "${line:A}" == "$dirpath" ]] && return 0
 
-    # a malformed pattern raises a fatal zsh error; contain it and
-    # treat the entry as non-matching
-    matched=1
+    matches=()
     {
-      [[ $dirpath == ${~line} ]] && matched=0
+      matches=(${~line}(N-/))
     } always {
-      (( TRY_BLOCK_ERROR )) && TRY_BLOCK_ERROR=0
+      if (( TRY_BLOCK_ERROR )); then
+        TRY_BLOCK_ERROR=0
+        matches=()
+      fi
     }
-    (( matched )) || return 0
+
+    for match in "${matches[@]}"; do
+      [[ "${match:A}" == "$dirpath" ]] && return 0
+    done
   done < "$list_file" 2>/dev/null
 
   return 1
+}
+
+_dotenv_ensure_list_file() {
+  emulate -L zsh
+  local list_file=$1
+
+  [[ -n "$list_file" ]] || return 1
+  command mkdir -p -- "${list_file:h}" || return 1
+  [[ -e "$list_file" ]] || command touch -- "$list_file" || return 1
+}
+
+_dotenv_list_file_for() {
+  emulate -L zsh
+
+  case "$1" in
+    allowed|allow)
+      REPLY="$ZSH_DOTENV_ALLOWED_LIST"
+      ;;
+    disallowed|disallow|denied|deny)
+      REPLY="$ZSH_DOTENV_DISALLOWED_LIST"
+      ;;
+    *)
+      echo "dotenv: expected 'allowed' or 'disallowed'" >&2
+      return 1
+      ;;
+  esac
+}
+
+_dotenv_append_list_entry() {
+  emulate -L zsh
+  local list_file=$1 entry=$2
+
+  _dotenv_ensure_list_file "$list_file" || return 1
+
+  if command grep -Fx -q -- "$entry" "$list_file" 2>/dev/null; then
+    REPLY=present
+    return
+  fi
+
+  print -r -- "$entry" >> "$list_file" || return 1
+  REPLY=added
+}
+
+_dotenv_add_list_entry_usage() {
+  print -r -- "Usage: $1 [--pattern] [path-or-pattern]"
+}
+
+_dotenv_add_list_entry_command() {
+  emulate -L zsh
+  local list_file=$1 command_name=$2 entry list_entry resolved_path
+  local as_pattern=false
+  shift 2
+
+  if [[ "$1" == -h || "$1" == --help ]]; then
+    _dotenv_add_list_entry_usage "$command_name"
+    return
+  fi
+
+  if [[ "$1" == --pattern ]]; then
+    as_pattern=true
+    shift
+  fi
+
+  if (( $# > 1 )) || [[ "$as_pattern" == true && $# -ne 1 ]]; then
+    _dotenv_add_list_entry_usage "$command_name" >&2
+    return 1
+  fi
+
+  entry="${1:-$PWD}"
+  if [[ "$as_pattern" == true ]]; then
+    if [[ "$entry" != /* && "$entry" != ~* ]]; then
+      echo "dotenv: patterns must be absolute paths or start with '~'" >&2
+      return 1
+    fi
+
+    list_entry="$entry"
+  else
+    resolved_path="${entry:A}"
+    list_entry="${(b)resolved_path}"
+  fi
+
+  _dotenv_append_list_entry "$list_file" "$list_entry" || return 1
+
+  case "$REPLY" in
+    added) echo "dotenv: added '$list_entry' to $list_file" ;;
+    present) echo "dotenv: '$list_entry' is already in $list_file" ;;
+  esac
+}
+
+dotenv-allow() {
+  _dotenv_add_list_entry_command "$ZSH_DOTENV_ALLOWED_LIST" dotenv-allow "$@"
+}
+
+dotenv-disallow() {
+  _dotenv_add_list_entry_command "$ZSH_DOTENV_DISALLOWED_LIST" dotenv-disallow "$@"
+}
+
+_dotenv_print_list() {
+  emulate -L zsh
+  local list_name=$1 list_file line
+
+  _dotenv_list_file_for "$list_name" || return 1
+  list_file="$REPLY"
+  _dotenv_ensure_list_file "$list_file" || return 1
+
+  echo "$list_name: $list_file"
+  if [[ ! -s "$list_file" ]]; then
+    echo "  <empty>"
+    return
+  fi
+
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    print -r -- "  $line"
+  done < "$list_file"
+}
+
+dotenv-list() {
+  emulate -L zsh
+
+  if [[ "$1" == -h || "$1" == --help ]]; then
+    echo "Usage: dotenv-list [allowed|disallowed]"
+    return
+  fi
+
+  case $# in
+    0)
+      _dotenv_print_list allowed
+      _dotenv_print_list disallowed
+      ;;
+    1)
+      _dotenv_print_list "$1"
+      ;;
+    *)
+      echo "Usage: dotenv-list [allowed|disallowed]" >&2
+      return 1
+      ;;
+  esac
+}
+
+dotenv-edit() {
+  emulate -L zsh
+  local list_name="${1:-allowed}" list_file editor
+
+  if [[ "$1" == -h || "$1" == --help ]]; then
+    echo "Usage: dotenv-edit [allowed|disallowed]"
+    return
+  fi
+
+  if (( $# > 1 )); then
+    echo "Usage: dotenv-edit [allowed|disallowed]" >&2
+    return 1
+  fi
+
+  _dotenv_list_file_for "$list_name" || return 1
+  list_file="$REPLY"
+  _dotenv_ensure_list_file "$list_file" || return 1
+
+  editor="${VISUAL:-${EDITOR:-vi}}"
+  ${=editor} "$list_file"
 }
 
 source_env() {
@@ -309,8 +474,8 @@ source_env() {
     local confirmation dirpath="${PWD:A}"
 
     # make sure there is an (dis-)allowed file
-    touch "$ZSH_DOTENV_ALLOWED_LIST"
-    touch "$ZSH_DOTENV_DISALLOWED_LIST"
+    _dotenv_ensure_list_file "$ZSH_DOTENV_ALLOWED_LIST" || return 1
+    _dotenv_ensure_list_file "$ZSH_DOTENV_DISALLOWED_LIST" || return 1
 
     # early return if disallowed
     if _dotenv_list_match "$dirpath" "$ZSH_DOTENV_DISALLOWED_LIST"; then
