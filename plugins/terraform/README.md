@@ -27,18 +27,27 @@ plugins=(... terraform)
 | `tfdp`  | `terraform destroy -parallelism=1`     |
 | `tff`   | `terraform fmt`                        |
 | `tffr`  | `terraform fmt -recursive`             |
+| `tffck` | `terraform fmt -check -recursive`      |
+| `tfg`   | `terraform graph`                      |
 | `tfi`   | `terraform init`                       |
+| `tfib`  | `terraform init -backend=false`        |
 | `tfir`  | `terraform init -reconfigure`          |
 | `tfiu`  | `terraform init -upgrade`              |
 | `tfiur` | `terraform init -upgrade -reconfigure` |
+| `tfip`  | `terraform import`                     |
 | `tfo`   | `terraform output`                     |
 | `tfp`   | `terraform plan`                       |
-| `tfv`   | `terraform validate`                   |
+| `tfpo`  | `terraform plan -out tfplan`           |
+| `tfpr`  | `terraform providers`                  |
+| `tfr`   | `terraform refresh`                    |
 | `tfs`   | `terraform state`                      |
+| `tfsr`  | `terraform state rm`                   |
 | `tft`   | `terraform test`                       |
 | `tfsh`  | `terraform show`                       |
+| `tfv`   | `terraform validate`                   |
 | `tfw`   | `terraform workspace`                  |
 | `tfwl`  | `terraform workspace list`             |
+| `tfwn`  | `terraform workspace new`              |
 | `tfws`  | `terraform workspace select`           |
 
 ## Prompt function
