@@ -1,0 +1,150 @@
+#!/usr/bin/env zunit
+
+@setup {
+  typeset -g tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv-list.XXXXXX")"
+  typeset -g allowed_list="$tmpdir/allowed.list"
+  typeset -g disallowed_list="$tmpdir/disallowed.list"
+  ZSH_DOTENV_ALLOWED_LIST="$allowed_list"
+  ZSH_DOTENV_DISALLOWED_LIST="$disallowed_list"
+}
+
+@teardown {
+  [[ -n "$tmpdir" && -d "$tmpdir" ]] && command rm -rf "$tmpdir"
+  unset DOTENV_PRECEDENCE 2>/dev/null
+}
+
+@test 'list match supports escaped literal paths' {
+  local dir="$tmpdir/project[one]"
+  command mkdir -p "$dir"
+  print -r -- "${(b)dir}" > "$allowed_list"
+
+  run _dotenv_list_match "$dir" "$allowed_list"
+  assert $state equals 0
+}
+
+@test 'list match keeps exact absolute entries literal' {
+  local dir="$tmpdir/project[one]"
+  command mkdir -p "$dir"
+  print -r -- "$dir" > "$allowed_list"
+
+  run _dotenv_list_match "$dir" "$allowed_list"
+  assert $state equals 0
+}
+
+@test 'list match ignores comments blank lines and CRLF endings' {
+  local dir="$tmpdir/project"
+  command mkdir -p "$dir"
+  {
+    print -r -- '   # comment'
+    print -r -- '   '
+    printf '%s\r\n' "  ${(b)dir}  "
+  } > "$allowed_list"
+
+  run _dotenv_list_match "$dir" "$allowed_list"
+  assert $state equals 0
+}
+
+@test 'filename glob matches direct directories only' {
+  local project="$tmpdir/worktrees/app-one"
+  local nested="$project/nested"
+  command mkdir -p "$nested"
+  print -r -- "$tmpdir/worktrees/*" > "$allowed_list"
+
+  run _dotenv_list_match "$project" "$allowed_list"
+  assert $state equals 0
+
+  run _dotenv_list_match "$nested" "$allowed_list"
+  assert $state equals 1
+}
+
+@test 'filename glob can match nested directories explicitly' {
+  local nested="$tmpdir/worktrees/app-one/nested"
+  command mkdir -p "$nested"
+  print -r -- "$tmpdir/worktrees/*/nested" > "$allowed_list"
+
+  run _dotenv_list_match "$nested" "$allowed_list"
+  assert $state equals 0
+}
+
+@test 'malformed patterns are ignored without breaking later entries' {
+  local dir="$tmpdir/project"
+  command mkdir -p "$dir"
+  print -r -- "$tmpdir/[" > "$allowed_list"
+  print -r -- "${(b)dir}" >> "$allowed_list"
+
+  run _dotenv_list_match "$dir" "$allowed_list"
+  assert $state equals 0
+}
+
+@test 'relative entries are ignored' {
+  print -r -- '.' > "$allowed_list"
+
+  run _dotenv_list_match "$PWD" "$allowed_list"
+  assert $state equals 1
+}
+
+@test 'disallowed entries take precedence over allowed entries' {
+  local project="$tmpdir/project"
+  command mkdir -p "$project"
+  print -r -- 'DOTENV_PRECEDENCE=loaded' > "$project/.env"
+  print -r -- "${(b)project}" > "$allowed_list"
+  print -r -- "${(b)project}" > "$disallowed_list"
+
+  (
+    ZSH_DOTENV_FILE=.env
+    ZSH_DOTENV_PROMPT=true
+    cd "$project"
+    source_env
+    [[ ! -v DOTENV_PRECEDENCE ]]
+  )
+  assert $? equals 0
+}
+
+@test 'dotenv-allow writes escaped literal absolute paths' {
+  local dir="$tmpdir/project[one]"
+  local resolved_dir
+  command mkdir -p "$dir"
+  resolved_dir="${dir:A}"
+
+  dotenv-allow "$dir" >/dev/null
+
+  assert "$(<"$allowed_list")" equals "${(b)resolved_dir}"
+}
+
+@test 'dotenv-disallow with pattern writes the raw pattern' {
+  local pattern="$tmpdir/worktrees/*"
+
+  dotenv-disallow --pattern "$pattern" >/dev/null
+
+  assert "$(<"$disallowed_list")" equals "$pattern"
+}
+
+@test 'dotenv-allow does not append duplicate entries' {
+  local dir="$tmpdir/project"
+  local -a lines
+  command mkdir -p "$dir"
+
+  dotenv-allow "$dir" >/dev/null
+  dotenv-allow "$dir" >/dev/null
+  lines=("${(@f)"$(<"$allowed_list")"}")
+
+  assert ${#lines} equals 1
+}
+
+@test 'dotenv-list shows list location and entries' {
+  local output
+  print -r -- "$tmpdir/project" > "$allowed_list"
+
+  output="$(dotenv-list allowed)"
+
+  [[ "$output" == *"$allowed_list"* && "$output" == *"$tmpdir/project"* ]]
+  assert $? equals 0
+}
+
+@test 'dotenv-edit opens the selected list with the configured editor' {
+  VISUAL= EDITOR=true dotenv-edit disallowed
+  assert $? equals 0
+
+  [[ -f "$disallowed_list" ]]
+  assert $? equals 0
+}
