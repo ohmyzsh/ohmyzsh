@@ -192,25 +192,6 @@ _omz_source() {
   fi
 }
 
-# Load all of the lib files in ~/.oh-my-zsh/lib that end in .zsh
-# TIP: Add files you don't want in git to .gitignore
-for lib_file ("$ZSH"/lib/*.zsh); do
-  _omz_source "lib/${lib_file:t}"
-done
-unset lib_file
-
-# Load all of the plugins that were defined in ~/.zshrc
-for plugin ($plugins); do
-  _omz_source "plugins/$plugin/$plugin.plugin.zsh"
-done
-unset plugin
-
-# Load all of your custom configurations from custom/
-for config_file ("$ZSH_CUSTOM"/*.zsh(N)); do
-  source "$config_file"
-done
-unset config_file
-
 # Load the theme
 is_theme() {
   local base_dir=$1
@@ -229,6 +210,25 @@ if [[ -n "$ZSH_THEME" ]]; then
     echo "[oh-my-zsh] theme '$ZSH_THEME' not found"
   fi
 fi
+
+# Load all of the lib files in ~/.oh-my-zsh/lib that end in .zsh
+# TIP: Add files you don't want in git to .gitignore
+for lib_file ("$ZSH"/lib/*.zsh); do
+  _omz_source "lib/${lib_file:t}"
+done
+unset lib_file
+
+# Load all of the plugins that were defined in ~/.zshrc
+for plugin ($plugins); do
+  _omz_source "plugins/$plugin/$plugin.plugin.zsh"
+done
+unset plugin
+
+# Load all of your custom configurations from custom/
+for config_file ("$ZSH_CUSTOM"/*.zsh(N)); do
+  source "$config_file"
+done
+unset config_file
 
 # set completion colors to be the same as `ls`, after theme has been loaded
 [[ -z "$LS_COLORS" ]] || zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
