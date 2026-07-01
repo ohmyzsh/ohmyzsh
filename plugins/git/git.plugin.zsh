@@ -68,6 +68,13 @@ function grename() {
 # (sorted alphabetically by function name)
 # (order should follow README)
 #
+function gcb() {
+  # Controlla se siamo in un repository Git
+  command git rev-parse --is-inside-work-tree &>/dev/null || return
+
+  # Prende il branch corrente, rimuove il newline e lo copia negli appunti
+  command git branch --show-current | tr -d '\n' | clipcopy
+}
 
 # Similar to `gunwip` but recursive "Unwips" all recent `--wip--` commits not just the last one
 function gunwipall() {
