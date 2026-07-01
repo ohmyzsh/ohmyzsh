@@ -23,6 +23,16 @@ plugins=(... podman)
 | pirm    | `podman image rm`                             | Remove one or more images                                                                |
 | pit     | `podman image tag`                            | Add a name and tag to a particular image                                                 |
 | plo     | `podman container logs`                       | Fetch the logs of a podman container                                                     |
+| pmif    | `podman machine info`                         | Display machine host info                                                                |
+| pmit    | `podman machine init`                         | Initialize a virtual machine                                                             |
+| pmis    | `podman machine inspect`                      | Inspect an existing machine                                                              |
+| pml     | `podman machine list`                         | List machines                                                                            |
+| pmo     | `podman machine os`                           | Manage a Podman virtual machine's OS                                                     |
+| pmrm    | `podman machine rm`                           | Remove an existing machine                                                               |
+| pms     | `podman machine set`                          | Set a virtual machine setting                                                            |
+| pmss    | `podman machine ssh`                          | SSH into an existing machine                                                             |
+| pmst    | `podman machine start`                        | Start an existing machine                                                                |
+| pmsp    | `podman machine stop`                         | Stop an existing machine                                                                 |
 | pnc     | `podman network create`                       | Create a new network                                                                     |
 | pncn    | `podman network connect`                      | Connect a container to a network                                                         |
 | pndcn   | `podman network disconnect`                   | Disconnect a container from a network                                                    |
