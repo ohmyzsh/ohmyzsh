@@ -24,6 +24,8 @@ plugins=(... kubectl)
 | kcdc     | `kubectl config delete-context`                         | Delete the specified context from the kubeconfig                                                 |
 | kccc     | `kubectl config current-context`                        | Display the current-context                                                                      |
 | kcgc     | `kubectl config get-contexts`                           | List of contexts available                                                                       |
+| kcsetns  | `kcsc --current --namespace`                            | Update the current context namespace                                                             |
+| kcgetns  | `k config view --minify -o jsonpath=...`                | Get the current context namespace                                                                |
 |          |                                                         | **General aliases**                                                                              |
 | kdel     | `kubectl delete`                                        | Delete resources by filenames, stdin, resources and names, or by resources and label selector    |
 | kdelf    | `kubectl delete -f`                                     | Delete a pod using the type and name specified in -f argument                                    |
