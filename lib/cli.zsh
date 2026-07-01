@@ -371,7 +371,7 @@ multi == 1 && /^[^#]*\)/ {
   next
 }
 
-# if multi flag is enabled and we didnt find a closing parenthesis,
+# if multi flag is enabled and we didn't find a closing parenthesis,
 # get the indentation level to match when adding plugins
 multi == 1 && /^[^#]*/ {
   indent=\"\"
