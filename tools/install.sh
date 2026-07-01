@@ -510,6 +510,16 @@ print_success() {
   printf '%s\n' "• Join our Discord community: $(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
   printf '%s\n' "• Get stickers, t-shirts, coffee mugs and more: $(fmt_link "CommitGoods Shop" https://commitgoods.com/collections/oh-my-zsh)"
   printf '%s\n' $FMT_RESET
+
+  if [ "$ZSHRC_BACKED_UP" = yes ]; then
+    printf '\n'
+    printf "${FMT_YELLOW}⚠️  Your previous ~/.zshrc has been backed up to %s${FMT_RESET}\n" "$OLD_ZSHRC"
+    printf "${FMT_YELLOW}   If you had custom configurations (PATH exports, aliases, functions, etc.),${FMT_RESET}\n"
+    printf "${FMT_YELLOW}   you may want to migrate them to your new ~/.zshrc.${FMT_RESET}\n"
+    printf '\n'
+    printf "${FMT_YELLOW}   You can compare the two files with:${FMT_RESET}\n"
+    printf "${FMT_YELLOW}     diff %s %s${FMT_RESET}\n" "$zdot/.zshrc" "$OLD_ZSHRC"
+  fi
 }
 
 main() {
