@@ -1,7 +1,6 @@
 # git-commit plugin
 
-The git-commit plugin adds several
-[git aliases](https://www.git-scm.com/docs/git-config#Documentation/git-config.txt-alias) for
+The git-commit plugin adds several git subcommands for
 [conventional commit](https://www.conventionalcommits.org/en/v1.0.0/#summary) messages.
 
 To use it, add `git-commit` to the plugins array in your zshrc file:
@@ -31,15 +30,13 @@ Where `type` is one of the following:
 - `test`
 - `wip`
 
-> NOTE: the alias for `revert` type is `rev`, as otherwise it conflicts with the git command of the same name.
-> It will still generate a commit message in the format `revert: <message>`
-
-> ⚠️ Enabling this plugin will (potentially) overwrite all `alias.<type>` that you manually set. Use with
-> care!
+> NOTE: the subcommand for `revert` type is `rev`, as otherwise it conflicts with the
+> git command of the same name. It will still generate a commit message in the format
+> `revert: <message>`
 
 ## Examples
 
-| Git alias                                     | Command                                              |
+| Git subcommand                                | Command                                              |
 | --------------------------------------------- | ---------------------------------------------------- |
 | `git style "remove trailing whitespace"`      | `git commit -m "style: remove trailing whitespace"`  |
 | `git wip "work in progress"`                  | `git commit -m "work in progress"`                   |
