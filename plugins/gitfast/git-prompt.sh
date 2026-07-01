@@ -474,9 +474,12 @@ __git_ps1 ()
 
 		if [ -n "$b" ]; then
 			:
+		# Prefer symbolic-ref short name resolution (works well with worktrees)
+		elif symref_short="$(git symbolic-ref --quiet --short HEAD 2>/dev/null)" && [ -n "$symref_short" ]; then
+			b="$symref_short"
 		elif [ -h "$g/HEAD" ]; then
 			# symlink symbolic ref
-			b="$(git symbolic-ref HEAD 2>/dev/null)"
+			b="$(git symbolic-ref --short HEAD 2>/dev/null)"
 		else
 			local head=""
 			if ! __git_eread "$g/HEAD" head; then
