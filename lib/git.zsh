@@ -29,14 +29,35 @@ function _omz_git_prompt_info() {
   || ref=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null) \
   || return 0
 
-  # Use global ZSH_THEME_GIT_SHOW_UPSTREAM=1 for including upstream remote info
-  local upstream
-  if (( ${+ZSH_THEME_GIT_SHOW_UPSTREAM} )); then
-    upstream=$(__git_prompt_git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2>/dev/null) \
-    && upstream=" -> ${upstream}"
+  local upstream upstream_ref
+  if (( ${+ZSH_THEME_GIT_SHOW_UPSTREAM} || ${+ZSH_THEME_GIT_SHOW_DEFAULT_BRANCH} )); then
+    upstream_ref=$(__git_prompt_git rev-parse --abbrev-ref --symbolic-full-name "@{upstream}" 2>/dev/null) || upstream_ref=
   fi
 
-  echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref//\%/%%}${upstream//\%/%%}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+  # Use global ZSH_THEME_GIT_SHOW_UPSTREAM=1 for including upstream remote info
+  if (( ${+ZSH_THEME_GIT_SHOW_UPSTREAM} )) && [[ -n "$upstream_ref" ]]; then
+    upstream=" -> ${upstream_ref}"
+  fi
+
+  # Use global ZSH_THEME_GIT_SHOW_DEFAULT_BRANCH=1 for including the repository's
+  # default branch, as reported by the upstream remote's HEAD, falling back to
+  # origin/HEAD. By default this only displays when it differs from the current
+  # branch. Set it to "always" to display it even when both branches are the same.
+  local default_branch default_branch_remote
+  if (( ${+ZSH_THEME_GIT_SHOW_DEFAULT_BRANCH} )); then
+    default_branch_remote="${upstream_ref%%/*}"
+    default_branch_remote="${default_branch_remote:-origin}"
+    default_branch=$(__git_prompt_git symbolic-ref --quiet --short "refs/remotes/${default_branch_remote}/HEAD" 2>/dev/null) || default_branch=
+    default_branch=${default_branch#${default_branch_remote}/}
+    if [[ -n "$default_branch" \
+      && ( "$ZSH_THEME_GIT_SHOW_DEFAULT_BRANCH" = always || "$default_branch" != "$ref" ) ]]; then
+      default_branch="${ZSH_THEME_GIT_PROMPT_DEFAULT_BRANCH_PREFIX:-" | default: "}${default_branch}${ZSH_THEME_GIT_PROMPT_DEFAULT_BRANCH_SUFFIX}"
+    else
+      default_branch=
+    fi
+  fi
+
+  echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref//\%/%%}${upstream//\%/%%}${default_branch//\%/%%}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
 }
 
 function _omz_git_prompt_status() {
