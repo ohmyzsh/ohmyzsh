@@ -70,3 +70,6 @@ alias jjrt='cd "$(jj root || echo .)"'
 alias jjsp='jj split'
 alias jjsq='jj squash'
 alias jjst='jj status'
+alias jjwa='jj workspace add'
+alias jjwf='jj workspace forget'
+
