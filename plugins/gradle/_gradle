@@ -269,6 +269,7 @@ __gradle_subcommand() {
                 '-Dorg.gradle.configuration-cache.unsafe.ignore.unsupported-build-events-listeners=[]' \
                 '-Dorg.gradle.configuration-cache=[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]' \
                 '-Dorg.gradle.configureondemand=[Configures necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]' \
+                '-Dorg.gradle.console.interactive=[]' \
                 '-Dorg.gradle.console.unicode=[Specifies which character types are allowed in the console output. Supported values are 'auto' (default), 'disable', or 'enable'.]' \
                 '-Dorg.gradle.console=[Specifies which type of console output to generate. Supported values are 'plain', 'colored', 'auto' (default), 'rich', or 'verbose'.]:org.gradle.console:(plain auto rich verbose)' \
                 '-Dorg.gradle.continue=[Continues task execution after a task failure.]' \
@@ -298,6 +299,7 @@ __gradle_subcommand() {
                 '-Dorg.gradle.problems.report=[Enables the HTML problems report.]' \
                 '-Dorg.gradle.projectcachedir=[Specifies the project-specific cache directory. Default is .gradle in the root project directory.]:org.gradle.projectcachedir:_directories' \
                 '-Dorg.gradle.tooling.parallel=[]' \
+                '-Dorg.gradle.unsafe.isolated-projects.diagnostics=[]' \
                 '-Dorg.gradle.unsafe.isolated-projects=[]' \
                 '-Dorg.gradle.vfs.verbose=[]' \
                 '-Dorg.gradle.vfs.watch=[Enables file system watching. Reuses file system data for subsequent builds.]:org.gradle.vfs.watch:(true false)' \
@@ -337,6 +339,7 @@ __gradle_subcommand() {
                 {-a,--no-rebuild}'[Disables rebuilding of project dependencies.]' \
                 (--scan)'--no-scan[Disables the creation of a Build Scan.]' \
                 (--watch-fs)'--no-watch-fs[Disables file system watching.]' \
+                '--non-interactive[Do not do interactive prompting. (incubating)]' \
                 '--offline[Runs the build without accessing network resources.]' \
                 (--no-parallel)'--parallel[Builds projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]' \
                 '--priority[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Supported values are 'normal' (default) or 'low'.]' \
@@ -403,6 +406,7 @@ _gradle() {
         '-Dorg.gradle.configuration-cache.unsafe.ignore.unsupported-build-events-listeners=[]:->argument-expected' \
         '-Dorg.gradle.configuration-cache=[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]:->argument-expected' \
         '-Dorg.gradle.configureondemand=[Configures necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]:->argument-expected' \
+        '-Dorg.gradle.console.interactive=[]:->argument-expected' \
         '-Dorg.gradle.console.unicode=[Specifies which character types are allowed in the console output. Supported values are 'auto' (default), 'disable', or 'enable'.]:->argument-expected' \
         '-Dorg.gradle.console=[Specifies which type of console output to generate. Supported values are 'plain', 'colored', 'auto' (default), 'rich', or 'verbose'.]:org.gradle.console:(plain auto rich verbose):->argument-expected' \
         '-Dorg.gradle.continue=[Continues task execution after a task failure.]:->argument-expected' \
@@ -432,6 +436,7 @@ _gradle() {
         '-Dorg.gradle.problems.report=[Enables the HTML problems report.]:->argument-expected' \
         '-Dorg.gradle.projectcachedir=[Specifies the project-specific cache directory. Default is .gradle in the root project directory.]:org.gradle.projectcachedir:_directories:->argument-expected' \
         '-Dorg.gradle.tooling.parallel=[]:->argument-expected' \
+        '-Dorg.gradle.unsafe.isolated-projects.diagnostics=[]:->argument-expected' \
         '-Dorg.gradle.unsafe.isolated-projects=[]:->argument-expected' \
         '-Dorg.gradle.vfs.verbose=[]:->argument-expected' \
         '-Dorg.gradle.vfs.watch=[Enables file system watching. Reuses file system data for subsequent builds.]:org.gradle.vfs.watch:(true false):->argument-expected' \
@@ -472,6 +477,7 @@ _gradle() {
         {-a,--no-rebuild}'[Disables rebuilding of project dependencies.]' \
         (--scan)'--no-scan[Disables the creation of a Build Scan.]' \
         (--watch-fs)'--no-watch-fs[Disables file system watching.]' \
+        '--non-interactive[Do not do interactive prompting. (incubating)]' \
         '--offline[Runs the build without accessing network resources.]' \
         (--no-parallel)'--parallel[Builds projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]' \
         '--priority[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Supported values are 'normal' (default) or 'low'.]:->argument-expected' \
