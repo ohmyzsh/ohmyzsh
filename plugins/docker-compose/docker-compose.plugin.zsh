@@ -5,8 +5,8 @@
 [[ -x "${commands[docker-compose]:A}" ]] && dccmd='docker-compose' || dccmd='docker compose'
 
 alias dco="$dccmd"
-alias dcc="$dccmd config"
 alias dcb="$dccmd build"
+alias dcc="$dccmd config"
 alias dce="$dccmd exec"
 alias dcps="$dccmd ps"
 alias dcrestart="$dccmd restart"

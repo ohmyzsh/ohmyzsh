@@ -16,8 +16,8 @@ plugins=(... docker-compose)
 | Alias     | Command                          | Description                                                                      |
 |-----------|----------------------------------|----------------------------------------------------------------------------------|
 | dco       | `docker-compose`                 | Docker-compose main command                                                      |
-| dcc       | `docker-compose config`                 | Parse, resolve and render compose file in canonical format |
 | dcb       | `docker-compose build`           | Build containers                                                                 |
+| dcc       | `docker-compose config`                 | Parse, resolve and render compose file in canonical format |
 | dce       | `docker-compose exec`            | Execute command inside a container                                               |
 | dcps      | `docker-compose ps`              | List containers                                                                  |
 | dcrestart | `docker-compose restart`         | Restart container                                                                |
