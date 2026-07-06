@@ -2,7 +2,7 @@
 
 This plugin provides completion for [docker-compose](https://docs.docker.com/compose/) as well as some
 aliases for frequent docker-compose commands.
-This plugin chooses automatically between the legacy `docker-compose` command and the modern 
+This plugin chooses automatically between the legacy `docker-compose` command and the modern
 `docker compose` subcommand, preferring `docker-compose` when both are available.
 
 To use it, add docker-compose to the plugins array of your zshrc file:
@@ -16,6 +16,7 @@ plugins=(... docker-compose)
 | Alias     | Command                          | Description                                                                      |
 |-----------|----------------------------------|----------------------------------------------------------------------------------|
 | dco       | `docker-compose`                 | Docker-compose main command                                                      |
+| dcc       | `docker-compose config`                 | Parse, resolve and render compose file in canonical format |
 | dcb       | `docker-compose build`           | Build containers                                                                 |
 | dce       | `docker-compose exec`            | Execute command inside a container                                               |
 | dcps      | `docker-compose ps`              | List containers                                                                  |
