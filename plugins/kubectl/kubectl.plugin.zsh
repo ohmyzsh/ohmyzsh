@@ -42,6 +42,8 @@ alias kdelf='kubectl delete -f'
 alias kdelk='kubectl delete -k'
 alias kge='kubectl get events --sort-by=".lastTimestamp"'
 alias kgew='kubectl get events --sort-by=".lastTimestamp" --watch'
+alias kgen='kubectl get events --sort-by=".metadata.creationTimestamp"'
+alias kgenw='kubectl get events --sort-by=".metadata.creationTimestamp" --watch'
 
 # Pod management.
 alias kgp='kubectl get pods'

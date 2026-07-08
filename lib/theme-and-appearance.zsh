@@ -57,8 +57,8 @@ case "$OSTYPE" in
     # with color and multibyte support) are available from ports.
     # `colorls` will be installed on purpose and can't be pulled in by installing
     # coreutils (which might be installed for ), so prefer it to `gls`.
-    test-ls-args gls --color && alias ls='gls --color=tty'
     test-ls-args colorls -G && alias ls='colorls -G'
+    test-ls-args gls --color && alias ls='gls --color=tty'
     ;;
   (darwin|freebsd)*)
     # This alias works by default just using $LSCOLORS

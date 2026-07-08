@@ -10,20 +10,21 @@ else
     }
 
     # Ignore these folders (if the necessary grep flags are available)
-    EXC_FOLDERS="{.bzr,CVS,.git,.hg,.svn,.idea,.tox,.venv,venv}"
+    local EXC_FOLDERS="{.bzr,CVS,.git,.hg,.svn,.idea,.tox,.venv,venv}"
+    local grep_opts
 
     # Check for --exclude-dir, otherwise check for --exclude. If --exclude
     # isn't available, --color won't be either (they were released at the same
     # time (v2.5): https://git.savannah.gnu.org/cgit/grep.git/tree/NEWS?id=1236f007
     if grep-flags-available --color=auto --exclude-dir=.cvs; then
-        GREP_OPTIONS="--color=auto --exclude-dir=$EXC_FOLDERS"
+        grep_opts="--color=auto --exclude-dir=$EXC_FOLDERS"
     elif grep-flags-available --color=auto --exclude=.cvs; then
-        GREP_OPTIONS="--color=auto --exclude=$EXC_FOLDERS"
+        grep_opts="--color=auto --exclude=$EXC_FOLDERS"
     fi
 
-    if [[ -n "$GREP_OPTIONS" ]]; then
+    if [[ -n "$grep_opts" ]]; then
         # export grep, egrep and fgrep settings
-        alias grep="grep $GREP_OPTIONS"
+        alias grep="grep $grep_opts"
         alias egrep="grep -E"
         alias fgrep="grep -F"
 
@@ -34,7 +35,6 @@ else
     fi
 
     # Clean up
-    unset GREP_OPTIONS EXC_FOLDERS
     unfunction grep-flags-available
 fi
 

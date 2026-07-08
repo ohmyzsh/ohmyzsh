@@ -167,7 +167,12 @@ alias gcpa='git cherry-pick --abort'
 alias gcpc='git cherry-pick --continue'
 alias gclean='git clean --interactive -d'
 alias gcl='git clone --recurse-submodules'
-alias gclf='git clone --recursive --shallow-submodules --filter=blob:none --also-filter-submodules'
+# gclf: clone with --filter and --shallow-submodules, requires Git >= 2.36 for --also-filter-submodules
+if is-at-least 2.36.0 "$git_version"; then
+  alias gclf='git clone --recursive --shallow-submodules --filter=blob:none --also-filter-submodules'
+else
+  alias gclf='git clone --recursive --shallow-submodules --filter=blob:none'
+fi
 
 function gccd() {
   setopt localoptions extendedglob

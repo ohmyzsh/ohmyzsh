@@ -65,7 +65,9 @@ function takezip() {
   data="$(mktemp)"
   curl -L "$1" > "$data"
   unzip "$data" -d "./"
-  thedir="$(unzip -l "$data" | awk 'NR==4 {print $4}' | sed 's/\/.*//')"
+  # Parse the first actual file entry from unzip -l output, skipping header lines and separators
+  thedir="$(unzip -l "$data" | awk 'NR>3 && !/^-/ && NF>=4 {print $4; exit}')"
+  thedir="${thedir%%/*}"
   rm "$data"
   cd "$thedir"
 }

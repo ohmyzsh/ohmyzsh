@@ -615,12 +615,13 @@ function _omz::pr::test {
     builtin cd -q "$ZSH"
 
     # Get the ohmyzsh git remote
-    command git remote -v | while read remote url _; do
+    local found=0
+    while read remote url _; do
       case "$url" in
       https://github.com/ohmyzsh/ohmyzsh(|.git)) found=1; break ;;
       git@github.com:ohmyzsh/ohmyzsh(|.git)) found=1; break ;;
       esac
-    done
+    done <<< "$(command git remote -v)"
 
     (( $found )) || {
       _omz::log error "could not find the ohmyzsh git remote. Aborting..."
