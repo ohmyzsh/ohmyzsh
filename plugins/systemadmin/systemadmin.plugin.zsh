@@ -28,6 +28,8 @@ alias mkdir='mkdir -pv'
 # get top process eating memory
 alias psmem='ps -e -orss=,args= | sort -b -k1 -nr'
 alias psmem10='ps -e -orss=,args= | sort -b -k1 -nr | head -n 10'
+# list all zombie processes with ownership and parent process details
+alias pszombie="ps -eo user,pid,ppid,state,cmd | awk '\$4==\"Z\"'"
 # get top process eating cpu if not work try execute : export LC_ALL='C'
 alias pscpu='ps -e -o pcpu,cpu,nice,state,cputime,args | sort -k1,1n -nr'
 alias pscpu10='ps -e -o pcpu,cpu,nice,state,cputime,args | sort -k1,1n -nr | head -n 10'
