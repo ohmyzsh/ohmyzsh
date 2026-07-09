@@ -177,10 +177,10 @@ function getip() {
   fi
 }
 
-# Clear zombie processes
-function clrz() {
-  ps -eal | awk '{ if ($2 == "Z") {print $4}}' | kill -9
-}
+## Clear zombie processes
+#function clrz() {
+#  ps -eal | awk '{ if ($2 == "Z") {print $4}}' | kill -9
+#}
 
 # Second concurrent
 function conssec() {
