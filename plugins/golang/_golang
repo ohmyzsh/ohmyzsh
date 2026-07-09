@@ -81,6 +81,7 @@ _go() {
     'tool[run specified go tool]'
     'version[print Go version]'
     'vet[run go tool vet on packages]'
+    'work[workspace maintenance]'
   )
   if (( CURRENT == 2 )); then
     # explain go commands
@@ -88,19 +89,38 @@ _go() {
     return
   fi
   build_flags=(
-    '-a[force reinstallation of packages that are already up to date]'
+    '-C[change to dir before running the command]:directory:_path_files -/'
+    '-a[force rebuilding of packages that are already up-to-date]'
     '-n[print the commands but do not run them]'
     '-p[number of parallel builds]:number'
     '-race[enable data race detection]'
-    '-x[print the commands]'
+    '-msan[enable interoperation with memory sanitizer]'
+    '-asan[enable interoperation with address sanitizer]'
+    '-cover[enable code coverage instrumentation]'
+    '-covermode[set the mode for coverage analysis]:mode:(set count atomic)'
+    '-coverpkg[apply coverage analysis to matching packages]:pattern'
+    '-v[print the names of packages as they are compiled]'
     '-work[print temporary directory name and keep it]'
-    '-ccflags[flags for 5c/6c/8c]:flags'
-    '-gcflags[flags for 5g/6g/8g]:flags'
-    '-ldflags[flags for 5l/6l/8l]:flags'
-    '-gccgoflags[flags for gccgo]:flags'
-    '-compiler[name of compiler to use]:name'
-    '-installsuffix[suffix to add to package directory]:suffix'
+    '-x[print the commands]'
+    '-asmflags[arguments to pass on each go tool asm invocation]:flags'
+    '-buildmode[build mode to use]:mode:(archive c-archive c-shared default shared exe pie plugin)'
+    '-buildvcs[stamp binaries with version control information]:mode:(true false auto)'
+    '-compiler[name of compiler to use]:name:(gccgo gc)'
+    '-gccgoflags[arguments to pass on each gccgo compiler/linker invocation]:flags'
+    '-gcflags[arguments to pass on each go tool compile invocation]:flags'
+    '-installsuffix[suffix to use in the package installation directory]:suffix'
+    '-json[emit build output in JSON suitable for automated processing]'
+    '-ldflags[arguments to pass on each go tool link invocation]:flags'
+    '-linkshared[build code that will be linked against shared libraries]'
+    '-mod[module download mode to use]:mode:(readonly vendor mod)'
+    '-modcacherw[leave newly-created directories in the module cache read-write]'
+    '-modfile[read and write an alternate go.mod file]:file:_files -g "*.mod"'
+    '-overlay[read a JSON config file that provides an overlay for build operations]:file:_files -g "*.json"'
+    '-pgo[specify the file path of a profile for profile-guided optimization]:file:_files'
+    '-pkgdir[install and load all packages from dir]:directory:_path_files -/'
     '-tags[list of build tags to consider satisfied]:tags'
+    '-trimpath[remove all file system paths from the resulting executable]'
+    '-toolexec[program to use to invoke toolchain programs]:command'
   )
 
   case ${words[2]} in
@@ -125,17 +145,20 @@ _go() {
     ;;
   install)
     _arguments -s -w : ${build_flags[@]} \
-      "-v[show package names]" \
       '*:importpaths:__go_packages'
     ;;
   get)
     _arguments -s -w : \
-      ${build_flags[@]}
+      ${build_flags[@]} \
+      "-t[consider modules needed to build tests of packages]" \
+      "-u[update modules providing dependencies to newer minor or patch releases]" \
+      "-u=[update modules providing dependencies to patch releases]:mode:(patch)" \
+      "-tool[add a matching tool line to go.mod for each listed package]" \
+      "*:importpaths:__go_packages"
     ;;
   build)
     _arguments -s -w : \
       ${build_flags[@]} \
-      "-v[show package names]" \
       "-o[output file]:file:_files" \
       "*:args:{ _alternative ':importpaths:__go_packages' ':files:_path_files -g \"*.go\"' }"
     ;;
@@ -238,6 +261,59 @@ _go() {
       ;;
     esac
     ;;
+  work)
+    local -a work_commands
+    work_commands+=(
+      'edit[edit go.work from tools or scripts]'
+      'init[initialize workspace file]'
+      'sync[sync workspace build list to modules]'
+      'use[add modules to workspace file]'
+      'vendor[make vendored copy of dependencies]'
+    )
+
+    if (( CURRENT == 3 )); then
+      _values 'go work commands' ${work_commands[@]} "help[display help]"
+      return
+    fi
+
+    case ${words[3]} in
+    help)
+      _values 'go work commands' ${work_commands[@]}
+      ;;
+    edit)
+      _arguments -s -w : \
+        "-fmt[reformat the go.work file]" \
+        "-godebug[=key=value add a godebug key=value line]:key=value" \
+        "-dropgodebug[=key drop an existing godebug line]:key" \
+        "-use[=path add a use directive]:directory:_path_files -/" \
+        "-dropuse[=path drop a use directive]:directory:_path_files -/" \
+        "-replace[=old{@v}=new{@v} add a replacement of the given module path and version pair]:name" \
+        "-dropreplace[=old{@v} drop a replacement of the given module path and version pair]:name" \
+        "-go[={version} set the expected Go language version]:number" \
+        "-toolchain[=name set the Go toolchain to use]:name" \
+        "-print[print the final go.work in its text format]" \
+        "-json[print the final go.work file in JSON format]" \
+        "1:go.work file:_files -g 'go.work'"
+      ;;
+    init)
+      _arguments -s -w : \
+        "*:module directories:_path_files -/"
+      ;;
+    sync)
+      ;;
+    use)
+      _arguments -s -w : \
+        "-r[search recursively for modules in the argument directories]" \
+        "*:module directories:_path_files -/"
+      ;;
+    vendor)
+      _arguments -s -w : \
+        "-e[attempt to proceed despite errors encountered while loading packages]" \
+        "-v[print the names of vendored modules and packages]" \
+        "-o[create the vendor directory at the given path]:output directory:_path_files -/"
+      ;;
+    esac
+    ;;
   help)
     _values "${commands[@]}" \
       'environment[show Go environment variables available]' \
@@ -246,6 +322,12 @@ _go() {
       'remote[remote import path syntax]' \
       'testflag[description of testing flags]' \
       'testfunc[description of testing functions]'
+    ;;
+  version)
+    _arguments -s -w : \
+      "-m[print module version information]" \
+      "-v[report unrecognized files]" \
+      "*:file:_files"
     ;;
   run)
     _arguments -s -w : \
