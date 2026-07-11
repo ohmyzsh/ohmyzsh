@@ -81,6 +81,8 @@ Twitter), and join us on [Discord](https://discord.gg/ohmyzsh).
 
 - [Zsh](https://www.zsh.org) should be installed (v4.3.9 or more recent is fine but we prefer 5.0.8 and
   newer). If not pre-installed (run `zsh --version` to confirm), check the following wiki instructions here:
+
+> **Pro Tip:** After installation, run `omz update` periodically to get the latest plugins and themes.
   [Installing ZSH](https://github.com/ohmyzsh/ohmyzsh/wiki/Installing-ZSH)
 - `curl` or `wget` should be installed
 - `git` should be installed (recommended v2.4.11 or higher)
