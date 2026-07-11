@@ -2,28 +2,39 @@
 
 # Make sure important variables exist if not already defined
 #
-# $USER is defined by login(1) which is not always executed (e.g. containers)
-# POSIX: https://pubs.opengroup.org/onlinepubs/009695299/utilities/id.html
-USER=${USER:-$(id -u -n)}
 # $HOME is defined at the time of login, but it could be unset. If it is unset,
 # a tilde by itself (~) will not be expanded to the current user's home directory.
 # POSIX: https://pubs.opengroup.org/onlinepubs/009696899/basedefs/xbd_chap08.html#tag_08_03
-HOME="${HOME:-$(getent passwd "$USER" 2>/dev/null | cut -d: -f6)}"
-# macOS does not have getent; use dscl to query the directory service
-HOME="${HOME:-$(dscl . -read "/Users/$USER" NFSHomeDirectory 2>/dev/null | awk '{print $2}')}"
-# Last resort: tilde expansion via eval (POSIX, but carries injection risk)
-HOME="${HOME:-$(eval "echo ~$USER" 2>/dev/null)}"
-
-if [ -z "$HOME" ]; then
-  echo >&2 "Error: could not determine HOME directory"
-  exit 1
+current_uid=$(id -u 2>/dev/null)
+current_user=$(id -u -n 2>/dev/null)
+HOME=${HOME:-}
+if [ -z "$HOME" ] && [ -n "$current_uid" ] && command -v getent >/dev/null 2>&1; then
+  HOME=$(getent passwd "$current_uid" 2>/dev/null | cut -d: -f6)
+fi
+# macOS does not have getent; use dscl to query the directory service.
+if [ -z "$HOME" ] && [ -n "$current_user" ] && command -v dscl >/dev/null 2>&1; then
+  HOME=$(dscl . -read "/Users/$current_user" NFSHomeDirectory 2>/dev/null | awk '{print $2}')
+fi
+if [ -z "$HOME" ] && [ -n "$current_uid" ] && [ -r /etc/passwd ]; then
+  HOME=$(awk -F: -v uid="$current_uid" '$3 == uid { print $6; exit }' /etc/passwd)
 fi
 
+HOME=${HOME%"${HOME##*[!/]}"}
+case "$HOME" in
+  ""|/) echo >&2 "Error: could not determine HOME directory"; exit 1 ;;
+  /*) ;;
+  *) echo >&2 "Error: could not determine HOME directory"; exit 1 ;;
+esac
+
 zdot="${ZDOTDIR:-$HOME}"
+zdot=${zdot%"${zdot##*[!/]}"}
+case "${zdot:-/}" in
+  /|.|..) echo >&2 "Error: refusing unsafe ZDOTDIR '$zdot'"; exit 1 ;;
+esac
 
 # Default OMZ directory (matches tools/install.sh logic)
-if [ -n "$ZDOTDIR" ] && [ "$ZDOTDIR" != "$HOME" ]; then
-  OMZ_DIR="${ZSH:-$ZDOTDIR/ohmyzsh}"
+if [ -n "$ZDOTDIR" ] && [ "$zdot" != "$HOME" ]; then
+  OMZ_DIR="${ZSH:-$zdot/ohmyzsh}"
 else
   OMZ_DIR="${ZSH:-$HOME/.oh-my-zsh}"
 fi
