@@ -48,15 +48,15 @@ omz_f() {
 unset -f omz_f
 
 # If ZSH is not defined, use the current script's directory.
-[[ -n "$ZSH" ]] || export ZSH="${${(%):-%x}:a:h}"
+[[ -n ${ZSH-} ]] || export ZSH="${${(%):-%x}:a:h}"
 
 # Set ZSH_CUSTOM to the path where your custom config files
 # and plugins exists, or else we will use the default custom/
-[[ -n "$ZSH_CUSTOM" ]] || ZSH_CUSTOM="$ZSH/custom"
+[[ -n ${ZSH_CUSTOM-} ]] || ZSH_CUSTOM="$ZSH/custom"
 
 # Set ZSH_CACHE_DIR to the path where cache files should be created
 # or else we will use the default cache/
-[[ -n "$ZSH_CACHE_DIR" ]] || ZSH_CACHE_DIR="$ZSH/cache"
+[[ -n ${ZSH_CACHE_DIR-} ]] || ZSH_CACHE_DIR="$ZSH/cache"
 
 # Make sure $ZSH_CACHE_DIR is writable, otherwise use a directory in $HOME
 if [[ ! -w "$ZSH_CACHE_DIR" ]]; then
@@ -98,15 +98,15 @@ for plugin ($plugins); do
 done
 
 # Figure out the SHORT hostname
-if [[ "$OSTYPE" = darwin* ]]; then
+if [[ ${OSTYPE-} = darwin* ]]; then
   # macOS's $HOST changes with dhcp, etc. Use LocalHostName if possible.
-  SHORT_HOST=$(scutil --get LocalHostName 2>/dev/null) || SHORT_HOST="${HOST/.*/}"
+  SHORT_HOST=$(scutil --get LocalHostName 2>/dev/null) || SHORT_HOST="${HOST-}"
 else
-  SHORT_HOST="${HOST/.*/}"
+  SHORT_HOST="${HOST-}"
 fi
 
 # Save the location of the current completion dump file.
-if [[ -z "$ZSH_COMPDUMP" ]]; then
+if [[ -z ${ZSH_COMPDUMP-} ]]; then
   ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 fi
 
@@ -121,7 +121,7 @@ if ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null \
   zcompdump_refresh=1
 fi
 
-if [[ "$ZSH_DISABLE_COMPFIX" != true ]]; then
+if [[ ${ZSH_DISABLE_COMPFIX-} != true ]]; then
   source "$ZSH/lib/compfix.zsh"
   # Load only from secure directories
   compinit -i -d "$ZSH_COMPDUMP"
@@ -133,7 +133,7 @@ else
 fi
 
 # Append zcompdump metadata if missing
-if (( $zcompdump_refresh )) \
+if (( ${zcompdump_refresh:-0} )) \
   || ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null; then
   # Use `tee` in case the $ZSH_COMPDUMP filename is invalid, to silence the error
   # See https://github.com/ohmyzsh/ohmyzsh/commit/dd1a7269#commitcomment-39003489
@@ -200,7 +200,7 @@ done
 unset lib_file
 
 # Load all of the plugins that were defined in ~/.zshrc
-for plugin ($plugins); do
+for plugin (${plugins-}); do
   _omz_source "plugins/$plugin/$plugin.plugin.zsh"
 done
 unset plugin
@@ -218,7 +218,7 @@ is_theme() {
   builtin test -f $base_dir/$name.zsh-theme
 }
 
-if [[ -n "$ZSH_THEME" ]]; then
+if [[ -n ${ZSH_THEME-} ]]; then
   if is_theme "$ZSH_CUSTOM" "$ZSH_THEME"; then
     source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
   elif is_theme "$ZSH_CUSTOM/themes" "$ZSH_THEME"; then
@@ -231,4 +231,4 @@ if [[ -n "$ZSH_THEME" ]]; then
 fi
 
 # set completion colors to be the same as `ls`, after theme has been loaded
-[[ -z "$LS_COLORS" ]] || zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+[[ -z ${LS_COLORS-} ]] || zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
