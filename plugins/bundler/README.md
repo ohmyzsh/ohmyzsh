@@ -22,7 +22,7 @@ plugins=(... bundler)
 | `bo`   | `bundle open`     | Opens the source directory for a gem in your bundle      |
 | `bout` | `bundle outdated` | List installed gems with newer versions available        |
 | `bp`   | `bundle package`  | Package your needed .gem files into your application     |
-| `bu`   | `bundle update --all` (no arguments) or `bundle update <args>` | Update all gems, or only the given gems/options (e.g. `bu rake`, `bu --ruby`) |
+| `bu`   | `bundle update`   | Update your gems to the latest available versions          |
 
 ## Gem wrapper
 

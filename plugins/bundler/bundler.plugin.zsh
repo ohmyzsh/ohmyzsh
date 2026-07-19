@@ -9,16 +9,7 @@ alias bl="bundle list"
 alias bo="bundle open"
 alias bout="bundle outdated"
 alias bp="bundle package"
-unalias bu 2>/dev/null
-# `bundle update` needs --all to update everything, but rejects --all when
-# gems or options are given (e.g. `bu <gem>`, `bu --ruby`)
-bu() {
-  if [[ $# -eq 0 ]]; then
-    bundle update --all
-  else
-    bundle update "$@"
-  fi
-}
+alias bu="bundle update"
 
 ## Gem wrapper
 
