@@ -1,11 +1,6 @@
 # AWS CDK Plugin
 
-This plugin provides aliases and autocompletion for the
-[AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) CLI.
-
-## Requirements
-
-- [AWS CDK CLI](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) installed (`npm install -g aws-cdk`)
+This plugin provides aliases and autocompletion for the [AWS Cloud Development Kit (CDK)](https://aws.amazon.com/cdk/) CLI.
 
 ## Usage
 
@@ -14,6 +9,10 @@ Add `cdk` to the plugins array in your `.zshrc`:
 ```zsh
 plugins=(... cdk)
 ```
+
+## Requirements
+
+- [AWS CDK CLI](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) installed (`npm install -g aws-cdk`)
 
 ## Aliases
 
