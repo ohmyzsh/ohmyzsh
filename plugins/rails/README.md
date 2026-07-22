@@ -24,11 +24,12 @@ plugins=(... rails)
 | `rdm`   | `rails db:migrate`               | Run pending db migrations                              |
 | `rdmd`  | `rails db:migrate:down`          | Undo specific db migration                             |
 | `rdmr`  | `rails db:migrate:redo`          | Redo specific db migration                             |
+| `rdmrs` | `rails db:migrate:reset`         | Delete the database and set it up again from scratch.  |
 | `rdms`  | `rails db:migrate:status`        | Show current db migration status                       |
 | `rdmtc` | `rails db:migrate db:test:clone` | Run pending migrations and clone db into test database |
 | `rdmu`  | `rails db:migrate:up`            | Run specific db migration                              |
 | `rdr`   | `rails db:rollback`              | Roll back the last migration                           |
-| `rdrs`  | `rails db:reset`                 | Delete the database and set it up again                |
+| `rdrs`  | `rails db:reset`                 | Delete the database and set it up again from schema.   |
 | `rds`   | `rails db:seed`                  | Seed the database                                      |
 | `rdsl`  | `rails db:schema:load`           | Load the database schema                               |
 | `rdtc`  | `rails db:test:clone`            | Clone the database into the test database              |
