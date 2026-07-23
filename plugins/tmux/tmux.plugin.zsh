@@ -167,7 +167,7 @@ function _zsh_tmux_plugin_preexec()
   local -a tmux_cmd
   tmux_cmd=(command tmux)
 
-  eval $($tmux_cmd show-environment -s)
+  eval "$($tmux_cmd show-environment -s)"
 }
 
 # Use the completions for tmux for our function
