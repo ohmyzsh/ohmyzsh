@@ -9,8 +9,7 @@ alias bl="bundle list"
 alias bo="bundle open"
 alias bout="bundle outdated"
 alias bp="bundle package"
-alias bu="bundle update"
-alias bua="bundle update --all"
+alias bu="bundle update --all"
 
 ## Gem wrapper
 

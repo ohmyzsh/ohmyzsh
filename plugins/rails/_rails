@@ -214,7 +214,6 @@ _rails_subcommands() {
       "db\:migrate[Migrate the database]"
       "db\:migrate\:down[Run the 'down' for a given migration VERSION]"
       "db\:migrate\:redo[Roll back the database one migration and re-migrate up]"
-      "db\:migrate\:reset[Drop and recreate all databases from scratch for the current environment]"
       "db\:migrate\:status[Display status of migrations]"
       "db\:migrate\:up[Run the 'up' for a given migration VERSION]"
       "db\:prepare[Run setup if database does not exist, or run migrations if it does]"
