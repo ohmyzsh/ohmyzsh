@@ -40,6 +40,15 @@ function _omz_git_prompt_info() {
 }
 
 function _omz_git_prompt_status() {
+  # OHMYZSH-13330: avoid "regex matching error: illegal byte sequence".
+  # zsh's "=~" operator delegates to the C library regex, which aborts with
+  # REG_ILLSEQ when the subject contains an invalid byte sequence under a
+  # multibyte locale (e.g. a filename with non-UTF-8 bytes in `git status`
+  # output). Forcing the C locale makes every byte a valid character, so the
+  # regex matching below never fails that way. `git status --porcelain` is
+  # locale-independent, so this does not change the parsed output.
+  local -x LC_ALL=C
+
   [[ "$(__git_prompt_git config --get oh-my-zsh.hide-status 2>/dev/null)" = 1 ]] && return
 
   # Maps a git status prefix to an internal constant
