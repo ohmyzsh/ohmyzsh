@@ -30,7 +30,10 @@ alias pamcl='php artisan make:class'
 alias pamen='php artisan make:enum'
 alias pami='php artisan make:interface'
 alias pamtr='php artisan make:trait'
-
+alias pamv='php artisan make:view'
+alias pammid='php artisan make:middleware'
+alias pamcomp='php artisan make:component'
+alias pammig='php artisan make:migration'
 
 # Clears
 alias pacac='php artisan cache:clear'
@@ -46,3 +49,7 @@ alias paql='php artisan queue:listen'
 alias paqr='php artisan queue:retry'
 alias paqt='php artisan queue:table'
 alias paqw='php artisan queue:work'
+
+# Rotes
+alias parl='php artisan route:list'
+alias parc='php artisan route:cache'
