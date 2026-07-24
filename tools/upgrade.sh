@@ -231,6 +231,10 @@ local ret=0
 remote=${"$(git config --local oh-my-zsh.remote)":-origin}
 branch=${"$(git config --local oh-my-zsh.branch)":-master}
 
+# cooldown: minimum age (in days) of commits to apply
+local cooldown_days
+zstyle -s ':omz:update' cooldown cooldown_days || cooldown_days=0
+
 # repository state
 last_head=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
 # checkout update branch
@@ -242,7 +246,20 @@ last_commit=$(git rev-parse "$branch")
 if [[ $verbose_mode != silent ]]; then
   printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
 fi
-if LANG= git pull --quiet --rebase $remote $branch; then
+if {
+  if (( cooldown_days > 0 )); then
+    zmodload zsh/datetime
+    local cutoff_epoch cooldown_ref
+    cutoff_epoch=$(( EPOCHSECONDS - cooldown_days * 86400 ))
+    LANG= git fetch --quiet $remote $branch && {
+      cooldown_ref=$(git log --format="%H %ct" "$remote/$branch" \
+        | awk -v c="$cutoff_epoch" '$2 <= c { print $1; exit }')
+      [[ -z "$cooldown_ref" ]] || LANG= git merge --ff-only --quiet "$cooldown_ref"
+    }
+  else
+    LANG= git pull --quiet --rebase $remote $branch
+  fi
+}; then
   # Check if it was really updated or not
   if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
     message="Oh My Zsh is already at the latest version."
