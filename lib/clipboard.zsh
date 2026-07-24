@@ -54,6 +54,23 @@ function detect-clipboard() {
   if [[ "${OSTYPE}" == darwin* ]] && (( ${+commands[pbcopy]} )) && (( ${+commands[pbpaste]} )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | pbcopy; }
     function clippaste() { pbpaste; }
+  elif [[ -n "$SSH_CONNECTION" || -n "$SSH_TTY" ]] && \
+       [[ "$TERM" =~ '^(screen|xterm|iterm|kitty|wezterm|alacritty)' || -n "$TERMINAL_EMULATOR" ]] && \
+       (( ${+commands[base64]} )); then
+    function clipcopy() {
+      emulate -L zsh
+      local content
+      if [[ -n "$1" && -f "$1" ]]; then
+        content=$(<"$1")
+      else
+        content=$(</dev/stdin)
+      fi
+      printf "\e]52;c;%s\a" "$(echo -n "$content" | base64 | tr -d '\n')"
+    }
+    function clippaste() {
+      print "clippaste: reading clipboard via OSC 52 is not supported for security reasons." >&2
+      return 1
+    }
   elif [[ "${OSTYPE}" == (cygwin|msys)* ]]; then
     function clipcopy() { cat "${1:-/dev/stdin}" > /dev/clipboard; }
     function clippaste() { cat /dev/clipboard; }
