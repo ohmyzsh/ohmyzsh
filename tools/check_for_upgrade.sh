@@ -108,6 +108,28 @@ ERROR='${error//\'/’}'
 EOD
 }
 
+function read_update_confirmation() {
+  local option prompt
+  prompt="[oh-my-zsh] Would you like to update? [Y/n] "
+
+  while true; do
+    printf "%s" "$prompt"
+
+    if ! read -r -k 1 option; then
+      echo
+      return 1
+    fi
+
+    [[ "$option" = $'\n' ]] || echo
+
+    case "$option" in
+      [yY$'\n']) return 0 ;;
+      [nN]) return 1 ;;
+      *) prompt="[oh-my-zsh] Please enter 'y' or 'n': " ;;
+    esac
+  done
+}
+
 function update_ohmyzsh() {
   local verbose_mode
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
@@ -162,7 +184,7 @@ function handle_update() {
   () {
     emulate -L zsh
 
-    local epoch_target mtime option LAST_EPOCH
+    local epoch_target mtime LAST_EPOCH
 
     # Remove lock directory if older than a day
     zmodload zsh/datetime
@@ -187,7 +209,7 @@ function handle_update() {
     trap "
       ret=\$?
       unset update_mode
-      unset -f current_epoch is_update_available update_last_updated_file update_ohmyzsh handle_update 2>/dev/null
+      unset -f current_epoch is_update_available update_last_updated_file read_update_confirmation update_ohmyzsh handle_update 2>/dev/null
       command rm -rf '$ZSH/log/update.lock'
       return \$ret
     " EXIT INT QUIT
@@ -231,19 +253,16 @@ function handle_update() {
     fi
 
     # Ask for confirmation and only update on 'y', 'Y' or Enter
-    # Otherwise just show a reminder for how to update
-    printf "[oh-my-zsh] Would you like to update? [Y/n] "
-    read -r -k 1 option
-    [[ "$option" = $'\n' ]] || echo
-    case "$option" in
-      [yY$'\n']) update_ohmyzsh ;;
-      [nN]) update_last_updated_file ;&
-      *) echo "[oh-my-zsh] You can update manually by running \`omz update\`" ;;
-    esac
+    if read_update_confirmation; then
+      update_ohmyzsh
+    else
+      update_last_updated_file
+      echo "[oh-my-zsh] You can update manually by running \`omz update\`"
+    fi
   }
 
   unset update_mode
-  unset -f current_epoch is_update_available update_last_updated_file update_ohmyzsh handle_update
+  unset -f current_epoch is_update_available update_last_updated_file read_update_confirmation update_ohmyzsh handle_update
 }
 
 case "$update_mode" in
