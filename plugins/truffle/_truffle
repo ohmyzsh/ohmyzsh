@@ -1,0 +1,16 @@
+#compdef truffle
+
+_arguments \
+  '1: :->command' \
+  '*: :->args'
+
+case $state in
+  command)
+    local commands=("init" "compile" "migrate" "test" "exec" "develop" "console")
+    _describe "command" commands
+    ;;
+  *)
+    _files
+    ;;
+esac
+
