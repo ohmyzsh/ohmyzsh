@@ -129,6 +129,7 @@ alias gb='git branch'
 alias gba='git branch --all'
 alias gbd='git branch --delete'
 alias gbD='git branch --delete --force'
+alias gbDnr="gbD \$(diff -B <(gb | sed 's,[[:space:]\*]*,,' | sort) <(gbr | sed 's,[[:space:]\*]*origin/,,' | sort) | sed -n 's/^< //p') 2> /dev/null || echo 'No branches found!!!'" # git branch force-delete no remote
 
 function gbda() {
   git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null
