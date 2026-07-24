@@ -1,7 +1,8 @@
 # ssh plugin
 
-This plugin provides host completion based off of your `~/.ssh/config` file, and adds
-some utility functions to work with SSH keys.
+This plugin provides host completion based off of your `~/.ssh/config` file,
+and adds some utility functions to work with SSH keys. If the `~/.ssh/config`
+contains `Include` directives, the plugin also parse hosts in related files.
 
 To use it, add `ssh` to the plugins array in your zshrc file:
 
