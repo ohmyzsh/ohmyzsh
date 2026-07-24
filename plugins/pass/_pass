@@ -125,9 +125,10 @@ _pass_cmd_show () {
 _pass_complete_entries_helper () {
 	local IFS=$'\n'
 	local prefix
-	zstyle -s ":completion:${rootcontext}:" prefix prefix ||
-prefix="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
-  _values -C 'passwords' ${$(find -L "$prefix" \( -name .git -o -name .gpg-id \) -prune -o $@ -print 2>/dev/null | sed -e "s#${prefix}/\{0,1\}##" -e 's#\.gpg##' -e 's#\\#\\\\#g' -e 's#:#\\:#g' | sort):-""}
+	zstyle -s ":completion:${rootcontext}:" prefix prefix || prefix="${PASSWORD_STORE_DIR:-$HOME/.password-store}"
+	local -a entries
+	entries=(${$(find -L "$prefix" \( -name .git -o -name .gpg-id \) -prune -o $@ -print 2>/dev/null | sed -e "s#${prefix}/\{0,1\}##" -e 's#\.gpg##' -e 's#\\#\\\\#g' | sort):-""})
+	compadd -M 'l:|=* r:|=*' -a entries
 }
 
 _pass_complete_entries_with_subdirs () {
