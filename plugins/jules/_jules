@@ -1,0 +1,59 @@
+#compdef jules
+
+_jules() {
+    local line
+
+    _arguments -C \
+        "1: :->command" \
+        "*::arg:->args"
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'login:Sign in to Jules with your Google account'
+                'logout:Sign out of the current session'
+                'remote:Manage repositories and remote sessions'
+                'version:Show the installed version of Jules'
+                'help:Show general help or help for a specific command'
+                'completion:Generate shell autocompletion scripts'
+            )
+            _describe -t commands 'jules command' commands
+        ;;
+        args)
+            case $words[1] in
+                remote)
+                    _arguments \
+                        "1: :->remote_cmd" \
+                        "*::arg:->remote_args"
+                    
+                    case $state in
+                        remote_cmd)
+                            local -a remote_commands
+                            remote_commands=(
+                                'list:List connected repositories or active sessions'
+                                'new:Start a new Jules session in a repository'
+                                'pull:Download the results of a session'
+                            )
+                            _describe -t remote_commands 'remote command' remote_commands
+                        ;;
+                        remote_args)
+                            _arguments \
+                                '--repo[Specify the repository (e.g. user/repo)]:repo:_files' \
+                                '--session[Session name or ID]:session:' \
+                                '--parallel[Number of parallel sessions]:count:' \
+                                '--theme[Interface theme (light/dark)]:theme:(light dark)'
+                        ;;
+                    esac
+                ;;
+                *)
+                    _arguments \
+                        '(-h --help)'{-h,--help}'[Show help]' \
+                        '--theme[Set the visual theme]:theme:(light dark)'
+                ;;
+            esac
+        ;;
+    esac
+}
+
+_jules "$@"
