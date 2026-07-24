@@ -1,0 +1,17 @@
+_load_nodejs_scripts() {
+  local read_package_json_scripts_command="try { Object.keys(require('./package.json').scripts).join('\n').replace(/:/g, '\\\:') } catch {''}"
+  nodejs_scripts=("${(@f)$(node -pe ${read_package_json_scripts_command} | sort)}")
+}
+
+_adwnode() {
+  if command -v node >/dev/null 2>&1; then
+    if [ -f ./package.json ]; then
+      _load_nodejs_scripts
+
+      
+      if [[ ! ${#nodejs_scripts[@]} -eq 0 ]]; then
+        _describe '' nodejs_scripts
+      fi
+    fi
+  fi
+}
