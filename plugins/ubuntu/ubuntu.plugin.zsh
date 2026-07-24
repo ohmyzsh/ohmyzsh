@@ -135,4 +135,6 @@ function apt-list-packages {
   grep -v deinstall | \
   sort -n | \
   awk '{print $1" "$2}'
+# Install package with recommended AND suggested packages
+alias apti='apt install -o APT::Install-Recommends="true" -o APT::Install-Suggests="true"'
 }
