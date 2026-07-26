@@ -295,8 +295,8 @@ _history-substring-search-begin() {
     fi
 
     #
-    # Escape and join query parts with wildcard character '*' as seperator
-    # `(j:CHAR:)` join array to string with CHAR as seperator
+    # Escape and join query parts with wildcard character '*' as separator
+    # `(j:CHAR:)` join array to string with CHAR as separator
     #
     local search_pattern="${(j:*:)_history_substring_search_query_parts[@]//(#m)[\][()|\\*?#<>~^]/\\$MATCH}*"
 

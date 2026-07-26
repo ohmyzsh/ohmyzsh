@@ -10,6 +10,7 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 git_custom_status() {
   local branch=$(git_current_branch)
   [[ -n "$branch" ]] || return 0
+  branch="${branch//\%/%%}"
   echo "$(parse_git_dirty)\
 %{${fg_bold[yellow]}%}$(work_in_progress)%{$reset_color%}\
 ${ZSH_THEME_GIT_PROMPT_PREFIX}${branch}${ZSH_THEME_GIT_PROMPT_SUFFIX}"

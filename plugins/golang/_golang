@@ -15,6 +15,52 @@ __go_identifiers() {
   compadd $(godoc -templates "$tmpl_path" ${words[-2]} 2> /dev/null)
 }
 
+__go_tool_commands() {
+  local -a tools tool_commands
+  local -A command_seen short_count
+  local tool command
+
+  tools=("${(@f)$(go tool 2>/dev/null)}")
+
+  # Go 1.24+ lists module tools by package path, but also accepts unique
+  # default binary names for those tools.
+  for tool in "${tools[@]}"; do
+    [[ -n $tool ]] || continue
+
+    (( command_seen[$tool]++ ))
+
+    if [[ $tool == */* ]]; then
+      command=${tool:t}
+
+      if [[ $command == v[0-9]* && ${command#v} != *[^0-9]* ]] && (( ${command#v} > 1 )); then
+        command=${${tool%/$command}:t}
+      fi
+
+      (( short_count[$command]++ ))
+    fi
+  done
+
+  for tool in "${tools[@]}"; do
+    [[ -n $tool ]] || continue
+
+    tool_commands+=("$tool")
+
+    if [[ $tool == */* ]]; then
+      command=${tool:t}
+
+      if [[ $command == v[0-9]* && ${command#v} != *[^0-9]* ]] && (( ${command#v} > 1 )); then
+        command=${${tool%/$command}:t}
+      fi
+
+      if (( short_count[$command] == 1 && ! command_seen[$command] )); then
+        tool_commands+=("$command")
+      fi
+    fi
+  done
+
+  _values "go tool" "${tool_commands[@]}"
+}
+
 _go() {
   typeset -a commands build_flags
   commands+=(
@@ -208,7 +254,7 @@ _go() {
     ;;
   tool)
     if (( CURRENT == 3 )); then
-        _values "go tool" $(go tool)
+        __go_tool_commands
         return
     fi
     case ${words[3]} in

@@ -78,7 +78,7 @@ if is-at-least 4.2.0; then
   alias -s chm=xchm
   alias -s djvu=djview
 
-  #list whats inside packed file
+  #list what's inside packed file
   alias -s zip="unzip -l"
   alias -s rar="unrar l"
   alias -s tar="tar tf"
