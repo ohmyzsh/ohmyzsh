@@ -13,16 +13,20 @@ plugins=(... flutter)
 | Alias      | Command                 | Description                                                                |
 | :--------- | :---------------------- | :------------------------------------------------------------------------- |
 | `fl`       | `flutter`               | Shorthand for flutter command                                              |
+| `fla`      | `flutter analyze`       | Analyzes flutter code                                                      |
 | `flattach` | `flutter attach`        | Attaches flutter to a running flutter application with enabled observatory |
 | `flb`      | `flutter build`         | Build flutter application                                                  |
-| `flchnl`   | `flutter channel`       | Switches flutter channel (requires input of desired channel)               |
 | `flc`      | `flutter clean`         | Cleans flutter project                                                     |
-| `fldvcs`   | `flutter devices`       | List connected devices (if any)                                            |
+| `flchnl`   | `flutter channel`       | Switches flutter channel (requires input of desired channel)               |
 | `fldoc`    | `flutter doctor`        | Runs flutter doctor                                                        |
-| `flpub`    | `flutter pub`           | Shorthand for flutter pub command                                          |
+| `fldvcs`   | `flutter devices`       | List connected devices (if any)                                            |
 | `flget`    | `flutter pub get`       | Installs dependencies                                                      |
+| `fll`      | `flutter logs`          | Shows flutter logs                                                         |
+| `flpu`     | `flutter pub upgrade`   | Upgrades dependencies                                                      |
+| `flpub`    | `flutter pub`           | Shorthand for flutter pub command                                          |
 | `flr`      | `flutter run`           | Runs flutter app                                                           |
 | `flrd`     | `flutter run --debug`   | Runs flutter app in debug mode (default mode)                              |
 | `flrp`     | `flutter run --profile` | Runs flutter app in profile mode                                           |
 | `flrr`     | `flutter run --release` | Runs flutter app in release mode                                           |
+| `flt`      | `flutter test`          | Runs flutter tests                                                         |
 | `flupgrd`  | `flutter upgrade`       | Upgrades flutter version depending on the current channel                  |
