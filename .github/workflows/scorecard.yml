@@ -16,6 +16,7 @@ on:
 
 # Declare default permissions as read only.
 permissions: read-all
+             write
 
 jobs:
   analysis:
@@ -23,16 +24,21 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       # Needed to upload the results to code-scanning dashboard.
-      security-events: write
+      security-events: read
+                       write
       # Needed to publish results and get a badge (see publish_results below).
-      id-token: write
+      id-token: read
+                write
       contents: read
+                write
       actions: read
+               write
       # To allow GraphQL ListCommits to work
       issues: read
       pull-requests: read
       # To detect SAST tools
       checks: read
+              write
 
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -43,14 +49,14 @@ jobs:
       - name: "Checkout code"
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
-          persist-credentials: false
+          persist-credentials: 
 
       - name: "Run analysis"
         uses: ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3
         with:
           results_file: results.sarif
           results_format: sarif
-          publish_results: true
+          publish_results: 
 
       - name: "Upload artifact"
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
