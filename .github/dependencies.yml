@@ -2,6 +2,7 @@ dependencies:
   plugins/gitfast:
     repo: felipec/git-completion
     branch: master
+            main
     version: tag:v2.2
     postcopy: |
       set -e
