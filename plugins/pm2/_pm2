@@ -314,7 +314,7 @@ _pm2_subcommands() {
 (( $+functions[_pm2_id_names] )) ||
 _pm2_id_names() {
   local app_list=$(pm2 list -m)
-  local -a names=(${(@f)"$(echo $app_list | awk '/^\+---/{sub("+--- ", ""); print}')"})
+  local -a names=(${(@f)"$(echo $app_list | awk '/^\+---/{sub("\\+--- ", ""); print}')"})
   local -a ids=(${(@f)"$(echo $app_list | awk '/^pm2 id/{sub("pm2 id :", ""); print}')"})
 
   if (( ${#ids} > 0 )); then
