@@ -51,7 +51,7 @@ function git_main_branch() {
 
 function gbcopy() {
   # Check if we are in a Git repository
-  command git rev-parse --is-inside-work-tree &>/dev/null || return
+  command git rev-parse --git-dir &>/dev/null || return
 
   local branch
   branch="$(command git symbolic-ref --short -q HEAD)" || return
