@@ -135,7 +135,7 @@ function gbcopy() {
   command git rev-parse --is-inside-work-tree &>/dev/null || return
 
   local branch
-  branch="$(git_current_branch)" || return
+  branch="$(command git symbolic-ref --short -q HEAD)" || return
   [[ -n "$branch" ]] || return 1
 
   print -rn -- "$branch" | clipcopy

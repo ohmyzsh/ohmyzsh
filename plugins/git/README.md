@@ -253,8 +253,8 @@ receive further support.
 | `git_current_user_email` | Returns the `user.email` config value (Lives in `lib/git.zsh`)                                                 |
 | `git_current_user_name`  | Returns the `user.name` config value (Lives in `lib/git.zsh`)                                                  |
 | `git_develop_branch`     | Returns the name of the “development” branch: `dev`, `devel`, `development` if they exist, `develop` otherwise |
-| `git_main_branch`        | Returns the name of the main branch: `main` if it exists, `master` otherwise                                                                                                                                   |
-| `gbcopy` | Copy current branch name to clipboard                                                                                          |
+| `git_main_branch`        | Returns the name of the main branch: `main` if it exists, `master` otherwise                                   |
+| `gbcopy`                 | Copies current branch name to clipboard                                                                        |
 | `grename <old> <new>`    | Renames branch `<old>` to `<new>`, including on the origin remote                                              |
 | `gbda`                   | Deletes all merged branches                                                                                    |
 | `gbds`                   | Deletes all squash-merged branches (**Note: performance degrades with number of branches**)                    |
