@@ -49,6 +49,17 @@ function git_main_branch() {
   return 1
 }
 
+function gbcopy() {
+  # Check if we are in a Git repository
+  command git rev-parse --is-inside-work-tree &>/dev/null || return
+
+  local branch
+  branch="$(command git symbolic-ref --short -q HEAD)" || return
+  [[ -n "$branch" ]] || return 1
+
+  print -rn -- "$branch" | clipcopy
+}
+
 function grename() {
   if [[ -z "$1" || -z "$2" ]]; then
     echo "Usage: $0 old_branch new_branch"
@@ -129,17 +140,6 @@ alias gb='git branch'
 alias gba='git branch --all'
 alias gbd='git branch --delete'
 alias gbD='git branch --delete --force'
-
-function gbcopy() {
-  # Check if we are in a Git repository
-  command git rev-parse --is-inside-work-tree &>/dev/null || return
-
-  local branch
-  branch="$(command git symbolic-ref --short -q HEAD)" || return
-  [[ -n "$branch" ]] || return 1
-
-  print -rn -- "$branch" | clipcopy
-}
 
 function gbda() {
   git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null
