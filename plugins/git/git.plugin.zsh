@@ -22,6 +22,16 @@ function git_develop_branch() {
   echo develop
   return 1
 }
+function gbcopy() {
+  # Check if we are in a Git repository
+  command git rev-parse --is-inside-work-tree &>/dev/null || return
+
+  local branch
+  branch="$(git_current_branch)" || return
+  [[ -n "$branch" ]] || return 1
+
+  print -rn -- "$branch" | clipcopy
+}
 
 # Get the default branch name from common branch names or fallback to remote HEAD
 function git_main_branch() {
@@ -47,16 +57,6 @@ function git_main_branch() {
   # If no main branch was found, fall back to master but return error
   echo master
   return 1
-}
-function gbcopy() {
-  # Check if we are in a Git repository
-  command git rev-parse --is-inside-work-tree &>/dev/null || return
-
-  local branch
-  branch="$(git_current_branch)" || return
-  [[ -n "$branch" ]] || return 1
-
-  print -rn -- "$branch" | clipcopy
 }
 
 function grename() {
