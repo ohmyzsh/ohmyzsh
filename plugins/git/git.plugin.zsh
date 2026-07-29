@@ -48,6 +48,16 @@ function git_main_branch() {
   echo master
   return 1
 }
+function gbcopy() {
+  # Check if we are in a Git repository
+  command git rev-parse --is-inside-work-tree &>/dev/null || return
+
+  local branch
+  branch="$(git_current_branch)" || return
+  [[ -n "$branch" ]] || return 1
+
+  print -rn -- "$branch" | clipcopy
+}
 
 function grename() {
   if [[ -z "$1" || -z "$2" ]]; then
@@ -68,16 +78,6 @@ function grename() {
 # (sorted alphabetically by function name)
 # (order should follow README)
 #
-function gcbn() {
-  # Check if we are in a Git repository
-  command git rev-parse --is-inside-work-tree &>/dev/null || return
-
-  local branch
-  branch="$(git_current_branch)" || return
-  [[ -n "$branch" ]] || return 1
-
-  print -rn -- "$branch" | clipcopy
-}
 
 # Similar to `gunwip` but recursive "Unwips" all recent `--wip--` commits not just the last one
 function gunwipall() {
