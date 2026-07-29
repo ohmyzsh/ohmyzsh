@@ -23,7 +23,6 @@ function git_develop_branch() {
   return 1
 }
 
-
 # Get the default branch name from common branch names or fallback to remote HEAD
 function git_main_branch() {
   command git rev-parse --git-dir &>/dev/null || return
@@ -48,17 +47,6 @@ function git_main_branch() {
   # If no main branch was found, fall back to master but return error
   echo master
   return 1
-}
-
-function gbcopy() {
-  # Check if we are in a Git repository
-  command git rev-parse --is-inside-work-tree &>/dev/null || return
-
-  local branch
-  branch="$(git_current_branch)" || return
-  [[ -n "$branch" ]] || return 1
-
-  print -rn -- "$branch" | clipcopy
 }
 
 function grename() {
@@ -141,6 +129,17 @@ alias gb='git branch'
 alias gba='git branch --all'
 alias gbd='git branch --delete'
 alias gbD='git branch --delete --force'
+
+function gbcopy() {
+  # Check if we are in a Git repository
+  command git rev-parse --is-inside-work-tree &>/dev/null || return
+
+  local branch
+  branch="$(git_current_branch)" || return
+  [[ -n "$branch" ]] || return 1
+
+  print -rn -- "$branch" | clipcopy
+}
 
 function gbda() {
   git branch --no-color --merged | command grep -vE "^([+*]|\s*($(git_main_branch)|$(git_develop_branch))\s*$)" | command xargs git branch --delete 2>/dev/null
