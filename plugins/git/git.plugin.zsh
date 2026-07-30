@@ -153,7 +153,7 @@ alias gbgd='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk
 alias gbgD='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk '"'"'{print $1}'"'"' | xargs git branch -D'
 alias gbm='git branch --move'
 alias gbnm='git branch --no-merged'
-alias gbr='git branch --remote'
+alias gbr='git branch --remotes'
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 alias gbg='LANG=C git branch -vv | grep ": gone\]"'
 alias gco='git checkout'
