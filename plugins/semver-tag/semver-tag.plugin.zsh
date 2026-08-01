@@ -54,7 +54,9 @@ _semver_tag_bump() {
   local newtag="${prefix}${major}.${minor}.${patch}"
 
   if $mismatch; then
-    print -n "Running this will create $newtag, but your existing tags are formatted $latest, are you sure? [y/N] "
+    print -n "The latest tag is $latest. This will create tag $newtag, but that doesn't match the existing format, are you sure? [y/N] "
+  elif [[ -n "$latest" ]]; then
+    print -n "The latest tag is $latest. This will create tag $newtag, continue? [y/N] "
   else
     print -n "This will create tag $newtag, continue? [y/N] "
   fi
