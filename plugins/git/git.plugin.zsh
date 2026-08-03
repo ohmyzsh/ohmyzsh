@@ -295,6 +295,7 @@ function ggl() {
 }
 compdef _git ggl=git-pull
 
+alias glom='git pull origin $(git_main_branch)'
 alias gluc='git pull upstream $(git_current_branch)'
 alias glum='git pull upstream $(git_main_branch)'
 alias gp='git push'

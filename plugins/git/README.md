@@ -132,6 +132,7 @@ plugins=(... git)
 | `gprumi`               | `git pull --rebase=interactive upstream $(git_main_branch)`                                                                     |
 | `ggpull`               | `git pull origin "$(git_current_branch)"`                                                                                       |
 | `ggl`                  | `git pull origin $(current_branch)`                                                                                             |
+| `glom`                 | `git pull origin $(git_main_branch)`                                                                                            |
 | `gluc`                 | `git pull upstream $(git_current_branch)`                                                                                       |
 | `glum`                 | `git pull upstream $(git_main_branch)`                                                                                          |
 | `gp`                   | `git push`                                                                                                                      |
