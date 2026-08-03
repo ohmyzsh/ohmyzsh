@@ -24,13 +24,14 @@ fi
   [[ -n "$_pipenv_fresh_version" ]] && print -r -- "$_pipenv_fresh_version" >| "$_pipenv_version_cache"
 } &|
 
-if is-at-least 2026.5.0 "$_pipenv_version" && (( $+commands[register-python-argcomplete] )); then
-  # argcomplete-based completion
-  autoload -Uz bashcompinit
-  bashcompinit
+if is-at-least 2026.5.0 "$_pipenv_version"; then
+  # pipenv >= 2026.5.0: argcomplete-based completion (no legacy fallback)
+  if (( $+commands[register-python-argcomplete] )); then
+    autoload -Uz bashcompinit
+    bashcompinit
 
-  eval "$(register-python-argcomplete pipenv)"
-
+    eval "$(register-python-argcomplete pipenv)"
+  fi
 else
   # legacy Click-based completion via _PIPENV_COMPLETE
 
