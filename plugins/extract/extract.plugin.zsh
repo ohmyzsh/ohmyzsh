@@ -102,7 +102,7 @@ EOF
       (*.tar.lrz) (( $+commands[lrzuntar] )) && lrzuntar "$full_path" ;;
       (*.gz) (( $+commands[pigz] )) && pigz -cdk "$full_path" > "${file:t:r}" || gunzip -ck "$full_path" > "${file:t:r}" ;;
       (*.bz2) (( $+commands[pbzip2] )) && pbzip2 -d "$full_path" || bunzip2 "$full_path" ;;
-      (*.xz) unxz "$full_path" ;;
+      (*.xz) xzcat "$full_path" > "${file:t:r}" ;;
       (*.lrz) (( $+commands[lrunzip] )) && lrunzip "$full_path" ;;
       (*.lz4) lz4 -d "$full_path" ;;
       (*.lzma) unlzma "$full_path" ;;
