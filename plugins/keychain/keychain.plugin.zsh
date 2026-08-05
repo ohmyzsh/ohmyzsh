@@ -29,12 +29,17 @@ function {
     # Keychain 3.x: subcommand-based CLI, no --agents.
     keychain add ${^options:-} --host $SHORT_HOST ${^identities}
   else
+    local agents
+
+    # load agents to start (only used by keychain < 2.9).
+    zstyle -s :omz:plugins:keychain agents agents
+
     autoload -Uz is-at-least
     if [[ "${version_string:l}" =~ 'keychain ([0-9]+\.[0-9]+)' ]] && \
        is-at-least 2.9 "$match[1]"; then
       keychain ${^options:-} ${^identities} --host $SHORT_HOST
     else
-      keychain ${^options:-} --agents ${agents:-ssh} ${^identities} --host $SHORT_HOST
+      keychain ${^options:-} --agents ${agents:-gpg} ${^identities} --host $SHORT_HOST
     fi
   fi
 
