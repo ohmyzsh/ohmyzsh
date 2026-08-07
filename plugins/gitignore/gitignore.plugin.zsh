@@ -10,6 +10,7 @@ function gi() {
 }
 
 _gitignoreio_get_command_list() {
+  setopt local_options pipe_fail
   _gi_curl "list" | tr "," "\n"
 }
 
@@ -17,6 +18,17 @@ __gitignoreio_caching_policy() {
   local -a oldp
   oldp=("$1"(Nm+7))
   (($#oldp))
+}
+
+_gitignoreio_retrieve_stale_cache() {
+  zstyle -t ":completion:${curcontext}:" use-cache || return 1
+
+  local cache_dir
+  zstyle -s ":completion:${curcontext}:" cache-path cache_dir
+  : ${cache_dir:=${ZDOTDIR:-$HOME}/.zcompcache}
+
+  [[ -e "$cache_dir/gi-list" ]] || return 1
+  . "$cache_dir/gi-list"
 }
 
 _gitignoreio() {
@@ -30,8 +42,13 @@ _gitignoreio() {
 
   local -a _gi_list
   if _cache_invalid gi-list || ! _retrieve_cache gi-list; then
-    _gi_list=(${(f)"$(_gitignoreio_get_command_list)"})
-    _store_cache gi-list _gi_list
+    local command_list
+    if command_list="$(_gitignoreio_get_command_list)" && [[ -n "$command_list" ]]; then
+      _gi_list=(${(f)command_list})
+      _store_cache gi-list _gi_list
+    else
+      _gitignoreio_retrieve_stale_cache
+    fi
   fi
 
   compadd -S '' -a _gi_list
