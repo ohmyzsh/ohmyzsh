@@ -739,7 +739,11 @@ function _omz::reload {
   # Old zsh versions don't have ZSH_ARGZERO
   local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
   # Check whether to run a login shell
-  [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
+  if [[ "$zsh" = -* || -o login ]]; then
+    exec -l "${${SHELL:-$zsh}#-}"
+  else
+    exec "$zsh"
+  fi
 }
 
 function _omz::theme {
@@ -917,7 +921,11 @@ function _omz::update {
     # Old zsh versions don't have ZSH_ARGZERO
     local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
     # Check whether to run a login shell
-    [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
+    if [[ "$zsh" = -* || -o login ]]; then
+      exec -l "${${SHELL:-$zsh}#-}"
+    else
+      exec "$zsh"
+    fi
   fi
 }
 
