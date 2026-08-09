@@ -10,8 +10,12 @@ emacsfun() {
   *) cmd="(delete 't (mapcar 'framep (frame-list)))" ;; # if != nil, there are graphical terminals (x, w32, ns)
   esac
 
-  # Check if there are suitable frames
-  frames="$(emacsclient -a '' -n -e "$cmd" 2>/dev/null |sed 's/.*\x07//g' )"
+  # Check if there are suitable frames. If the Emacs server is not running
+  # emacsclient fails (exit != 0) and $frames stays empty. Note that an empty
+  # --alternate-editor is NOT used here: on emacsclient >= 25.1 an empty string
+  # is no longer special-cased as "start emacs --daemon", so passing one would
+  # make emacsclient try to exec the empty string and fail.
+  frames="$(emacsclient -n -e "$cmd" 2>/dev/null |sed 's/.*\x07//g' )"
 
   # Only create another X frame if there isn't one present
   if [ -z "$frames" -o "$frames" = nil ]; then
