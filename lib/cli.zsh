@@ -738,6 +738,12 @@ function _omz::reload {
 
   # Old zsh versions don't have ZSH_ARGZERO
   local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+  # ZSH_ARGZERO is how zsh was invoked, not the executable path. A bare
+  # name ("zsh"), login flag ("-zsh") or relative path ("./bin/zsh") is
+  # re-resolved via $PATH or stale after a cwd change, so fall back to
+  # $SHELL when it holds a zsh path; a non-zsh $SHELL (e.g. /bin/bash for
+  # users launching zsh manually) keeps the previous PATH resolution. See #13919.
+  [[ "$zsh" != /* && "$SHELL" == *zsh* ]] && zsh="$SHELL"
   # Check whether to run a login shell
   [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
 }
@@ -916,6 +922,12 @@ function _omz::update {
   if [[ "$(builtin cd -q "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
     # Old zsh versions don't have ZSH_ARGZERO
     local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+    # ZSH_ARGZERO is how zsh was invoked, not the executable path. A bare
+    # name ("zsh"), login flag ("-zsh") or relative path ("./bin/zsh") is
+    # re-resolved via $PATH or stale after a cwd change, so fall back to
+    # $SHELL when it holds a zsh path; a non-zsh $SHELL (e.g. /bin/bash for
+    # users launching zsh manually) keeps the previous PATH resolution. See #13919.
+    [[ "$zsh" != /* && "$SHELL" == *zsh* ]] && zsh="$SHELL"
     # Check whether to run a login shell
     [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
   fi
