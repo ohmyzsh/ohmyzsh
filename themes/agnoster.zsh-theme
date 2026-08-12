@@ -63,6 +63,12 @@ esac
 : ${AGNOSTER_GIT_DIRTY_FG:=black}
 : ${AGNOSTER_GIT_DIRTY_BG:=yellow}
 
+# Jujutsu related
+: ${AGNOSTER_JJ_CLEAN_FG:=${CURRENT_FG}}
+: ${AGNOSTER_JJ_CLEAN_BG:=green}
+: ${AGNOSTER_JJ_DIRTY_FG:=black}
+: ${AGNOSTER_JJ_DIRTY_BG:=yellow}
+
 # Bazaar related
 : ${AGNOSTER_BZR_CLEAN_FG:=${CURRENT_FG}}
 : ${AGNOSTER_BZR_CLEAN_BG:=green}
@@ -177,6 +183,7 @@ prompt_git_relative() {
   fi;
 }
 
+
 # Git: branch/detached head, dirty status
 prompt_git() {
   (( $+commands[git] )) || return
@@ -236,6 +243,25 @@ prompt_git() {
     vcs_info
     echo -n "${${ref:gs/%/%%}/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
     [[ $AGNOSTER_GIT_INLINE == 'true' ]] && prompt_git_relative
+  fi
+}
+
+# Jujutsu
+prompt_jj() {
+  if command -v jj &> /dev/null && jj root &> /dev/null; then
+    # local jj_bookmark=$(jj bookmark list --no-pager 2>/dev/null | head -n 1 | awk '{print $1}')
+    # Check the bookmark for the current change (@) 
+    local jj_bookmark=$(jj log -r @ --no-pager --template 'local_bookmarks.map(|b| b.name()).join(", ")' 2>/dev/null | head -n 1 | awk '{print $2}')
+    if [[ -n "$jj_bookmark" ]]; then
+      jj_id="$jj_bookmark"
+    else
+      # Fallback to change ID if no bookmark exists
+      jj_id="$(jj log -r @ --no-pager --template 'change_id.shortest(3)' 2>/dev/null | head -n 1 | awk '{print $2}')"
+    fi
+    # 
+    prompt_segment "$AGNOSTER_JJ_CLEAN_FG" "$AGNOSTER_JJ_CLEAN_BG" "${jj_id:-jj}"
+  else
+    prompt_git
   fi
 }
 
@@ -368,7 +394,7 @@ build_prompt() {
   prompt_terraform
   prompt_context
   prompt_dir
-  prompt_git
+  prompt_jj
   prompt_bzr
   prompt_hg
   prompt_end
