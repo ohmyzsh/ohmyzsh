@@ -10,9 +10,11 @@ plugins=(... history)
 
 ## Aliases
 
-| Alias | Command              | Description                                                      |
-|-------|----------------------|------------------------------------------------------------------|
-| `h`   | `history`            | Prints your command history                                      |
-| `hl`  | `history \| less`    | Pipe history output to less to search and navigate it easily     |
-| `hs`  | `history \| grep`    | Use grep to search your command history                          |
-| `hsi` | `history \| grep -i` | Use grep to do a case-insensitive search of your command history |
+| Alias  | Command                     | Description                                                         |
+|--------|-----------------------------|---------------------------------------------------------------------|
+| `h`    | `history`                   | Prints your command history                                         |
+| `hl`   | `history \| less`           | Pipe history output to less to search and navigate it easily        |
+| `hs`   | `history \| grep`           | Use grep to search your command history                             |
+| `hsi`  | `history \| grep -i`        | Use grep to do a case-insensitive search of your command history    |
+| `hst`  | `history \| grep \| tail -20` | Search history and show only the last 20 matches                   |
+| `hsti` | `history \| grep -i \| tail -20` | Case-insensitive search showing only the last 20 matches         |
