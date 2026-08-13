@@ -3,11 +3,13 @@
 
 @setup {
   typeset -g fixture="$(_create_temp_fixture)"
+  typeset -g fixture2="$(_create_temp_fixture)"
   typeset -gA expected_vars=()
 }
 
 @teardown {
   [[ -f "$fixture" ]] && command rm -f "$fixture"
+  [[ -f "$fixture2" ]] && command rm -f "$fixture2"
   unset DOTENV_TEST_VARS DOTENV_SOURCE_VARS 2>/dev/null
 }
 
@@ -395,4 +397,32 @@ EOF
   _parse_dotenv_test "$fixture"
 
   assert "DOTENV_TEST_VARS" var_same_as "expected_vars"
+}
+
+@test 'source_env loads multiple files via ZSH_DOTENV_FILES in order' {
+  > "$fixture" <<'EOF'
+FROM_FIRST=1
+FROM_BOTH=first
+EOF
+  > "$fixture2" <<'EOF'
+FROM_SECOND=2
+FROM_BOTH=second
+EOF
+
+  local saved_file="$ZSH_DOTENV_FILE"
+  local saved_files="$ZSH_DOTENV_FILES"
+
+  ZSH_DOTENV_FILE="$fixture"
+  ZSH_DOTENV_FILES="${fixture2:A}"
+  ZSH_DOTENV_PROMPT=false
+
+  source_env
+
+  assert "FROM_FIRST" var_is_set
+  assert "FROM_SECOND" var_is_set
+  assert "$FROM_BOTH" equals "second"
+
+  unset FROM_FIRST FROM_SECOND FROM_BOTH 2>/dev/null
+  ZSH_DOTENV_FILE="$saved_file"
+  ZSH_DOTENV_FILES="$saved_files"
 }

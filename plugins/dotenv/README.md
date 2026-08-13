@@ -66,6 +66,17 @@ For example, this will make the plugin look for files named `.dotenv` and load t
 ZSH_DOTENV_FILE=.dotenv
 ```
 
+### ZSH_DOTENV_FILES
+
+You can specify additional dotenv files to load, in the order they should be loaded,
+with a space-separated `ZSH_DOTENV_FILES` variable. Each listed file is sourced after
+`ZSH_DOTENV_FILE`, so later files take precedence. Only existing files are loaded:
+
+```zsh
+# in ~/.zshrc, before Oh My Zsh is sourced:
+ZSH_DOTENV_FILES=".env.local .env.override"
+```
+
 ### ZSH_DOTENV_PROMPT
 
 Set `ZSH_DOTENV_PROMPT=false` in your zshrc file if you don't want the confirmation message.
