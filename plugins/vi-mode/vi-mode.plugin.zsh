@@ -163,9 +163,25 @@ fi
 
 # if mode indicator wasn't setup by theme, define default, we'll leave INSERT_MODE_INDICATOR empty by default
 typeset -g MODE_INDICATOR=${MODE_INDICATOR:='%B%F{red}<%b<<%f'}
+typeset -g VISUAL_MODE_INDICATOR=${VISUAL_MODE_INDICATOR:='%F{yellow}VISUAL%f'}
+typeset -g VISUAL_LINE_MODE_INDICATOR=${VISUAL_LINE_MODE_INDICATOR:='%F{yellow}VISUAL LINE%f'}
 
 function vi_mode_prompt_info() {
-  echo "${${VI_KEYMAP/vicmd/$MODE_INDICATOR}/(main|viins)/$INSERT_MODE_INDICATOR}"
+  local indicator=""
+  case "${VI_KEYMAP}" in
+    vicmd) indicator="$MODE_INDICATOR" ;;
+    main|viins) indicator="$INSERT_MODE_INDICATOR" ;;
+    visual)
+      # zsh uses the same "visual" keymap for both visual and visual-line
+      # modes; REGION_ACTIVE distinguishes them (1 = char, 2 = line).
+      if (( REGION_ACTIVE == 2 )); then
+        indicator="$VISUAL_LINE_MODE_INDICATOR"
+      else
+        indicator="$VISUAL_MODE_INDICATOR"
+      fi
+      ;;
+  esac
+  echo "$indicator"
 }
 
 # define right prompt, if it wasn't defined by a theme
