@@ -1,0 +1,13 @@
+# Copy this file into /usr/share/zsh/site-functions/
+# and add 'autoload n-bindings' to .zshrc
+#
+# This function lists all current zsh key bindings grouped by keymap
+
+local keymap
+
+for keymap in $(bindkey -l); do
+    echo "== $keymap =="
+    bindkey -M "$keymap" -L
+done
+
+# vim: set filetype=zsh:
