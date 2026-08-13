@@ -16,6 +16,7 @@
 # - doitclient (for SSH) http://www.chiark.greenend.org.uk/~sgtatham/doit/
 # - win32yank (Windows)
 # - tmux (if $TMUX is set)
+# - OSC 52 terminal escape (opt-in via ZSH_CLIPBOARD_OSC52=true)
 #
 # Defines two functions, clipcopy and clippaste, based on the detected platform.
 ##
@@ -84,6 +85,16 @@ function detect-clipboard() {
   elif [ -n "${TMUX:-}" ] && (( ${+commands[tmux]} )); then
     function clipcopy() { tmux load-buffer -w "${1:--}"; }
     function clippaste() { tmux save-buffer -; }
+  elif [[ "${ZSH_CLIPBOARD_OSC52:-}" == true ]] && [[ -t 1 ]] && [[ -n "${TERM:-}" ]] && [[ "$TERM" != dumb ]] && (( ${+commands[base64]} )); then
+    # OSC 52 clipboard escape; supported by most modern terminals and
+    # tmux, and works over plain SSH without any helper binaries.
+    # This only handles copying; there's no standard OSC 52 read/paste.
+    function clipcopy() {
+      local payload
+      payload="$(base64 < "${1:-/dev/stdin}" | tr -d '\n')"
+      printf '\033]52;c;%s\a' "${payload}"
+    }
+    function clippaste() { print "clippaste: OSC 52 has no paste channel on this platform" >&2; return 1; }
   else
     function _retry_clipboard_detection_or_fail() {
       local clipcmd="${1}"; shift
