@@ -37,6 +37,12 @@ plugins=(... vi-mode)
 - `INSERT_MODE_INDICATOR`: controls the string displayed when the shell is in insert mode.
   See [Mode indicators](#mode-indicators) for details.
 
+- `VISUAL_MODE_INDICATOR`: controls the string displayed when the shell is in visual mode.
+  See [Mode indicators](#mode-indicators) for details.
+
+- `VISUAL_LINE_MODE_INDICATOR`: controls the string displayed when the shell is in visual line mode.
+  See [Mode indicators](#mode-indicators) for details.
+
 - `VI_MODE_DISABLE_CLIPBOARD`: If set, disables clipboard integration on yank/paste
 
 ## Mode indicators
@@ -51,6 +57,14 @@ These settings support Prompt Expansion sequences. For example:
 ```zsh
 MODE_INDICATOR="%F{white}+%f"
 INSERT_MODE_INDICATOR="%F{yellow}+%f"
+```
+
+When in visual mode (or visual line mode), the `VISUAL_MODE_INDICATOR` (and
+`VISUAL_LINE_MODE_INDICATOR`) variables can be used to customize the display:
+
+```zsh
+VISUAL_MODE_INDICATOR="%F{green}VISUAL%f"
+VISUAL_LINE_MODE_INDICATOR="%F{green}VISUAL LINE%f"
 ```
 
 ### Adding mode indicators to your prompt
