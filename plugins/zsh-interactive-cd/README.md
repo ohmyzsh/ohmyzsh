@@ -19,3 +19,11 @@ This plugin provides an interactive way to change directories in zsh using fzf.
 ## Usage
 
 Press tab for completion as usual, it'll launch fzf automatically. Check fzf’s [readme](https://github.com/junegunn/fzf#search-syntax) for more search syntax usage.
+
+## Configuration
+
+Set `zic_accept_last=true` in your `~/.zshrc` to have fzf automatically accept the last remaining match once the list is filtered down to a single directory:
+
+```zsh
+zic_accept_last=true
+```

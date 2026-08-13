@@ -81,11 +81,16 @@ __zic_fzf_bindings() {
   autoload is-at-least
   fzf=$(__zic_fzf_prog)
 
+  bindings="shift-tab:up,tab:down"
   if $(is-at-least '0.21.0' $(${=fzf} --version)); then
-    echo 'shift-tab:up,tab:down,bspace:backward-delete-char/eof'
-  else
-    echo 'shift-tab:up,tab:down'
+    bindings="$bindings,bspace:backward-delete-char/eof"
   fi
+
+  if [ "$zic_accept_last" = "true" ]; then
+    bindings="$bindings,one:accept"
+  fi
+
+  echo "$bindings"
 }
 
 _zic_list_generator() {
