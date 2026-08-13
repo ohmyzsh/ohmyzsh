@@ -7,6 +7,9 @@
 : ${ZSH_DOTENV_ALLOWED_LIST:="${ZSH_CACHE_DIR:-$ZSH/cache}/dotenv-allowed.list"}
 : ${ZSH_DOTENV_DISALLOWED_LIST:="${ZSH_CACHE_DIR:-$ZSH/cache}/dotenv-disallowed.list"}
 
+# Additional dotenv files to load in the specified order (see ZSH_DOTENV_FILE)
+: ${ZSH_DOTENV_FILES:=}
+
 ## Functions
 
 _parse_dotenv_content() {
@@ -273,7 +276,18 @@ _dotenv_check_syntax() {
 }
 
 source_env() {
-  if [[ ! -f "$ZSH_DOTENV_FILE" ]] && [[ ! -p "$ZSH_DOTENV_FILE" ]]; then
+  local -a env_files=("$ZSH_DOTENV_FILE")
+  [[ -n "$ZSH_DOTENV_FILES" ]] && env_files+=("${(@s: :)ZSH_DOTENV_FILES}")
+  local env_file found=false
+
+  for env_file in "${env_files[@]}"; do
+    [[ -n "$env_file" ]] || continue
+    if [[ -f "$env_file" ]] || [[ -p "$env_file" ]]; then
+      found=true
+      break
+    fi
+  done
+  if [[ "$found" == false ]]; then
     return
   fi
 
@@ -299,7 +313,7 @@ source_env() {
       [[ $column -eq 1 ]] || echo
 
       # print same-line prompt and output newline character if necessary
-      echo -n "dotenv: found '$ZSH_DOTENV_FILE' file. Source it? ([y]es/[N]o/[a]lways/n[e]ver) "
+      echo -n "dotenv: found '$env_file' file. Source it? ([y]es/[N]o/[a]lways/n[e]ver) "
       read -k 1 confirmation
       [[ "$confirmation" = $'\n' ]] || echo
 
@@ -314,20 +328,25 @@ source_env() {
   fi
 
   local content
-  if [[ -p "$ZSH_DOTENV_FILE" ]]; then
-    _dotenv_read_limited "$ZSH_DOTENV_FILE" || return 1
-    content="$REPLY"
-    _dotenv_check_syntax "$ZSH_DOTENV_FILE" "$content" || return 1
+  for env_file in "${env_files[@]}"; do
+    [[ -n "$env_file" ]] || continue
+    [[ -f "$env_file" ]] || [[ -p "$env_file" ]] || continue
+
+    if [[ -p "$env_file" ]]; then
+      _dotenv_read_limited "$env_file" || return 1
+      content="$REPLY"
+      _dotenv_check_syntax "$env_file" "$content" || return 1
+
+      setopt localoptions allexport
+      _parse_dotenv_content "$content"
+      continue
+    fi
+
+    _dotenv_check_syntax "$env_file" || return 1
 
     setopt localoptions allexport
-    _parse_dotenv_content "$content"
-    return
-  fi
-
-  _dotenv_check_syntax "$ZSH_DOTENV_FILE" || return 1
-
-  setopt localoptions allexport
-  parse_dotenv "$ZSH_DOTENV_FILE"
+    parse_dotenv "$env_file"
+  done
 }
 
 autoload -U add-zsh-hook
