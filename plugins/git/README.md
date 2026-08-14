@@ -255,6 +255,7 @@ receive further support.
 | `git_develop_branch`     | Returns the name of the “development” branch: `dev`, `devel`, `development` if they exist, `develop` otherwise |
 | `git_main_branch`        | Returns the name of the main branch: `main` if it exists, `master` otherwise                                   |
 | `grename <old> <new>`    | Renames branch `<old>` to `<new>`, including on the origin remote                                              |
+| `gcbc`                   | Copies the current branch name to the system clipboard (uses `clipcopy`)                                       |
 | `gbda`                   | Deletes all merged branches                                                                                    |
 | `gbds`                   | Deletes all squash-merged branches (**Note: performance degrades with number of branches**)                    |
 
