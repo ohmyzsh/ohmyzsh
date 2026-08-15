@@ -125,6 +125,36 @@ bindkey '\C-x\C-e' edit-command-line
 # file rename magick
 bindkey "^[m" copy-prev-shell-word
 
+# Numeric keypad (application keypad mode): some terminals (e.g. macOS
+# Terminal.app with certain keyboard layouts) leave the keypad in application
+# mode, so the numeric keypad keys send escape sequences (e.g. \eOp for 0,
+# \eOM for Enter) instead of the usual characters. Bind them to their
+# corresponding characters so the keypad works as expected.
+bindkey -M emacs -s '\eOp' '0'
+bindkey -M emacs -s '\eOq' '1'
+bindkey -M emacs -s '\eOr' '2'
+bindkey -M emacs -s '\eOs' '3'
+bindkey -M emacs -s '\eOt' '4'
+bindkey -M emacs -s '\eOu' '5'
+bindkey -M emacs -s '\eOv' '6'
+bindkey -M emacs -s '\eOw' '7'
+bindkey -M emacs -s '\eOx' '8'
+bindkey -M emacs -s '\eOy' '9'
+bindkey -M emacs -s '\eOl' '.'
+bindkey -M emacs '\eOM' accept-line
+bindkey -M viins -s '\eOp' '0'
+bindkey -M viins -s '\eOq' '1'
+bindkey -M viins -s '\eOr' '2'
+bindkey -M viins -s '\eOs' '3'
+bindkey -M viins -s '\eOt' '4'
+bindkey -M viins -s '\eOu' '5'
+bindkey -M viins -s '\eOv' '6'
+bindkey -M viins -s '\eOw' '7'
+bindkey -M viins -s '\eOx' '8'
+bindkey -M viins -s '\eOy' '9'
+bindkey -M viins -s '\eOl' '.'
+bindkey -M viins '\eOM' accept-line
+
 # consider emacs keybindings:
 
 #bindkey -e  ## emacs key bindings
