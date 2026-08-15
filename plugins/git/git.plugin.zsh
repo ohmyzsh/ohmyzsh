@@ -364,7 +364,7 @@ alias grhh='git reset --hard'
 alias grhk='git reset --keep'
 alias grhs='git reset --soft'
 alias gpristine='git reset --hard && git clean --force -dfx'
-alias gwipe='git reset --hard && git clean --force -df'
+alias greset-clean='git reset --hard && git clean --force -df'
 alias groh='git reset origin/$(git_current_branch) --hard'
 alias grs='git restore'
 alias grss='git restore --source'
@@ -422,7 +422,8 @@ unset git_version
 # Logic for adding warnings on deprecated aliases or functions
 local old_name new_name
 for old_name new_name (
-  current_branch  git_current_branch
+  current_branch      git_current_branch
+  gwipe               greset-clean
 ); do
   aliases[$old_name]="
     print -Pu2 \"%F{yellow}[oh-my-zsh] '%F{red}${old_name}%F{yellow}' is deprecated, using '%F{green}${new_name}%F{yellow}' instead.%f\"
