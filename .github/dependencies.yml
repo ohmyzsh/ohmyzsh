@@ -49,6 +49,7 @@ dependencies:
     version: 102fb78036ed76feedf623907483691777a1d510
     precopy: |
       set -e
+      rm -r tests
       test -e README.md && mv -f README.md MANUAL.md
     postcopy: |
       set -e
