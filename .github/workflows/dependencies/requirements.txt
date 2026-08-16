@@ -1,5 +1,5 @@
 certifi==2026.7.22
-charset-normalizer==3.4.9
+charset-normalizer==3.5.0
 idna==3.18
 PyYAML==6.0.3
 requests==2.34.2
