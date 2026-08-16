@@ -49,9 +49,18 @@ USER=${USER:-$(id -u -n)}
 # $HOME is defined at the time of login, but it could be unset. If it is unset,
 # a tilde by itself (~) will not be expanded to the current user's home directory.
 # POSIX: https://pubs.opengroup.org/onlinepubs/009696899/basedefs/xbd_chap08.html#tag_08_03
-HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
-# macOS does not have getent, but this works even if $HOME is unset
-HOME="${HOME:-$(eval echo ~"$USER")}"
+HOME="${HOME:-$(getent passwd "$USER" 2>/dev/null | cut -d: -f6)}"
+# macOS does not have getent; fall back to tilde expansion, but only if $USER
+# is a safe username. The eval below would otherwise expand any shell
+# metacharacters in $USER and allow command injection (CWE-78).
+case "$USER" in
+  *[![:alnum:]_.-]*|'')
+    HOME="${HOME:-$PWD}"
+    ;;
+  *)
+    HOME="${HOME:-$(eval echo ~"$USER")}"
+    ;;
+esac
 
 
 # Track if $ZSH was provided
