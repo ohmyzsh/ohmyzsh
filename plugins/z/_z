@@ -1,6 +1,6 @@
 #compdef zshz ${ZSHZ_CMD:-${_Z_CMD:-z}}
 #
-# Zsh-z - jump around with Zsh - A native Zsh version of z without awk, sort,
+# Zsh-z - jump around with Zsh - A native Zsh version of rupa/z without awk, sort,
 # date, or sed
 #
 # https://github.com/agkozak/zsh-z
@@ -24,11 +24,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-#
-# z (https://github.com/rupa/z) is copyright (c) 2009 rupa deadwyler and
-# licensed under the WTFPL license, Version 2.a
-#
-# shellcheck shell=ksh
+################################################################################
 
 ############################################################
 # Zsh-z COMPLETIONS
