@@ -59,7 +59,7 @@ case "$manager" in
 esac
 
 cat > "$zshrc" <<RC
-set -euo pipefail
+set -eo pipefail
 
 export HOME="$home_dir"
 export XDG_CACHE_HOME="$cache_dir"
@@ -89,6 +89,9 @@ cat >> "$zshrc" <<RC
 
 source "\$OMZ_ROOT/lib/functions.zsh"
 source "\$OMZ_ROOT/plugins/git/git.plugin.zsh"
+autoload -Uz compinit
+compinit -i -d "\$ZSH_CACHE_DIR/.zcompdump"
+
 source "\$OMZ_ROOT/themes/robbyrussell.zsh-theme"
 
 [[ -d "\$ZSH_CACHE_DIR/completions" ]] || { print -u2 "completions cache directory missing"; return 1; }
