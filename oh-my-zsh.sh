@@ -50,30 +50,13 @@ unset -f omz_f
 # If ZSH is not defined, use the current script's directory.
 [[ -n "$ZSH" ]] || export ZSH="${${(%):-%x}:a:h}"
 
-# Set ZSH_CUSTOM to the path where your custom config files
-# and plugins exists, or else we will use the default custom/
-[[ -n "$ZSH_CUSTOM" ]] || ZSH_CUSTOM="$ZSH/custom"
-
-# Set ZSH_CACHE_DIR to the path where cache files should be created
-# or else we will use the default cache/
-[[ -n "$ZSH_CACHE_DIR" ]] || ZSH_CACHE_DIR="$ZSH/cache"
-
-# Make sure $ZSH_CACHE_DIR is writable, otherwise use a directory in $HOME
-if [[ ! -w "$ZSH_CACHE_DIR" ]]; then
-  ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
-fi
-
-# Create cache and completions dir and add to $fpath
-mkdir -p "$ZSH_CACHE_DIR/completions"
-(( ${fpath[(Ie)$ZSH_CACHE_DIR/completions]} )) || fpath=("$ZSH_CACHE_DIR/completions" $fpath)
+# Shared, manager-agnostic bootstrap.
+source "$ZSH/lib/bootstrap.zsh"
 
 # Check for updates on initial load...
 source "$ZSH/tools/check_for_upgrade.sh"
 
 # Initializes Oh My Zsh
-
-# add a function path
-fpath=($ZSH/{functions,completions} $ZSH_CUSTOM/{functions,completions} $fpath)
 
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit zrecompile
@@ -234,3 +217,6 @@ fi
 
 # set completion colors to be the same as `ls`, after theme has been loaded
 [[ -z "$LS_COLORS" ]] || zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+# Public signal: full Oh My Zsh init script has completed.
+typeset -g OMZ_IS_LOADED=true

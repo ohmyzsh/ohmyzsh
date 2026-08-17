@@ -23,6 +23,7 @@ you would make is not already covered.
 - [A note on AI-assisted contributions](#a-note-on-ai-assisted-contributions)
 - [Use the Search, Luke](#use-the-search-luke)
 - [Commit Guidelines](#commit-guidelines)
+  - [Plugin And Theme Bootstrap Compatibility](#plugin-and-theme-bootstrap-compatibility)
   - [Format](#format)
   - [Style](#style)
 - [Volunteer](#volunteer)
@@ -175,6 +176,24 @@ Oh My Zsh uses the [Conventional Commits](https://www.conventionalcommits.org/en
 specification. The automatic changelog tool uses these to automatically generate
 a changelog based on the commit messages. Here's a guide to writing a commit message
 to allow this:
+
+### Plugin And Theme Bootstrap Compatibility
+
+Oh My Zsh now provides a shared bootstrap entrypoint at `lib/bootstrap.zsh` for plugin-manager setups that don't
+source `oh-my-zsh.sh`.
+
+When working on plugins/themes:
+
+- assume bootstrap has already run in manager-driven setups
+- rely on bootstrap guarantees (`ZSH*` defaults, cache/completions setup, required `fpath` entries)
+- avoid adding per-plugin/per-theme copies of common setup unless truly plugin-specific
+
+Common patterns we should migrate away from over time:
+
+- repeated cache setup logic (`mkdir -p "$ZSH_CACHE_DIR/completions"`)
+- repeated base `fpath` bootstrapping for OMZ core/custom directories
+
+If your plugin/theme still needs custom initialization, keep it scoped to that plugin/theme behavior only.
 
 ### Format
 

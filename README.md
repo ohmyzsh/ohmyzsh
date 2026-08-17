@@ -46,6 +46,7 @@ Twitter), and join us on [Discord](https://discord.gg/ohmyzsh).
     - [Manual Installation](#manual-installation)
   - [Installation Problems](#installation-problems)
   - [Custom Plugins And Themes](#custom-plugins-and-themes)
+  - [Using Plugin Managers Without `oh-my-zsh.sh`](#using-plugin-managers-without-oh-my-zshsh)
   - [Enable GNU ls In macOS And FreeBSD Systems](#enable-gnu-ls-in-macos-and-freebsd-systems)
   - [Skip Aliases](#skip-aliases)
   - [Async git prompt](#async-git-prompt)
@@ -348,6 +349,54 @@ If you have many functions that go well together, you can put them as a `XYZ.plu
 
 If you would like to override the functionality of a plugin distributed with Oh My Zsh, create a plugin of the
 same name in the `custom/plugins/` directory and it will be loaded instead of the one in `plugins/`.
+
+### Using Plugin Managers Without `oh-my-zsh.sh`
+
+Some plugin managers load individual OMZ plugins/themes directly and do not source `oh-my-zsh.sh`.
+For those setups, source this bootstrap entrypoint before loading any OMZ plugin or theme:
+
+```zsh
+source "$ZSH/lib/bootstrap.zsh"
+```
+
+#### Bootstrap compatibility contract
+
+`lib/bootstrap.zsh` is idempotent and guarantees:
+
+- `ZSH`, `ZSH_CUSTOM`, and `ZSH_CACHE_DIR` defaults
+- writable cache fallback to `${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh`
+- `$ZSH_CACHE_DIR/completions` directory creation
+- required OMZ `fpath` entries for plugins/themes:
+  - `$ZSH/functions`
+  - `$ZSH/completions`
+  - `$ZSH_CUSTOM/functions`
+  - `$ZSH_CUSTOM/completions`
+  - `$ZSH_CACHE_DIR/completions`
+- public signal: `OMZ_IS_BOOTSTRAPPED=true`
+
+What still requires `oh-my-zsh.sh`:
+
+- update checks
+- plugin auto-discovery from the `plugins=(...)` list
+- `compinit`/`compfix` orchestration and zcompdump metadata refresh
+- alias filtering via `:omz:*` zstyles during file sourcing
+- final full-init signal: `OMZ_IS_LOADED=true`
+
+#### Plugin manager hook guidance
+
+Run bootstrap once, before any OMZ plugin/theme load:
+
+- **Antigen:** add a one-time pre-bundle hook to source `lib/bootstrap.zsh`.
+- **Zinit:** use a pre-load/`atinit` hook for OMZ snippets/plugins.
+- **zplug:** use a load hook (`hook-load`) before OMZ plugin/theme sourcing.
+- **zgen / zulu:** source `lib/bootstrap.zsh` immediately before OMZ plugin/theme load lines.
+
+Compatibility matrix:
+
+| Load mode | `OMZ_IS_BOOTSTRAPPED` | `OMZ_IS_LOADED` | Suitable for |
+| :-- | :--: | :--: | :-- |
+| `source $ZSH/oh-my-zsh.sh` | ✅ | ✅ | Full OMZ framework features |
+| `source $ZSH/lib/bootstrap.zsh` + manager-loaded OMZ plugins/themes | ✅ | ❌ | Plugin/theme prerequisites only |
 
 ### Enable GNU ls In macOS And FreeBSD Systems
 
