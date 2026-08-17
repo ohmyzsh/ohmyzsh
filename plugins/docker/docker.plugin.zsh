@@ -48,6 +48,10 @@ fi
 0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
 
+# Ensure cache completions dir exists when the plugin is loaded directly
+# (e.g. antigen, where oh-my-zsh.sh might not run).
+command mkdir -p "$ZSH_CACHE_DIR/completions"
+
 # If the completion file doesn't exist yet, we need to autoload it and
 # bind it to `docker`. Otherwise, compinit will have already done that.
 if [[ ! -f "$ZSH_CACHE_DIR/completions/_docker" ]]; then
