@@ -1,0 +1,37 @@
+name: Plugin manager integration (advisory)
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  plugin-manager-matrix:
+    name: ${{ matrix.manager }}:${{ matrix.scenario }}
+    runs-on: ubuntu-latest
+    if: github.repository == 'ohmyzsh/ohmyzsh'
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        manager: [antigen, zinit, zgen, zplug, antibody, zulu]
+        scenario: [positive, negative]
+
+    steps:
+      - name: Set up git repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install zsh and go
+        run: sudo apt-get update; sudo apt-get install zsh golang
+
+      - name: Run plugin-manager bootstrap integration
+        run: zsh ./lib/tests/plugin-manager-bootstrap-integration.test.zsh "${{ matrix.manager }}" "${{ matrix.scenario }}"
+
+      - name: Rollout note
+        if: always()
+        run: |
+          echo "Phase 2 active: full manager matrix is advisory/nightly."
+          echo "Phase 3 target: promote full matrix to required after stability window."

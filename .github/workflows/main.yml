@@ -41,3 +41,49 @@ jobs:
                       ./themes/*.zsh-theme; do
             zsh -n "$file" || return 1
           done
+
+      - name: Focused syntax check for bootstrap-adjacent touched files
+        if: github.event_name == 'pull_request'
+        run: |
+          mapfile -t touched < <(
+            git diff --name-only "${{ github.event.pull_request.base.sha }}" "${{ github.sha }}" \
+            | grep -E '^(lib/bootstrap\.zsh|lib/tests/bootstrap.*\.zsh|oh-my-zsh\.sh|lib/(completion|compfix|functions|theme-and-appearance)\.zsh|plugins/.+/.+\.plugin\.zsh|themes/.+\.zsh-theme)$' \
+            || true
+          )
+
+          if [ "${#touched[@]}" -eq 0 ]; then
+            echo "No bootstrap-adjacent files touched"
+            exit 0
+          fi
+
+          for file in "${touched[@]}"; do
+            echo "Syntax checking $file"
+            zsh -n "$file"
+          done
+
+      - name: Run bootstrap unit test
+        if: github.event_name == 'pull_request'
+        run: zsh ./lib/tests/bootstrap.test.zsh
+
+      - name: Run inline bootstrap invariants smoke test
+        if: github.event_name == 'pull_request'
+        run: zsh ./lib/tests/bootstrap-inline-ci.test.zsh
+
+  plugin-manager-smoke:
+    name: Plugin manager smoke (${{ matrix.manager }}:${{ matrix.scenario }})
+    runs-on: ubuntu-latest
+    if: github.repository == 'ohmyzsh/ohmyzsh' && github.event_name == 'pull_request'
+    strategy:
+      fail-fast: false
+      matrix:
+        manager: [antigen, zinit]
+        scenario: [positive, negative]
+    steps:
+      - name: Set up git repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install zsh
+        run: sudo apt-get update; sudo apt-get install zsh
+
+      - name: Run plugin-manager bootstrap integration
+        run: zsh ./lib/tests/plugin-manager-bootstrap-integration.test.zsh "${{ matrix.manager }}" "${{ matrix.scenario }}"
