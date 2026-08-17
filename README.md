@@ -361,7 +361,8 @@ source "$ZSH/lib/bootstrap.zsh"
 
 #### Bootstrap compatibility contract
 
-`lib/bootstrap.zsh` is idempotent and guarantees:
+`lib/bootstrap.zsh` is idempotent and is the only required pre-load step for plugin-manager setups.
+It guarantees:
 
 - `ZSH`, `ZSH_CUSTOM`, and `ZSH_CACHE_DIR` defaults
 - writable cache fallback to `${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh`
@@ -372,7 +373,7 @@ source "$ZSH/lib/bootstrap.zsh"
   - `$ZSH_CUSTOM/functions`
   - `$ZSH_CUSTOM/completions`
   - `$ZSH_CACHE_DIR/completions`
-- public signal: `OMZ_IS_BOOTSTRAPPED=true`
+- public signal: `OMZ_IS_BOOTSTRAPPED=true` (for one-time hook guards)
 
 What still requires `oh-my-zsh.sh`:
 
@@ -386,10 +387,61 @@ What still requires `oh-my-zsh.sh`:
 
 Run bootstrap once, before any OMZ plugin/theme load:
 
-- **Antigen:** add a one-time pre-bundle hook to source `lib/bootstrap.zsh`.
-- **Zinit:** use a pre-load/`atinit` hook for OMZ snippets/plugins.
-- **zplug:** use a load hook (`hook-load`) before OMZ plugin/theme sourcing.
-- **zgen / zulu:** source `lib/bootstrap.zsh` immediately before OMZ plugin/theme load lines.
+```zsh
+[[ -n "${OMZ_IS_BOOTSTRAPPED:-}" ]] || source "$ZSH/lib/bootstrap.zsh"
+```
+
+- **Antigen** (pre-bundle hook pattern):
+
+  ```zsh
+  omz_preload() { [[ -n "${OMZ_IS_BOOTSTRAPPED:-}" ]] || source "$ZSH/lib/bootstrap.zsh"; }
+  omz_preload
+  antigen bundle OMZ::plugins/git
+  antigen apply
+  ```
+
+- **Zinit** (`atinit` pre-load hook):
+
+  ```zsh
+  zinit ice atinit'[[ -n "${OMZ_IS_BOOTSTRAPPED:-}" ]] || source "$ZSH/lib/bootstrap.zsh"'
+  zinit snippet OMZ::plugins/git/git.plugin.zsh
+  ```
+
+- **zgen** (pre-load hook function called before OMZ loads):
+
+  ```zsh
+  omz_preload() { [[ -n "${OMZ_IS_BOOTSTRAPPED:-}" ]] || source "$ZSH/lib/bootstrap.zsh"; }
+  omz_preload
+  zgen load ohmyzsh/ohmyzsh plugins/git
+  ```
+
+- **zplug** (run pre-load hook immediately before OMZ entries):
+
+  ```zsh
+  omz_preload() { [[ -n "${OMZ_IS_BOOTSTRAPPED:-}" ]] || source "$ZSH/lib/bootstrap.zsh"; }
+  omz_preload
+  zplug "plugins/git", from:oh-my-zsh
+  zplug load
+  ```
+
+- **antibody** (run pre-load hook before `antibody bundle`/`source` output):
+
+  ```zsh
+  omz_preload() { [[ -n "${OMZ_IS_BOOTSTRAPPED:-}" ]] || source "$ZSH/lib/bootstrap.zsh"; }
+  omz_preload
+  source <(antibody bundle <<'EOF'
+  ohmyzsh/ohmyzsh path:plugins/git
+  EOF
+  )
+  ```
+
+- **zulu** (run pre-load hook before OMZ module loads):
+
+  ```zsh
+  omz_preload() { [[ -n "${OMZ_IS_BOOTSTRAPPED:-}" ]] || source "$ZSH/lib/bootstrap.zsh"; }
+  omz_preload
+  zulu install oh-my-zsh
+  ```
 
 Compatibility matrix:
 
