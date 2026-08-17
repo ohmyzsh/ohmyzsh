@@ -450,6 +450,20 @@ Compatibility matrix:
 | `source $ZSH/oh-my-zsh.sh` | ✅ | ✅ | Full OMZ framework features |
 | `source $ZSH/lib/bootstrap.zsh` + manager-loaded OMZ plugins/themes | ✅ | ❌ | Plugin/theme prerequisites only |
 
+#### Manager entrypoints and OMZ-side auto-injection limits
+
+Most plugin managers load OMZ by directly sourcing selected plugin/theme/lib entrypoints, not by sourcing
+`oh-my-zsh.sh`, so OMZ cannot universally inject bootstrap on its own.
+
+| Manager | Typical OMZ entrypoint(s) it loads | Can OMZ auto-inject bootstrap without user hook? |
+| :-- | :-- | :--: |
+| Antigen | `antigen bundle ...` targets after `antigen use oh-my-zsh` | ❌ |
+| Zinit | `OMZ::`, `OMZL::`, `OMZP::`, `OMZT::` snippets | ❌ |
+| zgen | `zgen oh-my-zsh ...` selected OMZ paths | ❌ |
+| zplug | `from:oh-my-zsh` selected OMZ entries | ❌ |
+| antibody | `ohmyzsh/ohmyzsh path:...` selected OMZ paths | ❌ |
+| zulu | OMZ package/module entries selected by zulu | ❌ |
+
 ### Enable GNU ls In macOS And FreeBSD Systems
 
 <a name="enable-gnu-ls"></a>
