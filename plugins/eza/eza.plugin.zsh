@@ -53,7 +53,12 @@ function _configure_eza() {
     _EZA_TAIL+=("--time-style='$_val'")
   fi
   if zstyle -t ":omz:plugins:eza" "hyperlink"; then
-    _EZA_TAIL+=("--hyperlink")
+    case "${_val:l}" in
+      yes|true|on|1) _val=auto ;;
+    esac
+    if [[ ${_val:l} == (always|auto|automatic|never) ]]; then
+      _EZA_TAIL+=("--hyperlink=${_val:l}")
+    fi
   fi
 }
 
