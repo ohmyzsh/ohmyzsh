@@ -69,7 +69,7 @@ function asr() {
   local -a available_regions
   available_regions=($(aws_regions))
   if [[ -z "${available_regions[(r)$1]}" ]]; then
-    echo "${fg[red]}Available regions: \n$(aws_regions)"
+    echo "${fg[red]}Available regions: \n$(aws_regions)${reset_color}" >&2
     return 1
   fi
 
