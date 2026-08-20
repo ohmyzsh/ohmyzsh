@@ -19,3 +19,14 @@ This plugin provides an interactive way to change directories in zsh using fzf.
 ## Usage
 
 Press tab for completion as usual, it'll launch fzf automatically. Check fzf’s [readme](https://github.com/junegunn/fzf#search-syntax) for more search syntax usage.
+
+### Hidden Directories
+
+By default, `zsh-interactive-cd` hides directories that start with `.` (dotfolders).  
+
+You can enable hidden directories in the suggestion list by setting:
+
+```zsh
+# Show hidden directories in interactive cd
+export ZIC_SHOW_HIDDEN=true
+```
