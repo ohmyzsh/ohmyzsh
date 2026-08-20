@@ -39,6 +39,7 @@ plugins=(... macos)
 | `rmdsstore`   | Remove .DS_Store files recursively in a directory        |
 | `btrestart`   | Restart the Bluetooth daemon                             |
 | `freespace`   | Erases purgeable disk space with 0s on the selected disk |
+| `pbfile`      | Copy the file reference to the macOS pasteboard          |
 
 ## Acknowledgements
 
