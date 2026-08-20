@@ -1,0 +1,24 @@
+#compdef printc
+
+_printc() {
+  local -a all_opts
+
+  all_opts=(
+    "-b[bold]"
+    "-i[italic]"
+    "-u[underline]"
+    "-l[list built in colors]"
+    "-h[show help message]"
+    "-n[suppress newline]"
+    "-C[built in colors]:custom:(cayenne \
+      mocha asparagus fern clover moss teal \
+      ocean midnight eggplant plum maroon maraschino \
+      tangerine lemon lime spring seafoam turquois \
+      aqua blueberry grape magenta strawberry salmon \
+      cantaloupe banana honeydew flora spindrift ice \
+      sky orchid lavender bubblegum carnation)"
+  )
+
+  _arguments -s "$all_opts[@]"
+}
+
