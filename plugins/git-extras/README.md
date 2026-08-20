@@ -10,7 +10,13 @@ plugins=(... git-extras)
 
 ## Setup notes
 
-The completions work by augmenting the `_git` completion provided by `zsh`. This only works with the `zsh`-provided `_git`, not the `_git` provided by `git` itself. If you have both `zsh` and `git` installed, you need to make sure that the `zsh`-provided `_git` takes precedence.
+The completions work by augmenting the `_git` completion provided by `zsh`. This only works with the `zsh`-provided `_git`, not the `_git` provided by `git` itself. If you have both `zsh` and `git` installed, you need to make sure that the `zsh` provided `_git` takes precedence.
+
+To find out where the `_git` completions are installed and which one has precedence:
+
+1. `ls /usr/share/zsh/functions/Completion/Unix/_git` # if present, the `zsh` provided `_git` completion is present.
+2. `ls /usr/share/git/completion/git-completion.zsh`  # if present, the `git` provided `_git` completion is present. And why wouldn't it be?
+3. `which _git` # will show the path of the _git completion that is currently being used by your shell, indicating which one has precedence.
 
 ### OS X Homebrew Setup
 
