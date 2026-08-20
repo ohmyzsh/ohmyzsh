@@ -29,6 +29,25 @@ function theme_preview() {
     print -P "$PROMPT                                                                                      $RPROMPT"
 }
 
+function fav_theme_preview() {
+    if [[ -s $FAVLIST ]]; then
+        for THEME_NAME in $(cat $FAVLIST); do
+            THEME="$THEME_NAME.zsh-theme"
+            print "$fg[blue]${(l.((${COLUMNS}-${#THEME_NAME}-5))..─.)}$reset_color $THEME_NAME $fg[blue]───$reset_color"
+            source "$THEMES_DIR/$THEME"
+            cols=$(tput cols)
+            (exit 1)
+            print -P "$PROMPT                                                                                      $RPROMPT" 
+        done
+    else
+        if ! noyes "No ($FAVLIST) in the system. Do you want to preview all the available themes?"; then
+            theme_chooser 0
+        else
+            echo "Okay, exiting."
+        fi
+    fi
+}
+
 function banner() {
     echo
     echo "[0;1;35;95m╺━[0;1;31;91m┓┏[0;1;33;93m━┓[0;1;32;92m╻[0m [0;1;36;96m╻[0m   [0;1;35;95m╺┳[0;1;31;91m╸╻[0m [0;1;33;93m╻[0;1;32;92m┏━[0;1;36;96m╸┏[0;1;34;94m┳┓[0;1;35;95m┏━[0;1;31;91m╸[0m   [0;1;32;92m┏━[0;1;36;96m╸╻[0m [0;1;34;94m╻[0;1;35;95m┏━[0;1;31;91m┓┏[0;1;33;93m━┓[0;1;32;92m┏━[0;1;36;96m┓┏[0;1;34;94m━╸[0;1;35;95m┏━[0;1;31;91m┓[0m"
@@ -43,6 +62,7 @@ function usage() {
     echo "Options"
     echo "  -l   List available themes"
     echo "  -s   Show all themes"
+    echo "  -f   Show favourite themes"
     echo "  -h   Get this help message"
     exit 1
 }
@@ -77,11 +97,12 @@ function theme_chooser() {
     done
 }
 
-while getopts ":lhs" Option
+while getopts ":lhsf" Option
 do
   case $Option in
     l ) list_themes ;;
     s ) theme_chooser 0 ;;
+    f ) fav_theme_preview ;; 
     h ) usage ;;
     * ) usage ;; # Default.
   esac
@@ -96,3 +117,4 @@ if [[ -z $Option ]]; then
         theme_preview $1".zsh-theme"
     fi
 fi
+
