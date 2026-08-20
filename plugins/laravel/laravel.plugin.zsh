@@ -7,6 +7,11 @@ alias pas='php artisan serve'
 alias pad='php artisan dev'
 alias pats='php artisan test'
 
+#test
+alias pat="php artisan test"
+alias pu="vendor/bin/phpunit"
+alias puf="vendor/bin/phpunit --filter"
+
 # Database
 alias pam='php artisan migrate'
 alias pamf='php artisan migrate:fresh'
