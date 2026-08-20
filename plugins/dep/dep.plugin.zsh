@@ -1,0 +1,5 @@
+alias depc="dep check"
+alias deps="dep status"
+alias depe="dep ensure"
+alias depa="dep ensure -add"
+alias depu="dep ensure -update"
