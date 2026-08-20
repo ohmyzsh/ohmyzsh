@@ -50,6 +50,10 @@ function mkcd takedir() {
   mkdir -p $@ && cd ${@:$#}
 }
 
+function taketmp() {
+  cd $(mktemp -d)
+}
+
 function takeurl() {
   local data thedir
   data="$(mktemp)"
@@ -82,6 +86,8 @@ function take() {
     takezip "$1"
   elif [[ $1 =~ ^([A-Za-z0-9]\+@|https?|git|ssh|ftps?|rsync).*\.git/?$ ]]; then
     takegit "$1"
+  elif [[ "$1" == "" ]]; then
+    taketmp
   else
     takedir "$@"
   fi
