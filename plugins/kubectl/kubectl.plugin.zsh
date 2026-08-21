@@ -10,7 +10,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
   _comps[kubectl]=_kubectl
 fi
 
-kubectl completion zsh 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_kubectl" &|
+# Generate the completion into a temporary file and move it into place
+# atomically, so a compinit running concurrently (package-manager setups
+# may run it after this plugin) never reads an empty or partial file.
+local _kubectl_tmp="$ZSH_CACHE_DIR/completions/_kubectl.tmp.$$"
+kubectl completion zsh 2> /dev/null >| "$_kubectl_tmp" && mv -f "$_kubectl_tmp" "$ZSH_CACHE_DIR/completions/_kubectl" &|
 
 # This command is used a LOT both below and in daily life
 alias k=kubectl
