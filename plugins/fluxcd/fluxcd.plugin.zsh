@@ -11,4 +11,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_flux" ]]; then
   _comps[flux]=_flux
 fi
 
-flux completion zsh >| "$ZSH_CACHE_DIR/completions/_flux" &|
+flux completion zsh >| "$ZSH_CACHE_DIR/completions/_flux.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_flux.tmp.$$" "$ZSH_CACHE_DIR/completions/_flux" &|
