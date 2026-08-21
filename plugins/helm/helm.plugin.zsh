@@ -9,7 +9,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_helm" ]]; then
   source "$ZSH_CACHE_DIR/completions/_helm"
 else
   source "$ZSH_CACHE_DIR/completions/_helm"
-  helm completion zsh | tee "$ZSH_CACHE_DIR/completions/_helm" >/dev/null &|
+  # Regenerate atomically so a concurrent compinit never reads a partial file.
+  local _helm_tmp="$ZSH_CACHE_DIR/completions/_helm.tmp.$$"
+  helm completion zsh >| "$_helm_tmp" && mv -f "$_helm_tmp" "$ZSH_CACHE_DIR/completions/_helm" &|
 fi
 
 alias h='helm'
