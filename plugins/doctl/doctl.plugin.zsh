@@ -14,4 +14,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_doctl" ]]; then
   _comps[doctl]=_doctl
 fi
 
-doctl completion zsh >| "$ZSH_CACHE_DIR/completions/_doctl" &|
+doctl completion zsh >| "$ZSH_CACHE_DIR/completions/_doctl.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_doctl.tmp.$$" "$ZSH_CACHE_DIR/completions/_doctl" &|
