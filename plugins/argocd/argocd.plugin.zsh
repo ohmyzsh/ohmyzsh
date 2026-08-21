@@ -11,4 +11,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_argocd" ]]; then
   _comps[argocd]=_argocd
 fi
 
-argocd completion zsh >| "$ZSH_CACHE_DIR/completions/_argocd" &|
+argocd completion zsh >| "$ZSH_CACHE_DIR/completions/_argocd.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_argocd.tmp.$$" "$ZSH_CACHE_DIR/completions/_argocd" &|
