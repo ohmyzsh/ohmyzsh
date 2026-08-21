@@ -11,7 +11,7 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_kind" ]]; then
 fi
 
 # Generate and load kind completion
-kind completion zsh >! "$ZSH_CACHE_DIR/completions/_kind" &|
+kind completion zsh >! "$ZSH_CACHE_DIR/completions/_kind.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_kind.tmp.$$" "$ZSH_CACHE_DIR/completions/_kind" &|
 
 # Register aliases
 alias kicc="kind create cluster"
