@@ -11,4 +11,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_chezmoi" ]]; then
   _comps[chezmoi]=_chezmoi
 fi
 
-chezmoi completion zsh >| "$ZSH_CACHE_DIR/completions/_chezmoi" &|
+chezmoi completion zsh >| "$ZSH_CACHE_DIR/completions/_chezmoi.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_chezmoi.tmp.$$" "$ZSH_CACHE_DIR/completions/_chezmoi" &|
