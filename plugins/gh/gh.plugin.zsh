@@ -11,4 +11,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_gh" ]]; then
   _comps[gh]=_gh
 fi
 
-gh completion --shell zsh >| "$ZSH_CACHE_DIR/completions/_gh" &|
+gh completion --shell zsh >| "$ZSH_CACHE_DIR/completions/_gh.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_gh.tmp.$$" "$ZSH_CACHE_DIR/completions/_gh" &|
