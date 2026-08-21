@@ -12,4 +12,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_asdf" ]]; then
   autoload -Uz _asdf
   _comps[asdf]=_asdf
 fi
-asdf completion zsh >| "$ZSH_CACHE_DIR/completions/_asdf" &|
+asdf completion zsh >| "$ZSH_CACHE_DIR/completions/_asdf.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_asdf.tmp.$$" "$ZSH_CACHE_DIR/completions/_asdf" &|
