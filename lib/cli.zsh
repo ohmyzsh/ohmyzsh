@@ -738,8 +738,27 @@ function _omz::reload {
 
   # Old zsh versions don't have ZSH_ARGZERO
   local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
-  # Check whether to run a login shell
-  [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
+  local is_login=0
+  [[ "$zsh" = -* || -o login ]] && is_login=1
+
+  if (( is_login )); then
+    # Login shell: ZSH_ARGZERO is often "-zsh" (resolved via $PATH) or
+    # otherwise unreliable. Prefer $SHELL when it points at an executable.
+    if [[ -n "$SHELL" && -x "$SHELL" ]]; then
+      exec -l "$SHELL"
+    else
+      exec -l "${zsh#-}"
+    fi
+  else
+    # Non-login shell: resolve bare names and relative paths.
+    if [[ "$zsh" != */* ]]; then
+      # Bare name like "zsh" — resolve via the command hash
+      zsh="${commands[$zsh]:-$zsh}"
+    elif [[ "$zsh" != /* ]]; then
+      zsh="$PWD/$zsh"
+    fi
+    exec "$zsh"
+  fi
 }
 
 function _omz::theme {
