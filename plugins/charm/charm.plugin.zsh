@@ -11,4 +11,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_charm" ]]; then
   _comps[charm]=_charm
 fi
 
-charm completion zsh >| "$ZSH_CACHE_DIR/completions/_charm" &|
+charm completion zsh >| "$ZSH_CACHE_DIR/completions/_charm.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_charm.tmp.$$" "$ZSH_CACHE_DIR/completions/_charm" &|
