@@ -11,4 +11,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_buf" ]]; then
 fi
 
 # Generate and load buf completion
-buf completion zsh >! "$ZSH_CACHE_DIR/completions/_buf" &|
+buf completion zsh >! "$ZSH_CACHE_DIR/completions/_buf.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_buf.tmp.$$" "$ZSH_CACHE_DIR/completions/_buf" &|
