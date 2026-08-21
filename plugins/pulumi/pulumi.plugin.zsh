@@ -10,7 +10,7 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_pulumi" ]]; then
   _comps[pulumi]=_pulumi
 fi
 
-pulumi gen-completion zsh >| "$ZSH_CACHE_DIR/completions/_pulumi" &|
+pulumi gen-completion zsh >| "$ZSH_CACHE_DIR/completions/_pulumi.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_pulumi.tmp.$$" "$ZSH_CACHE_DIR/completions/_pulumi" &|
 
 # Aliases
 alias pul='pulumi'
