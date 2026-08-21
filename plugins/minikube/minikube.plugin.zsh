@@ -10,4 +10,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_minikube" ]]; then
   _comps[minikube]=_minikube
 fi
 
-minikube completion zsh >| "$ZSH_CACHE_DIR/completions/_minikube" &|
+minikube completion zsh >| "$ZSH_CACHE_DIR/completions/_minikube.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_minikube.tmp.$$" "$ZSH_CACHE_DIR/completions/_minikube" &|
