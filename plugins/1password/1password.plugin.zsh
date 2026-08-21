@@ -9,7 +9,7 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_op" ]]; then
   _comps[op]=_op
 fi
 
-op completion zsh >| "$ZSH_CACHE_DIR/completions/_op" &|
+op completion zsh >| "$ZSH_CACHE_DIR/completions/_op.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_op.tmp.$$" "$ZSH_CACHE_DIR/completions/_op" &|
 
 # Load opswd function
 autoload -Uz opswd
