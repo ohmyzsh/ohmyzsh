@@ -9,4 +9,6 @@ fancy-ctrl-z () {
 }
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
+bindkey -M viins '^Z' fancy-ctrl-z
+bindkey -M vicmd '^Z' fancy-ctrl-z
 
