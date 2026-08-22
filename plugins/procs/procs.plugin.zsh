@@ -11,11 +11,16 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_procs" ]]; then
 fi
 
 {
+  local completion="$ZSH_CACHE_DIR/completions/_procs" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+
   autoload -Uz is-at-least
   local _version=$(procs --version)
   if is-at-least "0.14" "${_version#procs }"; then
-    procs --gen-completion-out zsh >| "$ZSH_CACHE_DIR/completions/_procs"
+    procs --gen-completion-out zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+    command rm -f "$tmp"
   else
-    procs --completion-out zsh >| "$ZSH_CACHE_DIR/completions/_procs"
+    procs --completion-out zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+    command rm -f "$tmp"
   fi
 } &|

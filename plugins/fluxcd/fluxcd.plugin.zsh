@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_flux" ]]; then
   _comps[flux]=_flux
 fi
 
-flux completion zsh >| "$ZSH_CACHE_DIR/completions/_flux" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_flux" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  flux completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

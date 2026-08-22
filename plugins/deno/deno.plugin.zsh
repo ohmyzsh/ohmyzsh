@@ -25,4 +25,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_deno" ]]; then
   _comps[deno]=_deno
 fi
 
-deno completions zsh >| "$ZSH_CACHE_DIR/completions/_deno" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_deno" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  deno completions zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_pass-cli" ]]; then
   _comps[pass-cli]=_pass-cli
 fi
 
-pass-cli completions zsh >| "$ZSH_CACHE_DIR/completions/_pass-cli" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_pass-cli" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  pass-cli completions zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

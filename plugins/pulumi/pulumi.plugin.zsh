@@ -10,7 +10,12 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_pulumi" ]]; then
   _comps[pulumi]=_pulumi
 fi
 
-pulumi gen-completion zsh >| "$ZSH_CACHE_DIR/completions/_pulumi" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_pulumi" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  pulumi gen-completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|
 
 # Aliases
 alias pul='pulumi'

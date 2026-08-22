@@ -12,7 +12,12 @@ function install_autocompletion {
     _comps[$1]=_$1
   fi
 
-  $1 completion zsh >| "$ZSH_CACHE_DIR/completions/_$1" &|
+  {
+    local completion="$ZSH_CACHE_DIR/completions/_$1" tmp
+    tmp=$(command mktemp "$completion.XXXXXX") || exit
+    $1 completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+    command rm -f "$tmp"
+  } &|
 }
 
 install_autocompletion cosign

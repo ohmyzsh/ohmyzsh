@@ -7,7 +7,12 @@ if (( $+commands[nsc] )); then
     _comps[nsc]=_nsc
   fi
 
-  nsc completion zsh >| "$ZSH_CACHE_DIR/completions/_nsc" &|
+  {
+    local completion="$ZSH_CACHE_DIR/completions/_nsc" tmp
+    tmp=$(command mktemp "$completion.XXXXXX") || exit
+    nsc completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+    command rm -f "$tmp"
+  } &|
 fi
 
 if (( $+commands[nats] )); then
@@ -19,5 +24,10 @@ if (( $+commands[nats] )); then
     _comps[nats]=_nats
   fi
 
-  nats --completion-script-zsh >| "$ZSH_CACHE_DIR/completions/_nats" &|
+  {
+    local completion="$ZSH_CACHE_DIR/completions/_nats" tmp
+    tmp=$(command mktemp "$completion.XXXXXX") || exit
+    nats --completion-script-zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+    command rm -f "$tmp"
+  } &|
 fi

@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_ngrok" ]]; then
   _comps[ngrok]=_ngrok
 fi
 
-ngrok completion zsh >| "$ZSH_CACHE_DIR/completions/_ngrok" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_ngrok" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  ngrok completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

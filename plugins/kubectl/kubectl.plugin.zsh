@@ -10,7 +10,12 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
   _comps[kubectl]=_kubectl
 fi
 
-kubectl completion zsh 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_kubectl" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_kubectl" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  kubectl completion zsh 2> /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|
 
 # This command is used a LOT both below and in daily life
 alias k=kubectl

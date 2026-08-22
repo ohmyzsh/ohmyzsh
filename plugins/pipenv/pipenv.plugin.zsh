@@ -43,7 +43,12 @@ else
     _comps[pipenv]=_pipenv
   fi
 
-  _PIPENV_COMPLETE=zsh_source pipenv >| "$ZSH_CACHE_DIR/completions/_pipenv" &|
+  {
+    local completion="$ZSH_CACHE_DIR/completions/_pipenv" tmp
+    tmp=$(command mktemp "$completion.XXXXXX") || exit
+    _PIPENV_COMPLETE=zsh_source pipenv >| "$tmp" && command mv -f "$tmp" "$completion"
+    command rm -f "$tmp"
+  } &|
 fi
 
 if zstyle -T ':omz:plugins:pipenv' auto-shell; then

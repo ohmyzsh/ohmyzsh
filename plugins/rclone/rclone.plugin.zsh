@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_rclone" ]]; then
   _comps[rclone]=_rclone
 fi
 
-rclone completion zsh - >| "$ZSH_CACHE_DIR/completions/_rclone" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_rclone" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  rclone completion zsh - >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

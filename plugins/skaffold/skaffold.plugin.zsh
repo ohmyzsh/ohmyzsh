@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_skaffold" ]]; then
   _comps[skaffold]=_skaffold
 fi
 
-skaffold completion zsh >| "$ZSH_CACHE_DIR/completions/_skaffold" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_skaffold" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  skaffold completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

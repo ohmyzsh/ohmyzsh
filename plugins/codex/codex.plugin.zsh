@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_codex" ]]; then
   _comps[codex]=_codex
 fi
 
-codex completion zsh < /dev/null 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_codex" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_codex" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  codex completion zsh < /dev/null 2> /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

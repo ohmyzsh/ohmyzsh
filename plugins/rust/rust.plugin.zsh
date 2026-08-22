@@ -19,7 +19,12 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_rustup" ]]; then
 fi
 
 # Generate completion files in the background
-rustup completions zsh >| "$ZSH_CACHE_DIR/completions/_rustup" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_rustup" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  rustup completions zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|
 cat >| "$ZSH_CACHE_DIR/completions/_cargo" <<'EOF'
 #compdef cargo
 source "$(rustup run ${${(z)$(rustup default)}[1]} rustc --print sysroot)"/share/zsh/site-functions/_cargo

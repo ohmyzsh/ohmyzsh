@@ -12,4 +12,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_asdf" ]]; then
   autoload -Uz _asdf
   _comps[asdf]=_asdf
 fi
-asdf completion zsh >| "$ZSH_CACHE_DIR/completions/_asdf" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_asdf" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  asdf completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

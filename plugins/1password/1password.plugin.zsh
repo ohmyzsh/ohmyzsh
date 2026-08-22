@@ -9,7 +9,12 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_op" ]]; then
   _comps[op]=_op
 fi
 
-op completion zsh >| "$ZSH_CACHE_DIR/completions/_op" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_op" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  op completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|
 
 # Load opswd function
 autoload -Uz opswd

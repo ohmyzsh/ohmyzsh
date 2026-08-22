@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_atlas" ]]; then
   _comps[atlas]=_atlas
 fi
 
-atlas completion zsh >| "$ZSH_CACHE_DIR/completions/atlas" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_atlas" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  atlas completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

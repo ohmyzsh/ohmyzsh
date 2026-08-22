@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_arduino-cli" ]]; then
 fi
 
 # Generate and load arduino-cli completion
-arduino-cli completion zsh >! "$ZSH_CACHE_DIR/completions/_arduino-cli" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_arduino-cli" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  arduino-cli completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

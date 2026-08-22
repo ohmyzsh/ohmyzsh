@@ -10,4 +10,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_stripe" ]]; then
   _comps[stripe]=_stripe
 fi
 
-stripe completion --shell zsh --write-to-stdout >| "$ZSH_CACHE_DIR/completions/_stripe" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_stripe" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  stripe completion --shell zsh --write-to-stdout >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

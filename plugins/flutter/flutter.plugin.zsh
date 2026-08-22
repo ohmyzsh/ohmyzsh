@@ -30,4 +30,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_flutter" ]]; then
   _comps[flutter]=_flutter
 fi
 
-flutter zsh-completion < /dev/null >| "$ZSH_CACHE_DIR/completions/_flutter" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_flutter" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  flutter zsh-completion < /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

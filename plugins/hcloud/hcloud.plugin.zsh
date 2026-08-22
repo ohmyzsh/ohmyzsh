@@ -13,7 +13,12 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_hcloud" ]]; then
   _comps[hcloud]=_hcloud
 fi
 
-hcloud completion zsh 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_hcloud" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_hcloud" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  hcloud completion zsh 2> /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|
 
 # Main alias
 alias hc='hcloud'

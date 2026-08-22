@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_volta" ]]; then
   _comps[volta]=_volta
 fi
 
-volta completions zsh >| "$ZSH_CACHE_DIR/completions/_volta" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_volta" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  volta completions zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

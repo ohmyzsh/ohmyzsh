@@ -9,5 +9,10 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_hasura" ]]; then
   source "$ZSH_CACHE_DIR/completions/_hasura"
 else
   source "$ZSH_CACHE_DIR/completions/_hasura"
-  hasura completion zsh --file "$ZSH_CACHE_DIR/completions/_hasura" >/dev/null &|
+  {
+    local completion="$ZSH_CACHE_DIR/completions/_hasura" tmp
+    tmp=$(command mktemp "$completion.XXXXXX") || exit
+    hasura completion zsh --file "$tmp" >/dev/null && command mv -f "$tmp" "$completion"
+    command rm -f "$tmp"
+  } &|
 fi

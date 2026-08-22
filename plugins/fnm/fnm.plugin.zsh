@@ -10,7 +10,12 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_fnm" ]]; then
   _comps[fnm]=_fnm
 fi
 
-fnm completions --shell=zsh >| "$ZSH_CACHE_DIR/completions/_fnm" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_fnm" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  fnm completions --shell=zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|
 
 if zstyle -t ':omz:plugins:fnm' autostart; then
   local -a fnm_env_cmd

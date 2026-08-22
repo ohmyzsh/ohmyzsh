@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_timoni" ]]; then
   _comps[timoni]=_timoni
 fi
 
-timoni completion zsh >| "$ZSH_CACHE_DIR/completions/_timoni" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_timoni" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  timoni completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

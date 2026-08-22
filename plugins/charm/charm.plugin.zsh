@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_charm" ]]; then
   _comps[charm]=_charm
 fi
 
-charm completion zsh >| "$ZSH_CACHE_DIR/completions/_charm" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_charm" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  charm completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

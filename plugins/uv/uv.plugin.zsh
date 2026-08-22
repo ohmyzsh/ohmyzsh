@@ -43,5 +43,15 @@ fi
 
 # uv and uvx are installed together (uvx is an alias to `uv tool run`)  
 # Overwrites the file each time as completions might change with uv versions.
-uv generate-shell-completion zsh >| "$ZSH_CACHE_DIR/completions/_uv" &|
-uvx --generate-shell-completion zsh >| "$ZSH_CACHE_DIR/completions/_uvx" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_uv" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  uv generate-shell-completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_uvx" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  uvx --generate-shell-completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

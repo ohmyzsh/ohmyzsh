@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_buf" ]]; then
 fi
 
 # Generate and load buf completion
-buf completion zsh >! "$ZSH_CACHE_DIR/completions/_buf" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_buf" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  buf completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

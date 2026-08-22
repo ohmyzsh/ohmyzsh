@@ -10,7 +10,12 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_rbw" ]]; then
   _comps[rbw]=_rbw
 fi
 
-rbw gen-completions zsh >| "$ZSH_CACHE_DIR/completions/_rbw" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_rbw" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  rbw gen-completions zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|
 
 # rbwpw function copies the password of a service to the clipboard
 # and clears it after 20 seconds

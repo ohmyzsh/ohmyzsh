@@ -11,7 +11,12 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_jj" ]]; then
   _comps[jj]=_jj
 fi
 
-COMPLETE=zsh jj >| "$ZSH_CACHE_DIR/completions/_jj" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_jj" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  COMPLETE=zsh jj >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|
 
 function __jj_prompt_jj() {
   local -a flags
@@ -72,4 +77,3 @@ alias jjsq='jj squash'
 alias jjst='jj status'
 alias jjwa='jj workspace add'
 alias jjwf='jj workspace forget'
-

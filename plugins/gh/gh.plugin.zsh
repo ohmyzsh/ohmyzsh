@@ -11,4 +11,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_gh" ]]; then
   _comps[gh]=_gh
 fi
 
-gh completion --shell zsh >| "$ZSH_CACHE_DIR/completions/_gh" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_gh" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  gh completion --shell zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|

@@ -14,4 +14,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_mise" ]]; then
 fi
 
 # Generate and load mise completion
-mise completion zsh >| "$ZSH_CACHE_DIR/completions/_mise" &|
+{
+  local completion="$ZSH_CACHE_DIR/completions/_mise" tmp
+  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  mise completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
+  command rm -f "$tmp"
+} &|
