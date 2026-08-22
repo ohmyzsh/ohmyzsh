@@ -11,7 +11,7 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_jj" ]]; then
   _comps[jj]=_jj
 fi
 
-COMPLETE=zsh jj >| "$ZSH_CACHE_DIR/completions/_jj" &|
+COMPLETE=zsh jj >| "$ZSH_CACHE_DIR/completions/_jj.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_jj.tmp.$$" "$ZSH_CACHE_DIR/completions/_jj" &|
 
 function __jj_prompt_jj() {
   local -a flags
