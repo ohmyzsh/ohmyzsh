@@ -11,4 +11,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_task" ]]; then
 fi
 
 # Generate and load task completion
-task --completion zsh >! "$ZSH_CACHE_DIR/completions/_task" &|
+task --completion zsh >! "$ZSH_CACHE_DIR/completions/_task.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_task.tmp.$$" "$ZSH_CACHE_DIR/completions/_task" &|
