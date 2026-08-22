@@ -159,6 +159,14 @@ alias gbg='LANG=C git branch -vv | grep ": gone\]"'
 alias gco='git checkout'
 alias gcor='git checkout --recurse-submodules'
 alias gcb='git checkout -b'
+function gcbc() {
+  local branch=$(git branch --show-current 2>/dev/null) || return
+  if [[ -z "$branch" ]]; then
+    print -u2 "gcbc: not on a branch"
+    return 1
+  fi
+  print -rn -- "$branch" | clipcopy
+}
 alias gcB='git checkout -B'
 alias gcd='git checkout $(git_develop_branch)'
 alias gcm='git checkout $(git_main_branch)'
