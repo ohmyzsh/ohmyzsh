@@ -43,7 +43,11 @@ else
     _comps[pipenv]=_pipenv
   fi
 
-  _PIPENV_COMPLETE=zsh_source pipenv >| "$ZSH_CACHE_DIR/completions/_pipenv" &|
+  zmodload -F zsh/files b:zf_mv
+  () {
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_pipenv"
+    zf_mv -f -- =( _PIPENV_COMPLETE=zsh_source pipenv ) "$TMPPREFIX"
+  } &|
 fi
 
 if zstyle -T ':omz:plugins:pipenv' auto-shell; then

@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_pass-cli" ]]; then
   _comps[pass-cli]=_pass-cli
 fi
 
-pass-cli completions zsh >| "$ZSH_CACHE_DIR/completions/_pass-cli" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_pass-cli"
+  zf_mv -f -- =( pass-cli completions zsh ) "$TMPPREFIX"
+} &|

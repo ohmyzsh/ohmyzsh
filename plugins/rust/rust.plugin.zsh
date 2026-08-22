@@ -19,7 +19,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_rustup" ]]; then
 fi
 
 # Generate completion files in the background
-rustup completions zsh >| "$ZSH_CACHE_DIR/completions/_rustup" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_rustup"
+  zf_mv -f -- =( rustup completions zsh ) "$TMPPREFIX"
+} &|
 cat >| "$ZSH_CACHE_DIR/completions/_cargo" <<'EOF'
 #compdef cargo
 source "$(rustup run ${${(z)$(rustup default)}[1]} rustc --print sysroot)"/share/zsh/site-functions/_cargo

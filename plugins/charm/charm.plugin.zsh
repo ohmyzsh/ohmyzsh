@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_charm" ]]; then
   _comps[charm]=_charm
 fi
 
-charm completion zsh >| "$ZSH_CACHE_DIR/completions/_charm" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_charm"
+  zf_mv -f -- =( charm completion zsh ) "$TMPPREFIX"
+} &|

@@ -11,7 +11,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_jj" ]]; then
   _comps[jj]=_jj
 fi
 
-COMPLETE=zsh jj >| "$ZSH_CACHE_DIR/completions/_jj" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_jj"
+  zf_mv -f -- =( COMPLETE=zsh jj ) "$TMPPREFIX"
+} &|
 
 function __jj_prompt_jj() {
   local -a flags
@@ -72,4 +76,3 @@ alias jjsq='jj squash'
 alias jjst='jj status'
 alias jjwa='jj workspace add'
 alias jjwf='jj workspace forget'
-

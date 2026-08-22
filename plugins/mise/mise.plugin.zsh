@@ -14,4 +14,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_mise" ]]; then
 fi
 
 # Generate and load mise completion
-mise completion zsh >| "$ZSH_CACHE_DIR/completions/_mise" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_mise"
+  zf_mv -f -- =( mise completion zsh ) "$TMPPREFIX"
+} &|
