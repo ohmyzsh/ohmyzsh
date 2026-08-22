@@ -191,6 +191,8 @@ if is_tty; then
   RESET=$(printf '\033[0m')
 fi
 
+## START Migrations
+
 # Update upstream remote to ohmyzsh org
 git remote -v | while read remote url extra; do
   case "$url" in
@@ -213,6 +215,14 @@ git remote -v | while read remote url extra; do
   break
 done
 
+# Set default release mode
+# We should really move away from `.branch`, and keep it only for forks
+# then we can set `.release` and `.remote` as the right ones for us
+# Release options: master, release/YY0M, vYY0M.x.y
+if [[ -z "$(git config --local oh-my-zsh.release)" ]]; then
+  git config --local oh-my-zsh.release "master"
+fi
+
 # Set git-config values known to fix git errors
 # Line endings (#4069)
 git config core.eol lf
@@ -225,11 +235,14 @@ git config receive.fsck.zeroPaddedFilemode ignore
 resetAutoStash=$(git config --bool rebase.autoStash 2>/dev/null)
 git config rebase.autoStash true
 
+## END migrations
+
 local ret=0
 
 # repository settings
 remote=${"$(git config --local oh-my-zsh.remote)":-origin}
 branch=${"$(git config --local oh-my-zsh.branch)":-master}
+release=${"$(git config --local oh-my-zsh.release)":-master}
 
 # repository state
 last_head=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
@@ -242,6 +255,28 @@ last_commit=$(git rev-parse "$branch")
 if [[ $verbose_mode != silent ]]; then
   printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
 fi
+
+# master -> git pull 
+# release/YY0M -> git pull origin release/YY0M
+# vYY0M.x.y -> only update if release/ branch of the tag has a security update
+case "$release" in
+  master|release/*) git pull --quiet --rebase "$remote" "$release" ;;
+  v*) ;; # do nothing, but we should really make sure that security patches are fast-tracked: if the "$release" tag is in branch release/YY0M, we should pull that branch and then check out the latest tag, and inform the user that we upgraded their release
+  *) echo "error: unknown release '$release'" && exit 1 ;; # here we should show how to fix the issue
+esac
+
+# test: are we updating on the main remote or from a fork?
+# if main remote then
+#   case "$release" in
+#     master|release/*) git pull --quiet --rebase "$remote" "$release" ;;
+#     release/*) git pull --quiet --rebase "$remote" "$release" ;;
+#     v*) ;; # nothing
+#     *) echo "error: unknown release '$release'" && exit 1 ;;
+#   esac
+# fi
+
+# if master or release/* do just git pull $remote $branch
+
 if LANG= git pull --quiet --rebase $remote $branch; then
   # Check if it was really updated or not
   if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
