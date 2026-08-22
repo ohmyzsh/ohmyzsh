@@ -21,13 +21,13 @@ if command diff --color /dev/null{,} &>/dev/null; then
 fi
 
 # Don't set ls coloring if disabled
-[[ "$DISABLE_LS_COLORS" != true ]] || return 0
+[[ ${DISABLE_LS_COLORS-} != true ]] || return 0
 
 # Default coloring for BSD-based ls
 export LSCOLORS="Gxfxcxdxbxegedabagacad"
 
 # Default coloring for GNU-based ls
-if [[ -z "$LS_COLORS" ]]; then
+if [[ -z ${LS_COLORS-} ]]; then
   # Define LS_COLORS via dircolors if available. Otherwise, set a default
   # equivalent to LSCOLORS (generated via https://geoff.greer.fm/lscolors)
   if (( $+commands[dircolors] )); then
