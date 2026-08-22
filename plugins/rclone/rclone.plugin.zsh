@@ -11,4 +11,4 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_rclone" ]]; then
   _comps[rclone]=_rclone
 fi
 
-rclone completion zsh - >| "$ZSH_CACHE_DIR/completions/_rclone" &|
+rclone completion zsh - >| "$ZSH_CACHE_DIR/completions/_rclone.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_rclone.tmp.$$" "$ZSH_CACHE_DIR/completions/_rclone" &|
