@@ -19,6 +19,7 @@
 				ssm_run_sudo() {sudo $_sublime_merge_path "$@" >/dev/null 2>&1}
 				alias ssm=ssm_run_sudo
 				alias sm=sm_run
+				alias smerge="'$_sublime_merge_path'"
 				break
 			fi
 		done
@@ -33,6 +34,7 @@
 			if [[ -a $_sublime_merge_path ]]; then
 				subm () { "$_sublime_merge_path" "$@" }
 				alias sm=subm
+				alias smerge="'$_sublime_merge_path'"
 				break
 			fi
 		done
@@ -45,6 +47,7 @@
 			if [[ -a $_sublime_merge_path ]]; then
 				subm () { "$_sublime_merge_path" "$@" }
 				alias sm=subm
+				alias smerge="'$_sublime_merge_path'"
 				break
 			fi
 		done
