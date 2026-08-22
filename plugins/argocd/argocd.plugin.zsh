@@ -11,9 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_argocd" ]]; then
   _comps[argocd]=_argocd
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_argocd" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  argocd completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_argocd"
+  zf_mv -f -- =( argocd completion zsh ) "$TMPPREFIX"
 } &|

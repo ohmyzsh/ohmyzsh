@@ -12,12 +12,11 @@ function install_autocompletion {
     _comps[$1]=_$1
   fi
 
-  {
-    local completion="$ZSH_CACHE_DIR/completions/_$1" tmp
-    tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-    $1 completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-    command rm -f "$tmp"
-  } &|
+  zmodload -F zsh/files b:zf_mv
+  () {
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_$1"
+    zf_mv -f -- =( $1 completion zsh ) "$TMPPREFIX"
+  } "$1" &|
 }
 
 install_autocompletion cosign

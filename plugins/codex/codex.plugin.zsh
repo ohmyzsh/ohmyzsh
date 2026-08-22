@@ -11,9 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_codex" ]]; then
   _comps[codex]=_codex
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_codex" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  codex completion zsh < /dev/null 2> /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_codex"
+  zf_mv -f -- =( codex completion zsh < /dev/null 2> /dev/null ) "$TMPPREFIX"
 } &|

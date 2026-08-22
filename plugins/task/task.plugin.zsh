@@ -11,9 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_task" ]]; then
 fi
 
 # Generate and load task completion
-{
-  local completion="$ZSH_CACHE_DIR/completions/_task" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  task --completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_task"
+  zf_mv -f -- =( task --completion zsh ) "$TMPPREFIX"
 } &|

@@ -9,11 +9,10 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_helm" ]]; then
   source "$ZSH_CACHE_DIR/completions/_helm"
 else
   source "$ZSH_CACHE_DIR/completions/_helm"
-  {
-    local completion="$ZSH_CACHE_DIR/completions/_helm" tmp
-    tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-    helm completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-    command rm -f "$tmp"
+  zmodload -F zsh/files b:zf_mv
+  () {
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_helm"
+    zf_mv -f -- =( helm completion zsh ) "$TMPPREFIX"
   } &|
 fi
 

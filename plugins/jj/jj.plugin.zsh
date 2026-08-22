@@ -11,11 +11,10 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_jj" ]]; then
   _comps[jj]=_jj
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_jj" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  COMPLETE=zsh jj >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_jj"
+  zf_mv -f -- =( COMPLETE=zsh jj ) "$TMPPREFIX"
 } &|
 
 function __jj_prompt_jj() {

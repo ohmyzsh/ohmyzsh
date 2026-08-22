@@ -19,11 +19,10 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_rustup" ]]; then
 fi
 
 # Generate completion files in the background
-{
-  local completion="$ZSH_CACHE_DIR/completions/_rustup" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  rustup completions zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_rustup"
+  zf_mv -f -- =( rustup completions zsh ) "$TMPPREFIX"
 } &|
 cat >| "$ZSH_CACHE_DIR/completions/_cargo" <<'EOF'
 #compdef cargo

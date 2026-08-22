@@ -10,17 +10,16 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_procs" ]]; then
   _comps[procs]=_procs
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_procs" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_procs"
   autoload -Uz is-at-least
   local _version=$(procs --version)
-  if is-at-least "0.14" "${_version#procs }"; then
-    procs --gen-completion-out zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-    command rm -f "$tmp"
-  else
-    procs --completion-out zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-    command rm -f "$tmp"
-  fi
+  zf_mv -f -- =(
+    if is-at-least "0.14" "${_version#procs }"; then
+      procs --gen-completion-out zsh
+    else
+      procs --completion-out zsh
+    fi
+  ) "$TMPPREFIX"
 } &|

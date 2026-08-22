@@ -11,9 +11,8 @@ fi
 
 # and then generate it in the background. On first completion,
 # the actual completion file will be loaded.
-{
-  local completion="$ZSH_CACHE_DIR/completions/_k9s" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  k9s completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_k9s"
+  zf_mv -f -- =( k9s completion zsh ) "$TMPPREFIX"
 } &|

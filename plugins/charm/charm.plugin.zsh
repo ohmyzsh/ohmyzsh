@@ -11,9 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_charm" ]]; then
   _comps[charm]=_charm
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_charm" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  charm completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_charm"
+  zf_mv -f -- =( charm completion zsh ) "$TMPPREFIX"
 } &|

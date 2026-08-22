@@ -11,9 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_skaffold" ]]; then
   _comps[skaffold]=_skaffold
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_skaffold" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  skaffold completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_skaffold"
+  zf_mv -f -- =( skaffold completion zsh ) "$TMPPREFIX"
 } &|

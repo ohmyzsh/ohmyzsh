@@ -43,11 +43,10 @@ else
     _comps[pipenv]=_pipenv
   fi
 
-  {
-    local completion="$ZSH_CACHE_DIR/completions/_pipenv" tmp
-    tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-    _PIPENV_COMPLETE=zsh_source pipenv >| "$tmp" && command mv -f "$tmp" "$completion"
-    command rm -f "$tmp"
+  zmodload -F zsh/files b:zf_mv
+  () {
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_pipenv"
+    zf_mv -f -- =( _PIPENV_COMPLETE=zsh_source pipenv ) "$TMPPREFIX"
   } &|
 fi
 

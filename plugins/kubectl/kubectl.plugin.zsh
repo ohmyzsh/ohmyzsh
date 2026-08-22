@@ -10,11 +10,10 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
   _comps[kubectl]=_kubectl
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_kubectl" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  kubectl completion zsh 2> /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_kubectl"
+  zf_mv -f -- =( kubectl completion zsh 2> /dev/null ) "$TMPPREFIX"
 } &|
 
 # This command is used a LOT both below and in daily life

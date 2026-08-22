@@ -10,11 +10,10 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_podman" ]]; then
   _comps[podman]=_podman
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_podman" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  podman completion zsh 2> /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_podman"
+  zf_mv -f -- =( podman completion zsh 2> /dev/null ) "$TMPPREFIX"
 } &|
 
 alias pbl='podman build'

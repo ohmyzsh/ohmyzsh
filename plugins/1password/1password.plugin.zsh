@@ -9,11 +9,10 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_op" ]]; then
   _comps[op]=_op
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_op" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  op completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_op"
+  zf_mv -f -- =( op completion zsh ) "$TMPPREFIX"
 } &|
 
 # Load opswd function

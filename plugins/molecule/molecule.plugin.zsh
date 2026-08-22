@@ -11,11 +11,10 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_molecule" ]]; then
   _comps[molecule]=_molecule
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_molecule" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  _MOLECULE_COMPLETE=zsh_source molecule >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_molecule"
+  zf_mv -f -- =( _MOLECULE_COMPLETE=zsh_source molecule ) "$TMPPREFIX"
 } &|
 
 # Alias

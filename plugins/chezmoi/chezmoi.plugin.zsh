@@ -11,9 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_chezmoi" ]]; then
   _comps[chezmoi]=_chezmoi
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_chezmoi" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  chezmoi completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_chezmoi"
+  zf_mv -f -- =( chezmoi completion zsh ) "$TMPPREFIX"
 } &|

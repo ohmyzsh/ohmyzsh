@@ -25,9 +25,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_deno" ]]; then
   _comps[deno]=_deno
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_deno" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  deno completions zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_deno"
+  zf_mv -f -- =( deno completions zsh ) "$TMPPREFIX"
 } &|

@@ -39,9 +39,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_poetry" ]]; then
   _comps[poetry]=_poetry
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_poetry" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  poetry completions zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_poetry"
+  zf_mv -f -- =( poetry completions zsh ) "$TMPPREFIX"
 } &|

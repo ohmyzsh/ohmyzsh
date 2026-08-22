@@ -7,11 +7,10 @@ if (( $+commands[nsc] )); then
     _comps[nsc]=_nsc
   fi
 
-  {
-    local completion="$ZSH_CACHE_DIR/completions/_nsc" tmp
-    tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-    nsc completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-    command rm -f "$tmp"
+  zmodload -F zsh/files b:zf_mv
+  () {
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_nsc"
+    zf_mv -f -- =( nsc completion zsh ) "$TMPPREFIX"
   } &|
 fi
 
@@ -24,10 +23,9 @@ if (( $+commands[nats] )); then
     _comps[nats]=_nats
   fi
 
-  {
-    local completion="$ZSH_CACHE_DIR/completions/_nats" tmp
-    tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-    nats --completion-script-zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-    command rm -f "$tmp"
+  zmodload -F zsh/files b:zf_mv
+  () {
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_nats"
+    zf_mv -f -- =( nats --completion-script-zsh ) "$TMPPREFIX"
   } &|
 fi

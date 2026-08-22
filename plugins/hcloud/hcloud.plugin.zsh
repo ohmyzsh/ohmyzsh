@@ -13,11 +13,10 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_hcloud" ]]; then
   _comps[hcloud]=_hcloud
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_hcloud" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  hcloud completion zsh 2> /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_hcloud"
+  zf_mv -f -- =( hcloud completion zsh 2> /dev/null ) "$TMPPREFIX"
 } &|
 
 # Main alias

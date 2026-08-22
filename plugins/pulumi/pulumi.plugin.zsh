@@ -10,11 +10,10 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_pulumi" ]]; then
   _comps[pulumi]=_pulumi
 fi
 
-{
-  local completion="$ZSH_CACHE_DIR/completions/_pulumi" tmp
-  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
-  pulumi gen-completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
-  command rm -f "$tmp"
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_pulumi"
+  zf_mv -f -- =( pulumi gen-completion zsh ) "$TMPPREFIX"
 } &|
 
 # Aliases
