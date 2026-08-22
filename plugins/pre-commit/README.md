@@ -1,7 +1,7 @@
 # Pre-commit plugin
 
 This plugin adds aliases for common commands of [pre-commit](https://pre-commit.com/).
-It also supports [prek](https://github.com/prek/prek) as a drop-in replacement.
+It also supports [prek](https://github.com/j178/prek) as a drop-in replacement.
 If `prek` is available, it will be used; otherwise, `pre-commit` is used as fallback.
 
 To use this plugin, add it to the plugins array in your zshrc file:
