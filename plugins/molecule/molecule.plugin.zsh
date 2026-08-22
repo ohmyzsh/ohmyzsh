@@ -11,7 +11,7 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_molecule" ]]; then
   _comps[molecule]=_molecule
 fi
 
-_MOLECULE_COMPLETE=zsh_source molecule >| "$ZSH_CACHE_DIR/completions/_molecule" &|
+_MOLECULE_COMPLETE=zsh_source molecule >| "$ZSH_CACHE_DIR/completions/_molecule.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_molecule.tmp.$$" "$ZSH_CACHE_DIR/completions/_molecule" &|
 
 # Alias
 # molecule: https://docs.ansible.com/projects/molecule/
