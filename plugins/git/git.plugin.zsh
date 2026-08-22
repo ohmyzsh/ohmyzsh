@@ -49,6 +49,17 @@ function git_main_branch() {
   return 1
 }
 
+function gbcopy() {
+  # Check if we are in a Git repository
+  command git rev-parse --git-dir &>/dev/null || return
+
+  local branch
+  branch="$(command git symbolic-ref --short -q HEAD)" || return
+  [[ -n "$branch" ]] || return 1
+
+  print -rn -- "$branch" | clipcopy
+}
+
 function grename() {
   if [[ -z "$1" || -z "$2" ]]; then
     echo "Usage: $0 old_branch new_branch"
