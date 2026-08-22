@@ -99,6 +99,34 @@ ssh-add -K -c -a /run/user/1000/ssh-auth <identities>
 
 For valid `ssh-add` arguments run `ssh-add --help` or `man ssh-add`.
 
+### `override-agent-socket-path`
+
+If you want to say goodbye to (for example) gnome-keyring, you will need a fixed, 
+constant path to SSH-agent socket. 
+By default its name is randomly generated in form of `$TMPDIR/ssh-XXXXXXXXXX/agent.<ppid>`.
+
+To override the `$SSH_AUTH_SOCK` path, use `override-agent-socket-path` style.
+
+```zsh
+zstyle :omz:plugins:ssh-agent override-agent-socket-path yes
+zstyle :omz:plugins:ssh-agent ssh_agent_sock_path "YOUR_CUSTOM_SOCKET_PATH"
+```
+
+Of course you should double-quote the path itself.
+There are few builtin defaults for Linux and MacOS, so you could simply add:
+
+```zsh
+zstyle :omz:plugins:ssh-agent override-agent-socket-path yes
+```
+
+These are the defaults:
+* Linux:
+  The default `$SSH_AUTH_SOCK` will be `"/var/run/user/<YOUR_UID>/ssh-agent"`
+* MacOS:
+  The default `$SSH_AUTH_SOCK` will be `$TMPDIR/ssh-agent.socket"` or `/tmp/ssh-agent.socket"` if `$TMPDIR` is not set for some reason.
+* On other systems the socket file will be placed in `"$HOME/.ssh/ssh-agent.socket"`
+
+
 ### Powerline 10k specific settings
 
 Powerline10k has an instant prompt setting that doesn't like when this plugin
