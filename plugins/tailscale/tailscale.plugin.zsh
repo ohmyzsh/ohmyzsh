@@ -22,4 +22,4 @@ if (( $+aliases[tailscale] )); then
   _comps[${aliases[tailscale]:t}]=_tailscale
 fi
 
-tailscale completion zsh >| "$ZSH_CACHE_DIR/completions/_tailscale" &|
+tailscale completion zsh >| "$ZSH_CACHE_DIR/completions/_tailscale.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_tailscale.tmp.$$" "$ZSH_CACHE_DIR/completions/_tailscale" &|
