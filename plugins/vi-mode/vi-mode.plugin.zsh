@@ -31,24 +31,32 @@ function _vi-mode-set-cursor-shape-for-keymap() {
   # https://vt100.net/docs/vt510-rm/DECSCUSR
   local _shape=0
   case "${1:-${VI_KEYMAP:-main}}" in
-    main)    _shape=$VI_MODE_CURSOR_INSERT ;; # vi insert: line
-    viins)   _shape=$VI_MODE_CURSOR_INSERT ;; # vi insert: line
-    isearch) _shape=$VI_MODE_CURSOR_INSERT ;; # inc search: line
-    command) _shape=$VI_MODE_CURSOR_INSERT ;; # read a command name
-    vicmd)   _shape=$VI_MODE_CURSOR_NORMAL ;; # vi cmd: block
-    visual)  _shape=$VI_MODE_CURSOR_VISUAL ;; # vi visual mode: block
-    viopp)   _shape=$VI_MODE_CURSOR_OPPEND ;; # vi operation pending: blinking block
-    *)       _shape=0 ;;
+    main)        _shape=$VI_MODE_CURSOR_INSERT ;; # vi insert: line
+    viins)       _shape=$VI_MODE_CURSOR_INSERT ;; # vi insert: line
+    isearch)     _shape=$VI_MODE_CURSOR_INSERT ;; # inc search: line
+    command)     _shape=$VI_MODE_CURSOR_INSERT ;; # read a command name
+    vicmd)       _shape=$VI_MODE_CURSOR_NORMAL ;; # vi cmd: block
+    visual)      _shape=$VI_MODE_CURSOR_VISUAL ;; # vi visual mode: block
+    visual-line) _shape=$VI_MODE_CURSOR_VISUAL ;; # vi visual line mode: block
+    viopp)       _shape=$VI_MODE_CURSOR_OPPEND ;; # vi operation pending: blinking block
+    *)           _shape=0 ;;
   esac
   printf $'\e[%d q' "${_shape}"
 }
 
-function _visual-mode {
-  typeset -g VI_KEYMAP=visual
-  _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
-  zle .visual-mode
+function zle-line-pre-redraw() {
+  if [[ "$REGION_ACTIVE" -eq 0 && ("$VI_KEYMAP" == visual || "$VI_KEYMAP" == visual-line) ]]; then
+    typeset -g VI_KEYMAP=$KEYMAP
+    _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
+  elif [[ "$REGION_ACTIVE" -eq 1 && "$VI_KEYMAP" != "visual" ]]; then
+    typeset -g VI_KEYMAP=visual
+    _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
+  elif [[ "$REGION_ACTIVE" -eq 2 && "$VI_KEYMAP" != "visual-line" ]]; then
+    typeset -g VI_KEYMAP=visual-line
+    _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
+  fi
 }
-zle -N visual-mode _visual-mode
+zle -N zle-line-pre-redraw
 
 function _vi-mode-should-reset-prompt() {
   # If $VI_MODE_RESET_PROMPT_ON_MODE_CHANGE is unset (default), dynamically
