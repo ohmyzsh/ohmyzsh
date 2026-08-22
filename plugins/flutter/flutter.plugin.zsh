@@ -32,7 +32,7 @@ fi
 
 {
   local completion="$ZSH_CACHE_DIR/completions/_flutter" tmp
-  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
   flutter zsh-completion < /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
   command rm -f "$tmp"
 } &|

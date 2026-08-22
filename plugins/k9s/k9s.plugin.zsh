@@ -13,7 +13,7 @@ fi
 # the actual completion file will be loaded.
 {
   local completion="$ZSH_CACHE_DIR/completions/_k9s" tmp
-  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
   k9s completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
   command rm -f "$tmp"
 } &|

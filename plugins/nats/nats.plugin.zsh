@@ -9,7 +9,7 @@ if (( $+commands[nsc] )); then
 
   {
     local completion="$ZSH_CACHE_DIR/completions/_nsc" tmp
-    tmp=$(command mktemp "$completion.XXXXXX") || exit
+    tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
     nsc completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
     command rm -f "$tmp"
   } &|
@@ -26,7 +26,7 @@ if (( $+commands[nats] )); then
 
   {
     local completion="$ZSH_CACHE_DIR/completions/_nats" tmp
-    tmp=$(command mktemp "$completion.XXXXXX") || exit
+    tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
     nats --completion-script-zsh >| "$tmp" && command mv -f "$tmp" "$completion"
     command rm -f "$tmp"
   } &|

@@ -11,7 +11,7 @@ else
   source "$ZSH_CACHE_DIR/completions/_helm"
   {
     local completion="$ZSH_CACHE_DIR/completions/_helm" tmp
-    tmp=$(command mktemp "$completion.XXXXXX") || exit
+    tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
     helm completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
     command rm -f "$tmp"
   } &|

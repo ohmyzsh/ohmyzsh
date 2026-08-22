@@ -13,7 +13,7 @@ fi
 
 {
   local completion="$ZSH_CACHE_DIR/completions/_volta" tmp
-  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
   volta completions zsh >| "$tmp" && command mv -f "$tmp" "$completion"
   command rm -f "$tmp"
 } &|

@@ -12,7 +12,7 @@ fi
 
 {
   local completion="$ZSH_CACHE_DIR/completions/_kubectl" tmp
-  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
   kubectl completion zsh 2> /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
   command rm -f "$tmp"
 } &|

@@ -15,7 +15,7 @@ fi
 
 {
   local completion="$ZSH_CACHE_DIR/completions/_hcloud" tmp
-  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
   hcloud completion zsh 2> /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
   command rm -f "$tmp"
 } &|

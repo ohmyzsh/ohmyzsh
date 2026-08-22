@@ -12,7 +12,7 @@ fi
 
 {
   local completion="$ZSH_CACHE_DIR/completions/_procs" tmp
-  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
 
   autoload -Uz is-at-least
   local _version=$(procs --version)

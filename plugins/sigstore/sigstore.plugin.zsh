@@ -14,7 +14,7 @@ function install_autocompletion {
 
   {
     local completion="$ZSH_CACHE_DIR/completions/_$1" tmp
-    tmp=$(command mktemp "$completion.XXXXXX") || exit
+    tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
     $1 completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
     command rm -f "$tmp"
   } &|

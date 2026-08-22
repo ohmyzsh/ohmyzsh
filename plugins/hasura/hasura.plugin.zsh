@@ -11,7 +11,7 @@ else
   source "$ZSH_CACHE_DIR/completions/_hasura"
   {
     local completion="$ZSH_CACHE_DIR/completions/_hasura" tmp
-    tmp=$(command mktemp "$completion.XXXXXX") || exit
+    tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
     hasura completion zsh --file "$tmp" >/dev/null && command mv -f "$tmp" "$completion"
     command rm -f "$tmp"
   } &|

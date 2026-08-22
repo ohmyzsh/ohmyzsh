@@ -45,7 +45,7 @@ else
 
   {
     local completion="$ZSH_CACHE_DIR/completions/_pipenv" tmp
-    tmp=$(command mktemp "$completion.XXXXXX") || exit
+    tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
     _PIPENV_COMPLETE=zsh_source pipenv >| "$tmp" && command mv -f "$tmp" "$completion"
     command rm -f "$tmp"
   } &|

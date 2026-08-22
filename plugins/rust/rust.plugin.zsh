@@ -21,7 +21,7 @@ fi
 # Generate completion files in the background
 {
   local completion="$ZSH_CACHE_DIR/completions/_rustup" tmp
-  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
   rustup completions zsh >| "$tmp" && command mv -f "$tmp" "$completion"
   command rm -f "$tmp"
 } &|

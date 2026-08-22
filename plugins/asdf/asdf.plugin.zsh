@@ -14,7 +14,7 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_asdf" ]]; then
 fi
 {
   local completion="$ZSH_CACHE_DIR/completions/_asdf" tmp
-  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
   asdf completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
   command rm -f "$tmp"
 } &|

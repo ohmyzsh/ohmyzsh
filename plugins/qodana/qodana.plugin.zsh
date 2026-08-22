@@ -13,7 +13,7 @@ fi
 
 {
   local completion="$ZSH_CACHE_DIR/completions/_qodana" tmp
-  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
   qodana completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
   command rm -f "$tmp"
 } &|

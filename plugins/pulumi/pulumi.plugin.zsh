@@ -12,7 +12,7 @@ fi
 
 {
   local completion="$ZSH_CACHE_DIR/completions/_pulumi" tmp
-  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
   pulumi gen-completion zsh >| "$tmp" && command mv -f "$tmp" "$completion"
   command rm -f "$tmp"
 } &|

@@ -13,7 +13,7 @@ fi
 
 {
   local completion="$ZSH_CACHE_DIR/completions/_codex" tmp
-  tmp=$(command mktemp "$completion.XXXXXX") || exit
+  tmp=$(command mktemp -t _omz_comp.XXXXXXXX) || exit
   codex completion zsh < /dev/null 2> /dev/null >| "$tmp" && command mv -f "$tmp" "$completion"
   command rm -f "$tmp"
 } &|
