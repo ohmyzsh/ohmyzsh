@@ -11,4 +11,4 @@ fi
 
 # and then generate it in the background. On first completion,
 # the actual completion file will be loaded.
-k9s completion zsh >| "$ZSH_CACHE_DIR/completions/_k9s" &|
+k9s completion zsh >| "$ZSH_CACHE_DIR/completions/_k9s.tmp.$$" && mv -f "$ZSH_CACHE_DIR/completions/_k9s.tmp.$$" "$ZSH_CACHE_DIR/completions/_k9s" &|
