@@ -6,6 +6,7 @@
 
 alias dco="$dccmd"
 alias dcb="$dccmd build"
+alias dcc="$dccmd config"
 alias dce="$dccmd exec"
 alias dcps="$dccmd ps"
 alias dcrestart="$dccmd restart"
