@@ -58,14 +58,17 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
+
+  local plugin_dir="$1"
+
   # `docker completion` is only available from 23.0.0 on
   # docker version returns `Docker version 24.0.2, build cb74dfcd85`
   # with `s:,:` remove the comma after the version, and select third word of it
   if zstyle -t ':omz:plugins:docker' legacy-completion || \
     ! is-at-least 23.0.0 ${${(s:,:z)"$(command docker --version)"}[3]}; then
-        command cp "${0:h}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
+        command cp "${plugin_dir}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
       else
         local TMPPREFIX="$ZSH_CACHE_DIR/completions/_docker"
         zf_mv -f -- =( command docker completion zsh ) "$TMPPREFIX"
   fi
-} &|
+} "${0:A:h}" &|
