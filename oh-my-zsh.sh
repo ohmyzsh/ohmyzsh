@@ -45,6 +45,22 @@ omz_f() {
   return 1
 }
 
+# Check if the effective locale is not UTF-8, in which case warn the user:
+# non-UTF-8 locales are known to cause completion glitches such as duplicated
+# characters at the prompt.
+# https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#i-see-duplicate-typed-characters-after-i-complete-a-command
+if [[ "$DISABLE_LOCALE_WARNING" != true ]] && (( $+commands[locale] )); then
+  _omz_charmap="$(locale charmap 2>/dev/null)"
+  if [[ "$_omz_charmap" != "UTF-8" ]]; then
+    printf "$(omz_f 33)Warning:$(omz_f 22) your current locale is not UTF-8 (charmap: ${_omz_charmap:-unknown})"
+    printf ", which may cause glitches in completions and international characters.\n"
+    printf "Consider setting a UTF-8 locale, e.g. $(omz_f 1)export LANG=C.UTF-8$(omz_f 22). See:\n"
+    printf "$(omz_f 4)https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#i-see-duplicate-typed-characters-after-i-complete-a-command$(omz_f 24)\n"
+    printf "$(omz_f 0)"
+  fi
+  unset _omz_charmap
+fi
+
 unset -f omz_f
 
 # If ZSH is not defined, use the current script's directory.
