@@ -8,7 +8,7 @@ else
 fi
 
 # Load mise hooks
-eval "$($_mise activate zsh)"
+eval "$($_mise_bin activate zsh)"
 
 # If the completion file doesn't exist yet, we need to autoload it and
 # bind it to `mise`. Otherwise, compinit will have already done that.
