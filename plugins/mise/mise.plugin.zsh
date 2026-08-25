@@ -1,9 +1,14 @@
-if [[ ! -x ~/.local/bin/mise ]]; then
+local _mise_bin
+if (( $+commands[mise] )); then
+  _mise_bin=mise
+elif [[ -x ~/.local/bin/mise ]]; then
+  _mise_bin=~/.local/bin/mise
+else
   return
 fi
 
 # Load mise hooks
-eval "$(~/.local/bin/mise activate zsh)"
+eval "$($_mise activate zsh)"
 
 # If the completion file doesn't exist yet, we need to autoload it and
 # bind it to `mise`. Otherwise, compinit will have already done that.
