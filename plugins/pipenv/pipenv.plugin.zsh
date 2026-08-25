@@ -63,12 +63,15 @@ if zstyle -T ':omz:plugins:pipenv' auto-shell; then
       fi
     fi
 
-    # activate the shell if Pipfile exists
+    # activate the shell if Pipfile exists and its virtualenv is usable
     if [[ "$PIPENV_ACTIVE" != 1 ]]; then
       if [[ -f "$PWD/Pipfile" ]]; then
-        export pipfile_dir="$PWD"
-        source "$(pipenv --venv)/bin/activate"
-        export PIPENV_ACTIVE=1
+        local venv_path
+        if venv_path="$(pipenv --venv 2>/dev/null)" && [[ -n "$venv_path" && -f "$venv_path/bin/activate" ]]; then
+          export pipfile_dir="$PWD"
+          source "$venv_path/bin/activate"
+          export PIPENV_ACTIVE=1
+        fi
       fi
     fi
   }
