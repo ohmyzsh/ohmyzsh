@@ -44,6 +44,18 @@ if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
   fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
 fi
 
+# If the completion file doesn't exist yet, we need to autoload it and
+# bind it to `brew`. Otherwise, compinit will have already done that.
+if [[ -f "$HOMEBREW_PREFIX/share/zsh/site-functions/_brew" ]]; then
+  if [[ ! -f "$ZSH_CACHE_DIR/completions/_brew" ]]; then
+    typeset -g -A _comps
+    autoload -Uz _brew
+    _comps[brew]=_brew
+  fi
+  command ln -sfn "$HOMEBREW_PREFIX/share/zsh/site-functions/_brew" \
+    "$ZSH_CACHE_DIR/completions/_brew"
+fi
+
 alias ba='brew autoremove'
 alias bcfg='brew config'
 alias bci='brew info --cask'
