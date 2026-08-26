@@ -53,7 +53,13 @@ function _configure_eza() {
     _EZA_TAIL+=("--time-style='$_val'")
   fi
   if zstyle -t ":omz:plugins:eza" "hyperlink"; then
-    _EZA_TAIL+=("--hyperlink")
+    # eza >= 0.23 turns --hyperlink into an option with an optional WHEN value,
+    # so a bare --hyperlink swallows the next argument (e.g. `ll ./tmp`).
+    if eza --hyperlink=auto --version &>/dev/null; then
+      _EZA_TAIL+=("--hyperlink=auto")
+    else
+      _EZA_TAIL+=("--hyperlink")
+    fi
   fi
 }
 
