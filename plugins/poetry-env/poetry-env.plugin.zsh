@@ -8,7 +8,8 @@ _togglePoetryShell() {
 
   # Deactivate when leaving the active project or entering a nested project
   if [[ $poetry_active -eq 1 ]]; then
-    if [[ "$PWD" == "$poetry_dir" || "$PWD" == "$poetry_dir"/* ]]; then
+    local project_dir="${poetry_dir%/}"
+    if [[ "$PWD" == "$project_dir" || "$PWD" == "$project_dir"/* ]]; then
       in_active_poetry_dir=1
     fi
 
