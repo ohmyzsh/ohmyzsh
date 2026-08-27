@@ -39,11 +39,12 @@ plugins=(... vi-mode)
 
 - `VI_MODE_DISABLE_CLIPBOARD`: If set, disables clipboard integration on yank/paste
 
-Clipboard integration tries to keep put widgets (`p`/`P`) in sync with the system
-clipboard, but it never lets a broken or stale clipboard clobber the text killed
-inside the line editor: if the last copy to the system clipboard failed, or the
-clipboard still holds exactly what vi-mode last pushed, puts use the internal
-kill buffer instead. External copies made outside the shell are picked up as
+Clipboard integration keeps put widgets (`p`/`P`) in sync with the system
+clipboard, but only while the last copy to the clipboard actually succeeded.
+If that copy failed — no `xclip`/`xsel`, Wayland without `wl-clipboard`, a dead
+X forwarding over SSH — the clipboard no longer mirrors what you killed inside
+the line editor, so puts use the internal kill buffer instead of the stale
+clipboard contents. External copies made outside the shell are picked up as
 usual whenever the clipboard tool chain is working.
 
 ## Mode indicators
