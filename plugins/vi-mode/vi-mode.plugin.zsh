@@ -118,11 +118,9 @@ bindkey '^s' history-incremental-search-forward
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
-# Track the last value successfully pushed to the system clipboard, and whether
-# the most recent push failed, so that put widgets can tell "the user copied
-# something else externally" apart from "the clipboard tool is broken or its
-# contents are stale", and avoid pasting stale data on `xp`-style sequences.
-typeset -g _OMZ_VI_CLIPBOARD_SENTINEL=""
+# Set when the most recent clipboard push failed, meaning the system clipboard
+# no longer mirrors CUTBUFFER. Put widgets check it so they keep the text killed
+# inside the editor instead of reloading stale clipboard contents.
 typeset -g _OMZ_VI_CLIPBOARD_BROKEN=""
 
 function wrap_clipboard_widgets() {
@@ -139,8 +137,10 @@ function wrap_clipboard_widgets() {
       eval "
         function ${wrapped_name}() {
           zle .${widget}
+          # Record only whether the push worked: a failed push means the
+          # clipboard no longer mirrors CUTBUFFER, so put widgets must not
+          # trust it (see the paste branch below).
           if printf %s \"\${CUTBUFFER}\" | clipcopy 2>/dev/null; then
-            _OMZ_VI_CLIPBOARD_SENTINEL=\"\${CUTBUFFER}\"
             _OMZ_VI_CLIPBOARD_BROKEN=\"\"
           else
             _OMZ_VI_CLIPBOARD_BROKEN=1
@@ -150,14 +150,11 @@ function wrap_clipboard_widgets() {
     else
       eval "
         function ${wrapped_name}() {
-          # Only pick up external clipboard changes while the clipboard tool
-          # chain is known to work; otherwise trust the internal CUTBUFFER,
-          # which still holds the last killed text (e.g. for \`xp\`).
+          # Trust the clipboard only while the last push succeeded; otherwise
+          # CUTBUFFER still holds the real last kill and the clipboard holds
+          # whatever unrelated text was copied before it (e.g. for \`xp\`).
           if [[ -z \"\${_OMZ_VI_CLIPBOARD_BROKEN:-}\" ]]; then
-            local _omz_clip
-            if _omz_clip=\"\$(clippaste 2>/dev/null)\" && [[ \"\$_omz_clip\" != \"\${_OMZ_VI_CLIPBOARD_SENTINEL:-}\" ]]; then
-              CUTBUFFER=\"\$_omz_clip\"
-            fi
+            CUTBUFFER=\"\$(clippaste 2>/dev/null || echo \$CUTBUFFER)\"
           fi
           zle .${widget}
         }
