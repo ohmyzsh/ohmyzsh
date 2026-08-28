@@ -96,146 +96,46 @@ alias rkn='rake notes'
 alias rksts='rake stats'
 alias rkt='rake test'
 
-# Multi-database functions
-# Usage: rdc [database] - rails db:create[:database]
-function rdc() {
-  if [ $# -eq 0 ]; then
-    echo "Running: rails db:create" >&2
-    rails db:create
-  else
-    echo "Running: rails db:create:$1" >&2
-    rails db:create:"$1"
-  fi
-}
+# Database tasks
+#
+# Rails applications can define more than one database (primary, cache, cable,
+# queue, ...). Each one gets its own namespaced task, e.g. `db:migrate:cache`.
+# The functions below take an optional database name as the first argument:
+#
+#   rdm                    ->  rails db:migrate
+#   rdm cache              ->  rails db:migrate:cache
+#   rdm VERSION=20231225   ->  rails db:migrate VERSION=20231225
+#   rdm cache STEP=2       ->  rails db:migrate:cache STEP=2
+#   rdm --trace            ->  rails db:migrate --trace
+#
+# The first argument is read as a database name only when it is a bare word.
+# Flags (--trace), variables (STEP=2) and other tasks (db:seed) are passed
+# through to rails untouched, so the previous alias behavior still works.
+function _rails_db_command() {
+  local task="$1"
+  shift
 
-# Usage: rdd [database] - rails db:drop[:database]
-function rdd() {
-  if [ $# -eq 0 ]; then
-    echo "Running: rails db:drop" >&2
-    rails db:drop
-  else
-    echo "Running: rails db:drop:$1" >&2
-    rails db:drop:"$1"
-  fi
-}
-
-# Usage: rdm [database] [VERSION=x VERBOSE=false SCOPE=blog] - rails db:migrate[:database]
-function rdm() {
-  if [ $# -eq 0 ]; then
-    echo "Running: rails db:migrate" >&2
-    rails db:migrate
-  elif [[ "$1" == *"="* ]]; then
-    echo "Running: rails db:migrate $*" >&2
-    rails db:migrate "$@"
-  else
-    local database="$1"
+  if [[ $# -gt 0 && "$1" != -* && "$1" != *=* && "$1" != *:* ]]; then
+    task="$task:$1"
     shift
-    echo "Running: rails db:migrate:$database $*" >&2
-    rails db:migrate:"$database" "$@"
+    # Echo the resolved task so it is clear which database is being used
+    local -a cmd=(rails "$task" "$@")
+    print -u2 -r -- "Running: ${cmd[*]}"
   fi
+
+  rails "$task" "$@"
 }
 
-# Usage: rdmd [database] [VERSION=x] - rails db:migrate:down[:database]
-function rdmd() {
-  if [ $# -eq 0 ]; then
-    echo "Running: rails db:migrate:down" >&2
-    rails db:migrate:down
-  elif [[ "$1" == *"="* ]]; then
-    echo "Running: rails db:migrate:down $*" >&2
-    rails db:migrate:down "$@"
-  else
-    local database="$1"
-    shift
-    echo "Running: rails db:migrate:down:$database $*" >&2
-    rails db:migrate:down:"$database" "$@"
-  fi
-}
-
-# Usage: rdmr [database] [STEP=x VERSION=x] - rails db:migrate:redo[:database]
-function rdmr() {
-  if [ $# -eq 0 ]; then
-    echo "Running: rails db:migrate:redo" >&2
-    rails db:migrate:redo
-  elif [[ "$1" == *"="* ]]; then
-    echo "Running: rails db:migrate:redo $*" >&2
-    rails db:migrate:redo "$@"
-  else
-    local database="$1"
-    shift
-    echo "Running: rails db:migrate:redo:$database $*" >&2
-    rails db:migrate:redo:"$database" "$@"
-  fi
-}
-
-# Usage: rdms [database] - rails db:migrate:status[:database]
-function rdms() {
-  if [ $# -eq 0 ]; then
-    echo "Running: rails db:migrate:status" >&2
-    rails db:migrate:status
-  else
-    echo "Running: rails db:migrate:status:$1" >&2
-    rails db:migrate:status:"$1"
-  fi
-}
-
-# Usage: rdmu [database] [VERSION=x] - rails db:migrate:up[:database]
-function rdmu() {
-  if [ $# -eq 0 ]; then
-    echo "Running: rails db:migrate:up" >&2
-    rails db:migrate:up
-  elif [[ "$1" == *"="* ]]; then
-    echo "Running: rails db:migrate:up $*" >&2
-    rails db:migrate:up "$@"
-  else
-    local database="$1"
-    shift
-    echo "Running: rails db:migrate:up:$database $*" >&2
-    rails db:migrate:up:"$database" "$@"
-  fi
-}
-
-# Usage: rdr [database] [STEP=n] - rails db:rollback[:database]
-function rdr() {
-  if [ $# -eq 0 ]; then
-    echo "Running: rails db:rollback" >&2
-    rails db:rollback
-  elif [[ "$1" == *"="* ]]; then
-    echo "Running: rails db:rollback $*" >&2
-    rails db:rollback "$@"
-  else
-    local database="$1"
-    shift
-    echo "Running: rails db:rollback:$database $*" >&2
-    rails db:rollback:"$database" "$@"
-  fi
-}
-
-# Usage: rdrs [database] - rails db:reset[:database]
-function rdrs() {
-  if [ $# -eq 0 ]; then
-    echo "Running: rails db:reset" >&2
-    rails db:reset
-  else
-    echo "Running: rails db:reset:$1" >&2
-    rails db:reset:"$1"
-  fi
-}
-
-# Usage: rdsl [database] [SCHEMA_FORMAT=ruby|sql] - rails db:schema:load[:database]
-function rdsl() {
-  if [ $# -eq 0 ]; then
-    echo "Running: rails db:schema:load" >&2
-    rails db:schema:load
-  elif [[ "$1" == *"="* ]]; then
-    echo "Running: rails db:schema:load $*" >&2
-    rails db:schema:load "$@"
-  else
-    local database="$1"
-    shift
-    echo "Running: rails db:schema:load:$database $*" >&2
-    rails db:schema:load:"$database" "$@"
-  fi
-}
+function rdc()  { _rails_db_command db:create "$@" }
+function rdd()  { _rails_db_command db:drop "$@" }
+function rdm()  { _rails_db_command db:migrate "$@" }
+function rdmd() { _rails_db_command db:migrate:down "$@" }
+function rdmr() { _rails_db_command db:migrate:redo "$@" }
+function rdms() { _rails_db_command db:migrate:status "$@" }
+function rdmu() { _rails_db_command db:migrate:up "$@" }
+function rdr()  { _rails_db_command db:rollback "$@" }
+function rdrs() { _rails_db_command db:reset "$@" }
+function rdsl() { _rails_db_command db:schema:load "$@" }
 
 # legacy stuff
 alias sc='ruby script/console'
