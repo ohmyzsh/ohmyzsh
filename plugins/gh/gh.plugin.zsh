@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_gh" ]]; then
   _comps[gh]=_gh
 fi
 
-gh completion --shell zsh >| "$ZSH_CACHE_DIR/completions/_gh" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_gh"
+  zf_mv -f -- =( gh completion --shell zsh ) "$TMPPREFIX"
+} &|

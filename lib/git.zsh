@@ -36,7 +36,27 @@ function _omz_git_prompt_info() {
     && upstream=" -> ${upstream}"
   fi
 
-  echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref:gs/%/%%}${upstream:gs/%/%%}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+  echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref//\%/%%}${upstream//\%/%%}$(parse_git_dirty)${ZSH_THEME_GIT_PROMPT_SUFFIX}"
+}
+
+# Match an extended regular expression against a subject, forcing the C locale
+# only for the duration of the call.
+#
+# OHMYZSH-13330: zsh's "=~" operator delegates to the C library regex, which
+# aborts with REG_ILLSEQ when the subject contains an invalid byte sequence
+# under a multibyte locale (e.g. a filename with non-UTF-8 bytes in `git
+# status` output). Forcing the C locale makes every byte a valid character,
+# so the regex matching never fails that way. `git status --porcelain` is
+# locale-independent, so this does not change the parsed output.
+#
+# OHMYZSH-13985: the locale must be scoped to this function and not set for
+# the whole caller. Assigning LC_ALL makes zsh re-run setlocale() right away,
+# so leaving it set while the rest of the caller runs breaks multibyte
+# handling there — most visibly, `echo` refuses to expand Unicode escapes in
+# theme prompt symbols ("character not in range").
+function _omz_git_prompt_status_match() {
+  local -x LC_ALL=C
+  [[ "$1" =~ "$2" ]]
 }
 
 function _omz_git_prompt_status() {
@@ -104,11 +124,11 @@ function _omz_git_prompt_status() {
   status_lines=("${(@f)${status_text}}")
 
   # If the tracking line exists, get and parse it
-  if [[ "$status_lines[1]" =~ "^## [^ ]+ \[(.*)\]" ]]; then
+  if _omz_git_prompt_status_match "$status_lines[1]" "^## [^ ]+ \[(.*)\]"; then
     local branch_statuses
     branch_statuses=("${(@s/,/)match}")
     for branch_status in $branch_statuses; do
-      if [[ ! $branch_status =~ "(behind|diverged|ahead) ([0-9]+)?" ]]; then
+      if ! _omz_git_prompt_status_match "$branch_status" "(behind|diverged|ahead) ([0-9]+)?"; then
         continue
       fi
       local last_parsed_status=$prefix_constant_map[$match[1]]
@@ -117,11 +137,11 @@ function _omz_git_prompt_status() {
   fi
 
   # For each status prefix, do a regex comparison
-  for status_prefix in ${(k)prefix_constant_map}; do
+  for status_prefix in "${(@k)prefix_constant_map}"; do
     local status_constant="${prefix_constant_map[$status_prefix]}"
     local status_regex=$'(^|\n)'"$status_prefix"
 
-    if [[ "$status_text" =~ $status_regex ]]; then
+    if _omz_git_prompt_status_match "$status_text" "$status_regex"; then
       statuses_seen[$status_constant]=1
     fi
   done
@@ -162,13 +182,13 @@ if zstyle -t ':omz:alpha:lib:git' async-prompt \
   # or any of the other prompt variables
   function _defer_async_git_register() {
     # Check if git_prompt_info is used in a prompt variable
-    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
+    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT-}:${RPS1-}:${RPS2-}:${RPS3-}:${RPS4-}" in
     *(\$\(git_prompt_info\)|\`git_prompt_info\`)*)
       _omz_register_handler _omz_git_prompt_info
       ;;
     esac
 
-    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT}:${RPS1}:${RPS2}:${RPS3}:${RPS4}" in
+    case "${PS1}:${PS2}:${PS3}:${PS4}:${RPROMPT-}:${RPS1-}:${RPS2-}:${RPS3-}:${RPS4-}" in
     *(\$\(git_prompt_status\)|\`git_prompt_status\`)*)
       _omz_register_handler _omz_git_prompt_status
       ;;
@@ -255,7 +275,7 @@ function git_remote_status() {
         fi
 
         if [[ -n $ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_DETAILED ]]; then
-            git_remote_status="$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_PREFIX${remote:gs/%/%%}$git_remote_status_detailed$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_SUFFIX"
+            git_remote_status="$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_PREFIX${remote//\%/%%}$git_remote_status_detailed$ZSH_THEME_GIT_PROMPT_REMOTE_STATUS_SUFFIX"
         fi
 
         echo $git_remote_status

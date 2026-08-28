@@ -4,6 +4,7 @@ alias bob='php artisan bob::build'
 
 # Development
 alias pas='php artisan serve'
+alias pad='php artisan dev'
 alias pats='php artisan test'
 
 # Database

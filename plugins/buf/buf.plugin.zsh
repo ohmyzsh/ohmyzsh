@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_buf" ]]; then
 fi
 
 # Generate and load buf completion
-buf completion zsh >! "$ZSH_CACHE_DIR/completions/_buf" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_buf"
+  zf_mv -f -- =( buf completion zsh ) "$TMPPREFIX"
+} &|

@@ -95,12 +95,12 @@ supports_hyperlinks() {
 
   # If $TERM_PROGRAM is set, these terminals support hyperlinks
   case "$TERM_PROGRAM" in
-  Hyper|iTerm.app|terminology|WezTerm|vscode) return 0 ;;
+  ghostty|Hyper|iTerm.app|terminology|vscode|WezTerm) return 0 ;;
   esac
 
   # These termcap entries support hyperlinks
   case "$TERM" in
-  xterm-kitty|alacritty|alacritty-direct) return 0 ;;
+  alacritty|alacritty-direct|xterm-ghostty|xterm-kitty) return 0 ;;
   esac
 
   # xfce4-terminal supports hyperlinks
@@ -273,7 +273,7 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     printf "${BLUE}%s${RESET}\n\n" "$message"
     printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on X:" "$(fmt_link @ohmyzsh https://x.com/ohmyzsh)"
     printf "${BLUE}${BOLD}%s %s${RESET}\n" "Want to get involved in the community? Join our Discord:" "$(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
-    printf "${BLUE}${BOLD}%s %s${RESET}\n" "Get your Oh My Zsh swag at:" "$(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" "Get your Oh My Zsh swag at:" "$(fmt_link "CommitGoods Shop" https://commitgoods.com/collections/oh-my-zsh)"
   elif [[ $verbose_mode == minimal ]]; then
     printf "${BLUE}%s${RESET}\n" "$message"
   fi

@@ -111,7 +111,7 @@ _yarn_commands_scripts() {
     packageJson=$(_yarn_find_package_json $opt_args[--cwd])
     binaries=($(builtin cd $opt_args[--cwd] && echo node_modules/.bin/*(x:t)))
   else
-    packageJson=$(_yarn_find_package_json $pwd)
+    packageJson=$(_yarn_find_package_json $PWD)
     binaries=($(echo node_modules/.bin/*(x:t)))
   fi
 
@@ -135,7 +135,7 @@ _yarn_scripts() {
       binaries=($(builtin cd $_yarn_run_cwd && yarn bin | perl -wln -e 'm{^[^:]+: (\S+)$} and print $1'))
     fi
   else
-    packageJson=$(_yarn_find_package_json $pwd)
+    packageJson=$(_yarn_find_package_json $PWD)
     if [[ -d node_modules ]]; then
       binaries=($(echo node_modules/.bin/*(x:t)))
     else

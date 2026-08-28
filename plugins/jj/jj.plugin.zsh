@@ -11,7 +11,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_jj" ]]; then
   _comps[jj]=_jj
 fi
 
-COMPLETE=zsh jj >| "$ZSH_CACHE_DIR/completions/_jj" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_jj"
+  zf_mv -f -- =( COMPLETE=zsh jj ) "$TMPPREFIX"
+} &|
 
 function __jj_prompt_jj() {
   local -a flags
@@ -34,6 +38,18 @@ function jj_prompt_template() {
 }
 
 # Aliases (sorted alphabetically)
+alias jja='jj abandon'
+alias jjb='jj bookmark'
+alias jjba='jj bookmark advance'
+alias jjbc='jj bookmark create'
+alias jjbd='jj bookmark delete'
+alias jjbf='jj bookmark forget'
+alias jjbl='jj bookmark list'
+alias jjbm='jj bookmark move'
+alias jjbr='jj bookmark rename'
+alias jjbs='jj bookmark set'
+alias jjbt='jj bookmark track'
+alias jjbu='jj bookmark untrack'
 alias jjc='jj commit'
 alias jjcmsg='jj commit --message'
 alias jjd='jj diff'
@@ -44,11 +60,19 @@ alias jjgcl='jj git clone'
 alias jjgf='jj git fetch'
 alias jjgfa='jj git fetch --all-remotes'
 alias jjgp='jj git push'
+alias jjgpa='jj git push --all'
+alias jjgpd='jj git push --deleted'
+alias jjgpt='jj git push --tracked'
 alias jjl='jj log'
 alias jjla='jj log -r "all()"'
 alias jjn='jj new'
+alias jjnt='jj new "trunk()"'
 alias jjrb='jj rebase'
+alias jjrbm='jj rebase -d "trunk()"'
 alias jjrs='jj restore'
 alias jjrt='cd "$(jj root || echo .)"'
 alias jjsp='jj split'
 alias jjsq='jj squash'
+alias jjst='jj status'
+alias jjwa='jj workspace add'
+alias jjwf='jj workspace forget'

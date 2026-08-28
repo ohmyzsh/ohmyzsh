@@ -1,0 +1,12 @@
+#compdef cdk
+
+# Originally found and adapted from: https://github.com/aws/aws-cdk/discussions/24380#discussioncomment-5158176
+
+local -a reply
+local IFS
+IFS=$'\n' reply=($(COMP_CWORD="$((CURRENT-1))" \
+          COMP_LINE="$BUFFER" \
+          COMP_POINT="$CURSOR" \
+          cdk --get-yargs-completions "${words[@]}"))
+
+_describe 'values' reply

@@ -18,6 +18,7 @@ To learn more, visit [ohmyz.sh](https://ohmyz.sh), follow [@ohmyzsh](https://x.c
 Twitter), and join us on [Discord](https://discord.gg/ohmyzsh).
 
 [![CI](https://github.com/ohmyzsh/ohmyzsh/workflows/CI/badge.svg)](https://github.com/ohmyzsh/ohmyzsh/actions?query=workflow%3ACI)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/10713/badge)](https://www.bestpractices.dev/projects/10713)
 [![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/ohmyzsh?label=%40ohmyzsh&logo=x&style=flat)](https://twitter.com/intent/follow?screen_name=ohmyzsh)
 [![Mastodon Follow](https://img.shields.io/mastodon/follow/111169632522566717?label=%40ohmyzsh&domain=https%3A%2F%2Fmstdn.social&logo=mastodon&style=flat)](https://mstdn.social/@ohmyzsh)
 [![Discord server](https://img.shields.io/discord/642496866407284746)](https://discord.gg/ohmyzsh)
@@ -45,7 +46,7 @@ Twitter), and join us on [Discord](https://discord.gg/ohmyzsh).
     - [Manual Installation](#manual-installation)
   - [Installation Problems](#installation-problems)
   - [Custom Plugins And Themes](#custom-plugins-and-themes)
-  - [Enable GNU ls In macOS And freeBSD Systems](#enable-gnu-ls-in-macos-and-freebsd-systems)
+  - [Enable GNU ls In macOS And FreeBSD Systems](#enable-gnu-ls-in-macos-and-freebsd-systems)
   - [Skip Aliases](#skip-aliases)
   - [Async git prompt](#async-git-prompt)
 - [Getting Updates](#getting-updates)
@@ -69,7 +70,7 @@ Twitter), and join us on [Discord](https://discord.gg/ohmyzsh).
 | O/S            | Status |
 | :------------- | :----: |
 | Android        |   ✅   |
-| freeBSD        |   ✅   |
+| FreeBSD        |   ✅   |
 | LCARS          |   🛸   |
 | Linux          |   ✅   |
 | macOS          |   ✅   |
@@ -348,7 +349,7 @@ If you have many functions that go well together, you can put them as a `XYZ.plu
 If you would like to override the functionality of a plugin distributed with Oh My Zsh, create a plugin of the
 same name in the `custom/plugins/` directory and it will be loaded instead of the one in `plugins/`.
 
-### Enable GNU ls In macOS And freeBSD Systems
+### Enable GNU ls In macOS And FreeBSD Systems
 
 <a name="enable-gnu-ls"></a>
 
@@ -547,7 +548,7 @@ We're on social media:
 ## Merchandise
 
 We have
-[stickers, shirts, and coffee mugs available](https://shop.planetargon.com/collections/oh-my-zsh?utm_source=github)
+[stickers, shirts, and coffee mugs available](https://commitgoods.com/collections/oh-my-zsh?utm_source=github)
 for you to show off your love of Oh My Zsh. Again, you will become the talk of the town!
 
 ## License

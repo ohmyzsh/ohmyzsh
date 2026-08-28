@@ -124,9 +124,11 @@ fi
 if [[ "$ZSH_DISABLE_COMPFIX" != true ]]; then
   source "$ZSH/lib/compfix.zsh"
   # Load only from secure directories
+  # Reset the flag compinit sets when -i excludes insecure entries
+  unset _comp_secure
   compinit -i -d "$ZSH_COMPDUMP"
   # If completion insecurities exist, warn the user
-  handle_completion_insecurities &|
+  [[ "$_comp_secure" == yes ]] && handle_completion_insecurities &|
 else
   # If the user wants it, load from all found directories
   compinit -u -d "$ZSH_COMPDUMP"

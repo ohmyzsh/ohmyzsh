@@ -10,4 +10,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_stripe" ]]; then
   _comps[stripe]=_stripe
 fi
 
-stripe completion --shell zsh --write-to-stdout >| "$ZSH_CACHE_DIR/completions/_stripe" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_stripe"
+  zf_mv -f -- =( stripe completion --shell zsh --write-to-stdout ) "$TMPPREFIX"
+} &|

@@ -34,6 +34,25 @@ PORT=3001
 
 You can even mix both formats, although it's probably a bad idea.
 
+Multi-line values are supported using quoted strings:
+
+```sh
+PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEA...
+-----END RSA PRIVATE KEY-----"
+```
+
+Variables defined earlier in the file can be referenced by later entries:
+
+```sh
+BASE_URL=https://example.com
+API_URL=$BASE_URL/api
+ASSETS_URL=${BASE_URL}/assets
+```
+
+Note: only variables defined within the same `.env` file are expanded this way —
+shell environment variables that already exist are **not** substituted.
+
 ## Settings
 
 ### ZSH_DOTENV_FILE
@@ -78,13 +97,45 @@ change.
 NOTE: if a directory is found in both the allowed and disallowed lists, the disallowed list
 takes preference, _i.e._ the .env file will never be sourced.
 
+## Named Pipe (FIFO) Support
+
+The plugin supports `.env` files provided as UNIX named pipes (FIFOs) in addition to regular files.
+This is useful when secrets managers like [1Password Environments](https://developer.1password.com/docs/environment/)
+mount `.env` files as named pipes to inject secrets on-the-fly without writing them to disk.
+
+No additional configuration is required — the plugin automatically detects and sources named pipes.
+
+## Tests
+
+The tests use [zunit](https://github.com/zunit-zsh/zunit). Install it per its [documentation](https://github.com/zunit-zsh/zunit#installation), then run:
+
+```sh
+cd plugins/dotenv && zunit
+```
+
+> [NOTE!]
+> zunit also requires installing [Revolver](https://github.com/molovo/revolver).
+
 ## Version Control
 
 **It's strongly recommended to add `.env` file to `.gitignore`**, because usually it contains sensitive information such as your credentials, secret keys, passwords etc. You don't want to commit this file, it's supposed to be local only.
 
-## Disclaimer
+## Security
 
-This plugin only sources the `.env` file. Nothing less, nothing more. It doesn't do any checks. It's designed to be the fastest and simplest option. You're responsible for the `.env` file content. You can put some code (or weird symbols) there, but do it on your own risk. `dotenv` is the basic tool, yet it does the job.
+The plugin applies several best-effort safeguards when loading a `.env` file:
+
+- **Size limit** — files larger than 10 MiB are rejected to prevent DoS.
+- **Syntax check** — the file is validated with `zsh -fn` before any variables are set.
+- **No command substitution** — entries containing `$(...)` or backtick constructs are skipped.
+- **Forbidden variables** — the following variables are never overwritten, regardless of what the
+  `.env` file contains: `NODE_OPTIONS`, `BASH_ENV`, `ENV`, `ZDOTDIR`, `ZSH`, `LD_PRELOAD`,
+  `LD_LIBRARY_PATH`, `DYLD_INSERT_LIBRARIES`, `GIT_CONFIG_GLOBAL`, `GIT_DIR`, `GIT_EDITOR`,
+  `GIT_EXTERNAL_DIFF`, `GIT_EXEC_PATH`, `GIT_PAGER`, `GIT_SSH`, `GIT_SSH_COMMAND`,
+  `GIT_SSL_NO_VERIFY`, `GIT_TEMPLATE_DIR`, `VISUAL`, `PAGER`, `EDITOR`, and all zsh special
+  parameters.
+
+These measures are **best-effort** — you are still responsible for the content of your `.env`
+file. Do not use this plugin as a security boundary.
 
 If you need more advanced and feature-rich ENV management, check out these awesome projects:
 

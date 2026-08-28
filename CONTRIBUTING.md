@@ -20,6 +20,7 @@ you would make is not already covered.
   - [Getting started](#getting-started)
   - [You have a solution](#you-have-a-solution)
   - [You have an addition](#you-have-an-addition)
+- [A note on AI-assisted contributions](#a-note-on-ai-assisted-contributions)
 - [Use the Search, Luke](#use-the-search-luke)
 - [Commit Guidelines](#commit-guidelines)
   - [Format](#format)
@@ -124,6 +125,30 @@ Because of this, from now on, we require that new aliases follow these condition
 
 This list is not exhaustive! Please remember that your alias will be in the machines of many people,
 so it should be justified why they should have it.
+
+## A note on AI-assisted contributions
+
+We'll admit it: AI tools can be pretty helpful for coding tasks, and we're not here to gatekeep how you get your work done. We use these tools ourselves! 🤖
+
+But here's the thing—Oh My Zsh is maintained by a small team of volunteers who do this in their spare time. We already have hundreds of pending PRs, and we want to make sure we're spending our limited time effectively.
+
+If you used AI tools meaningfully in your contribution (code generation, agentic coding assistants, etc.), please mention it in your PR description. Basic autocomplete doesn't count, but if an AI wrote substantial parts of your code, just let us know.
+
+**Examples of good disclosure:**
+- "Used ChatGPT to help generate the initial regex pattern for parsing git status output"
+- "Claude assisted with writing the unit tests for this feature"  
+- "Generated with Gemini and then reviewed/tested manually"
+- Or simply: "AI-assisted" in your PR description
+
+Here's what we're looking for:
+
+- **You understand your code**: You should be able to explain what your contribution does and how it works. We want to collaborate with humans who are invested in the project.
+- **Context matters**: Tell us what problem you're solving, how you tested it, and link to relevant docs. Small, incremental changes work better than massive generated overhauls.
+- **Quality over quantity**: We'd rather have one thoughtful, well-tested contribution than ten AI-generated PRs that need extensive review.
+
+The disclosure helps us know how much guidance to offer. If we're just reviewing AI output that you can't explain or improve, that changes the dynamic—and frankly, it's not a great use of anyone's time.
+
+As always, we reserve the right to decline any contribution. PRs that appear to be unreviewed AI output, or code the contributor can't explain, may be closed without extensive feedback.
 
 ----
 

@@ -9,14 +9,41 @@ Usage: extract [-option] [file ...]
 
 Options:
     -r, --remove    Remove archive after unpacking.
+    -t, --to-directory <dir>  Extract to a specific directory instead of the current one.
 EOF
   fi
 
   local remove_archive=1
-  if [[ "$1" == "-r" ]] || [[ "$1" == "--remove" ]]; then
-    remove_archive=0
-    shift
-  fi
+  local target_directory=""
+
+  while (( $# > 0 )); do
+    case "$1" in
+      -r|--remove)
+        remove_archive=0
+        shift
+        ;;
+      -t|--to-directory)
+        shift
+        if (( $# == 0 )); then
+          echo "extract: -t/--to-directory requires a directory argument" >&2
+          return 1
+        fi
+
+        target_directory="$1"
+        shift
+
+        if [[ ! -d "$target_directory" ]]; then
+          echo "extract: '$target_directory' is not a valid directory" >&2
+          return 1
+        fi
+
+        target_directory="${target_directory%/}"
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
 
   local pwd="$PWD"
   while (( $# > 0 )); do
@@ -33,6 +60,10 @@ EOF
     # Remove the .tar extension if the file name is .tar.*
     if [[ $extract_dir =~ '\.tar$' ]]; then
       extract_dir="${extract_dir:r}"
+    fi
+
+    if [[ -n "$target_directory" ]]; then
+      extract_dir="$target_directory/${extract_dir:t}"
     fi
 
     # If there's a file or directory with the same name as the archive
@@ -71,13 +102,21 @@ EOF
       (*.tar.lrz) (( $+commands[lrzuntar] )) && lrzuntar "$full_path" ;;
       (*.gz) (( $+commands[pigz] )) && pigz -cdk "$full_path" > "${file:t:r}" || gunzip -ck "$full_path" > "${file:t:r}" ;;
       (*.bz2) (( $+commands[pbzip2] )) && pbzip2 -d "$full_path" || bunzip2 "$full_path" ;;
-      (*.xz) unxz "$full_path" ;;
+      (*.xz) xzcat "$full_path" > "${file:t:r}" ;;
       (*.lrz) (( $+commands[lrunzip] )) && lrunzip "$full_path" ;;
       (*.lz4) lz4 -d "$full_path" ;;
       (*.lzma) unlzma "$full_path" ;;
       (*.z) uncompress "$full_path" ;;
       (*.zip|*.war|*.jar|*.ear|*.sublime-package|*.ipa|*.ipsw|*.xpi|*.apk|*.aar|*.whl|*.vsix|*.crx|*.pk3|*.pk4) unzip "$full_path" ;;
-      (*.rar) unrar x -ad "$full_path" ;;
+      (*.rar)
+        if (( $+commands[unrar] )); then
+          unrar x -ad "$full_path"
+        elif (( $+commands[unar] )); then
+          unar -o . "$full_path"
+        else
+          echo "extract: cannot extract RAR files: install unrar or unar" >&2
+          success=1
+        fi ;;
       (*.rpm)
         rpm2cpio "$full_path" | cpio --quiet -id ;;
       (*.7z | *.7z.[0-9]* | *.pk7) 7za x "$full_path" ;;
@@ -118,7 +157,7 @@ EOF
       # 1. Move and rename the extracted file/folder to a temporary random name
       # 2. Delete the empty folder
       # 3. Rename the extracted file/folder to the original name
-      if [[ "${content[1]:t}" == "$extract_dir" ]]; then
+      if [[ "${content[1]:t}" == "${extract_dir:t}" ]]; then
         # =(:) gives /tmp/zsh<random>, with :t it gives zsh<random>
         local tmp_name==(:); tmp_name="${tmp_name:t}"
         command mv "${content[1]}" "$tmp_name" \
@@ -126,9 +165,9 @@ EOF
         && command mv "$tmp_name" "$extract_dir"
       # Otherwise, if the extracted folder name already exists in the current
       # directory (because of a previous file / folder), keep the extract_dir
-      elif [[ ! -e "${content[1]:t}" ]]; then
-        command mv "${content[1]}" . \
-        && command rmdir "$extract_dir"
+      elif [[ ! -e "${target_directory:-.}/${content[1]:t}" ]]; then
+        command mv -- "${content[1]}" "${target_directory:-.}/" \
+        && command rmdir -- "$extract_dir"
       fi
     elif [[ ${#content} -eq 0 ]]; then
       command rmdir "$extract_dir"

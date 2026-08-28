@@ -18,6 +18,13 @@ TMP_DIR = os.path.join(os.environ.get("TMP_DIR", "/tmp"), "ohmyzsh")
 DEPS_YAML_FILE = ".github/dependencies.yml"
 # Dry run flag
 DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
+# GitHub Token is needed to avoid rate limiting
+GH_TOKEN = os.environ.get("GH_TOKEN")
+HEADERS = {
+    "Accept": "application/vnd.github+json",
+}
+if GH_TOKEN:
+    HEADERS["Authorization"] = f"Bearer {GH_TOKEN}"
 
 # utils for tag comparison
 BASEVERSION = re.compile(
@@ -212,6 +219,7 @@ class Dependency:
             if status["has_updates"] is True:
                 short_sha = status["head_ref"][:8]
                 new_version = status["version"] if is_tag else short_sha
+                source_ref = new_version if is_tag else status["head_ref"]
 
                 try:
                     branch_name = f"update/{self.path}/{new_version}"
@@ -219,31 +227,32 @@ class Dependency:
                     # Create new branch
                     branch = Git.checkout_or_create_branch(branch_name)
 
-                    # Update dependencies.yml file
-                    self.__update_yaml(
-                        f"tag:{new_version}" if is_tag else status["version"]
-                    )
-
                     # Update dependency files
-                    self.__apply_upstream_changes()
+                    self.__apply_upstream_changes(source_ref)
 
-                    # Add all changes and commit
-                    has_new_commit = Git.add_and_commit(self.name, new_version)
-
-                    if has_new_commit:
-                        # Push changes to remote
-                        Git.push(branch)
-
-                        # Create GitHub PR
-                        GitHub.create_pr(
-                            branch,
-                            f"feat({self.name}): update to version {new_version}",
-                            f"""## Description
-
-Update for **{self.desc}**: update to version [{new_version}]({status['head_url']}).
-Check out the [list of changes]({status['compare_url']}).
-""",
+                    if not Git.repo_is_clean():
+                        # Update dependencies.yml file
+                        self.__update_yaml(
+                            f"tag:{new_version}" if is_tag else status["version"]
                         )
+
+                        # Add all changes and commit
+                        has_new_commit = Git.add_and_commit(self.name, new_version)
+
+                        if has_new_commit:
+                            # Push changes to remote
+                            Git.push(branch)
+
+                            # Create GitHub PR
+                            GitHub.create_pr(
+                                branch,
+                                f"chore({self.name}): update to version {new_version}",
+                                f"""## Description
+
+Update for **{self.desc}**: update to version [{new_version}]({status["head_url"]}).
+Check out the [list of changes]({status["compare_url"]}).
+""",
+                            )
 
                     # Clean up repository
                     Git.clean_repo()
@@ -275,8 +284,8 @@ Check out the [list of changes]({status['compare_url']}).
 
 There is a new version of `{self.name}` {self.kind} available.
 
-New version: [{new_version}]({status['head_url']})
-Check out the [list of changes]({status['compare_url']}).
+New version: [{new_version}]({status["head_url"]})
+Check out the [list of changes]({status["compare_url"]}).
 """
 
                     print("Creating GitHub issue", file=sys.stderr)
@@ -289,7 +298,7 @@ Check out the [list of changes]({status['compare_url']}).
         dep_yaml = DependencyStore.update_dependency_version(self.path, new_version)
         DependencyStore.write_store(DEPS_YAML_FILE, dep_yaml)
 
-    def __apply_upstream_changes(self) -> None:
+    def __apply_upstream_changes(self, ref: str) -> None:
         # Patterns to ignore in copying files from upstream repo
         GLOBAL_IGNORE = [".git", ".github", ".gitignore"]
 
@@ -298,12 +307,11 @@ Check out the [list of changes]({status['compare_url']}).
         postcopy = self.values.get("postcopy")
 
         repo = self.values["repo"]
-        branch = self.values["branch"]
         remote_url = f"https://github.com/{repo}.git"
         repo_dir = os.path.join(TMP_DIR, repo)
 
         # Clone repository
-        Git.clone(remote_url, branch, repo_dir, reclone=True)
+        Git.clone(remote_url, ref, repo_dir, reclone=True)
 
         # Run precopy on tmp repo
         if precopy is not None:
@@ -340,7 +348,7 @@ class Git:
     default_branch = "master"
 
     @staticmethod
-    def clone(remote_url: str, branch: str, repo_dir: str, reclone=False):
+    def clone(remote_url: str, ref: str, repo_dir: str, reclone=False):
         # If repo needs to be fresh
         if reclone and os.path.exists(repo_dir):
             shutil.rmtree(repo_dir)
@@ -348,11 +356,11 @@ class Git:
         # Clone repo in tmp directory and checkout branch
         if not os.path.exists(repo_dir):
             print(
-                f"Cloning {remote_url} to {repo_dir} and checking out {branch}",
+                f"Cloning {remote_url} to {repo_dir} and checking out {ref}",
                 file=sys.stderr,
             )
             CommandRunner.run_or_fail(
-                ["git", "clone", "--depth=1", "-b", branch, remote_url, repo_dir],
+                ["git", "clone", "--depth=1", "--revision", ref, remote_url, repo_dir],
                 stage="Clone",
             )
 
@@ -378,20 +386,29 @@ class Git:
         return branch_name
 
     @staticmethod
+    def repo_is_clean() -> bool:
+        """
+        Returns `True` if the repo is clean.
+        Returns `False` if the repo is dirty.
+        """
+        try:
+            result = CommandRunner.run_or_fail(
+                ["git", "status", "--porcelain", "--untracked-files=normal"],
+                stage="CheckRepoClean",
+            )
+        except CommandRunner.Exception:
+            return False
+
+        return result.stdout.strip() == b""
+
+    @staticmethod
     def add_and_commit(scope: str, version: str) -> bool:
         """
         Returns `True` if there were changes and were indeed commited.
         Returns `False` if the repo was clean and no changes were commited.
         """
-        # check if repo is clean (clean => no error, no commit)
-        try:
-            CommandRunner.run_or_fail(
-                ["git", "diff", "--exit-code"], stage="CheckRepoClean"
-            )
+        if Git.repo_is_clean():
             return False
-        except CommandRunner.Exception:
-            # if it's other kind of error just throw!
-            pass
 
         user_name = os.environ.get("GIT_APP_NAME")
         user_email = os.environ.get("GIT_APP_EMAIL")
@@ -415,7 +432,7 @@ class Git:
                 f"user.email={user_email}",
                 "commit",
                 "-m",
-                f"feat({scope}): update to {version}",
+                f"chore({scope}): update to {version}",
             ],
             stage="CreateCommit",
             env=clean_env,
@@ -445,7 +462,7 @@ class GitHub:
         url = f"https://api.github.com/repos/{repo}/git/refs/tags"
 
         # Send a GET request to the GitHub API
-        response = requests.get(url)
+        response = requests.get(url, headers=HEADERS)
         current_version = coerce(current_tag)
         if current_version is None:
             raise ValueError(
@@ -505,7 +522,7 @@ class GitHub:
         url = f"https://api.github.com/repos/{repo}/compare/{version}...{branch}"
 
         # Send a GET request to the GitHub API
-        response = requests.get(url)
+        response = requests.get(url, headers=HEADERS)
 
         # If the request was successful
         if response.status_code == 200:
@@ -589,7 +606,13 @@ def main():
     DependencyStore.set(data)
 
     dependencies = data["dependencies"]
-    for path in dependencies:
+    if len(sys.argv) > 1:
+        # argv is list of dependencies to run, default is all of them
+        dependency_list = sys.argv[1:]
+    else:
+        dependency_list = dependencies.keys()
+
+    for path in dependency_list:
         dependency = Dependency(path, dependencies[path])
         dependency.update_or_notify()
 

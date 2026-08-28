@@ -53,5 +53,6 @@ local -a exts=(
 
 _arguments \
   '(-r --remove)'{-r,--remove}'[Remove archive.]' \
+  '(-t --to-directory)'{-t,--to-directory}'[Extract to a specific directory.]' \
   "*::archive file:_files -g '(#i)*.(${(j:|:)exts})(-.)'" \
     && return 0

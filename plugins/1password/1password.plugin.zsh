@@ -9,7 +9,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_op" ]]; then
   _comps[op]=_op
 fi
 
-op completion zsh >| "$ZSH_CACHE_DIR/completions/_op" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_op"
+  zf_mv -f -- =( op completion zsh ) "$TMPPREFIX"
+} &|
 
 # Load opswd function
 autoload -Uz opswd

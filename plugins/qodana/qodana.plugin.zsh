@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_qodana" ]]; then
   _comps[qodana]=_qodana
 fi
 
-qodana completion zsh >| "$ZSH_CACHE_DIR/completions/_qodana" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_qodana"
+  zf_mv -f -- =( qodana completion zsh ) "$TMPPREFIX"
+} &|

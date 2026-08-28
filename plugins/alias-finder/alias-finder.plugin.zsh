@@ -1,5 +1,5 @@
 alias-finder() {
-  local cmd=" " exact="" longer="" cheaper="" wordEnd="'{0,1}$" finder="" filter=""
+  local cmd=" " exact="" longer="" cheaper="" wordEnd="'?$" finder="" filter=""
 
   # build command and options
   for c in "$@"; do
@@ -31,7 +31,7 @@ alias-finder() {
 
   # find with alias and grep, removing last word each time until no more words
   while [[ $cmd != "" ]]; do
-    finder="'{0,1}$cmd$wordEnd"
+    finder="'?$cmd$wordEnd"
 
     # make filter to find only shorter results than current cmd
     if [[ $cheaper == true ]]; then

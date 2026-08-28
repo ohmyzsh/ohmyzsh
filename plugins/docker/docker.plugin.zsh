@@ -2,6 +2,7 @@ alias dbl='docker build'
 alias dcin='docker container inspect'
 alias dcls='docker container ls'
 alias dclsa='docker container ls -a'
+alias dcprune='docker container prune'
 alias dib='docker image build'
 alias dii='docker image inspect'
 alias dils='docker image ls'
@@ -15,6 +16,7 @@ alias dncn='docker network connect'
 alias dndcn='docker network disconnect'
 alias dni='docker network inspect'
 alias dnls='docker network ls'
+alias dnprune='docker network prune'
 alias dnrm='docker network rm'
 alias dpo='docker container port'
 alias dps='docker ps'
@@ -24,6 +26,7 @@ alias dr='docker container run'
 alias drit='docker container run -it'
 alias drm='docker container rm'
 alias 'drm!'='docker container rm -f'
+alias dsprune='docker system prune'
 alias dst='docker container start'
 alias drs='docker container restart'
 alias dsta='docker stop $(docker ps -q)'
@@ -53,14 +56,19 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_docker" ]]; then
   _comps[docker]=_docker
 fi
 
-{
+zmodload -F zsh/files b:zf_mv
+() {
+
+  local plugin_dir="$1"
+
   # `docker completion` is only available from 23.0.0 on
   # docker version returns `Docker version 24.0.2, build cb74dfcd85`
   # with `s:,:` remove the comma after the version, and select third word of it
   if zstyle -t ':omz:plugins:docker' legacy-completion || \
     ! is-at-least 23.0.0 ${${(s:,:z)"$(command docker --version)"}[3]}; then
-        command cp "${0:h}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
+        command cp "${plugin_dir}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
       else
-        command docker completion zsh | tee "$ZSH_CACHE_DIR/completions/_docker" > /dev/null
+        local TMPPREFIX="$ZSH_CACHE_DIR/completions/_docker"
+        zf_mv -f -- =( command docker completion zsh ) "$TMPPREFIX"
   fi
-} &|
+} "${0:A:h}" &|

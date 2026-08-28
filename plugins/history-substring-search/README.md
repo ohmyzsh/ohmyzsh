@@ -20,7 +20,7 @@ Requirements
 Install
 ------------------------------------------------------------------------------
 
-Using the [Homebrew]( https://brew.sh ) package manager:
+Using the [Homebrew](https://brew.sh) package manager:
 
     brew install zsh-history-substring-search
     echo 'source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh' >> ~/.zshrc
@@ -79,7 +79,7 @@ Using [Zinit](https://github.com/zdharma-continuum/zinit):
 
 2. Load the plugin in `~/.zshrc`:
 
-        zinit load 'zsh-users/zsh-history-substring-search
+        zinit load 'zsh-users/zsh-history-substring-search'
         zinit ice wait atload'_history_substring_search_config'
 
 3. Run `exec zsh` to take changes into account:

@@ -28,6 +28,7 @@ function _omz {
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
     'reload:Reload the current zsh session'
+    'shop:Open the Oh My Zsh shop'
     'theme:Manage themes'
     'update:Update Oh My Zsh'
     'version:Show the version'
@@ -173,6 +174,7 @@ Available commands:
   plugin <command>    Manage plugins
   pr     <command>    Manage Oh My Zsh Pull Requests
   reload              Reload the current zsh session
+  shop                Open the Oh My Zsh shop
   theme  <command>    Manage themes
   update              Update Oh My Zsh
   version             Show the version
@@ -369,7 +371,7 @@ multi == 1 && /^[^#]*\)/ {
   next
 }
 
-# if multi flag is enabled and we didnt find a closing parenthesis,
+# if multi flag is enabled and we didn't find a closing parenthesis,
 # get the indentation level to match when adding plugins
 multi == 1 && /^[^#]*/ {
   indent=\"\"
@@ -719,6 +721,15 @@ function _omz::pr::test {
       return 1
     }
   )
+}
+
+function _omz::shop {
+  local shop_url="https://commitgoods.com/collections/oh-my-zsh"
+  
+  _omz::log info "Opening Oh My Zsh shop in your browser..."
+  _omz::log info "$shop_url"
+  
+  open_command "$shop_url"
 }
 
 function _omz::reload {
