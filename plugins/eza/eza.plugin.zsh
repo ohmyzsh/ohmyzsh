@@ -52,8 +52,13 @@ function _configure_eza() {
   if [[ $_val ]]; then
     _EZA_TAIL+=("--time-style='$_val'")
   fi
-  if zstyle -t ":omz:plugins:eza" "hyperlink"; then
-    _EZA_TAIL+=("--hyperlink")
+  if zstyle -t ':omz:plugins:eza' 'hyperlink'; then
+    # eza >= 0.23 needs an explicit WHEN value
+    if command eza --hyperlink=auto --version &>/dev/null; then
+      _EZA_TAIL+=("--hyperlink=auto")
+    else
+      _EZA_TAIL+=("--hyperlink")
+    fi
   fi
 }
 
