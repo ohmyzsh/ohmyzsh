@@ -38,6 +38,7 @@ plugins=(... git)
 | `gbss`                 | `git bisect start`                                                                                                              |
 | `gbl`                  | `git blame -w`                                                                                                                  |
 | `gb`                   | `git branch`                                                                                                                    |
+| `gbls`                     | `git for-each-ref --format="%(refname:short)" refs/heads/`                                                                                                                    |
 | `gba`                  | `git branch --all`                                                                                                              |
 | `gbd`                  | `git branch --delete`                                                                                                           |
 | `gbD`                  | `git branch --delete --force`                                                                                                   |
