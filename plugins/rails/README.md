@@ -54,6 +54,33 @@ plugins=(... rails)
 | `rta`   | `rails test:all`                 | Runs all Rails tests, including system tests           |
 | `ru`    | `rails runner`                   | Run Ruby code in the context of Rails                  |
 
+### Multiple databases
+
+Rails applications can define more than one database (`primary`, `cache`, `cable`,
+`queue`, ...), and each one gets its own namespaced task. These commands accept an
+optional database name as the first argument:
+
+`rdc`, `rdd`, `rdm`, `rdmd`, `rdmr`, `rdms`, `rdmu`, `rdr`, `rdrs`, `rdsl`
+
+```zsh
+rdm                    # rails db:migrate
+rdm cache              # rails db:migrate:cache
+rdm VERSION=20231225   # rails db:migrate VERSION=20231225
+rdm cache STEP=2       # rails db:migrate:cache STEP=2
+rdm --trace            # rails db:migrate --trace
+```
+
+The first argument is read as a database name only when it is a bare word. Flags
+(`--trace`), variables (`STEP=2`) and other tasks (`db:seed`) are passed through to
+`rails` unchanged, so previous usage keeps working. When a database name is given,
+the resolved command is printed so it is clear which database is being used.
+
+`rdmrs` is not in the list above because Rails does not define a per-database
+`db:migrate:reset` task.
+
+Note that these are implemented as shell functions rather than aliases, so they will
+not appear in the output of `alias`.
+
 ### Foreman
 
 | Alias  | Command         | Description                               |

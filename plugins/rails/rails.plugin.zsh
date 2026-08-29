@@ -47,19 +47,9 @@ alias rc='rails console'
 alias rcs='rails console --sandbox'
 alias rd='rails destroy'
 alias rdb='rails dbconsole'
-alias rdc='rails db:create'
-alias rdd='rails db:drop'
-alias rdm='rails db:migrate'
-alias rdmd='rails db:migrate:down'
-alias rdmr='rails db:migrate:redo'
 alias rdmrs='rails db:migrate:reset'
-alias rdms='rails db:migrate:status'
 alias rdmtc='rails db:migrate db:test:clone'
-alias rdmu='rails db:migrate:up'
-alias rdr='rails db:rollback'
-alias rdrs='rails db:reset'
 alias rds='rails db:seed'
-alias rdsl='rails db:schema:load'
 alias rdtc='rails db:test:clone'
 alias rdtp='rails db:test:prepare'
 alias rgen='rails generate'
@@ -105,6 +95,47 @@ alias rkmd='rake middleware'
 alias rkn='rake notes'
 alias rksts='rake stats'
 alias rkt='rake test'
+
+# Database tasks
+#
+# Rails applications can define more than one database (primary, cache, cable,
+# queue, ...). Each one gets its own namespaced task, e.g. `db:migrate:cache`.
+# The functions below take an optional database name as the first argument:
+#
+#   rdm                    ->  rails db:migrate
+#   rdm cache              ->  rails db:migrate:cache
+#   rdm VERSION=20231225   ->  rails db:migrate VERSION=20231225
+#   rdm cache STEP=2       ->  rails db:migrate:cache STEP=2
+#   rdm --trace            ->  rails db:migrate --trace
+#
+# The first argument is read as a database name only when it is a bare word.
+# Flags (--trace), variables (STEP=2) and other tasks (db:seed) are passed
+# through to rails untouched, so the previous alias behavior still works.
+function _rails_db_command() {
+  local task="$1"
+  shift
+
+  if [[ $# -gt 0 && "$1" != -* && "$1" != *=* && "$1" != *:* ]]; then
+    task="$task:$1"
+    shift
+    # Echo the resolved task so it is clear which database is being used
+    local -a cmd=(rails "$task" "$@")
+    print -u2 -r -- "Running: ${cmd[*]}"
+  fi
+
+  rails "$task" "$@"
+}
+
+function rdc()  { _rails_db_command db:create "$@" }
+function rdd()  { _rails_db_command db:drop "$@" }
+function rdm()  { _rails_db_command db:migrate "$@" }
+function rdmd() { _rails_db_command db:migrate:down "$@" }
+function rdmr() { _rails_db_command db:migrate:redo "$@" }
+function rdms() { _rails_db_command db:migrate:status "$@" }
+function rdmu() { _rails_db_command db:migrate:up "$@" }
+function rdr()  { _rails_db_command db:rollback "$@" }
+function rdrs() { _rails_db_command db:reset "$@" }
+function rdsl() { _rails_db_command db:schema:load "$@" }
 
 # legacy stuff
 alias sc='ruby script/console'
