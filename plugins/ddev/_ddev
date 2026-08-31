@@ -1,0 +1,611 @@
+#compdef _ddev ddev
+
+
+function _ddev {
+  local -a commands
+
+  _arguments -C \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "auth:A collection of authentication commands"
+      "composer:Executes a composer command within the web container"
+      "config:Create or modify a ddev project configuration in the current directory"
+      "debug:A collection of debugging commands"
+      "delete:Remove all project information (including database) for an existing project"
+      "describe:Get a detailed description of a running ddev project."
+      "exec:Execute a shell command in the container for a service. Uses the web service by default."
+      "export-db:Dump a database to stdout or to a file"
+      "hostname:Manage your hostfile entries."
+      "import-db:Import a sql archive into the project."
+      "import-files:Pull the uploaded files directory of an existing project to the default public upload directory of your project."
+      "list:List projects"
+      "logs:Get the logs from your running services."
+      "pause:uses 'docker stop' to pause/stop the containers belonging to a project."
+      "poweroff:Completely stop all projects and containers"
+      "pull:Pull files and database using a configured provider plugin."
+      "restart:Restart a project or several projects."
+      "restore-snapshot:Restore a project's database to the provided snapshot version."
+      "share:Share project on the internet via ngrok."
+      "snapshot:Create a database snapshot for one or more projects."
+      "ssh:Starts a shell session in the container for a service. Uses web service by default."
+      "start:Start a ddev project."
+      "stop:Stop and remove the containers of a project. Does not lose or harm anything unless you add --remove-data."
+      "version:print ddev version and component versions"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  auth)
+    _ddev_auth
+    ;;
+  composer)
+    _ddev_composer
+    ;;
+  config)
+    _ddev_config
+    ;;
+  debug)
+    _ddev_debug
+    ;;
+  delete)
+    _ddev_delete
+    ;;
+  describe)
+    _ddev_describe
+    ;;
+  exec)
+    _ddev_exec
+    ;;
+  export-db)
+    _ddev_export-db
+    ;;
+  hostname)
+    _ddev_hostname
+    ;;
+  import-db)
+    _ddev_import-db
+    ;;
+  import-files)
+    _ddev_import-files
+    ;;
+  list)
+    _ddev_list
+    ;;
+  logs)
+    _ddev_logs
+    ;;
+  pause)
+    _ddev_pause
+    ;;
+  poweroff)
+    _ddev_poweroff
+    ;;
+  pull)
+    _ddev_pull
+    ;;
+  restart)
+    _ddev_restart
+    ;;
+  restore-snapshot)
+    _ddev_restore-snapshot
+    ;;
+  share)
+    _ddev_share
+    ;;
+  snapshot)
+    _ddev_snapshot
+    ;;
+  ssh)
+    _ddev_ssh
+    ;;
+  start)
+    _ddev_start
+    ;;
+  stop)
+    _ddev_stop
+    ;;
+  version)
+    _ddev_version
+    ;;
+  esac
+}
+
+
+function _ddev_auth {
+  local -a commands
+
+  _arguments -C \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "pantheon:Provide a machine token for the global pantheon auth"
+      "ssh:Add ssh key authentication to the ddev-ssh-auth container"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  pantheon)
+    _ddev_auth_pantheon
+    ;;
+  ssh)
+    _ddev_auth_ssh
+    ;;
+  esac
+}
+
+function _ddev_auth_pantheon {
+  _arguments \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_auth_ssh {
+  _arguments \
+    '(-d --ssh-key-path)'{-d,--ssh-key-path}'[full path to ssh key directory]:' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+
+function _ddev_composer {
+  local -a commands
+
+  _arguments -C \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "create:Executes 'composer create-project' within the web container with the arguments and flags provided"
+      "create-project:"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  create)
+    _ddev_composer_create
+    ;;
+  create-project)
+    _ddev_composer_create-project
+    ;;
+  esac
+}
+
+function _ddev_composer_create {
+  _arguments \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_composer_create-project {
+  _arguments \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+
+function _ddev_config {
+  local -a commands
+
+  _arguments -C \
+    '--additional-fqdns[A comma-delimited list of FQDNs for the project]:' \
+    '--additional-hostnames[A comma-delimited list of hostnames for the project]:' \
+    '--create-docroot[Prompts ddev to create the docroot if it doesn'\''t exist]' \
+    '--db-image[Sets the db container image]:' \
+    '--db-image-default[Sets the default db container image for this ddev version]' \
+    '--db-working-dir[Overrides the default working directory for the db service]:' \
+    '--db-working-dir-default[Unsets a db service working directory override]' \
+    '--dba-image[Sets the dba container image]:' \
+    '--dba-image-default[Sets the default dba container image for this ddev version]' \
+    '--dba-working-dir[Overrides the default working directory for the dba service]:' \
+    '--dba-working-dir-default[Unsets a dba service working directory override]' \
+    '--dbimage-extra-packages[A comma-delimited list of Debian packages that should be added to db container when the project is started]:' \
+    '--disable-settings-management[Prevent ddev from creating or updating CMS settings files]' \
+    '--docroot[Provide the relative docroot of the project, like '\''docroot'\'' or '\''htdocs'\'' or '\''web'\'', defaults to empty, the current directory]:' \
+    '--host-db-port[The db container'\''s localhost-bound port]:' \
+    '--host-https-port[The web container'\''s localhost-bound https port]:' \
+    '--host-webserver-port[The web container'\''s localhost-bound port]:' \
+    '--http-port[The router HTTP port for this project]:' \
+    '--https-port[The router HTTPS port for this project]:' \
+    '--image-defaults[Sets the default web, db, and dba container images]' \
+    '--mailhog-https-port[Router port to be used for mailhog access (https)]:' \
+    '--mailhog-port[Router port to be used for mailhog access]:' \
+    '--mariadb-version[mariadb version to use (incompatible with --mysql-version)]:' \
+    '--mysql-version[Oracle mysql version to use (incompatible with --mariadb-version)]:' \
+    '--nfs-mount-enabled[enable NFS mounting of project in container]' \
+    '--ngrok-args[Provide extra args to ngrok in ddev share]:' \
+    '--no-project-mount[Whether or not to skip mounting project code into the web container]' \
+    '--omit-containers[A comma-delimited list of container types that should not be started when the project is started]:' \
+    '--php-version[The version of PHP that will be enabled in the web container]:' \
+    '--phpmyadmin-https-port[Router port to be used for PHPMyAdmin (dba) container access (https)]:' \
+    '--phpmyadmin-port[Router port to be used for PHPMyAdmin (dba) container access]:' \
+    '--project-name[Provide the project name of project to configure (normally the same as the last part of directory name)]:' \
+    '--project-tld[set the top-level domain to be used for projects, defaults to ddev.site]:' \
+    '--project-type[Provide the project type (one of backdrop, drupal6, drupal7, drupal8, drupal9, magento, magento2, php, typo3, wordpress). This is autodetected and this flag is necessary only to override the detection.]:' \
+    '--show-config-location[Output the location of the config.yaml file if it exists, or error that it doesn'\''t exist.]' \
+    '--timezone[Specify timezone for containers and php, like Europe/London or America/Denver or GMT or UTC]:' \
+    '--upload-dir[Sets the project'\''s upload directory, the destination directory of the import-files command.]:' \
+    '--use-dns-when-possible[Use DNS for hostname resolution instead of /etc/hosts when possible]' \
+    '--web-image[Sets the web container image]:' \
+    '--web-image-default[Sets the default web container image for this ddev version]' \
+    '--web-working-dir[Overrides the default working directory for the web service]:' \
+    '--web-working-dir-default[Unsets a web service working directory override]' \
+    '--webimage-extra-packages[A comma-delimited list of Debian packages that should be added to web container when the project is started]:' \
+    '--webserver-type[Sets the project'\''s desired webserver type: nginx-fpm, apache-fpm, or apache-cgi]:' \
+    '--working-dir-defaults[Unsets all service working directory overrides]' \
+    '--xdebug-enabled[Whether or not XDebug is enabled in the web container]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "drud-s3:Create or modify a ddev project drud-s3 configuration in the current directory"
+      "global:Change global configuration"
+      "pantheon:Create or modify a ddev project pantheon configuration in the current directory"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  drud-s3)
+    _ddev_config_drud-s3
+    ;;
+  global)
+    _ddev_config_global
+    ;;
+  pantheon)
+    _ddev_config_pantheon
+    ;;
+  esac
+}
+
+function _ddev_config_drud-s3 {
+  _arguments \
+    '--access-key-id[drud-s3 only: AWS S3 access key ID]:' \
+    '--additional-fqdns[A comma-delimited list of FQDNs for the project]:' \
+    '--additional-hostnames[A comma-delimited list of hostnames for the project]:' \
+    '--bucket-name[drud-s3 only: AWS S3 bucket]:' \
+    '--create-docroot[Prompts ddev to create the docroot if it doesn'\''t exist]' \
+    '--db-image[Sets the db container image]:' \
+    '--db-image-default[Sets the default db container image for this ddev version]' \
+    '--db-working-dir[Overrides the default working directory for the db service]:' \
+    '--db-working-dir-default[Unsets a db service working directory override]' \
+    '--dba-image[Sets the dba container image]:' \
+    '--dba-image-default[Sets the default dba container image for this ddev version]' \
+    '--dba-working-dir[Overrides the default working directory for the dba service]:' \
+    '--dba-working-dir-default[Unsets a dba service working directory override]' \
+    '--dbimage-extra-packages[A comma-delimited list of Debian packages that should be added to db container when the project is started]:' \
+    '--disable-settings-management[Prevent ddev from creating or updating CMS settings files]' \
+    '--docroot[Provide the relative docroot of the project, like '\''docroot'\'' or '\''htdocs'\'' or '\''web'\'', defaults to empty, the current directory]:' \
+    '--environment[Choose the environment for a  project (production/staging/etc)]:' \
+    '--host-db-port[The db container'\''s localhost-bound port]:' \
+    '--host-https-port[The web container'\''s localhost-bound https port]:' \
+    '--host-webserver-port[The web container'\''s localhost-bound port]:' \
+    '--http-port[The router HTTP port for this project]:' \
+    '--https-port[The router HTTPS port for this project]:' \
+    '--image-defaults[Sets the default web, db, and dba container images]' \
+    '--mailhog-https-port[Router port to be used for mailhog access (https)]:' \
+    '--mailhog-port[Router port to be used for mailhog access]:' \
+    '--mariadb-version[mariadb version to use (incompatible with --mysql-version)]:' \
+    '--mysql-version[Oracle mysql version to use (incompatible with --mariadb-version)]:' \
+    '--nfs-mount-enabled[enable NFS mounting of project in container]' \
+    '--ngrok-args[Provide extra args to ngrok in ddev share]:' \
+    '--no-project-mount[Whether or not to skip mounting project code into the web container]' \
+    '--omit-containers[A comma-delimited list of container types that should not be started when the project is started]:' \
+    '--php-version[The version of PHP that will be enabled in the web container]:' \
+    '--phpmyadmin-https-port[Router port to be used for PHPMyAdmin (dba) container access (https)]:' \
+    '--phpmyadmin-port[Router port to be used for PHPMyAdmin (dba) container access]:' \
+    '--project-name[Provide the project name of project to configure (normally the same as the last part of directory name)]:' \
+    '--project-tld[set the top-level domain to be used for projects, defaults to ddev.site]:' \
+    '--project-type[Provide the project type (one of backdrop, drupal6, drupal7, drupal8, drupal9, magento, magento2, php, typo3, wordpress). This is autodetected and this flag is necessary only to override the detection.]:' \
+    '--secret-access-key[drud-s3 only: AWS S3 secret access key]:' \
+    '--show-config-location[Output the location of the config.yaml file if it exists, or error that it doesn'\''t exist.]' \
+    '--timezone[Specify timezone for containers and php, like Europe/London or America/Denver or GMT or UTC]:' \
+    '--upload-dir[Sets the project'\''s upload directory, the destination directory of the import-files command.]:' \
+    '--use-dns-when-possible[Use DNS for hostname resolution instead of /etc/hosts when possible]' \
+    '--web-image[Sets the web container image]:' \
+    '--web-image-default[Sets the default web container image for this ddev version]' \
+    '--web-working-dir[Overrides the default working directory for the web service]:' \
+    '--web-working-dir-default[Unsets a web service working directory override]' \
+    '--webimage-extra-packages[A comma-delimited list of Debian packages that should be added to web container when the project is started]:' \
+    '--webserver-type[Sets the project'\''s desired webserver type: nginx-fpm, apache-fpm, or apache-cgi]:' \
+    '--working-dir-defaults[Unsets all service working directory overrides]' \
+    '--xdebug-enabled[Whether or not XDebug is enabled in the web container]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_config_global {
+  _arguments \
+    '--instrumentation-opt-in[instrmentation-opt-in=true]' \
+    '--nfs-mount-enabled[Enable NFS mounting on all projects globally]' \
+    '--omit-containers[For example, --omit-containers=dba,ddev-ssh-agent]:' \
+    '--router-bind-all-interfaces[router-bind-all-interfaces=true]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_config_pantheon {
+  _arguments \
+    '--additional-fqdns[A comma-delimited list of FQDNs for the project]:' \
+    '--additional-hostnames[A comma-delimited list of hostnames for the project]:' \
+    '--create-docroot[Prompts ddev to create the docroot if it doesn'\''t exist]' \
+    '--db-image[Sets the db container image]:' \
+    '--db-image-default[Sets the default db container image for this ddev version]' \
+    '--db-working-dir[Overrides the default working directory for the db service]:' \
+    '--db-working-dir-default[Unsets a db service working directory override]' \
+    '--dba-image[Sets the dba container image]:' \
+    '--dba-image-default[Sets the default dba container image for this ddev version]' \
+    '--dba-working-dir[Overrides the default working directory for the dba service]:' \
+    '--dba-working-dir-default[Unsets a dba service working directory override]' \
+    '--dbimage-extra-packages[A comma-delimited list of Debian packages that should be added to db container when the project is started]:' \
+    '--disable-settings-management[Prevent ddev from creating or updating CMS settings files]' \
+    '--docroot[Provide the relative docroot of the project, like '\''docroot'\'' or '\''htdocs'\'' or '\''web'\'', defaults to empty, the current directory]:' \
+    '--host-db-port[The db container'\''s localhost-bound port]:' \
+    '--host-https-port[The web container'\''s localhost-bound https port]:' \
+    '--host-webserver-port[The web container'\''s localhost-bound port]:' \
+    '--http-port[The router HTTP port for this project]:' \
+    '--https-port[The router HTTPS port for this project]:' \
+    '--image-defaults[Sets the default web, db, and dba container images]' \
+    '--mailhog-https-port[Router port to be used for mailhog access (https)]:' \
+    '--mailhog-port[Router port to be used for mailhog access]:' \
+    '--mariadb-version[mariadb version to use (incompatible with --mysql-version)]:' \
+    '--mysql-version[Oracle mysql version to use (incompatible with --mariadb-version)]:' \
+    '--nfs-mount-enabled[enable NFS mounting of project in container]' \
+    '--ngrok-args[Provide extra args to ngrok in ddev share]:' \
+    '--no-project-mount[Whether or not to skip mounting project code into the web container]' \
+    '--omit-containers[A comma-delimited list of container types that should not be started when the project is started]:' \
+    '--pantheon-environment[Choose the environment for a Pantheon project (dev/test/prod)]:' \
+    '--php-version[The version of PHP that will be enabled in the web container]:' \
+    '--phpmyadmin-https-port[Router port to be used for PHPMyAdmin (dba) container access (https)]:' \
+    '--phpmyadmin-port[Router port to be used for PHPMyAdmin (dba) container access]:' \
+    '--project-name[Provide the project name of project to configure (normally the same as the last part of directory name)]:' \
+    '--project-tld[set the top-level domain to be used for projects, defaults to ddev.site]:' \
+    '--project-type[Provide the project type (one of backdrop, drupal6, drupal7, drupal8, drupal9, magento, magento2, php, typo3, wordpress). This is autodetected and this flag is necessary only to override the detection.]:' \
+    '--show-config-location[Output the location of the config.yaml file if it exists, or error that it doesn'\''t exist.]' \
+    '--timezone[Specify timezone for containers and php, like Europe/London or America/Denver or GMT or UTC]:' \
+    '--upload-dir[Sets the project'\''s upload directory, the destination directory of the import-files command.]:' \
+    '--use-dns-when-possible[Use DNS for hostname resolution instead of /etc/hosts when possible]' \
+    '--web-image[Sets the web container image]:' \
+    '--web-image-default[Sets the default web container image for this ddev version]' \
+    '--web-working-dir[Overrides the default working directory for the web service]:' \
+    '--web-working-dir-default[Unsets a web service working directory override]' \
+    '--webimage-extra-packages[A comma-delimited list of Debian packages that should be added to web container when the project is started]:' \
+    '--webserver-type[Sets the project'\''s desired webserver type: nginx-fpm, apache-fpm, or apache-cgi]:' \
+    '--working-dir-defaults[Unsets all service working directory overrides]' \
+    '--xdebug-enabled[Whether or not XDebug is enabled in the web container]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+
+function _ddev_debug {
+  local -a commands
+
+  _arguments -C \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "compose-config:Prints the docker-compose configuration of the current project"
+      "configyaml:Prints the project config.*.yaml usage"
+      "nfsmount:Checks to see if nfs mounting works for current project"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  compose-config)
+    _ddev_debug_compose-config
+    ;;
+  configyaml)
+    _ddev_debug_configyaml
+    ;;
+  nfsmount)
+    _ddev_debug_nfsmount
+    ;;
+  esac
+}
+
+function _ddev_debug_compose-config {
+  _arguments \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_debug_configyaml {
+  _arguments \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_debug_nfsmount {
+  _arguments \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+
+function _ddev_delete {
+  local -a commands
+
+  _arguments -C \
+    '(-a --all)'{-a,--all}'[Delete all projects]' \
+    '--clean-containers[Clean up all ddev docker containers which are not required by this version of ddev]' \
+    '(-O --omit-snapshot)'{-O,--omit-snapshot}'[Omit/skip database snapshot]' \
+    '(-y --yes)'{-y,--yes}'[Yes - skip confirmation prompt]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]' \
+    "1: :->cmnds" \
+    "*::arg:->args"
+
+  case $state in
+  cmnds)
+    commands=(
+      "images:Delete docker images not currently in use"
+    )
+    _describe "command" commands
+    ;;
+  esac
+
+  case "$words[1]" in
+  images)
+    _ddev_delete_images
+    ;;
+  esac
+}
+
+function _ddev_delete_images {
+  _arguments \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_describe {
+  _arguments \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_exec {
+  _arguments \
+    '(-d --dir)'{-d,--dir}'[Defines the execution directory within the container]:' \
+    '(-s --service)'{-s,--service}'[Defines the service to connect to. [e.g. web, db]]:' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_export-db {
+  _arguments \
+    '(-f --file)'{-f,--file}'[Provide the path to output the dump]:' \
+    '(-z --gzip)'{-z,--gzip}'[If provided asset is an archive, provide the path to extract within the archive.]' \
+    '(-d --target-db)'{-d,--target-db}'[If provided, target-db is alternate database to export]:' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_hostname {
+  _arguments \
+    '(-r --remove)'{-r,--remove}'[Remove the provided host name - ip correlation]' \
+    '(-R --remove-inactive)'{-R,--remove-inactive}'[Remove host names of inactive projects]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_import-db {
+  _arguments \
+    '--extract-path[If provided asset is an archive, provide the path to extract within the archive.]:' \
+    '--no-drop[Set if you do NOT want to drop the db before importing]' \
+    '(-p --progress)'{-p,--progress}'[Display a progress bar during import]' \
+    '(-f --src)'{-f,--src}'[Provide the path to a sql dump in .sql or tar/tar.gz/tgz/zip format]:' \
+    '(-d --target-db)'{-d,--target-db}'[If provided, target-db is alternate database to import into]:' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_import-files {
+  _arguments \
+    '--extract-path[If provided asset is an archive, optionally provide the path to extract within the archive.]:' \
+    '--src[Provide the path to the source directory or tar/tar.gz/tgz/zip archive of files to import]:' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_list {
+  _arguments \
+    '(-A --active-only)'{-A,--active-only}'[If set, only currently active projects will be displayed.]' \
+    '--continuous[If set, project information will be emitted until the command is stopped.]' \
+    '(-I --continuous-sleep-interval)'{-I,--continuous-sleep-interval}'[Time in seconds between ddev list --continous output lists.]:' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_logs {
+  _arguments \
+    '(-f --follow)'{-f,--follow}'[Follow the logs in real time.]' \
+    '(-s --service)'{-s,--service}'[Defines the service to retrieve logs from. [e.g. web, db]]:' \
+    '--tail[How many lines to show]:' \
+    '(-t --time)'{-t,--time}'[Add timestamps to logs]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_pause {
+  _arguments \
+    '(-a --all)'{-a,--all}'[Pause all running projects]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_poweroff {
+  _arguments \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_pull {
+  _arguments \
+    '--env[Overrides the default provider environment being pulled]:' \
+    '(-y --skip-confirmation)'{-y,--skip-confirmation}'[Skip confirmation step]' \
+    '--skip-db[Skip pulling database archive]' \
+    '--skip-files[Skip pulling file archive]' \
+    '--skip-import[Downloads file and/or database archives, but does not import them]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_restart {
+  _arguments \
+    '(-a --all)'{-a,--all}'[restart all projects]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_restore-snapshot {
+  _arguments \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_share {
+  _arguments \
+    '--subdomain[ngrok --subdomain argument, as in "ngrok --subdomain my-subdomain:, requires paid ngrok.com account"]:' \
+    '--use-http[Set to true to use unencrypted http local tunnel (required if you do not have an ngrok.com account)"]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_snapshot {
+  _arguments \
+    '(-a --all)'{-a,--all}'[Snapshot all running projects]' \
+    '(-n --name)'{-n,--name}'[provide a name for the snapshot]:' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_ssh {
+  _arguments \
+    '(-d --dir)'{-d,--dir}'[Defines the destination directory within the container]:' \
+    '(-s --service)'{-s,--service}'[Defines the service to connect to. [e.g. web, db]]:' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_start {
+  _arguments \
+    '(-a --all)'{-a,--all}'[Start all projects]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_stop {
+  _arguments \
+    '(-a --all)'{-a,--all}'[Stop and remove all running or container-stopped projects and remove from global projects list]' \
+    '(-O --omit-snapshot)'{-O,--omit-snapshot}'[Omit/skip database snapshot]' \
+    '(-R --remove-data)'{-R,--remove-data}'[Remove stored project data (MySQL, logs, etc.)]' \
+    '(-S --snapshot)'{-S,--snapshot}'[Create database snapshot]' \
+    '--stop-ssh-agent[Stop the ddev-ssh-agent container]' \
+    '(-U --unlist)'{-U,--unlist}'[Remove the project from global project list, it won'\''t show in ddev list until started again]' \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
+function _ddev_version {
+  _arguments \
+    '(-j --json-output)'{-j,--json-output}'[If true, user-oriented output will be in JSON format.]'
+}
+
