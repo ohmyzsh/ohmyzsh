@@ -9,6 +9,7 @@ alias vsshc="vagrant ssh-config"
 alias vrdp="vagrant rdp"
 
 alias vh="vagrant halt"
+alias vha="vagrant global-status | grep running | colrm 8 | xargs -L 1 -t vagrant halt"
 alias vssp="vagrant suspend"
 alias vst="vagrant status"
 alias vre="vagrant resume"
