@@ -144,6 +144,32 @@ __juju_units()
           ' 2>/dev/null
 }
 
+# Output all application names deployed in the current model.
+__juju_applications()
+{
+    command juju status --format=json 2>/dev/null \
+        | command jq -r '.applications // {} | keys | .[]' 2>/dev/null
+}
+
+# Complete an application token.
+# For integrate/remove-relation the token may be "app:endpoint"; if a colon is
+# already present we return 1 so the caller can fall through to endpoint or
+# generic completion — the application part is already typed.
+__juju_complete_application()
+{
+    local current="$1"
+    local -a apps
+    __juju_debug "[complete_app] current='${current}'"
+
+    # Colon means "app:" prefix is done; fall through to endpoint/other completion.
+    [[ "$current" == *:* ]] && return 1
+
+    apps=("${(@f)$(__juju_applications)}")
+    __juju_debug "[complete_app] apps=${#apps}"
+    (( ${#apps} )) || return 1
+    compadd -S '' -- "${apps[@]}"
+}
+
 # Complete a unit token.  If the token already contains a colon (e.g. the user
 # has typed "mysql/0:" for an scp path) we return immediately so zsh can fall
 # through to its built-in file/path completion for the remote path portion.
@@ -214,6 +240,39 @@ _juju()
         -u
         --unit
     )
+    # Commands whose first positional argument is an application name.
+    local -a _juju_app_commands=(
+        actions
+        list-actions
+        add-unit
+        attach-resource
+        bind
+        config
+        constraints
+        expose
+        refresh
+        resources
+        list-resources
+        scale-application
+        set-constraints
+        show-action
+        show-application
+        trust
+        unexpose
+    )
+    # Commands that accept one or more application names as ALL positional args.
+    local -a _juju_app_multi_commands=(
+        remove-application
+        remove-saas
+    )
+    # Flags that take an application name as their value.
+    local -a _juju_app_flags=(
+        -a
+        --app
+        --application
+        --apps
+        --applications
+    )
 
     __juju_debug "[_juju] curcontext: ${curcontext}"
     local -a completions
@@ -258,6 +317,13 @@ _juju()
         return 1
     fi
 
+    # Application name completion: flag value (e.g. juju exec --app <TAB>)
+    if (( ${_juju_app_flags[(I)$prev]} )); then
+        __juju_debug "[_juju] app flag completion, current: '${current}'"
+        __juju_complete_application "$current" && return 0
+        return 1
+    fi
+
     if [[ -z "$subcmd" ]]; then
         # No subcommand yet — complete subcommand names.
         completions=("${(@f)$(__juju_help_commands)}")
@@ -278,6 +344,31 @@ _juju()
     if (( ${_juju_model_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
         __juju_debug "[_juju] model command completion, current: '${current}'"
         __juju_complete_model "$current" && return 0
+        return 1
+    fi
+
+    # Application name completion: single-application positional arg commands.
+    if (( ${_juju_app_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
+        __juju_debug "[_juju] app command completion, current: '${current}'"
+        __juju_complete_application "$current" && return 0
+        return 1
+    fi
+
+    # Application name completion: commands that accept multiple application names.
+    if (( ${_juju_app_multi_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
+        __juju_debug "[_juju] app multi command completion, current: '${current}'"
+        __juju_complete_application "$current" && return 0
+        return 1
+    fi
+
+    # Application name completion for "juju integrate"/"juju relate" and
+    # "juju remove-relation": both positional args are "app[:endpoint]".
+    # Complete the application part; once a colon is present __juju_complete_application
+    # returns 1 so we fall through to generic/flag completion for the endpoint.
+    if [[ "$subcmd" == "integrate" || "$subcmd" == "relate" || "$subcmd" == "remove-relation" ]] \
+       && [[ "$current" != -* ]]; then
+        __juju_debug "[_juju] integrate/remove-relation app completion, current: '${current}'"
+        __juju_complete_application "$current" && return 0
         return 1
     fi
 
