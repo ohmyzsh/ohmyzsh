@@ -132,6 +132,37 @@ __juju_controllers()
         | command jq -r '.controllers | keys | .[]' 2>/dev/null
 }
 
+# Output all unit names for the current model (e.g. "mysql/0", "mysql/leader").
+# Includes subordinate units that appear nested under principal units.
+__juju_units()
+{
+    command juju status --format=json 2>/dev/null \
+        | command jq -r '
+            .applications // {} | to_entries[] |
+            .value.units // {} | to_entries[] |
+            ( [.key] + ( .value.subordinates // {} | keys ) ) | .[]
+          ' 2>/dev/null
+}
+
+# Complete a unit token.  If the token already contains a colon (e.g. the user
+# has typed "mysql/0:" for an scp path) we return immediately so zsh can fall
+# through to its built-in file/path completion for the remote path portion.
+__juju_complete_unit()
+{
+    local current="$1"
+    local -a units
+    __juju_debug "[complete_unit] current='${current}'"
+
+    # Once a colon is present the unit name is already complete; let the shell
+    # handle whatever comes after (remote path, etc.).
+    [[ "$current" == *:* ]] && return 1
+
+    units=("${(@f)$(__juju_units)}")
+    __juju_debug "[complete_unit] units=${#units}"
+    (( ${#units} )) || return 1
+    compadd -S '' -- "${units[@]}"
+}
+
 _juju()
 {
     # Initialise lookup arrays here so they are set on the very first invocation.
@@ -160,6 +191,28 @@ _juju()
     local -a _juju_controller_flags=(
         -c
         --controller
+    )
+    # Commands whose first positional argument is a unit name.
+    # resolved/remove-unit also accept app names but offering units is most useful.
+    local -a _juju_unit_commands=(
+        add-storage
+        attach-storage
+        debug-code
+        debug-hook
+        debug-hooks
+        resolved
+        resolve
+        show-unit
+    )
+    # Commands that accept one or more unit names as ALL positional args
+    # (remove-unit also accepts app names; we complete units here regardless).
+    local -a _juju_unit_multi_commands=(
+        remove-unit
+    )
+    # Flags that take a unit name as their value.
+    local -a _juju_unit_flags=(
+        -u
+        --unit
     )
 
     __juju_debug "[_juju] curcontext: ${curcontext}"
@@ -198,6 +251,13 @@ _juju()
         return 1
     fi
 
+    # Unit name completion: flag value (e.g. juju exec --unit <TAB>)
+    if (( ${_juju_unit_flags[(I)$prev]} )); then
+        __juju_debug "[_juju] unit flag completion, current: '${current}'"
+        __juju_complete_unit "$current" && return 0
+        return 1
+    fi
+
     if [[ -z "$subcmd" ]]; then
         # No subcommand yet — complete subcommand names.
         completions=("${(@f)$(__juju_help_commands)}")
@@ -218,6 +278,53 @@ _juju()
     if (( ${_juju_model_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
         __juju_debug "[_juju] model command completion, current: '${current}'"
         __juju_complete_model "$current" && return 0
+        return 1
+    fi
+
+    # Unit name completion: single-unit positional arg commands (e.g. juju ssh <TAB>,
+    # juju show-unit <TAB>, juju add-storage <TAB>).
+    if (( ${_juju_unit_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
+        __juju_debug "[_juju] unit command completion, current: '${current}'"
+        __juju_complete_unit "$current" && return 0
+        return 1
+    fi
+
+    # Unit name completion: commands that accept multiple unit names as positional
+    # args (e.g. juju remove-unit <TAB>  or  juju remove-unit mysql/0 <TAB>).
+    if (( ${_juju_unit_multi_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
+        __juju_debug "[_juju] unit multi command completion, current: '${current}'"
+        __juju_complete_unit "$current" && return 0
+        return 1
+    fi
+
+    # Unit name completion for "juju run <unit> [<unit>...] <action>":
+    # complete units until a non-unit word has been seen after the subcommand,
+    # then fall through to flag/option completion.
+    if [[ "$subcmd" == "run" ]] && [[ "$current" != -* ]]; then
+        # Count non-flag positional args after "run" (excluding current word).
+        local pos=0
+        local last_positional=""
+        for (( i = 3; i < CURRENT; i++ )); do
+            if [[ "${words[i]}" != -* ]]; then
+                (( pos++ ))
+                last_positional="${words[i]}"
+            fi
+        done
+        __juju_debug "[_juju] run: pos=${pos} last_positional='${last_positional}'"
+        # If no positional args yet, or all previous positional args look like
+        # units (app/N), keep completing units.
+        if (( pos == 0 )) || [[ "$last_positional" == */* ]]; then
+            __juju_debug "[_juju] run: completing unit"
+            __juju_complete_unit "$current" && return 0
+            return 1
+        fi
+    fi
+
+    # Unit name completion for "juju ssh <TAB>" and "juju scp <TAB>":
+    # the target may be a bare unit name or a "unit:/remote/path" token.
+    if [[ "$subcmd" == "ssh" || "$subcmd" == "scp" ]] && [[ "$current" != -* ]]; then
+        __juju_debug "[_juju] ssh/scp unit completion, current: '${current}'"
+        __juju_complete_unit "$current" && return 0
         return 1
     fi
 
