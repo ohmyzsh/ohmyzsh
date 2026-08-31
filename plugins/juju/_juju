@@ -1,5 +1,4 @@
 #compdef juju
-(( $+functions[compdef] )) && compdef _juju juju
 
 # zsh completion for juju                                  -*- shell-script -*-
 
@@ -127,43 +126,42 @@ __juju_complete_model()
     fi
 }
 
-# Commands whose first positional argument is a model name.
-_juju_model_commands=(
-    destroy-model
-    grant-model
-    revoke-model
-    switch
-)
-
-# Flags that take a model name as their value.
-_juju_model_flags=(
-    -m
-    --model
-)
-
 __juju_controllers()
 {
     command juju controllers --format=json 2>/dev/null \
         | command jq -r '.controllers | keys | .[]' 2>/dev/null
 }
 
-# Commands whose first positional argument is a controller name.
-_juju_controller_commands=(
-    destroy-controller
-    kill-controller
-    login
-    logout
-    unregister
-)
-
-# Flags that take a controller name as their value.
-_juju_controller_flags=(
-    -c
-    --controller
-)
-
 _juju()
 {
+    # Initialise lookup arrays here so they are set on the very first invocation.
+    # (With #compdef autoloading the whole file is the function body, so any
+    # file-scope assignments only take effect during the first call — after which
+    # the inner _juju() definition replaces the autoloaded one and those
+    # assignments are never reached again.  Keeping the arrays here is the
+    # correct pattern.)
+    local -a _juju_model_commands=(
+        destroy-model
+        grant-model
+        revoke-model
+        switch
+    )
+    local -a _juju_model_flags=(
+        -m
+        --model
+    )
+    local -a _juju_controller_commands=(
+        destroy-controller
+        kill-controller
+        login
+        logout
+        unregister
+    )
+    local -a _juju_controller_flags=(
+        -c
+        --controller
+    )
+
     __juju_debug "[_juju] curcontext: ${curcontext}"
     local -a completions
 
@@ -229,3 +227,11 @@ _juju()
     (( ${#completions} )) && _describe "option" completions && return 0
     return 1
 }
+
+# When this file is autoloaded by the completion system the entire file is
+# executed as the function body on the first invocation.  The inner _juju()
+# definition above replaces that autoloaded function, but the replacement is
+# never *called* during that first run.  Explicitly calling _juju here ensures
+# completions are produced on the very first tab press, matching the standard
+# zsh pattern used by _git and other large completion files.
+_juju "$@"
