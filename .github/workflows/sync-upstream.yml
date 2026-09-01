@@ -1,0 +1,61 @@
+name: sync-upstream
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Add upstream remote
+        run: git remote add upstream https://github.com/ohmyzsh/ohmyzsh.git
+
+      - name: Fetch upstream and origin
+        run: |
+          git fetch upstream master
+          git fetch origin master sayyad
+
+      - name: Check if sync needed
+        id: check
+        run: |
+          if git merge-base --is-ancestor upstream/master origin/master && \
+             [ "$(git rev-list --count upstream/master..origin/sayyad)" = "0" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Nothing to sync"
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Merge upstream into master
+        if: steps.check.outputs.skip != 'true'
+        run: |
+          if git merge-base --is-ancestor upstream/master origin/master; then
+            echo "Master already contains upstream"
+            exit 0
+          fi
+          git checkout -B master origin/master
+          git merge --no-edit upstream/master || { echo "::error::Merge conflict with upstream"; git merge --abort; exit 1; }
+          git push origin HEAD:refs/heads/master
+
+      - name: Rebase sayyad
+        if: steps.check.outputs.skip != 'true'
+        run: |
+          git checkout -b sayyad origin/sayyad
+          git rebase upstream/master || { echo "::error::Rebase conflicts"; git rebase --abort; exit 1; }
+          git push --force-with-lease origin HEAD:refs/heads/sayyad
