@@ -2,68 +2,95 @@ name: sync-upstream
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
 
 jobs:
   sync:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+
     steps:
-      - name: Checkout fork
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
         with:
+          ref: master
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       - name: Configure git
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Add upstream remote
-        run: git remote add upstream https://github.com/ohmyzsh/ohmyzsh.git
-
       - name: Fetch upstream and origin
         run: |
+          git remote add upstream https://github.com/ohmyzsh/ohmyzsh.git
           git fetch upstream master
-          git fetch origin master sayyad
+          git fetch origin \
+            refs/heads/master:refs/remotes/origin/master \
+            refs/heads/sayyad:refs/remotes/origin/sayyad
 
-      - name: Check if sync needed
+      - name: Check if sync is needed
         id: check
+        shell: bash
         run: |
-          if git merge-base --is-ancestor upstream/master origin/master && \
-             [ "$(git rev-list --count upstream/master..origin/sayyad)" = "0" ]; then
-            echo "skip=true" >> $GITHUB_OUTPUT
-            echo "Nothing to sync"
+          if git merge-base --is-ancestor upstream/master origin/master &&
+             git merge-base --is-ancestor upstream/master origin/sayyad; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "Both branches already contain upstream"
           else
-            echo "skip=false" >> $GITHUB_OUTPUT
+            echo "skip=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Merge upstream into master
+      - name: Fast-forward master
         if: steps.check.outputs.skip != 'true'
+        shell: bash
         run: |
-          if git merge-base --is-ancestor upstream/master origin/master; then
+          if ! git merge-base --is-ancestor upstream/master origin/master; then
+            git branch -f master upstream/master
+
+            # Preserve the workflow from the pre-sync master.
+            git show origin/master:.github/workflows/sync-upstream.yml \
+              > /tmp/sync-upstream.yml
+            mkdir -p .github/workflows
+            cp /tmp/sync-upstream.yml .github/workflows/sync-upstream.yml
+            git add .github/workflows/sync-upstream.yml
+
+            if ! git diff --cached --quiet; then
+              git commit -m "fix(ci): maintain sync workflow"
+            fi
+
+            git push origin master
+          else
             echo "Master already contains upstream"
-            exit 0
           fi
-          git checkout -B master origin/master
-          git merge --no-edit upstream/master || { echo "::error::Merge conflict with upstream"; git merge --abort; exit 1; }
-          git checkout origin/master -- .github/workflows/
-          git add .github/workflows/
-          git commit --amend --no-edit
-          git push origin HEAD:refs/heads/master --force-with-lease
 
       - name: Rebase sayyad
         if: steps.check.outputs.skip != 'true'
+        shell: bash
         run: |
-          git checkout -b sayyad origin/sayyad
-          git rebase upstream/master || { echo "::error::Rebase conflicts"; git rebase --abort; exit 1; }
+          git switch --create sayyad --track origin/sayyad
+          git rebase upstream/master || {
+            echo "::error::Rebase conflicts"
+            git rebase --abort
+            exit 1
+          }
+
+          # Keep the workflow files from the sayyad branch.
           git checkout origin/sayyad -- .github/workflows/
           git add .github/workflows/
-          git commit --amend --no-edit
+
+          if ! git diff --cached --quiet; then
+            git commit --amend --no-edit
+          fi
+
           git push --force-with-lease origin HEAD:refs/heads/sayyad
