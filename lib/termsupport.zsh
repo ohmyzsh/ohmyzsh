@@ -22,7 +22,8 @@ function title {
       print -Pn "\e]1;${1:q}\a" # set tab name
       ;;
     screen*|tmux*)
-      print -Pn "\ek${1:q}\e\\" # set screen hardstatus
+      print -Pn "\e]2;${2:q}\e\\" # set tmux pane title
+      print -Pn "\ek${1:q}\e\\" # set screen hardstatus/tmux window name if `allow-rename` is on
       ;;
     *)
       if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
