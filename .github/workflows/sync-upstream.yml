@@ -53,7 +53,10 @@ jobs:
           fi
           git checkout -B master origin/master
           git merge --no-edit upstream/master || { echo "::error::Merge conflict with upstream"; git merge --abort; exit 1; }
-          git push origin HEAD:refs/heads/master
+          git checkout origin/master -- .github/workflows/
+          git add .github/workflows/
+          git commit --amend --no-edit
+          git push origin HEAD:refs/heads/master --force-with-lease
 
       - name: Rebase sayyad
         if: steps.check.outputs.skip != 'true'
