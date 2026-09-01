@@ -19,3 +19,5 @@ log/
 # zcompile cached files
 *.zwc
 *.zwc.old
+.memsearch
+.serena

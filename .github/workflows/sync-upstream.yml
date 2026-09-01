@@ -63,4 +63,7 @@ jobs:
         run: |
           git checkout -b sayyad origin/sayyad
           git rebase upstream/master || { echo "::error::Rebase conflicts"; git rebase --abort; exit 1; }
+          git checkout origin/sayyad -- .github/workflows/
+          git add .github/workflows/
+          git commit --amend --no-edit
           git push --force-with-lease origin HEAD:refs/heads/sayyad
