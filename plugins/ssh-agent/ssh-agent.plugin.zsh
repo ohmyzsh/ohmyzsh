@@ -101,10 +101,18 @@ if zstyle -t :omz:plugins:ssh-agent agent-forwarding \
    && [[ -n "$SSH_AUTH_SOCK" ]]; then
   if [[ ! -L "$SSH_AUTH_SOCK" ]]; then
     if [[ -n "$TERMUX_VERSION" ]]; then
-      ln -sf "$SSH_AUTH_SOCK" "$PREFIX"/tmp/ssh-agent-$USERNAME-screen
+      _omz_ssh_agent_link="$PREFIX"/tmp/ssh-agent-$USERNAME-screen
     else
-      ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+      _omz_ssh_agent_link=/tmp/ssh-agent-$USERNAME-screen
     fi
+    # `ln -sf` unlinks the old symlink and then creates the new one: two
+    # syscalls, no atomic swap. Shells starting concurrently (a tmux window
+    # opening several panes at once) interleave those steps and all but one
+    # fail with "ln: ...: File exists". Stage the link under a PID-unique
+    # name and move it into place, since rename(2) is atomic.
+    command ln -sf "$SSH_AUTH_SOCK" "$_omz_ssh_agent_link.$$" \
+      && command mv -f "$_omz_ssh_agent_link.$$" "$_omz_ssh_agent_link"
+    unset _omz_ssh_agent_link
   fi
 else
   _start_agent
