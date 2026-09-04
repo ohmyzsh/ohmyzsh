@@ -51,6 +51,9 @@ fi
 # If the completion file doesn't exist yet, we need to autoload it and
 # bind it to `docker`. Otherwise, compinit will have already done that.
 if [[ ! -f "$ZSH_CACHE_DIR/completions/_docker" ]]; then
+  if [[ ! -f "$ZSH_CACHE_DIR/completions" ]]; then
+    mkdir -p "$ZSH_CACHE_DIR/completions"
+  fi
   typeset -g -A _comps
   autoload -Uz _docker
   _comps[docker]=_docker
