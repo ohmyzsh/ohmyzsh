@@ -11,6 +11,9 @@ _shopify_environments() {
   setopt localoptions extendedglob
   local -a envs
   local file line
+  # (#b) backreferences set $match, which would otherwise be left global.
+  local MATCH MBEGIN MEND
+  local -a match mbegin mend
   for file in shopify.theme.toml shopify.app.toml; do
     [[ -r "$file" ]] || continue
     for line in ${(f)"$(< $file)"}; do
@@ -31,6 +34,10 @@ _shopify_themes() {
   local cache_file="$ZSH_CACHE_DIR/shopify-themes${key: -100}"
   local -a themes fresh
   local json split entry id name role
+  # $match and friends are set by =~ and would otherwise be left global.
+  local MATCH MBEGIN MEND
+  local -a match mbegin mend
+  local nl=$'\n'
 
   # Reuse the cached list for five minutes.
   fresh=(${cache_file}(Nms-300))
@@ -39,7 +46,7 @@ _shopify_themes() {
   else
     json="$(command shopify theme list --json 2>/dev/null)" || return 1
     # One chunk per object, in zsh, so there is no dependency on jq.
-    split="${json//\{/$'\n'}"
+    split="${json//\{/$nl}"
     for entry in ${(f)split}; do
       id="" name="" role=""
       [[ $entry =~ '"id":[[:space:]]*([0-9]+)' ]] && id=$match[1]
