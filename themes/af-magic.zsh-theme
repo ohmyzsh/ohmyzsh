@@ -36,6 +36,9 @@ RPS1+=" ${FG[237]}%n@%m%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_PREFIX=" ${FG[075]}(${FG[078]}"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 ZSH_THEME_GIT_PROMPT_DIRTY="${FG[214]}*%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_STASH="${FG[214]}↓"
+ZSH_THEME_GIT_RESET_COLOR="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_STASH_DIRTY="${FG[214]}*↓"
 ZSH_THEME_GIT_PROMPT_SUFFIX="${FG[075]})%{$reset_color%}"
 
 # hg settings
