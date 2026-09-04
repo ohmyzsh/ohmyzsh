@@ -1,58 +1,48 @@
-local _rev="$(git -C $ZSH rev-parse HEAD 2> /dev/null)"
-if [[ $_rev == $(git config --global --get oh-my-zsh.git-commit-alias 2> /dev/null) ]]; then
-  return
-fi
-git config --global oh-my-zsh.git-commit-alias "$_rev"
+# Add git-commit commands directory to path
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+path=("${0:a:h}/git-commands" $path)
 
-local -a _git_commit_aliases
-_git_commit_aliases=(
-  'build'
-  'chore'
-  'ci'
-  'docs'
-  'feat'
-  'fix'
-  'perf'
-  'refactor'
-  'revert'
-  'style'
-  'test'
-  'wip'
-)
+# Append completions for custom git commands
+() {
+  local -a git_user_commands
+  zstyle -a ':completion:*:*:git:*' user-commands 'git_user_commands' \
+    || git_user_commands=()
+  git_user_commands+=(
+    build:'Commit with a message indicating a build' \
+    chore:'Commit with a message indicating a chore' \
+    ci:'Commit with a message indicating a CI change' \
+    docs:'Commit with a message indicating an update to the documentation' \
+    feat:'Commit with a message indicating a feature' \
+    fix:'Commit with a message indicating a fix' \
+    perf:'Commit with a message indicating a performance enhancement' \
+    refactor:'Commit with a message indicating a refactor' \
+    revert:'Commit with a message indicating a revert' \
+    style:'Commit with a message indicating a style change' \
+    test:'Commit with a message indicating updates to tests' \
+    wip:'Commit with a message indicating a work in progress'
+  )
+  zstyle ':completion:*:*:git:*' user-commands "${git_user_commands[@]}"
+}
 
-local _alias _type
-for _type in "${_git_commit_aliases[@]}"; do
-  # an alias can't be named "revert" because the git command takes precedence
-  # https://stackoverflow.com/a/3538791
-  case "$_type" in
-    revert) _alias=rev ;;
-    *) _alias=$_type ;;
-  esac
-
-  local _func='!a() {
-local _scope _attention _message
-while [ $# -ne 0 ]; do
-case $1 in
-  -s | --scope )
-    if [ -z $2 ]; then
-      echo "Missing scope!"
-      return 1
+########################################################################################
+### Remove below after Jan 2025:
+########################################################################################
+# Clean up aliases from the prior implementation of git-commit. Can be safely removed
+# once everyone's .gitconfig has been restored.
+() {
+  git config --global --get oh-my-zsh.git-commit-alias &> /dev/null || return 0
+  local -a old_git_aliases=(
+    'build'  'chore'     'ci'
+    'docs'   'feat'      'fix'
+    'perf'   'refactor'  'rev'
+    'style'  'test'      'wip'
+  )
+  local git_alias
+  for git_alias in $old_git_aliases; do
+    if [[ "$(git config --global --get alias.$git_alias | tr '\n' ' ')" == "!a() { local _scope _attention _message"* ]]; then
+      git config --global --unset alias.$git_alias
     fi
-    _scope="$2"
-    shift 2
-    ;;
-  -a | --attention )
-    _attention="!"
-    shift 1
-    ;;
-  * )
-    _message="${_message} $1"
-    shift 1
-    ;;
-esac
-done
-git commit -m "'$_type'${_scope:+(${_scope})}${_attention}:${_message}"
-}; a'
-
-  git config --global alias.$_alias "$_func"
-done
+  done
+  git config --global --unset oh-my-zsh.git-commit-alias
+}
