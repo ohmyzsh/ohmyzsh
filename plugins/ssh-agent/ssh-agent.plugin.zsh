@@ -110,8 +110,8 @@ if zstyle -t :omz:plugins:ssh-agent agent-forwarding \
     # opening several panes at once) interleave those steps and all but one
     # fail with "ln: ...: File exists". Stage the link under a PID-unique
     # name and move it into place, since rename(2) is atomic.
-    ln -sf "$SSH_AUTH_SOCK" "$_omz_ssh_agent_link.$$" \
-      && mv -f "$_omz_ssh_agent_link.$$" "$_omz_ssh_agent_link"
+    command ln -sf "$SSH_AUTH_SOCK" "$_omz_ssh_agent_link.$$" \
+      && command mv -f "$_omz_ssh_agent_link.$$" "$_omz_ssh_agent_link"
     unset _omz_ssh_agent_link
   fi
 else
