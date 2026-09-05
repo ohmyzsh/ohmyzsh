@@ -1,0 +1,43 @@
+# %name% plugin
+#
+# %description%
+#
+# This file is sourced by Oh My Zsh in every new shell, so keep it fast.
+# Avoid running external commands at the top level unless you really need to.
+
+# Only define anything if the tool is actually installed. Without this guard,
+# people who don't have %command% get aliases that fail with "command not found".
+if (( ! $+commands[%command%] )); then
+  return
+fi
+
+#
+# Aliases
+#
+# Document every alias in README.md. Short, obvious, and few beats many.
+# The one below is just an example: replace it with something %command% can do.
+#
+
+alias %command%s='%command% status'
+
+#
+# Functions
+#
+# Anything that needs arguments in the middle, or more than one command,
+# belongs here rather than in an alias.
+#
+
+# function %name%_current() {
+#   %command% status --short "$@"
+# }
+
+%completion%
+
+#
+# Need the path to this plugin's own directory (for data files, a lib/ dir...)?
+# This is the standard way to get it, since $0 is not reliable on its own:
+# https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+#
+# 0="${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"
+# 0="${${(M)0:#/*}:-$PWD/$0}"
+# source "${0:A:h}/lib/helpers.zsh"

@@ -24,6 +24,7 @@ function _omz {
   local -a cmds subcmds
   cmds=(
     'changelog:Print the changelog'
+    'generate:Run a generator, e.g. to create a custom plugin'
     'help:Usage information'
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
@@ -41,6 +42,8 @@ function _omz {
       changelog) local -a refs
         refs=("${(@f)$(builtin cd -q "$ZSH"; command git for-each-ref --format="%(refname:short):%(subject)" refs/heads refs/tags)}")
         _describe 'command' refs ;;
+      generate) subcmds=('plugin:Create a custom plugin')
+        _describe 'generator' subcmds ;;
       plugin) subcmds=(
         'disable:Disable plugin(s)'
         'enable:Enable plugin(s)'
@@ -56,6 +59,8 @@ function _omz {
     esac
   elif (( CURRENT == 4 )); then
     case "${words[2]}::${words[3]}" in
+      generate::plugin)
+        _omz::generate::plugin::complete_options ;;
       plugin::(disable|enable|load))
         local -aU valid_plugins
 
@@ -84,6 +89,8 @@ function _omz {
     esac
   elif (( CURRENT > 4 )); then
     case "${words[2]}::${words[3]}" in
+      generate::plugin)
+        _omz::generate::plugin::complete_options ;;
       plugin::(enable|disable|load))
         local -aU valid_plugins
 
@@ -169,15 +176,16 @@ Usage: omz <command> [options]
 
 Available commands:
 
-  help                Print this help message
-  changelog           Print the changelog
-  plugin <command>    Manage plugins
-  pr     <command>    Manage Oh My Zsh Pull Requests
-  reload              Reload the current zsh session
-  shop                Open the Oh My Zsh shop
-  theme  <command>    Manage themes
-  update              Update Oh My Zsh
-  version             Show the version
+  help                  Print this help message
+  changelog             Print the changelog
+  generate <generator>  Run a generator, e.g. to create a custom plugin
+  plugin <command>      Manage plugins
+  pr     <command>      Manage Oh My Zsh Pull Requests
+  reload                Reload the current zsh session
+  shop                  Open the Oh My Zsh shop
+  theme  <command>      Manage themes
+  update                Update Oh My Zsh
+  version               Show the version
 
 EOF
 }
@@ -200,6 +208,357 @@ EOF
   fi
 
   ZSH="$ZSH" command zsh -f "$ZSH/tools/changelog.sh" "$version" "${2:-}" "$format"
+}
+
+function _omz::generate {
+  (( $# > 0 && $+functions[$0::$1] )) || {
+    cat >&2 <<EOF
+Usage: ${(j: :)${(s.::.)0#_}} <generator> [options]
+
+Available generators:
+
+  plugin [<name>]  Create a custom plugin in \$ZSH_CUSTOM/plugins
+
+EOF
+    return 1
+  }
+
+  local command="$1"
+  shift
+
+  $0::$command "$@"
+}
+
+function _omz::generate::plugin {
+  setopt localoptions extendedglob
+
+  local -A opts
+  zparseopts -D -E -A opts -- d: -description: c: -command: -no-completion -enable y -yes h -help || return 1
+
+  if (( ${+opts[-h]} || ${+opts[--help]} )); then
+    _omz::generate::plugin::usage
+    return 0
+  fi
+
+  # zparseopts -E leaves anything it doesn't recognise in $@
+  local arg
+  for arg in "$@"; do
+    if [[ "$arg" == -* ]]; then
+      _omz::log error "unknown option '$arg'."
+      _omz::generate::plugin::usage
+      return 1
+    fi
+  done
+  if (( $# > 1 )); then
+    _omz::generate::plugin::usage
+    return 1
+  fi
+
+  # Only ask questions when there is someone there to answer them
+  local interactive=0
+  if [[ -o interactive && -t 0 ]] && (( ! ${+opts[-y]} && ! ${+opts[--yes]} )); then
+    interactive=1
+  fi
+
+  local custom="${ZSH_CUSTOM:-${ZSH:+$ZSH/custom}}"
+  if [[ -z "$custom" ]]; then
+    _omz::log error "\$ZSH is not set. Is Oh My Zsh loaded?"
+    return 1
+  fi
+
+  local templates="$ZSH/templates/generators/plugin"
+  if [[ ! -d "$templates" ]]; then
+    _omz::log error "templates not found at '${templates/#$HOME/\~}'. Try running 'omz update'."
+    return 1
+  fi
+
+  # Check we can write to $ZSH_CUSTOM/plugins, or the closest directory that exists
+  local probe="$custom/plugins"
+  while [[ ! -e "$probe" && "$probe" != "${probe:h}" ]]; do
+    probe="${probe:h}"
+  done
+  if [[ ! -w "$probe" ]]; then
+    _omz::log error "cannot write to '${probe/#$HOME/\~}'. Set \$ZSH_CUSTOM to a directory you own."
+    return 1
+  fi
+
+  ## Gather answers. Nothing is written until all of them are in.
+
+  local name="$1" attempts=0
+  if [[ -n "$name" ]]; then
+    _omz::generate::plugin::validate_name "$name" || return 1
+  elif (( interactive )); then
+    while true; do
+      _omz::generate::plugin::ask "Plugin name" || return 1
+      name="$REPLY"
+      _omz::generate::plugin::validate_name "$name" && break
+      if (( ++attempts >= 3 )); then
+        _omz::log error "giving up."
+        return 1
+      fi
+    done
+  else
+    _omz::generate::plugin::usage
+    return 1
+  fi
+
+  local dir="$custom/plugins/$name"
+  if [[ -e "$dir" ]]; then
+    _omz::log error "'$name' already exists at '${dir/#$HOME/\~}'. Remove it or pick another name."
+    return 1
+  fi
+  if [[ -d "$ZSH/plugins/$name" ]]; then
+    _omz::log warn "'$name' is also a built-in plugin. Your custom plugin will override it."
+    if (( interactive )); then
+      _omz::confirm "Continue? [y/N] "
+      if [[ "$REPLY" != [yY] ]]; then
+        _omz::log info "aborted."
+        return 1
+      fi
+    fi
+  fi
+
+  local description="${opts[-d]:-${opts[--description]:-}}"
+  if [[ -z "$description" ]]; then
+    description="$name plugin for Oh My Zsh"
+    if (( interactive )); then
+      _omz::generate::plugin::ask "Short description" "$description" || return 1
+      description="$REPLY"
+    fi
+  fi
+  # The description goes into a comment and a README line: keep it on one line
+  description="${description//[[:cntrl:]]/ }"
+
+  local cmd="${opts[-c]:-${opts[--command]:-}}"
+  if [[ -n "$cmd" ]]; then
+    _omz::generate::plugin::validate_command "$cmd" || return 1
+  elif (( interactive )); then
+    local default_cmd=""
+    (( $+commands[$name] )) && default_cmd="$name"
+    attempts=0
+    while true; do
+      if [[ -n "$default_cmd" ]]; then
+        _omz::generate::plugin::ask "Command-line tool this plugin wraps (or 'none')" "$default_cmd" || return 1
+      else
+        _omz::generate::plugin::ask "Command-line tool this plugin wraps (blank for none)" || return 1
+      fi
+      cmd="$REPLY"
+      [[ "$cmd" != (none|-) ]] || cmd=""
+      [[ -n "$cmd" ]] || break
+      _omz::generate::plugin::validate_command "$cmd" && break
+      if (( ++attempts >= 3 )); then
+        _omz::log error "giving up."
+        return 1
+      fi
+    done
+  fi
+
+  # completion: "" (none), "file" (a _<cmd> skeleton) or "cached" (the tool generates it)
+  local completion="" compgen=""
+  if [[ -n "$cmd" ]] && (( ! ${+opts[--no-completion]} )); then
+    completion=file
+    if (( interactive )); then
+      _omz::confirm "Add a completion function for $cmd? [Y/n] "
+      if [[ "$REPLY" == [nN] ]]; then
+        completion=""
+      else
+        _omz::confirm "Does $cmd generate its own zsh completion (e.g. '$cmd completion zsh')? [y/N] "
+        if [[ "$REPLY" == [yY] ]]; then
+          completion=cached
+          _omz::generate::plugin::ask "Command that prints the completion script" "$cmd completion zsh" || return 1
+          compgen="$REPLY"
+        fi
+      fi
+    fi
+  fi
+
+  local enable=${+opts[--enable]}
+  if (( interactive && ! enable )); then
+    _omz::confirm "Add $name to plugins=() in your .zshrc now? [y/N] "
+    [[ "$REPLY" != [yY] ]] || enable=1
+  fi
+
+  ## Write the files. If anything fails, remove only what we created.
+
+  local -a created
+  local block="" cache="" ok=0
+  {
+    if [[ ! -d "$custom/plugins" ]]; then
+      command mkdir -p "$custom/plugins" || return 1
+      _omz::generate::plugin::created "$custom/plugins"
+    fi
+    command mkdir "$dir" || return 1
+    _omz::generate::plugin::created "$dir"
+
+    local plugin_tpl=plugin.zsh-template readme_tpl=README.md-template
+    if [[ -z "$cmd" ]]; then
+      plugin_tpl=plugin-generic.zsh-template
+      readme_tpl=README-generic.md-template
+    elif [[ "$completion" == cached ]]; then
+      block="$(_omz::generate::plugin::template completion-cached.zsh-template)" || return 1
+      cache="$(_omz::generate::plugin::template README-cache.md-template)" || return 1
+    else
+      block="$(_omz::generate::plugin::template completion-note.zsh-template)" || return 1
+    fi
+
+    _omz::generate::plugin::render "$plugin_tpl" "$dir/$name.plugin.zsh" || return 1
+    _omz::generate::plugin::render "$readme_tpl" "$dir/README.md" || return 1
+    if [[ "$completion" == file ]]; then
+      _omz::generate::plugin::render completion.zsh-template "$dir/_$cmd" || return 1
+    fi
+    ok=1
+  } always {
+    if (( ! ok )); then
+      _omz::log error "could not generate the plugin. Cleaning up..."
+      (( ${#created} )) && command rm -f -- "${created[@]}"
+      [[ ! -d "$dir" ]] || command rmdir -- "$dir" 2>/dev/null
+    fi
+  }
+
+  print
+  _omz::log info "plugin '$name' generated."
+  print
+  print -r -- "Next steps:"
+  print
+  print -r -- "  1. Edit it:     ${EDITOR:-vim} ${dir/#$HOME/\~}/$name.plugin.zsh"
+  print -r -- "  2. Try it now:  omz plugin load $name"
+  (( enable )) || print -r -- "  3. Keep it:     omz plugin enable $name"
+  print
+  print -r -- "Docs: https://github.com/ohmyzsh/ohmyzsh/wiki/Customization#overriding-and-adding-plugins"
+
+  # Last thing we do: in an interactive shell this restarts zsh
+  if (( enable )); then
+    print
+    _omz::plugin::enable "$name"
+  fi
+}
+
+function _omz::generate::plugin::usage {
+  cat >&2 <<EOF
+Usage: omz generate plugin [<name>] [options]
+
+Creates a custom plugin in \$ZSH_CUSTOM/plugins/<name>. Anything not given as an
+option is asked for interactively. In a non-interactive shell (or with --yes)
+defaults are used instead.
+
+Options:
+  -d, --description <text>  One-line description for the README and file header
+  -c, --command <cmd>       Command-line tool this plugin wraps. Adds a check
+                            that it is installed and scaffolds its completion
+      --no-completion       Don't scaffold a completion function
+      --enable              Add the plugin to plugins=() in .zshrc when done
+                            (restarts your shell)
+  -y, --yes                 Never prompt; use defaults for anything not given
+  -h, --help                Show this help
+
+EOF
+}
+
+function _omz::generate::plugin::complete_options {
+  local -a opts
+  opts=(
+    '--description:One-line description for the README'
+    '--command:Command-line tool this plugin wraps'
+    '--no-completion:Skip the completion scaffold'
+    '--enable:Enable the plugin when done'
+    '--yes:Never prompt'
+  )
+  _describe -o 'options' opts
+}
+
+# The name ends up in a mkdir path and, via --enable, inside the awk script that
+# rewrites .zshrc. This is the one place it gets checked.
+function _omz::generate::plugin::validate_name {
+  setopt localoptions extendedglob
+  local name="$1"
+
+  if [[ -z "$name" ]]; then
+    _omz::log error "plugin name cannot be empty."
+  elif (( ${#name} > 64 )); then
+    _omz::log error "plugin name is too long (64 characters max)."
+  elif [[ "$name" != "${name:l}" ]]; then
+    _omz::log error "plugin names must be lowercase. Did you mean '${name:l}'?"
+  elif [[ "$name" != [a-z0-9][a-z0-9_-]# ]]; then
+    _omz::log error "invalid plugin name: use only lowercase letters, digits, '-' and '_', starting with a letter or digit."
+  else
+    return 0
+  fi
+  return 1
+}
+
+# The command name ends up in $+commands[...], _comps[...] and a filename
+function _omz::generate::plugin::validate_command {
+  setopt localoptions extendedglob
+
+  if (( ${#1} > 64 )) || [[ "$1" != [[:alnum:]_][[:alnum:]_.+-]# ]]; then
+    _omz::log error "invalid command name: use only letters, digits, '.', '_', '+' and '-'."
+    return 1
+  fi
+}
+
+# Ask a question and leave the answer in $REPLY. An empty answer takes the
+# default. Returns 1 when there is no more input (Ctrl-D).
+function _omz::generate::plugin::ask {
+  setopt localoptions extendedglob
+  local question="$1" default="$2"
+  [[ -z "$default" ]] || question+=" [$default]"
+
+  _omz::log prompt "$question: " "omz::generate::plugin"
+  if ! builtin read -r; then
+    print >&2
+    _omz::log info "aborted." "omz::generate::plugin"
+    return 1
+  fi
+
+  [[ -n "$REPLY" ]] || REPLY="$default"
+  # Answers are single-line values: flatten control characters and trim
+  REPLY="${REPLY//[[:cntrl:]]/ }"
+  REPLY="${${REPLY##[[:space:]]#}%%[[:space:]]#}"
+}
+
+# Print a template file, or explain which one is missing
+function _omz::generate::plugin::template {
+  if [[ ! -f "$templates/$1" ]]; then
+    _omz::log error "missing template '${templates/#$HOME/\~}/$1'." "omz::generate::plugin"
+    return 1
+  fi
+  print -r -- "$(<"$templates/$1")"
+}
+
+# Fill in the %placeholders% of a template and write it to a file. Values come
+# from the caller: $name, $cmd, $description, $compgen, $block and $cache.
+# Substitution is done with parameter expansion rather than sed so that the
+# values are always taken literally.
+function _omz::generate::plugin::render {
+  setopt localoptions extendedglob
+  local content
+  content="$(_omz::generate::plugin::template "$1")" || return 1
+
+  # Blocks go first: they contain placeholders of their own
+  content="${content//'%completion%'/$block}"
+  content="${content//'%cache%'/$cache}"
+  content="${content//'%name%'/$name}"
+  content="${content//'%command%'/$cmd}"
+  content="${content//'%description%'/$description}"
+  content="${content//'%compgen%'/$compgen}"
+  # Drop blank lines left behind by an empty placeholder at the end
+  content="${content%%$'\n'##}"
+
+  created+=("$2")
+  print -r -- "$content" > "$2" || return 1
+  _omz::generate::plugin::created "$2"
+}
+
+function _omz::generate::plugin::created {
+  # Colour the verb with print -P, but print the path with print -r so that a
+  # '%' somewhere in the path isn't treated as a prompt escape.
+  # Keep the output plain when it is being piped.
+  if [[ -t 1 ]]; then
+    print -Pn "      %F{green}create%f  "
+  else
+    print -n "      create  "
+  fi
+  print -r -- "${1/#$HOME/\~}"
 }
 
 function _omz::plugin {
