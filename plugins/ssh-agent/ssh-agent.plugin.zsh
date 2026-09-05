@@ -3,8 +3,9 @@ ssh_env_cache="$HOME/.ssh/environment-$SHORT_HOST"
 
 # Test if $SSH_AUTH_SOCK points at a listening agent
 function _is_agent_running() {
+  local REPLY
   [[ -n "$SSH_AUTH_SOCK" && -S "$SSH_AUTH_SOCK" ]] || return 1
-  zmodload zsh/net/socket
+  zmodload zsh/net/socket 2>/dev/null || return 1
   zsocket "$SSH_AUTH_SOCK" 2>/dev/null || return 1
   exec {REPLY}>&- # close the probe connection
   return 0
