@@ -14,7 +14,7 @@ function theme_precmd {
   if (( promptsize + rubypromptsize + pwdsize + venvpromptsize + condapromptsize > TERMWIDTH )); then
     (( PR_PWDLEN = TERMWIDTH - promptsize ))
   elif [[ "${langinfo[CODESET]}" = UTF-8 ]]; then
-    PR_FILLBAR="\${(l:$(( TERMWIDTH - (promptsize + rubypromptsize + pwdsize + venvpromptsize + condapromptsize ) ))::${PR_HBAR}:)}"
+    PR_FILLBAR="\${(l:$(( TERMWIDTH - (promptsize + rubypromptsize + pwdsize + venvpromptsize + condapromptsize ) ))::─:)}"
   else
     PR_FILLBAR="${PR_SHIFT_IN}\${(l:$(( TERMWIDTH - (promptsize + rubypromptsize + pwdsize + venvpromptsize + condapromptsize ) ))::${altchar[q]:--}:)}${PR_SHIFT_OUT}"
   fi
