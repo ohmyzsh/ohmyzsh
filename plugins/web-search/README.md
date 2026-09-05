@@ -51,6 +51,14 @@ Available search contexts are:
 | `npmpkg`              | `https://www.npmjs.com/search?q=`               |
 | `packagist`           | `https://packagist.org/?query=`                 |
 | `gopkg`               | `https://pkg.go.dev/search?m=package&q=`        |
+| `maven`               | `https://search.maven.org/search?q=`            |
+| `mdn`                 | `https://developer.mozilla.org/en-US/search?q=` |
+| `pd`                  | `https://pub.dev/packages?q=`                   |
+| `pypi`                | `https://pypi.org/search/?q=`                   |
+| `aur`                 | `https://aur.archlinux.org/packages?O=0&K=`     |
+| `archwiki`            | `https://wiki.archlinux.org/index.php?search=`  |
+| `hf`                  | `https://huggingface.co/search?q=`              |
+| `wikipedia`           | `https://en.wikipedia.org/w/index.php?search=`  |
 | `chatgpt`             | `https://chatgpt.com/?q=`                       |
 | `claudeai`            | `https://claude.ai/new?q=`                      |
 | `grokcom`             | `https://grok.com/?q=`                          |
