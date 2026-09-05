@@ -11,4 +11,7 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_sprite" ]]; then
   _comps[sprite]=_sprite
 fi
 
-sprite completion zsh >| "$ZSH_CACHE_DIR/completions/_sprite" &|
+() {
+  local tmpfile="$ZSH_CACHE_DIR/completions/_sprite.$$.tmp"
+  sprite completion zsh >| "$tmpfile" 2>/dev/null && command mv -f "$tmpfile" "$ZSH_CACHE_DIR/completions/_sprite" || command rm -f "$tmpfile"
+} &|
