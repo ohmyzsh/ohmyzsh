@@ -44,8 +44,7 @@ _shopify_themes() {
   if (( $#fresh )); then
     themes=("${(@f)$(< "$cache_file")}")
   else
-    json="$(command shopify theme list --json 2>/dev/null)" || return 1
-    # One chunk per object, in zsh, so there is no dependency on jq.
+    json="$(shopify theme list --json 2>/dev/null)" || return 1
     split="${json//\{/$nl}"
     for entry in ${(f)split}; do
       id="" name="" role=""
