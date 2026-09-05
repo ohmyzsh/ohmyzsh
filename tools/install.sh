@@ -370,6 +370,7 @@ setup_zshrc() {
       # Ask user for confirmation before backing up and overwriting
       echo "${FMT_YELLOW}Found ${zdot}/.zshrc."
       echo "The existing .zshrc will be backed up to .zshrc.pre-oh-my-zsh if overwritten."
+      echo "Your command history will be backed up too, since replacing .zshrc drops any SAVEHIST you had set."
       echo "Make sure your .zshrc contains the following minimal configuration if you choose not to overwrite it:${FMT_RESET}"
       echo "----------------------------------------"
       cat "$ZSH/templates/minimal.zshrc"
@@ -398,6 +399,34 @@ setup_zshrc() {
     fi
     echo "${FMT_GREEN}Backing up to ${OLD_ZSHRC}${FMT_RESET}"
     mv "$zdot/.zshrc" "$OLD_ZSHRC"
+
+    # The .zshrc we just moved aside is where the user's SAVEHIST lived. Without
+    # it zsh trims $HISTFILE the next time a shell exits, so copy the history
+    # while it is still intact. $HISTFILE is a zsh variable we cannot read from
+    # here, so cover both locations it is commonly given: /etc/zshrc on macOS
+    # sets ${ZDOTDIR:-$HOME}/.zsh_history, and lib/history.zsh falls back to
+    # $HOME/.zsh_history.
+    hist_backed_up=""
+    for hist in "$zdot/.zsh_history" "$HOME/.zsh_history"; do
+      if [ ! -f "$hist" ]; then
+        continue
+      fi
+      case " $hist_backed_up " in
+        *" $hist "*) continue ;;
+      esac
+      hist_backup="${hist}.pre-oh-my-zsh"
+      if [ -e "$hist_backup" ]; then
+        hist_backup="${hist_backup}-$(date +%Y-%m-%d_%H-%M-%S)"
+      fi
+      if cp "$hist" "$hist_backup"; then
+        echo "${FMT_GREEN}Backing up your command history to ${hist_backup}${FMT_RESET}"
+        hist_backed_up="$hist_backed_up $hist"
+      else
+        # a half-written file would look like a usable backup
+        rm -f "$hist_backup"
+        fmt_error "could not back up $hist"
+      fi
+    done
   fi
 
   echo "${FMT_GREEN}Using the Oh My Zsh template file and adding it to $zdot/.zshrc.${FMT_RESET}"
