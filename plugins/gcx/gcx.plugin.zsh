@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_gcx" ]]; then
   _comps[gcx]=_gcx
 fi
 
-gcx completion zsh >| "$ZSH_CACHE_DIR/completions/_gcx" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_gcx"
+  zf_mv -f -- =( gcx completion zsh ) "$TMPPREFIX"
+} &|
