@@ -42,7 +42,7 @@ plugins=(... jj)
 | jjn    | `jj new`                      |
 | jjnt   | `jj new "trunk()"`            |
 | jjrb   | `jj rebase`                   |
-| jjrbm  | `jj rebase -d "trunk()"`      |
+| jjrbm  | `jj rebase -o "trunk()"`      |
 | jjrs   | `jj restore`                  |
 | jjrt   | `cd "$(jj root \|\| echo .)"` |
 | jjsp   | `jj split`                    |
@@ -101,10 +101,10 @@ that.
 
 ### Git async-prompt compatibility
 
-If you use a wrapper function that calls `git_prompt_info` (as shown above), it won't work with
-the default git async-prompt mode. This is because async-prompt only registers its background worker
-when it detects `$(git_prompt_info)` literally in your prompt variables. A wrapper like
-`$(_my_theme_vcs_info)` won't match, so the async output stays empty.
+If you use a wrapper function that calls `git_prompt_info` (as shown above), it won't work with the default
+git async-prompt mode. This is because async-prompt only registers its background worker when it detects
+`$(git_prompt_info)` literally in your prompt variables. A wrapper like `$(_my_theme_vcs_info)` won't match,
+so the async output stays empty.
 
 To fix this, add one of the following to your `.zshrc` **before** Oh My Zsh is sourced:
 
