@@ -31,7 +31,12 @@ function title {
       else
         # Try to use terminfo to set the title if the feature is available
         if (( ${+terminfo[fsl]} && ${+terminfo[tsl]} )); then
-          print -Pn "${terminfo[tsl]}$1${terminfo[fsl]}"
+          # Emit the capabilities with echoti so terminfo does its own parameter
+          # substitution: some terminals (vt320) take a column argument, and
+          # running prompt expansion over the capability string mangles it.
+          echoti tsl 0
+          print -Pn "$1"
+          echoti fsl
         fi
       fi
       ;;
