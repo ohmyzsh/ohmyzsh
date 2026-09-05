@@ -71,6 +71,7 @@ plugins=(... kubectl)
 |          |                                                         | **Secret management**                                                                            |
 | kgsec    | `kubectl get secret`                                    | Get secret for decoding                                                                          |
 | kgseca   | `kubectl get secret --all-namespaces`                   | List secrets across all namespaces                                                               |
+| kesec    | `kubectl edit secret`                                   | Edit secret resource                                                                             |
 | kdsec    | `kubectl describe secret`                               | Describe secret resource in detail                                                               |
 | kdelsec  | `kubectl delete secret`                                 | Delete the secret                                                                                |
 |          |                                                         | **Deployment management**                                                                        |
