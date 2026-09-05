@@ -21,6 +21,18 @@ To enable **agent forwarding support** add the following to your zshrc file:
 zstyle :omz:plugins:ssh-agent agent-forwarding yes
 ```
 
+### `honor-existing`
+
+If your session already provides an ssh-agent — a desktop keyring, `gpg-agent`,
+KeePassXC, or an agent forwarded over SSH — the plugin normally ignores it and
+starts one of its own, which leaves you with two agents. Set this to reuse the
+running agent instead, and only start a new one when `$SSH_AUTH_SOCK` is empty
+or does not answer:
+
+```zsh
+zstyle :omz:plugins:ssh-agent honor-existing yes
+```
+
 ### `helper`
 
 To set an **external helper** to ask for the passwords and possibly store

@@ -1,16 +1,28 @@
 # Get the filename to store/lookup the environment from
 ssh_env_cache="$HOME/.ssh/environment-$SHORT_HOST"
 
+# Test if $SSH_AUTH_SOCK points at a listening agent
+function _is_agent_running() {
+  local REPLY
+  [[ -n "$SSH_AUTH_SOCK" && -S "$SSH_AUTH_SOCK" ]] || return 1
+  zmodload zsh/net/socket 2>/dev/null || return 1
+  zsocket "$SSH_AUTH_SOCK" 2>/dev/null || return 1
+  exec {REPLY}>&- # close the probe connection
+  return 0
+}
+
 function _start_agent() {
+  # Reuse an agent the session already provides, if enabled
+  if zstyle -t :omz:plugins:ssh-agent honor-existing && _is_agent_running; then
+    return 0
+  fi
+
   # Check if ssh-agent is already running
   if [[ -f "$ssh_env_cache" ]]; then
     . "$ssh_env_cache" > /dev/null
 
     # Test if $SSH_AUTH_SOCK is visible
-    zmodload zsh/net/socket
-    if [[ -S "$SSH_AUTH_SOCK" ]] && zsocket "$SSH_AUTH_SOCK" 2>/dev/null; then
-      return 0
-    fi
+    _is_agent_running && return 0
   fi
 
   if [[ ! -d "$HOME/.ssh" ]]; then
@@ -124,4 +136,4 @@ if ! zstyle -t :omz:plugins:ssh-agent lazy; then
 fi
 
 unset agent_forwarding ssh_env_cache
-unfunction _start_agent _add_identities
+unfunction _start_agent _add_identities _is_agent_running
