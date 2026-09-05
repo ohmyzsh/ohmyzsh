@@ -75,6 +75,12 @@ else
   pass "foo has no unfilled placeholders"
 fi
 
+## Values that look like placeholders are written literally
+
+omz generate plugin lit -d '%compgen% and %name% stay' -c lit --yes >/dev/null 2>&1
+assert_contains "$ZSH_CUSTOM/plugins/lit/README.md" '%compgen% and %name% stay'
+assert_contains "$ZSH_CUSTOM/plugins/lit/lit.plugin.zsh" '%compgen% and %name% stay'
+
 ## A plugin with no command
 
 if omz generate plugin bar --yes >/dev/null 2>&1; then
@@ -150,6 +156,25 @@ else
   pass "fails cleanly when templates are missing"
 fi
 [[ -e "$ZSH_CUSTOM/plugins/quux" ]] && fail "quux was created by a failed run"
+
+## A failure after the first file is written removes everything it created
+
+broken="$(mktemp -d)"
+mkdir -p "$broken/templates/generators/plugin" "$broken/plugins"
+cp "$ZSH/templates/generators/plugin/plugin.zsh-template" \
+   "$ZSH/templates/generators/plugin/completion-note.zsh-template" "$broken/templates/generators/plugin/"
+# README.md-template is missing, so the plugin file is written and then the README fails
+if ( ZSH="$broken"; omz generate plugin partial -c partial --yes >/dev/null 2>&1 ); then
+  fail "succeeded with a missing README template"
+else
+  pass "fails when a later template is missing"
+fi
+if [[ -e "$ZSH_CUSTOM/plugins/partial" ]]; then
+  fail "partial plugin directory was left behind: $(ls "$ZSH_CUSTOM/plugins/partial")"
+else
+  pass "cleans up the partial plugin directory"
+fi
+command rm -rf "$broken"
 
 ## The prompt helper
 

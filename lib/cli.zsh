@@ -429,7 +429,13 @@ function _omz::generate::plugin {
   # Last thing we do: in an interactive shell this restarts zsh
   if (( enable )); then
     print
-    _omz::plugin::enable "$name"
+    if (( ${plugins[(Ie)$name]} )); then
+      # Already enabled (e.g. a custom override of a built-in): just reload
+      _omz::log info "'$name' is already in your plugins list."
+      [[ ! -o interactive ]] || _omz::reload
+    else
+      _omz::plugin::enable "$name"
+    fi
   fi
 }
 
@@ -516,31 +522,39 @@ function _omz::generate::plugin::ask {
   REPLY="${${REPLY##[[:space:]]#}%%[[:space:]]#}"
 }
 
-# Print a template file, or explain which one is missing
+# Print a template file with its %placeholders% turned into private markers,
+# or explain which one is missing
 function _omz::generate::plugin::template {
   if [[ ! -f "$templates/$1" ]]; then
     _omz::log error "missing template '${templates/#$HOME/\~}/$1'." "omz::generate::plugin"
     return 1
   fi
-  print -r -- "$(<"$templates/$1")"
+
+  local content="$(<"$templates/$1")" token m=$'\x1f'
+  for token in completion cache name command description compgen; do
+    content="${content//\%${token}\%/${m}${token}${m}}"
+  done
+  print -r -- "$content"
 }
 
-# Fill in the %placeholders% of a template and write it to a file. Values come
+# Fill in the placeholders of a template and write it to a file. Values come
 # from the caller: $name, $cmd, $description, $compgen, $block and $cache.
-# Substitution is done with parameter expansion rather than sed so that the
-# values are always taken literally.
+#
+# Placeholders are matched as the markers that ::template produced, and the
+# marker character is stripped from every value, so a value that happens to
+# look like a placeholder (e.g. -d '%name%') is written out literally.
 function _omz::generate::plugin::render {
   setopt localoptions extendedglob
-  local content
+  local content m=$'\x1f'
   content="$(_omz::generate::plugin::template "$1")" || return 1
 
-  # Blocks go first: they contain placeholders of their own
-  content="${content//'%completion%'/$block}"
-  content="${content//'%cache%'/$cache}"
-  content="${content//'%name%'/$name}"
-  content="${content//'%command%'/$cmd}"
-  content="${content//'%description%'/$description}"
-  content="${content//'%compgen%'/$compgen}"
+  # Blocks go first: they are templates too and carry markers of their own
+  content="${content//${m}completion${m}/$block}"
+  content="${content//${m}cache${m}/$cache}"
+  content="${content//${m}name${m}/${name//$m/}}"
+  content="${content//${m}command${m}/${cmd//$m/}}"
+  content="${content//${m}description${m}/${description//$m/}}"
+  content="${content//${m}compgen${m}/${compgen//$m/}}"
   # Drop blank lines left behind by an empty placeholder at the end
   content="${content%%$'\n'##}"
 
