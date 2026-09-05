@@ -118,6 +118,11 @@ bindkey '^s' history-incremental-search-forward
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
+# Set when the most recent clipboard push failed, meaning the system clipboard
+# no longer mirrors CUTBUFFER. Put widgets check it so they keep the text killed
+# inside the editor instead of reloading stale clipboard contents.
+typeset -g _OMZ_VI_CLIPBOARD_BROKEN=""
+
 function wrap_clipboard_widgets() {
   # NB: Assume we are the first wrapper and that we only wrap native widgets
   # See zsh-autosuggestions.zsh for a more generic and more robust wrapper
@@ -132,13 +137,25 @@ function wrap_clipboard_widgets() {
       eval "
         function ${wrapped_name}() {
           zle .${widget}
-          printf %s \"\${CUTBUFFER}\" | clipcopy 2>/dev/null || true
+          # Record only whether the push worked: a failed push means the
+          # clipboard no longer mirrors CUTBUFFER, so put widgets must not
+          # trust it (see the paste branch below).
+          if printf %s \"\${CUTBUFFER}\" | clipcopy 2>/dev/null; then
+            _OMZ_VI_CLIPBOARD_BROKEN=\"\"
+          else
+            _OMZ_VI_CLIPBOARD_BROKEN=1
+          fi
         }
       "
     else
       eval "
         function ${wrapped_name}() {
-          CUTBUFFER=\"\$(clippaste 2>/dev/null || echo \$CUTBUFFER)\"
+          # Trust the clipboard only while the last push succeeded; otherwise
+          # CUTBUFFER still holds the real last kill and the clipboard holds
+          # whatever unrelated text was copied before it (e.g. for \`xp\`).
+          if [[ -z \"\${_OMZ_VI_CLIPBOARD_BROKEN:-}\" ]]; then
+            CUTBUFFER=\"\$(clippaste 2>/dev/null || echo \$CUTBUFFER)\"
+          fi
           zle .${widget}
         }
       "
