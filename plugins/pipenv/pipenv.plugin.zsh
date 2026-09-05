@@ -56,19 +56,26 @@ if zstyle -T ':omz:plugins:pipenv' auto-shell; then
     # deactivate shell if Pipfile doesn't exist and not in a subdir
     if [[ ! -f "$PWD/Pipfile" ]]; then
       if [[ "$PIPENV_ACTIVE" == 1 ]]; then
-        if [[ "$PWD" != "$pipfile_dir"* ]]; then
+        # Compare whole path components: `$pipfile_dir"*` also matches unrelated
+        # siblings that merely start with the same text (…/proj -> …/proj-docs),
+        # which would keep the virtualenv active outside the project.
+        local project_dir="${pipfile_dir%/}"
+        if [[ "$PWD" != "$project_dir" && "$PWD" != "$project_dir"/* ]]; then
           unset PIPENV_ACTIVE pipfile_dir
           deactivate
         fi
       fi
     fi
 
-    # activate the shell if Pipfile exists
+    # activate the shell if Pipfile exists and its virtualenv is usable
     if [[ "$PIPENV_ACTIVE" != 1 ]]; then
       if [[ -f "$PWD/Pipfile" ]]; then
-        export pipfile_dir="$PWD"
-        source "$(pipenv --venv)/bin/activate"
-        export PIPENV_ACTIVE=1
+        local venv_path
+        if venv_path="$(pipenv --venv 2>/dev/null)" && [[ -n "$venv_path" && -f "$venv_path/bin/activate" ]]; then
+          export pipfile_dir="$PWD"
+          source "$venv_path/bin/activate"
+          export PIPENV_ACTIVE=1
+        fi
       fi
     fi
   }
