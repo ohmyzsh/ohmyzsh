@@ -30,8 +30,7 @@ function _shopify_project_type() {
 
   while [[ -n "$dir" && "$dir" != "/" && "$dir" != "$HOME" ]]; do
     if [[ -x "$dir/node_modules/.bin/h2" ]] ||
-      [[ -f "$dir/package.json" && "$(<"$dir/package.json")" == *'"@shopify/hydrogen"'* ]]; then
-      print -r -- hydrogen
+      [[ -r "$dir/package.json" && "$(<"$dir/package.json")" == *'"@shopify/hydrogen"'* ]]; then
       return 0
     fi
 
