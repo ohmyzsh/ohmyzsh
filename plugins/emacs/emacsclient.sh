@@ -1,14 +1,33 @@
 #!/bin/sh
 
 emacsfun() {
-  local cmd frames
+  local cmd frames arg tty
 
   # Build the Emacs Lisp command to check for suitable frames
   # See https://www.gnu.org/software/emacs/manual/html_node/elisp/Frames.html#index-framep
-  case "$*" in
-  *-t*|*--tty*|*-nw*) cmd="(memq 't (mapcar 'framep (frame-list)))" ;; # if != nil, there are tty frames
-  *) cmd="(delete 't (mapcar 'framep (frame-list)))" ;; # if != nil, there are graphical terminals (x, w32, ns)
-  esac
+  for arg in "$@"; do
+    case "$arg" in
+    -t|--tty|-nw) tty=1; break ;;
+    esac
+  done
+
+  if [ -n "$tty" ]; then
+    cmd="(memq 't (mapcar 'framep (frame-list)))" # if != nil, there are tty frames
+  else
+    cmd="(delete 't (mapcar 'framep (frame-list)))" # if != nil, there are graphical terminals (x, w32, ns)
+  fi
+
+  # A tty frame needs the client to stay attached, so drop the --no-wait the
+  # `emacs` alias adds. Otherwise emacsclient returns at once and nothing opens.
+  if [ -n "$tty" ]; then
+    for arg do
+      shift
+      case "$arg" in
+      --no-wait) continue ;;
+      esac
+      set -- "$@" "$arg"
+    done
+  fi
 
   # Check if there are suitable frames
   frames="$(emacsclient -a '' -n -e "$cmd" 2>/dev/null |sed 's/.*\x07//g' )"
