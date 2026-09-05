@@ -346,6 +346,10 @@ directory.
 If you have many functions that go well together, you can put them as a `XYZ.plugin.zsh` file in the
 `custom/plugins/` directory and then enable this plugin.
 
+The quickest way to start one is `omz generate plugin <name>`. It creates the plugin directory with a
+commented `<name>.plugin.zsh`, a `README.md`, and (for plugins that wrap a command-line tool) a completion
+skeleton, then tells you how to try it out.
+
 If you would like to override the functionality of a plugin distributed with Oh My Zsh, create a plugin of the
 same name in the `custom/plugins/` directory and it will be loaded instead of the one in `plugins/`.
 
