@@ -1,3 +1,8 @@
+# Return immediately if heroku is not found
+if (( ! ${+commands[heroku]} )); then
+  return
+fi
+
 # general
 alias h='heroku'
 alias hauto='heroku autocomplete $(echo $SHELL)'
