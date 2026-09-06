@@ -417,6 +417,14 @@ setup_zshrc() {
       hist_backup="${hist}.pre-oh-my-zsh"
       if [ -e "$hist_backup" ]; then
         hist_backup="${hist_backup}-$(date +%Y-%m-%d_%H-%M-%S)"
+        if [ -e "$hist_backup" ]; then
+          fmt_error "$hist_backup exists. Can't back up $hist"
+          fmt_error "re-run the installer again in a couple of seconds"
+          if ! mv "$OLD_ZSHRC" "$zdot/.zshrc"; then
+            fmt_error "could not restore $zdot/.zshrc from backup"
+          fi
+          exit 1
+        fi
       fi
       if cp "$hist" "$hist_backup"; then
         echo "${FMT_GREEN}Backing up your command history to ${hist_backup}${FMT_RESET}"
@@ -425,6 +433,10 @@ setup_zshrc() {
         # a half-written file would look like a usable backup
         rm -f "$hist_backup"
         fmt_error "could not back up $hist"
+        if ! mv "$OLD_ZSHRC" "$zdot/.zshrc"; then
+          fmt_error "could not restore $zdot/.zshrc from backup"
+        fi
+        exit 1
       fi
     done
   fi
