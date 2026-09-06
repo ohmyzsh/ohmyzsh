@@ -60,8 +60,14 @@ if (( $+functions[VCS_INFO_formats] )); then
   }
 else
   function VCS_INFO_formats {
+    functions -c VCS_INFO_formats _omz_vcs_info_formats_wrapper
     unfunction VCS_INFO_formats
-    autoload -Uz +X regexp-replace VCS_INFO_formats 2>/dev/null || return 1
+    autoload -Uz +X regexp-replace VCS_INFO_formats 2>/dev/null || {
+      functions -c _omz_vcs_info_formats_wrapper VCS_INFO_formats
+      unfunction _omz_vcs_info_formats_wrapper
+      return 1
+    }
+    unfunction _omz_vcs_info_formats_wrapper
 
     # We use $tmp here because it's already a local variable in VCS_INFO_formats
     local PATCH='for tmp (base base-name branch misc revision subdir) hook_com[$tmp]="${hook_com[$tmp]//\%/%%}"'
