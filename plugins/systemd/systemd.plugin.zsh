@@ -67,13 +67,68 @@ power_commands=(
   suspend
 )
 
+if [[ -z "$ZSH_THEME_SYSTEMD_PRIVILEGE_TOOL" ]]; then
+  ZSH_THEME_SYSTEMD_PRIVILEGE_TOOL="sudo"
+fi
+
+# Error messages are defined in variables for better formatting
+privilege_tool_error_msg="\
+zsh systemd plugin:
+  \$ZSH_THEME_SYSTEMD_PRIVILEGE_TOOL is set to unknown value
+  Use 'custom' if the one you use in unsupported, or
+  'builtin-polkit' if you want to use builtin authentication methods.
+  Defaulting to 'sudo'"
+
+privilege_tool_custom_error_msg="\
+zsh systemd plugin:
+  \$ZSH_THEME_SYSTEMD_PRIVILEGE_TOOL is set to 'custom', but
+  \$ZSH_THEME_SYSTEMD_PRIVILEGE_TOOL_CUSTOM is not set.
+  Defaulting to 'sudo'"
+
+case "$ZSH_THEME_SYSTEMD_PRIVILEGE_TOOL" in
+  builtin-polkit)
+    # Since all the privilege escalation is done by systemctl itself, it's 
+    # easier to alias them as unprivileged
+    user_commands+=( "${sudo_commands[@]}" )
+    unset sudo_commands
+    privilege_tool=""
+    ;;
+  custom)
+    if [[ -n "$ZSH_THEME_SYSTEMD_PRIVILEGE_TOOL_CUSTOM" ]]; then
+      privilege_tool="$ZSH_THEME_SYSTEMD_PRIVILEGE_TOOL_CUSTOM"  
+    else
+      print "$privilege_tool_custom_error_msg" >&2
+      privilege_tool="sudo"
+    fi
+    ;;
+  sudo)
+    privilege_tool="sudo"
+    ;;
+  sudo-rs)
+    privilege_tool="sudo-rs"
+    ;;
+  doas)
+    privilege_tool="doas"
+    ;;
+  pkexec)
+    privilege_tool="pkexec"
+    ;;
+  run0)
+    privilege_tool="run0"
+    ;;
+  *)
+    print "$privilege_tool_error_msg" >&2
+    privilege_tool="sudo"
+    ;;
+esac
+
 for c in $user_commands; do
   alias "sc-$c"="systemctl $c"
   alias "scu-$c"="systemctl --user $c"
 done
 
 for c in $sudo_commands; do
-  alias "sc-$c"="sudo systemctl $c"
+  alias "sc-$c"="$privilege_tool systemctl $c"
   alias "scu-$c"="systemctl --user $c"
 done
 
@@ -81,7 +136,8 @@ for c in $power_commands; do
   alias "sc-$c"="systemctl $c"
 done
 
-unset c user_commands sudo_commands power_commands
+unset c user_commands sudo_commands power_commands privilege_tool
+unset privilege_tool_error_msg privilege_tool_custom_error_msg
 
 
 # --now commands
