@@ -30,6 +30,8 @@ if it's found, or the mvn command otherwise.
 | `mvncisto`           | `mvn clean install -DskipTests --offline`       |
 | `mvncom`             | `mvn compile`                                   |
 | `mvncp`              | `mvn clean package`                             |
+| `mvncpst`            | `mvn clean package -DskipTests`                 |
+| `mvncpsto`           | `mvn clean package -DskipTests --offline`       |
 | `mvnct`              | `mvn clean test`                                |
 | `mvncv`              | `mvn clean verify`                              |
 | `mvncvst`            | `mvn clean verify -DskipTests`                  |
