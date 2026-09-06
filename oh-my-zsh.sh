@@ -148,7 +148,9 @@ fi
 unset zcompdump_revision zcompdump_fpath zcompdump_refresh
 
 # zcompile the completion dump file if the .zwc is older or missing.
-if command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
+# Test that first so the lock directory and zrecompile are skipped when it's fresh.
+if [[ ! "${ZSH_COMPDUMP}.zwc" -nt "$ZSH_COMPDUMP" ]] \
+   && command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
   zrecompile -q -p "$ZSH_COMPDUMP"
   command rm -rf "$ZSH_COMPDUMP.zwc.old" "${ZSH_COMPDUMP}.lock"
 fi
