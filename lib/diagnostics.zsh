@@ -271,7 +271,7 @@ function _omz_diag_dump_check_core_commands() {
     unfunction unhash unlimit unset unsetopt vared wait whence where which zcompile
     zle zmodload zparseopts zregexparse zstyle )
   if is-at-least 5.1; then
-    reserved_word+=( declare export integer float local readonly typeset )
+    reserved_words+=( declare export integer float local readonly typeset )
   else
     builtins+=( declare export integer float local readonly typeset )
   fi

@@ -49,9 +49,31 @@ USER=${USER:-$(id -u -n)}
 # $HOME is defined at the time of login, but it could be unset. If it is unset,
 # a tilde by itself (~) will not be expanded to the current user's home directory.
 # POSIX: https://pubs.opengroup.org/onlinepubs/009696899/basedefs/xbd_chap08.html#tag_08_03
-HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
-# macOS does not have getent, but this works even if $HOME is unset
-HOME="${HOME:-$(eval echo ~"$USER")}"
+if [ -z "$HOME" ]; then
+  HOME=$(getent passwd "$USER" 2>/dev/null | cut -d: -f6)
+
+  # macOS does not have getent; fall back to tilde expansion, but only if
+  # $USER is a safe username. The eval below would otherwise expand any shell
+  # metacharacters in $USER and allow command injection (CWE-78).
+  case "$USER" in
+    *[![:alnum:]_.-]*|'')
+      ;;
+    *)
+      resolved_home=$(eval echo ~"$USER")
+      # Unknown users are not expanded and produce a literal "~username".
+      [ "$resolved_home" = "~$USER" ] || HOME=$resolved_home
+      ;;
+  esac
+
+  case "$HOME" in
+    /*) ;;
+    *)
+      echo "Error: unable to determine the current user's home directory." >&2
+      echo "Set HOME explicitly and rerun the installer." >&2
+      exit 1
+      ;;
+  esac
+fi
 
 
 # Track if $ZSH was provided
@@ -168,12 +190,12 @@ supports_hyperlinks() {
 
   # If $TERM_PROGRAM is set, these terminals support hyperlinks
   case "$TERM_PROGRAM" in
-  Hyper|iTerm.app|terminology|WezTerm|vscode) return 0 ;;
+  ghostty|Hyper|iTerm.app|terminology|vscode|WezTerm) return 0 ;;
   esac
 
   # These termcap entries support hyperlinks
   case "$TERM" in
-  xterm-kitty|alacritty|alacritty-direct) return 0 ;;
+  alacritty|alacritty-direct|xterm-ghostty|xterm-kitty) return 0 ;;
   esac
 
   # xfce4-terminal supports hyperlinks

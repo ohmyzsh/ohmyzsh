@@ -95,12 +95,12 @@ supports_hyperlinks() {
 
   # If $TERM_PROGRAM is set, these terminals support hyperlinks
   case "$TERM_PROGRAM" in
-  Hyper|iTerm.app|terminology|WezTerm|vscode) return 0 ;;
+  ghostty|Hyper|iTerm.app|terminology|vscode|WezTerm) return 0 ;;
   esac
 
   # These termcap entries support hyperlinks
   case "$TERM" in
-  xterm-kitty|alacritty|alacritty-direct) return 0 ;;
+  alacritty|alacritty-direct|xterm-ghostty|xterm-kitty) return 0 ;;
   esac
 
   # xfce4-terminal supports hyperlinks

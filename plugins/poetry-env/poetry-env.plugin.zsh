@@ -1,15 +1,24 @@
 _togglePoetryShell() {
   # Determine if currently in a Poetry-managed directory
   local in_poetry_dir=0
+  local in_active_poetry_dir=0
   if [[ -f "$PWD/pyproject.toml" && -f "$PWD/poetry.lock" ]]; then
     in_poetry_dir=1
   fi
 
-  # Deactivate the current environment if moving out of a Poetry directory or into a different Poetry directory
-  if [[ $poetry_active -eq 1 ]] && { [[ $in_poetry_dir -eq 0 ]] || [[ "$PWD" != "$poetry_dir"* ]]; }; then
-    export poetry_active=0
-    unset poetry_dir
-    (( $+functions[deactivate] )) && deactivate
+  # Deactivate when leaving the active project or entering a nested project
+  if [[ $poetry_active -eq 1 ]]; then
+    local project_dir="${poetry_dir%/}"
+    if [[ "$PWD" == "$project_dir" || "$PWD" == "$project_dir"/* ]]; then
+      in_active_poetry_dir=1
+    fi
+
+    if [[ $in_active_poetry_dir -eq 0 ]] ||
+      { [[ $in_poetry_dir -eq 1 ]] && [[ "$PWD" != "$poetry_dir" ]]; }; then
+      export poetry_active=0
+      unset poetry_dir
+      (( $+functions[deactivate] )) && deactivate
+    fi
   fi
 
   # Activate the environment if in a Poetry directory and no environment is currently active

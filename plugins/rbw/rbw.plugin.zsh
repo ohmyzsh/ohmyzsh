@@ -10,7 +10,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_rbw" ]]; then
   _comps[rbw]=_rbw
 fi
 
-rbw gen-completions zsh >| "$ZSH_CACHE_DIR/completions/_rbw" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_rbw"
+  zf_mv -f -- =( rbw gen-completions zsh ) "$TMPPREFIX"
+} &|
 
 # rbwpw function copies the password of a service to the clipboard
 # and clears it after 20 seconds

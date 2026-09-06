@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_ngrok" ]]; then
   _comps[ngrok]=_ngrok
 fi
 
-ngrok completion zsh >| "$ZSH_CACHE_DIR/completions/_ngrok" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_ngrok"
+  zf_mv -f -- =( ngrok completion zsh ) "$TMPPREFIX"
+} &|

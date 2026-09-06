@@ -10,7 +10,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_pulumi" ]]; then
   _comps[pulumi]=_pulumi
 fi
 
-pulumi gen-completion zsh >| "$ZSH_CACHE_DIR/completions/_pulumi" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_pulumi"
+  zf_mv -f -- =( pulumi gen-completion zsh ) "$TMPPREFIX"
+} &|
 
 # Aliases
 alias pul='pulumi'
