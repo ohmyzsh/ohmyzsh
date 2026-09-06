@@ -32,13 +32,10 @@ function web_search() {
     npmpkg          "https://www.npmjs.com/search?q="
     packagist       "https://packagist.org/?query="
     gopkg           "https://pkg.go.dev/search?m=package&q="
-    maven           "https://search.maven.org/search?q="
-    mdn             "https://developer.mozilla.org/en-US/search?q="
-    pd              "https://pub.dev/packages?q="
+    maven           "https://central.sonatype.com/search?q="
     pypi            "https://pypi.org/search/?q="
     aur             "https://aur.archlinux.org/packages?O=0&K="
     archwiki        "https://wiki.archlinux.org/index.php?search="
-    hf              "https://huggingface.co/search?q="
     wikipedia       "https://en.wikipedia.org/w/index.php?search="
     chatgpt         "https://chatgpt.com/?q="
     grok            "https://grok.com/?q="
@@ -101,12 +98,9 @@ alias npmpkg='web_search npmpkg'
 alias packagist='web_search packagist'
 alias gopkg='web_search gopkg'
 alias maven='web_search maven'
-alias mdn='web_search mdn'
-alias pd='web_search pd'
 alias pypi='web_search pypi'
 alias aur='web_search aur'
 alias archwiki='web_search archwiki'
-alias hf='web_search hf'
 alias wikipedia='web_search wikipedia'
 alias chatgpt='web_search chatgpt'
 alias grokcom='web_search grok'
@@ -132,4 +126,3 @@ if [[ ${#ZSH_WEB_SEARCH_ENGINES} -gt 0 ]]; then
   done
   unset engines key
 fi
-
