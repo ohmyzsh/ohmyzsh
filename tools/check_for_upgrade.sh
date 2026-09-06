@@ -23,12 +23,32 @@ zstyle -s ':omz:update' mode update_mode || {
 # - the automatic update is disabled
 # - the current user doesn't have write permissions nor owns the $ZSH directory
 # - is not run from a tty
-# - git is unavailable on the system
-# - $ZSH is not a git repository
 if [[ "$update_mode" = disabled ]] \
    || [[ ! -w "$ZSH" || ! -O "$ZSH" ]] \
-   || [[ ! -t 1 && ${POWERLEVEL9K_INSTANT_PROMPT:-off} == off ]] \
-   || ! command git --version >/dev/null 2>&1 \
+   || [[ ! -t 1 && ${POWERLEVEL9K_INSTANT_PROMPT:-off} == off ]]; then
+  unset update_mode
+  return
+fi
+
+# Cancel update if it's not time to check yet. This runs before the git checks
+# below because those fork on every startup. Skipped when a background update
+# left a result that still needs to be reported (EXIT_STATUS is set).
+() {
+  local LAST_EPOCH EXIT_STATUS ERROR epoch_target
+  zmodload zsh/datetime
+  source "${ZSH_CACHE_DIR}/.zsh-update" 2>/dev/null || return 1
+  [[ -n "$LAST_EPOCH" && -z "$EXIT_STATUS" ]] || return 1
+  zstyle -s ':omz:update' frequency epoch_target || epoch_target=${UPDATE_ZSH_DAYS:-13}
+  (( ( EPOCHSECONDS / 60 / 60 / 24 - LAST_EPOCH ) < epoch_target ))
+} && {
+  unset update_mode
+  return
+}
+
+# Cancel update if:
+# - git is unavailable on the system
+# - $ZSH is not a git repository
+if ! command git --version >/dev/null 2>&1 \
    || (builtin cd -q "$ZSH"; ! command git rev-parse --is-inside-work-tree &>/dev/null); then
   unset update_mode
   return
