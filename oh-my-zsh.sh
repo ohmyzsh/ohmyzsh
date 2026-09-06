@@ -114,9 +114,17 @@ fi
 zcompdump_revision="#omz revision: $(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
 zcompdump_fpath="#omz fpath: $fpath"
 
+# Check whether the zcompdump file carries the current OMZ metadata lines
+_omz_compdump_has_metadata() {
+  local -a lines
+  [[ -r "$ZSH_COMPDUMP" ]] || return 1
+  lines=("${(@f)$(<"$ZSH_COMPDUMP")}")
+  (( ${lines[(Ie)$zcompdump_revision]} && ${lines[(Ie)$zcompdump_fpath]} ))
+}
+
 # Delete the zcompdump file if OMZ zcompdump metadata changed
-if ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null \
-   || ! command grep -q -Fx "$zcompdump_fpath" "$ZSH_COMPDUMP" 2>/dev/null; then
+zcompdump_refresh=0
+if ! _omz_compdump_has_metadata; then
   command rm -f "$ZSH_COMPDUMP"
   zcompdump_refresh=1
 fi
@@ -134,9 +142,8 @@ else
   compinit -u -d "$ZSH_COMPDUMP"
 fi
 
-# Append zcompdump metadata if missing
-if (( $zcompdump_refresh )) \
-  || ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null; then
+# Append zcompdump metadata if missing (compinit may have regenerated the file)
+if (( zcompdump_refresh )) || ! _omz_compdump_has_metadata; then
   # Use `tee` in case the $ZSH_COMPDUMP filename is invalid, to silence the error
   # See https://github.com/ohmyzsh/ohmyzsh/commit/dd1a7269#commitcomment-39003489
   tee -a "$ZSH_COMPDUMP" &>/dev/null <<EOF
@@ -146,6 +153,7 @@ $zcompdump_fpath
 EOF
 fi
 unset zcompdump_revision zcompdump_fpath zcompdump_refresh
+unset -f _omz_compdump_has_metadata
 
 # zcompile the completion dump file if the .zwc is older or missing.
 if command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
