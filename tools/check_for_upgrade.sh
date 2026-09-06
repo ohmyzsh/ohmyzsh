@@ -232,11 +232,14 @@ function handle_update() {
 
     # Ask for confirmation and only update on 'y', 'Y' or Enter
     # Otherwise just show a reminder for how to update
+    # ㅛ (U+315B) is the character produced at the Y key position on the Korean
+    # Dubeolsik layout, so it is accepted too to avoid cancelling the update
+    # when a Korean IME is active.
     printf "[oh-my-zsh] Would you like to update? [Y/n] "
     read -r -k 1 option
     [[ "$option" = $'\n' ]] || echo
     case "$option" in
-      [yY$'\n']) update_ohmyzsh ;;
+      [yY$'\n']|$'ㅛ') update_ohmyzsh ;;
       [nN]) update_last_updated_file ;&
       *) echo "[oh-my-zsh] You can update manually by running \`omz update\`" ;;
     esac
