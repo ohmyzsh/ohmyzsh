@@ -72,11 +72,6 @@ EOF
       return 0
       ;;
     shuf|shuff|shuffle)
-      # The shuffle property of current playlist can't be changed in iTunes 12,
-      # so this workaround uses AppleScript to simulate user input instead.
-      # Defaults to toggling when no options are given.
-      # The toggle option depends on the shuffle button being visible in the Now playing area.
-      # On and off use the menu bar items.
       local state=$1
 
       if [[ -n "$state" && "$state" != (on|off|toggle) ]]; then
@@ -85,16 +80,24 @@ EOF
       fi
 
       case "$state" in
-        on|off)
-          # Inspired by: https://stackoverflow.com/a/14675583
-          osascript >/dev/null 2>&1 <<EOF
-            tell application "System Events" to perform action "AXPress" of (menu item "${state}" of menu "Shuffle" of menu item "Shuffle" of menu "Controls" of menu bar item "Controls" of menu bar 1 of application process "iTunes" )
-EOF
+        # Inspired by: https://stackoverflow.com/a/43942013/2396771
+        on)
+          osascript -e "tell application \"$APP_NAME\" to set shuffle enabled to true";
+          return 0
+          ;;
+        off)
+          osascript -e "tell application \"$APP_NAME\" to set shuffle enabled to false";
           return 0
           ;;
         toggle|*)
-          osascript >/dev/null 2>&1 <<EOF
-            tell application "System Events" to perform action "AXPress" of (button 2 of process "iTunes"'s window "iTunes"'s scroll area 1)
+          osascript 2>/dev/null <<EOF
+            tell application "$APP_NAME"
+              if shuffle enabled then
+                set shuffle enabled to false
+              else
+                set shuffle enabled to true
+              end
+            end tell
 EOF
           return 0
           ;;
