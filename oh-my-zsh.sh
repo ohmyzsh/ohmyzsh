@@ -100,7 +100,13 @@ done
 # Figure out the SHORT hostname
 if [[ "$OSTYPE" = darwin* ]]; then
   # macOS's $HOST changes with dhcp, etc. Use LocalHostName if possible.
-  SHORT_HOST=$(scutil --get LocalHostName 2>/dev/null) || SHORT_HOST="${HOST/.*/}"
+  # When $HOST is the Bonjour name (<LocalHostName>.local) it already is the
+  # LocalHostName, so don't fork scutil to look it up.
+  if [[ "$HOST" = *.local ]]; then
+    SHORT_HOST="${HOST%.local}"
+  else
+    SHORT_HOST=$(scutil --get LocalHostName 2>/dev/null) || SHORT_HOST="${HOST/.*/}"
+  fi
 else
   SHORT_HOST="${HOST/.*/}"
 fi
