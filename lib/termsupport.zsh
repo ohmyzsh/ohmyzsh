@@ -148,7 +148,8 @@ function omz_termsupport_cwd {
   setopt localoptions unset
   # Percent-encode the host and path names. Encoding forks a subshell each,
   # so keep the result and only redo it when $HOST or $PWD changed.
-  if [[ "$_omz_termsupport_cwd_key" != "$HOST:$PWD" ]]; then
+  local cache_key="$HOST:$PWD:${KONSOLE_PROFILE_NAME:+1}:${KONSOLE_DBUS_SESSION:+1}"
+  if [[ "$_omz_termsupport_cwd_key" != "$cache_key" ]]; then
     local URL_HOST URL_PATH
     URL_HOST="$(omz_urlencode -P $HOST)" || return 1
     URL_PATH="$(omz_urlencode -P $PWD)" || return 1
@@ -156,7 +157,7 @@ function omz_termsupport_cwd {
     # Konsole errors if the HOST is provided
     [[ -z "$KONSOLE_PROFILE_NAME" && -z "$KONSOLE_DBUS_SESSION"  ]] || URL_HOST=""
 
-    typeset -g _omz_termsupport_cwd_key="$HOST:$PWD"
+    typeset -g _omz_termsupport_cwd_key="$cache_key"
     typeset -g _omz_termsupport_cwd_url="file://${URL_HOST}${URL_PATH}"
   fi
 
