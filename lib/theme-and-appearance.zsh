@@ -20,9 +20,9 @@ __omz_probe_cache="$ZSH_CACHE_DIR/appearance-probes"
 __omz_probe_cached=("$__omz_probe_cache"(Nm-1))
 [[ -z "$__omz_probe_cached" ]] || source "$__omz_probe_cache"
 
-function test-cmd-args {
-  # Usage: test-cmd-args cmd args...
-  # e.g. test-cmd-args gls --color
+function __omz_test_cmd_args {
+  # Usage: __omz_test_cmd_args cmd args...
+  # e.g. __omz_test_cmd_args gls --color
   # Runs `cmd args... /dev/null` and remembers whether it succeeded
   local key="$*"
   if (( ! ${+__omz_probes[$key]} )); then
@@ -36,7 +36,7 @@ function test-cmd-args {
 }
 
 # Use diff --color if available
-if test-cmd-args diff --color /dev/null; then
+if __omz_test_cmd_args diff --color /dev/null; then
   function diff {
     command diff --color "$@"
   }
@@ -69,34 +69,34 @@ fi
     netbsd*)
       # On NetBSD, test if `gls` (GNU ls) is installed (this one supports colors);
       # otherwise, leave ls as is, because NetBSD's ls doesn't support -G
-      test-cmd-args gls --color && alias ls='gls --color=tty'
+      __omz_test_cmd_args gls --color && alias ls='gls --color=tty'
       ;;
     openbsd*)
       # On OpenBSD, `gls` (ls from GNU coreutils) and `colorls` (ls from base,
       # with color and multibyte support) are available from ports.
       # `colorls` will be installed on purpose and can't be pulled in by installing
       # coreutils (which might be installed for ), so prefer it to `gls`.
-      test-cmd-args gls --color && alias ls='gls --color=tty'
-      test-cmd-args colorls -G && alias ls='colorls -G'
+      __omz_test_cmd_args gls --color && alias ls='gls --color=tty'
+      __omz_test_cmd_args colorls -G && alias ls='colorls -G'
       ;;
     (darwin|freebsd)*)
       # This alias works by default just using $LSCOLORS
-      test-cmd-args ls -G && alias ls='ls -G'
+      __omz_test_cmd_args ls -G && alias ls='ls -G'
       # Only use GNU ls if installed and there are user defaults for $LS_COLORS,
       # as the default coloring scheme is not very pretty
       zstyle -t ':omz:lib:theme-and-appearance' gnu-ls \
-        && test-cmd-args gls --color \
+        && __omz_test_cmd_args gls --color \
         && alias ls='gls --color=tty'
       ;;
     *)
-      if test-cmd-args ls --color; then
+      if __omz_test_cmd_args ls --color; then
         alias ls='ls --color=tty'
-      elif test-cmd-args ls -G; then
+      elif __omz_test_cmd_args ls -G; then
         alias ls='ls -G'
       fi
       ;;
   esac
 }
 
-unfunction test-cmd-args
+unfunction __omz_test_cmd_args
 unset __omz_probes __omz_probe_cache __omz_probe_cached
