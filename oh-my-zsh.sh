@@ -141,12 +141,14 @@ _omz_git_head() {
 
   ref="${head#ref: }"
   if [[ -r "$common/$ref" ]]; then
-    read -r REPLY 2>/dev/null < "$common/$ref" && return 0
+    read -r REPLY 2>/dev/null < "$common/$ref" || return 1
+    [[ "$REPLY" != ref:\ * ]] || return 1
+    return 0
   fi
 
   [[ -r "$common/packed-refs" ]] || return 1
   lines=("${(@f)$(<"$common/packed-refs")}")
-  REPLY="${lines[(r)* $ref]%% *}"
+  REPLY="${lines[(r)* ${(b)ref}]%% *}"
   [[ -n "$REPLY" ]]
 }
 
