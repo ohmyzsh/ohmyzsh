@@ -15,8 +15,8 @@
 #   - https://github.com/symfony/symfony/blob/5.4/src/Symfony/Component/Console/Resources/completion.bash
 #
 _sf_console() {
-    local lastParam flagPrefix requestComp out comp
-    local -a completions
+    local lastParam out comp sf_cmd
+    local -a completions flagPrefix requestComp inputs
 
     # The user could have moved the cursor backwards on the command-line.
     # We need to trigger completion from the $CURRENT location, so we need
@@ -29,11 +29,20 @@ _sf_console() {
     setopt local_options BASH_REMATCH
     if [[ "${lastParam}" =~ '-.*=' ]]; then
         # We are dealing with a flag with an =
-        flagPrefix="-P ${BASH_REMATCH}"
+        flagPrefix=(-P "${BASH_REMATCH}")
     fi
 
-    # Prepare the command to obtain completions
-    requestComp="${words[0]} ${words[1]} _complete --no-interaction -szsh -a1 -c$((CURRENT-1))" i=""
+    # Prepare the command to obtain completions. An alias is resolved here,
+    # because the request is no longer read again by the shell.
+    sf_cmd="${words[1]}"
+    if [[ -n "${aliases[$sf_cmd]}" ]]; then
+        requestComp=(${(z)aliases[$sf_cmd]})
+    else
+        requestComp=(${~sf_cmd})
+    fi
+
+    requestComp+=(_complete --no-interaction -szsh -a1 "-c$((CURRENT-1))")
+
     for w in ${words[@]}; do
         w=$(printf -- '%b' "$w")
         # remove quotes from typed values
@@ -47,19 +56,18 @@ _sf_console() {
         fi
         # empty values are ignored
         if [ ! -z "$w" ]; then
-            i="${i}-i${w} "
+            inputs+=("-i$w")
         fi
     done
 
     # Ensure at least 1 input
-    if [ "${i}" = "" ]; then
-        requestComp="${requestComp} -i\" \""
-    else
-        requestComp="${requestComp} ${i}"
+    if (( ! $#inputs )); then
+        inputs=(-i' ')
     fi
 
-    # Use eval to handle any environment variables and such
-    out=$(eval ${requestComp} 2>/dev/null)
+    # The request is run without being read again by the shell, so that a
+    # "$(...)" or a backtick typed on the command line is not executed
+    out=$(SHELL_VERBOSITY=0 "${requestComp[@]}" "${inputs[@]}" 2>/dev/null)
 
     while IFS='\n' read -r comp; do
         if [ -n "$comp" ]; then
@@ -75,7 +83,7 @@ _sf_console() {
     done < <(printf "%s\n" "${out[@]}")
 
     # Let inbuilt _describe handle completions
-    eval _describe "completions" completions $flagPrefix
+    _describe "completions" completions "${flagPrefix[@]}"
     return $?
 }
 
