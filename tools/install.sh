@@ -417,10 +417,11 @@ setup_zshrc() {
       hist_backup_base="${hist}.pre-oh-my-zsh"
       hist_backup="$hist_backup_base"
       if [ -e "$hist_backup" ]; then
+        hist_backup_ts="$(date +%Y-%m-%d_%H-%M-%S)"
         hist_backup_i=0
         while [ -e "$hist_backup" ]; do
           hist_backup_i=$((hist_backup_i + 1))
-          hist_backup="${hist_backup_base}-$(date +%Y-%m-%d_%H-%M-%S)-${hist_backup_i}"
+          hist_backup="${hist_backup_base}-${hist_backup_ts}-${hist_backup_i}"
         done
       fi
       if cp -p "$hist" "$hist_backup"; then
