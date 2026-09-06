@@ -36,6 +36,8 @@ jobs:
         run: |
           for file in ./oh-my-zsh.sh \
                       ./lib/*.zsh \
+                      ./functions/* \
+                      ./completions/_* \
                       ./plugins/*/*.plugin.zsh \
                       ./plugins/*/_* \
                       ./themes/*.zsh-theme; do
