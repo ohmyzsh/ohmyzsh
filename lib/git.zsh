@@ -12,10 +12,16 @@ function __git_prompt_git() {
 }
 
 function _omz_git_prompt_info() {
-  # If we are on a folder not tracked by git, get out.
-  # Otherwise, check for hide-info at global and local repository level
-  if ! __git_prompt_git rev-parse --git-dir &> /dev/null \
-    || [[ "$(__git_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" == 1 ]]; then
+  # Get the git dir and the current branch name in one call. Outside a repo
+  # there is no output. On a detached HEAD the branch is "HEAD". On an unborn
+  # branch git exits non-zero after printing the git dir.
+  local -a info
+  info=("${(@f)$(__git_prompt_git rev-parse --git-dir --abbrev-ref HEAD 2> /dev/null)}")
+  local unborn=$(( $? != 0 ))
+  [[ -n "$info[1]" ]] || return 0
+
+  # Check for hide-info at global and local repository level
+  if [[ "$(__git_prompt_git config --get oh-my-zsh.hide-info 2>/dev/null)" == 1 ]]; then
     return 0
   fi
 
@@ -23,11 +29,14 @@ function _omz_git_prompt_info() {
   # - the current branch name
   # - the tag name if we are on a tag
   # - the short SHA of the current commit
-  local ref
-  ref=$(__git_prompt_git symbolic-ref --short HEAD 2> /dev/null) \
-  || ref=$(__git_prompt_git describe --tags --exact-match HEAD 2> /dev/null) \
-  || ref=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null) \
-  || return 0
+  local ref="$info[2]"
+  if (( unborn )); then
+    ref=$(__git_prompt_git symbolic-ref --short HEAD 2> /dev/null) || return 0
+  elif [[ "$ref" == HEAD ]]; then
+    ref=$(__git_prompt_git describe --tags --exact-match HEAD 2> /dev/null) \
+    || ref=$(__git_prompt_git rev-parse --short HEAD 2> /dev/null) \
+    || return 0
+  fi
 
   # Use global ZSH_THEME_GIT_SHOW_UPSTREAM=1 for including upstream remote info
   local upstream
@@ -244,7 +253,7 @@ function parse_git_dirty() {
         FLAGS+="--ignore-submodules=${GIT_STATUS_IGNORE_SUBMODULES:-dirty}"
         ;;
     esac
-    STATUS=$(__git_prompt_git status ${FLAGS} 2> /dev/null | tail -n 1)
+    STATUS=$(__git_prompt_git status ${FLAGS} 2> /dev/null)
   fi
   if [[ -n $STATUS ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
