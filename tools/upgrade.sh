@@ -271,9 +271,18 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
     printf '\n'
     printf "${BLUE}%s${RESET}\n\n" "$message"
-    printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on X:" "$(fmt_link @ohmyzsh https://x.com/ohmyzsh)"
-    printf "${BLUE}${BOLD}%s %s${RESET}\n" "Want to get involved in the community? Join our Discord:" "$(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
-    printf "${BLUE}${BOLD}%s %s${RESET}\n" "Get your Oh My Zsh swag at:" "$(fmt_link "CommitGoods Shop" https://commitgoods.com/collections/oh-my-zsh)"
+    printf "${BLUE}${BOLD}%s %s %s %s${RESET}\n" \
+      "Follow along on X" "($(fmt_link @ohmyzsh https://x.com/ohmyzsh))" \
+      "or Bluesky" "($(fmt_link @ohmyz.sh https://bsky.app/profile/ohmyz.sh))"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" \
+      "Questions or ideas? Join the community on" \
+      "$(fmt_link Discord https://discord.gg/ohmyzsh)"
+    printf "${BLUE}${BOLD}%s %s,${RESET}\n" \
+      "Help support the project: sponsor us on" \
+      "$(fmt_link "Open Collective" https://opencollective.com/ohmyzsh)"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" \
+      "or grab stickers, shirts, and swag from" \
+      "$(fmt_link CommitGoods https://commitgoods.com/ohmyzsh)"
   elif [[ $verbose_mode == minimal ]]; then
     printf "${BLUE}%s${RESET}\n" "$message"
   fi

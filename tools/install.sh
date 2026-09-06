@@ -528,9 +528,10 @@ print_success() {
     "$(fmt_code "$(fmt_link ".zshrc" "file://$zdot/.zshrc" --text)")" \
     "file to select plugins, themes, and options."
   printf '\n'
-  printf '%s\n' "• Follow us on X: $(fmt_link @ohmyzsh https://x.com/ohmyzsh)"
-  printf '%s\n' "• Join our Discord community: $(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
-  printf '%s\n' "• Get stickers, t-shirts, coffee mugs and more: $(fmt_link "CommitGoods Shop" https://commitgoods.com/collections/oh-my-zsh)"
+  printf '%s\n' "• Follow along on X ($(fmt_link @ohmyzsh https://x.com/ohmyzsh)) or Bluesky ($(fmt_link @ohmyz.sh https://bsky.app/profile/ohmyz.sh))"
+  printf '%s\n' "• Questions or ideas? Join the community on $(fmt_link Discord https://discord.gg/ohmyzsh)"
+  printf '%s\n' "• Help support the project: sponsor us on $(fmt_link "Open Collective" https://opencollective.com/ohmyzsh),"
+  printf '%s\n' "  or grab stickers, shirts, and swag from $(fmt_link CommitGoods https://commitgoods.com/ohmyzsh)"
   printf '%s\n' $FMT_RESET
 }
 
