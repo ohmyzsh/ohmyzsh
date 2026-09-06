@@ -12,7 +12,7 @@ dependencies:
   plugins/gradle:
     repo: gradle/gradle-completion
     branch: master
-    version: 63578c9bc56134b80766e88957ba0239e6be2343
+    version: e7c881dbef7462bc35ad05328397e1582fe25cb8
     precopy: |
       set -e
       find . ! -name _gradle ! -name LICENSE -delete
