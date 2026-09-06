@@ -325,10 +325,16 @@ Check out the [list of changes]({status["compare_url"]}).
 
         # Copy files from upstream repo
         print(f"Copying files from {repo_dir} to {path}", file=sys.stderr)
+        if os.path.exists(path):
+            if os.path.islink(path) or os.path.isfile(path):
+                os.remove(path)
+            else:
+                shutil.rmtree(path)
+
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         shutil.copytree(
             repo_dir,
             path,
-            dirs_exist_ok=True,
             ignore=shutil.ignore_patterns(*GLOBAL_IGNORE),
         )
 
