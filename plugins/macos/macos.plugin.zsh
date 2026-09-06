@@ -310,7 +310,7 @@ _freespace() {
 compdef _freespace freespace
 
 # Music / iTunes control function
-source "${0:h:A}/music"
+[[ -f "${0:h:A}/music" ]] && source "${0:h:A}/music"
 
 # Spotify control function
-source "${0:h:A}/spotify"
+[[ -f "${0:h:A}/spotify" ]] && source "${0:h:A}/spotify"
