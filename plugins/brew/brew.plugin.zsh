@@ -23,6 +23,13 @@ if (( ! $+commands[brew] )); then
   unset BREW_LOCATION
 fi
 
+if [[ "$BREW_LOCATION" == "/opt/homebrew/bin/brew" && -d "/opt/homebrew/sbin" ]]; then
+    path=("/opt/homebrew/sbin" $path)
+  fi
+
+  unset BREW_LOCATION
+fi
+
 if [[ -z "$HOMEBREW_PREFIX" ]]; then
   # Maintain compatibility with potential custom user profiles, where we had
   # previously relied on always sourcing shellenv. OMZ plugins should not rely
