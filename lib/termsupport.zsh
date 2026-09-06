@@ -25,7 +25,7 @@ function title {
       print -Pn "\ek${1:q}\e\\" # set screen hardstatus
       ;;
     *)
-      if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+      if [[ ${TERM_PROGRAM-} == "iTerm.app" ]]; then
         print -Pn "\e]2;${2:q}\a" # set window name
         print -Pn "\e]1;${1:q}\a" # set tab name
       else
@@ -41,7 +41,7 @@ function title {
 ZSH_THEME_TERM_TAB_TITLE_IDLE="%15<..<%~%<<" #15 char left truncated PWD
 ZSH_THEME_TERM_TITLE_IDLE="%n@%m:%~"
 # Avoid duplication of directory in terminals with independent dir display
-if [[ "$TERM_PROGRAM" == Apple_Terminal ]]; then
+if [[ ${TERM_PROGRAM-} == Apple_Terminal ]]; then
   ZSH_THEME_TERM_TITLE_IDLE="%n@%m"
 fi
 
@@ -104,7 +104,7 @@ function omz_termsupport_preexec {
 
 autoload -Uz add-zsh-hook
 
-if [[ -z "$INSIDE_EMACS" || "$INSIDE_EMACS" = vterm ]]; then
+if [[ -z ${INSIDE_EMACS-} || ${INSIDE_EMACS-} = vterm ]]; then
   add-zsh-hook precmd omz_termsupport_precmd
   add-zsh-hook preexec omz_termsupport_preexec
 fi
@@ -122,7 +122,7 @@ fi
 # As of May 2021 mlterm, PuTTY, rxvt, screen, termux & xterm simply ignore the unknown OSC.
 
 # Don't define the function if we're inside Emacs or in an SSH session (#11696)
-if [[ -n "$INSIDE_EMACS" || -n "$SSH_CLIENT" || -n "$SSH_TTY" ]]; then
+if [[ -n ${INSIDE_EMACS-} || -n ${SSH_CLIENT-} || -n ${SSH_TTY-} ]]; then
   return
 fi
 
@@ -133,7 +133,7 @@ case "$TERM" in
   contour*|foot*) ;;
   *)
     # Terminal.app and iTerm2 process OSC 7 correctly
-    case "$TERM_PROGRAM" in
+    case "${TERM_PROGRAM-}" in
       Apple_Terminal|iTerm.app) ;;
       *) return ;;
     esac ;;
