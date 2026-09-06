@@ -110,9 +110,51 @@ if [[ -z "$ZSH_COMPDUMP" ]]; then
   ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 fi
 
+# Resolve the commit $ZSH is checked out at into $REPLY by reading the git
+# directory, so that no git process is forked on every startup.
+# Handles .git files (worktrees, submodules), worktree common dirs, detached
+# HEADs and packed refs. Returns 1 if anything is unexpected.
+_omz_git_head() {
+  local gitdir="$ZSH/.git" common head ref
+  local -a lines
+  REPLY=
+
+  # .git may be a file pointing at the real git dir
+  if [[ -f "$gitdir" ]]; then
+    read -r head 2>/dev/null < "$gitdir" || return 1
+    gitdir="${head#gitdir: }"
+    [[ "$gitdir" = /* ]] || gitdir="$ZSH/$gitdir"
+  fi
+
+  # worktrees keep their refs in the common git dir
+  common="$gitdir"
+  if [[ -f "$gitdir/commondir" ]]; then
+    read -r common 2>/dev/null < "$gitdir/commondir" || return 1
+    [[ "$common" = /* ]] || common="$gitdir/$common"
+  fi
+
+  [[ -r "$gitdir/HEAD" ]] || return 1
+  read -r head 2>/dev/null < "$gitdir/HEAD" || return 1
+
+  # detached HEAD: the file holds the commit itself
+  [[ "$head" = ref:\ * ]] || { REPLY="$head"; return 0 }
+
+  ref="${head#ref: }"
+  if [[ -r "$common/$ref" ]]; then
+    read -r REPLY 2>/dev/null < "$common/$ref" && return 0
+  fi
+
+  [[ -r "$common/packed-refs" ]] || return 1
+  lines=("${(@f)$(<"$common/packed-refs")}")
+  REPLY="${lines[(r)* $ref]%% *}"
+  [[ -n "$REPLY" ]]
+}
+
 # Construct zcompdump OMZ metadata
-zcompdump_revision="#omz revision: $(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
+_omz_git_head || REPLY="$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
+zcompdump_revision="#omz revision: $REPLY"
 zcompdump_fpath="#omz fpath: $fpath"
+unset -f _omz_git_head
 
 # Delete the zcompdump file if OMZ zcompdump metadata changed
 if ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null \
