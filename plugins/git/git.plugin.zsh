@@ -1,13 +1,14 @@
 # Git version checking
 autoload -Uz is-at-least
 # Running `git version` forks on every startup, so cache the result for a day
-# in $ZSH_CACHE_DIR, keyed on the git binary's path and mtime.
+# in $ZSH_CACHE_DIR, keyed on the git command path, mtime, and exec path.
 () {
-  local cache="$ZSH_CACHE_DIR/git-version" key
+  local cache="$ZSH_CACHE_DIR/git-version" key exec_path
   local -a stat lines
   zmodload -F zsh/stat b:zstat
   zstat -A stat +mtime -- "$commands[git]" 2>/dev/null
-  key="$commands[git] $stat[1]"
+  exec_path="$(git --exec-path 2>/dev/null)"
+  key="$commands[git] $stat[1] $exec_path"
 
   lines=("$cache"(Nm-1))
   (( $#lines )) && lines=("${(@f)$(<"$cache")}")
