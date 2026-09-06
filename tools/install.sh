@@ -426,7 +426,7 @@ setup_zshrc() {
           exit 1
         fi
       fi
-      if cp "$hist" "$hist_backup"; then
+      if cp -p "$hist" "$hist_backup"; then
         echo "${FMT_GREEN}Backing up your command history to ${hist_backup}${FMT_RESET}"
         hist_backed_up="$hist_backed_up $hist"
       else
