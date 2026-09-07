@@ -29,7 +29,8 @@ function _omz_git_prompt_info() {
   # - the current branch name
   # - the tag name if we are on a tag
   # - the short SHA of the current commit
-  local ref="$info[2]"
+  # a git dir path may contain newlines, so the branch is the last line
+  local ref="$info[-1]"
   if (( unborn )); then
     ref=$(__git_prompt_git symbolic-ref --short HEAD 2> /dev/null) || return 0
   elif [[ "$ref" == HEAD ]]; then
@@ -253,7 +254,8 @@ function parse_git_dirty() {
         FLAGS+="--ignore-submodules=${GIT_STATUS_IGNORE_SUBMODULES:-dirty}"
         ;;
     esac
-    STATUS=$(__git_prompt_git status ${FLAGS} 2> /dev/null)
+    # only non-emptiness matters, so keep one line instead of the whole list
+    __git_prompt_git status ${FLAGS} 2> /dev/null | read -r STATUS
   fi
   if [[ -n $STATUS ]]; then
     echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
