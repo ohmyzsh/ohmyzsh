@@ -1,3 +1,2 @@
 pyfakefs
 pytest
-pytest-sugar

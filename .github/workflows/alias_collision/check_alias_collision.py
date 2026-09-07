@@ -3,10 +3,10 @@
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from pathlib import Path
 from dataclasses import dataclass
-from typing import List, Dict
 import itertools
 import re
 import json
+import sys
 
 
 ERROR_MESSAGE_TEMPLATE = (
@@ -55,7 +55,7 @@ class Alias:
     value: str
     module: Path
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         return {
             "alias": self.alias,
             "value": self.value,
@@ -68,29 +68,33 @@ class Collision:
     existing_alias: Alias
     new_alias: Alias
 
-    def is_new_collision(self, known_collision_aliases: List[str]) -> bool:
+    def is_new_collision(self, known_collision_aliases: list[str]) -> bool:
         return self.new_alias.alias not in known_collision_aliases
 
     @classmethod
-    def from_dict(cls, collision_dict: Dict) -> "Collision":
+    def from_dict(cls, collision_dict: dict) -> "Collision":
         return cls(
             Alias(**collision_dict["existing_alias"]),
             Alias(**collision_dict["new_alias"]),
         )
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         return {
             "existing_alias": self.existing_alias.to_dict(),
             "new_alias": self.new_alias.to_dict(),
         }
 
 
-def find_aliases_in_file(file: Path) -> List[Alias]:
-    matches = re.findall(r"^alias (.*)='(.*)'", file.read_text(), re.M)
+def find_aliases_in_file(file: Path) -> list[Alias]:
+    matches = re.findall(
+        r"^[ \t]*alias (?:-[gs] )?([^ =]+)=['\"]?(.*?)['\"]?$",
+        file.read_text(),
+        re.MULTILINE,
+    )
     return [Alias(match[0], match[1], file) for match in matches]
 
 
-def load_known_collisions(collision_file: Path) -> List[Collision]:
+def load_known_collisions(collision_file: Path) -> list[Collision]:
     collision_list = json.loads(collision_file.read_text())
     return [Collision.from_dict(collision_dict) for collision_dict in collision_list]
 
@@ -100,7 +104,7 @@ def find_all_aliases(path: Path) -> list:
     return list(itertools.chain(*aliases))
 
 
-def check_for_duplicates(aliases: List[Alias]) -> List[Collision]:
+def check_for_duplicates(aliases: list[Alias]) -> list[Collision]:
     elements = {}
     collisions = []
     for alias in aliases:
@@ -112,7 +116,7 @@ def check_for_duplicates(aliases: List[Alias]) -> List[Collision]:
     return collisions
 
 
-def print_collisions(collisions: Dict[Alias, Alias]) -> None:
+def print_collisions(collisions: dict[Alias, Alias]) -> None:
     if collisions:
         print(f"Found {len(collisions)} alias collisions:\n")
         for collision in collisions:
@@ -131,8 +135,8 @@ def print_collisions(collisions: Dict[Alias, Alias]) -> None:
 
 
 def check_for_new_collisions(
-    known_collisions: Path, collisions: List[Collision]
-) -> List[Collision]:
+    known_collisions: Path, collisions: list[Collision]
+) -> list[Collision]:
     known_collisions = load_known_collisions(known_collisions)
     known_collision_aliases = [
         collision.new_alias.alias for collision in known_collisions
@@ -163,4 +167,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    exit(main())
+    sys.exit(main())
