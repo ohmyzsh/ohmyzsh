@@ -104,8 +104,13 @@ if [[ "$OSTYPE" = darwin* ]]; then
   # (like lib/grep.zsh) and re-check sooner if $HOST changes.
   __omz_host_cache="$ZSH_CACHE_DIR/localhostname"
   __omz_host_cached=("$__omz_host_cache"(Nm-1))
+  __omz_host_key=
+  SHORT_HOST=
   if [[ -n "$__omz_host_cached" ]]; then
-    { read -r __omz_host_key && read -r SHORT_HOST } < "$__omz_host_cache"
+    if ! { read -r __omz_host_key && read -r SHORT_HOST } < "$__omz_host_cache"; then
+      __omz_host_key=
+      SHORT_HOST=
+    fi
   fi
   if [[ "$__omz_host_key" != "$HOST" || -z "$SHORT_HOST" ]]; then
     # only cache what scutil actually answered, so a transient failure
