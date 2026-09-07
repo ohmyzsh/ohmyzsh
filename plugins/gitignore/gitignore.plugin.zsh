@@ -1,7 +1,7 @@
 # gitignore plugin for oh-my-zsh
 # Uses gitignore.io CDN endpoint
 function _gi_curl() {
-  curl -sfL "https://www.gitignore.io/api/$1"
+  curl -sfL "https://www.toptal.com/developers/gitignore/api/$1"
 }
 
 function gi() {
