@@ -39,3 +39,18 @@ plugins=(... golang)
 | gov    | `go vet`          | Vet examines Go source code and reports suspicious constructs |
 | gove   | `go version`      | Prints Go version                                             |
 | gow    | `go work`         | Work provides access to operations on workspaces              |
+
+## Prompt
+
+This plugin provides the `go_prompt_info` function to add the installed Go
+version to your prompt.
+
+For example:
+```
+PROMPT="%~$ "
+RPROMPT='$(go_prompt_info)'
+```
+changes your prompt to:
+```
+~/go/project$ ▋                                                     1.22.3
+```
