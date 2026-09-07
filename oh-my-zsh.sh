@@ -136,20 +136,25 @@ _omz_git_head() {
   [[ -r "$gitdir/HEAD" ]] || return 1
   read -r head 2>/dev/null < "$gitdir/HEAD" || return 1
 
-  # detached HEAD: the file holds the commit itself
-  [[ "$head" = ref:\ * ]] || { REPLY="$head"; return 0 }
-
-  ref="${head#ref: }"
-  if [[ -r "$common/$ref" ]]; then
-    read -r REPLY 2>/dev/null < "$common/$ref" || return 1
-    [[ "$REPLY" != ref:\ * ]] || return 1
-    return 0
+  if [[ "$head" = ref:\ * ]]; then
+    ref="${head#ref: }"
+    if [[ -r "$common/$ref" ]]; then
+      read -r REPLY 2>/dev/null < "$common/$ref" || return 1
+    elif [[ -r "$common/packed-refs" ]]; then
+      lines=("${(@f)$(<"$common/packed-refs")}")
+      REPLY="${lines[(r)* ${(b)ref}]%% *}"
+    else
+      return 1
+    fi
+  else
+    # detached HEAD: the file holds the commit itself
+    REPLY="$head"
   fi
 
-  [[ -r "$common/packed-refs" ]] || return 1
-  lines=("${(@f)$(<"$common/packed-refs")}")
-  REPLY="${lines[(r)* ${(b)ref}]%% *}"
-  [[ -n "$REPLY" ]]
+  # only an object ID is a usable answer: a symbolic ref, a malformed file or
+  # a missed packed entry all fall through to the git fallback instead
+  [[ -n "$REPLY" && -z "${REPLY//[0-9a-f]/}" ]] \
+    && (( ${#REPLY} == 40 || ${#REPLY} == 64 ))
 }
 
 # Construct zcompdump OMZ metadata. The helper reports through $REPLY, so
