@@ -22,8 +22,10 @@ __omz_probe_cached=("$__omz_probe_cache"(Nm-1))
 
 function __omz_test_cmd_args {
   # Usage: __omz_test_cmd_args cmd args...
-  # e.g. __omz_test_cmd_args gls --color
-  # Runs `cmd args... /dev/null` and remembers whether it succeeded
+  # Runs `cmd args... /dev/null` and remembers whether it succeeded, so a
+  # command needing two operands passes the first one itself:
+  # e.g. __omz_test_cmd_args gls --color  ->  gls --color /dev/null
+  #      __omz_test_cmd_args diff --color /dev/null  ->  diff --color /dev/null /dev/null
   local key="$*"
   if (( ! ${+__omz_probes[$key]} )); then
     command "$@" /dev/null &>/dev/null
