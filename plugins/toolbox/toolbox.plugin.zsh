@@ -12,5 +12,19 @@ function toolbox_prompt_name() {
   awk -F\" '/name/ { gsub(/%/, "%%", $2); print $2 }' /run/.containerenv
 }
 
+function toolbox_prompt() {
+  if [[ -f /run/.containerenv ]]; then
+    local toolbox_name=$(toolbox_prompt_name)
+    if [[ -n "$toolbox_name" ]]; then
+      # Modify the HOST variable to display toolbox name in the prompt
+      # This ensures that '%m' in prompt formats shows "toolbx-{name}" instead of just "toolbx"
+      HOST="toolbx-$toolbox_name"
+    fi
+  fi
+}
+
+# Modify prompt to include toolbox name when inside a toolbox container
+toolbox_prompt
+
 alias tbe="toolbox enter"
 alias tbr="toolbox run"
