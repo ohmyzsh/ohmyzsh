@@ -16,6 +16,7 @@ FX=(
 
 # Build the tables with array operations instead of a 256-iteration loop
 () {
+  setopt localoptions noksharrays
   local -a codes fg bg
   codes=({000..255})
   fg=( "%{"$'\e'"[38;5;"${^codes}"m%}" )
