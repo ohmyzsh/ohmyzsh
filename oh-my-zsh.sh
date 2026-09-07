@@ -100,13 +100,17 @@ done
 # Figure out the SHORT hostname
 if [[ "$OSTYPE" = darwin* ]]; then
   # macOS's $HOST changes with dhcp, etc. Use LocalHostName if possible.
-  # When $HOST is the Bonjour name (<LocalHostName>.local) it already is the
-  # LocalHostName, so don't fork scutil to look it up.
-  if [[ "$HOST" = *.local ]]; then
-    SHORT_HOST="${HOST%.local}"
-  else
-    SHORT_HOST=$(scutil --get LocalHostName 2>/dev/null) || SHORT_HOST="${HOST/.*/}"
+  # scutil costs a fork on every start, so remember its answer against the
+  # $HOST it was looked up for and only ask again when $HOST changes.
+  __omz_host_cache="$ZSH_CACHE_DIR/localhostname"
+  if [[ -r "$__omz_host_cache" ]]; then
+    { read -r __omz_host_key && read -r SHORT_HOST } < "$__omz_host_cache"
   fi
+  if [[ "$__omz_host_key" != "$HOST" || -z "$SHORT_HOST" ]]; then
+    SHORT_HOST=$(scutil --get LocalHostName 2>/dev/null) || SHORT_HOST="${HOST/.*/}"
+    [[ ! -w "$ZSH_CACHE_DIR" ]] || print -rl -- "$HOST" "$SHORT_HOST" >| "$__omz_host_cache"
+  fi
+  unset __omz_host_cache __omz_host_key
 else
   SHORT_HOST="${HOST/.*/}"
 fi
