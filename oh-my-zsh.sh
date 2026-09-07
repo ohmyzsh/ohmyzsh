@@ -152,9 +152,13 @@ _omz_git_head() {
   [[ -n "$REPLY" ]]
 }
 
-# Construct zcompdump OMZ metadata
-_omz_git_head || REPLY="$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
-zcompdump_revision="#omz revision: $REPLY"
+# Construct zcompdump OMZ metadata. The helper reports through $REPLY, so
+# call it in a scope that keeps that out of the global namespace.
+() {
+  local REPLY
+  _omz_git_head || REPLY="$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
+  typeset -g zcompdump_revision="#omz revision: $REPLY"
+}
 zcompdump_fpath="#omz fpath: $fpath"
 unset -f _omz_git_head
 
