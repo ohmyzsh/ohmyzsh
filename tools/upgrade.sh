@@ -248,7 +248,7 @@ update_with_cooldown() {
   cutoff_epoch=$(( EPOCHSECONDS - cooldown_days * 86400 ))
   LANG= git fetch --quiet $remote $branch || return $?
 
-  cooldown_ref=$(git log --format="%H %ct" FETCH_HEAD \
+  cooldown_ref=$(git log --first-parent --format="%H %ct" FETCH_HEAD \
     | awk -v c="$cutoff_epoch" '$2 <= c { print $1; exit }')
 
   [[ -n "$cooldown_ref" ]] || return 0

@@ -57,7 +57,7 @@ function is_update_available() {
     (builtin cd -q "$ZSH"; LANG= git fetch --quiet $remote $branch) || return 1
     zmodload zsh/datetime
     cutoff_epoch=$(( EPOCHSECONDS - cooldown_days * 86400 ))
-    cooldown_ref=$(builtin cd -q "$ZSH"; git log --format="%H %ct" FETCH_HEAD \
+    cooldown_ref=$(builtin cd -q "$ZSH"; git log --first-parent --format="%H %ct" FETCH_HEAD \
       | awk -v c="$cutoff_epoch" '$2 <= c { print $1; exit }')
     [[ -n "$cooldown_ref" ]] || return 1
     [[ "$cooldown_ref" != "$local_head" ]] || return 1
