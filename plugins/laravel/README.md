@@ -43,6 +43,7 @@ plugins=(... laravel)
 | `pami`  | `php artisan make:interface` |
 | `pamtr` | `php artisan make:trait` |
 | `pamv` | `php artisan make:view` |
+| `pammig` | `php artisan make:migration` |
 
 ## Clears
 
