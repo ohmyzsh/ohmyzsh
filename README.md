@@ -475,6 +475,13 @@ just a little later:
 zstyle ':omz:update' cooldown 10
 ```
 
+`omz update` honors this setting. If you call `upgrade.sh` directly, pass the same
+value with `-c`, because that script does not read your `.zshrc`:
+
+```sh
+$ZSH/tools/upgrade.sh -c 10
+```
+
 ### Updates Verbosity
 
 You can also limit the update verbosity with the following settings:
