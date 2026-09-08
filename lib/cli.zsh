@@ -371,7 +371,7 @@ multi == 1 && /^[^#]*\)/ {
   next
 }
 
-# if multi flag is enabled and we didnt find a closing parenthesis,
+# if multi flag is enabled and we didn't find a closing parenthesis,
 # get the indentation level to match when adding plugins
 multi == 1 && /^[^#]*/ {
   indent=\"\"
@@ -519,7 +519,7 @@ function _omz::plugin::load {
     # Check if it has completion to reload compinit
     local -a comp_files
     comp_files=($base/_*(N))
-    has_completion=$(( $#comp_files > 0 ))
+    (( has_completion )) || has_completion=$(( $#comp_files > 0 ))
 
     # Load the plugin
     if [[ -f "$base/$plugin.plugin.zsh" ]]; then

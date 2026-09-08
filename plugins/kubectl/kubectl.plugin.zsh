@@ -10,7 +10,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
   _comps[kubectl]=_kubectl
 fi
 
-kubectl completion zsh 2> /dev/null >| "$ZSH_CACHE_DIR/completions/_kubectl" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_kubectl"
+  zf_mv -f -- =( kubectl completion zsh 2> /dev/null ) "$TMPPREFIX"
+} &|
 
 # This command is used a LOT both below and in daily life
 alias k=kubectl
@@ -89,6 +93,7 @@ alias kdelcm='kubectl delete configmap'
 # Secret management
 alias kgsec='kubectl get secret'
 alias kgseca='kubectl get secret --all-namespaces'
+alias kesec='kubectl edit secret'
 alias kdsec='kubectl describe secret'
 alias kdelsec='kubectl delete secret'
 

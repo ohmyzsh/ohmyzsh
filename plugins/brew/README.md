@@ -17,6 +17,12 @@ If `brew` is not found in the PATH, this plugin will attempt to find it in commo
 In case you installed `brew` in a non-common location, you can still set `BREW_LOCATION` variable pointing to
 the `brew` binary before sourcing `oh-my-zsh.sh` and it'll set up the environment.
 
+### sbin directory
+
+This plugin also adds `$HOMEBREW_PREFIX/sbin` to the PATH if the directory exists and isn't already present.
+Some Homebrew formulae (e.g. `mtr`) install executables to `sbin`, which `brew doctor` checks for. This
+ensures the `bdr` alias runs without warnings.
+
 ## Aliases
 
 | Alias    | Command                                 | Description                                                           |

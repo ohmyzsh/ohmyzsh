@@ -27,7 +27,7 @@ The plugin also documents two other ways to do this:
 
 1. Using a function wrapper, such that, for example, there exists a function
 named `ls` which calls `gls` instead. Since functions have a higher preference
-than commands, this ends up calling the GNU coreutil. It has also a higher
+than commands, this ends up calling the GNU coreutils. It has also a higher
 preference over shell builtins (`gecho` is called instead of the builtin `echo`).
 
 2. Using an alias. This has an even higher preference than functions, but they

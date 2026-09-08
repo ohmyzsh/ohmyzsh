@@ -138,7 +138,7 @@ function consume100() {
 
 # Website traffic statistics (G)
 function webtraffic() {
-  awk "{sum+=$10} END {print sum/1024/1024/1024}" "$(retlog)"
+  awk '{sum+=$10} END {print sum/1024/1024/1024}' "$(retlog)"
 }
 
 # Statistical connections 404

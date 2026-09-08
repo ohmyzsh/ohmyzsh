@@ -39,4 +39,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_poetry" ]]; then
   _comps[poetry]=_poetry
 fi
 
-poetry completions zsh >| "$ZSH_CACHE_DIR/completions/_poetry" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_poetry"
+  zf_mv -f -- =( poetry completions zsh ) "$TMPPREFIX"
+} &|

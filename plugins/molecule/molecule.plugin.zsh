@@ -11,7 +11,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_molecule" ]]; then
   _comps[molecule]=_molecule
 fi
 
-_MOLECULE_COMPLETE=zsh_source molecule >| "$ZSH_CACHE_DIR/completions/_molecule" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_molecule"
+  zf_mv -f -- =( _MOLECULE_COMPLETE=zsh_source molecule ) "$TMPPREFIX"
+} &|
 
 # Alias
 # molecule: https://docs.ansible.com/projects/molecule/

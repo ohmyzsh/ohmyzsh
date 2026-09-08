@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_bun" ]]; then
   _comps[bun]=_bun
 fi
 
-SHELL=zsh bun completions >| "$ZSH_CACHE_DIR/completions/_bun" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_bun"
+  zf_mv -f -- =( SHELL=zsh bun completions ) "$TMPPREFIX"
+} &|

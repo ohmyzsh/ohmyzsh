@@ -10,7 +10,7 @@ plugins=(... pipenv ...)
 
 ## Features
 
-- Adds completion for pipenv
+- Adds completion for pipenv ([install the `argcomplete` package to get it working with pipenv >= 2026.5.0](https://pipenv.pypa.io/en/latest/shell.html#shell-completion))
 - Auto activates and deactivates pipenv shell
 - Adds short aliases for common pipenv commands
   - `pch` is aliased to `pipenv check`
@@ -28,6 +28,18 @@ plugins=(... pipenv ...)
   - `pwh` is aliased to `pipenv --where`
   - `pvenv` is aliased to `pipenv --venv`
   - `ppy` is aliased to `pipenv --py`
+
+## Cache
+
+This plugin caches the Pipenv version to avoid running `pipenv --version` on every shell startup. The cache is automatically refreshed asynchronously when the plugin is loaded, which is usually when you start a new terminal session.
+
+For legacy Pipenv versions, the generated completion script is also cached.
+
+The cache is stored at:
+
+- `$ZSH_CACHE_DIR/pipenv_version` version of Pipenv, used to choose between argcomplete-based completion and legacy Click-based completion.
+
+- `$ZSH_CACHE_DIR/completions/_pipenv` legacy Click-based completion script.
 
 ## Configuration
 

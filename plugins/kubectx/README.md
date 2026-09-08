@@ -22,6 +22,21 @@ RPS1='$(kubectx_prompt_info)'
 PROMPT="$PROMPT"'$(kubectx_prompt_info)'
 ```
 
+The context is loaded asynchronously on supported versions of zsh so that
+`kubectl` does not block the prompt. To restore synchronous behavior, add this
+before Oh My Zsh is sourced:
+
+```zsh
+zstyle ':omz:alpha:plugins:kubectx' async-prompt no
+```
+
+If your theme calls `kubectx_prompt_info` indirectly through another function,
+force registration of the async handler instead:
+
+```zsh
+zstyle ':omz:alpha:plugins:kubectx' async-prompt force
+```
+
 ### Custom context names
 
 You can rename the default context name for better readability or additional formatting.

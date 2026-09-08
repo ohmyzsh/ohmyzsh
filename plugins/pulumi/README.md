@@ -1,7 +1,7 @@
 # Pulumi
 
 This is an **Oh My Zsh plugin** for the [**Pulumi CLI**](https://www.pulumi.com/docs/iac/cli/),
-an Infrastructure as Code (IaC) tool for building, deploying and managing cloud infrastucture.
+an Infrastructure as Code (IaC) tool for building, deploying and managing cloud infrastructure.
 
 This plugin provides:
 

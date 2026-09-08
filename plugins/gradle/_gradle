@@ -269,6 +269,7 @@ __gradle_subcommand() {
                 '-Dorg.gradle.configuration-cache.unsafe.ignore.unsupported-build-events-listeners=[]' \
                 '-Dorg.gradle.configuration-cache=[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]' \
                 '-Dorg.gradle.configureondemand=[Configures necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]' \
+                '-Dorg.gradle.console.interactive=[]' \
                 '-Dorg.gradle.console.unicode=[Specifies which character types are allowed in the console output. Supported values are 'auto' (default), 'disable', or 'enable'.]' \
                 '-Dorg.gradle.console=[Specifies which type of console output to generate. Supported values are 'plain', 'colored', 'auto' (default), 'rich', or 'verbose'.]:org.gradle.console:(plain auto rich verbose)' \
                 '-Dorg.gradle.continue=[Continues task execution after a task failure.]' \
@@ -283,6 +284,9 @@ __gradle_subcommand() {
                 '-Dorg.gradle.debug.suspend=[]' \
                 '-Dorg.gradle.debug=[]:org.gradle.debug:(true false)' \
                 '-Dorg.gradle.dependency.verification=[Configures the dependency verification mode. Supported values are 'strict', 'lenient', or 'off'.]:org.gradle.dependency.verification:(strict lenient off)' \
+                '-Dorg.gradle.isolated-projects.dangerously-ignore-problems=[]' \
+                '-Dorg.gradle.isolated-projects.diagnostics=[]' \
+                '-Dorg.gradle.isolated-projects=[Enables Isolated Projects. Projects are configured in parallel. Implies `--configuration-cache`.]' \
                 '-Dorg.gradle.java.home=[]:org.gradle.java.home:_directories' \
                 '-Dorg.gradle.java.installations.auto-detect=[]' \
                 '-Dorg.gradle.java.installations.auto-download=[]' \
@@ -298,7 +302,6 @@ __gradle_subcommand() {
                 '-Dorg.gradle.problems.report=[Enables the HTML problems report.]' \
                 '-Dorg.gradle.projectcachedir=[Specifies the project-specific cache directory. Default is .gradle in the root project directory.]:org.gradle.projectcachedir:_directories' \
                 '-Dorg.gradle.tooling.parallel=[]' \
-                '-Dorg.gradle.unsafe.isolated-projects=[]' \
                 '-Dorg.gradle.vfs.verbose=[]' \
                 '-Dorg.gradle.vfs.watch=[Enables file system watching. Reuses file system data for subsequent builds.]:org.gradle.vfs.watch:(true false)' \
                 '-Dorg.gradle.warning.mode=[Specifies which mode of warnings to generate. Supported values are 'all', 'fail', 'summary' (default), or 'none'.]' \
@@ -326,17 +329,20 @@ __gradle_subcommand() {
                 \*'--include-build[Includes the specified build in the composite.]:include build:_directories' \
                 (--quiet,-q,--warn,-w,--debug,-d){-i,--info}'[Sets the log level to info.]' \
                 \*{-I,--init-script}'[Specifies an initialization script.]:init script:_files -g \*.gradle(|.kts)' \
+                (--no-isolated-projects)'--isolated-projects[Enables Isolated Projects. Projects are configured in parallel. Implies `--configuration-cache`. (incubating)]' \
                 '--max-workers[Configures the maximum number of concurrent workers Gradle is allowed to use.]' \
                 (--build-cache)'--no-build-cache[Disables the Gradle build cache.]' \
                 (--configuration-cache)'--no-configuration-cache[Disables the configuration cache.]' \
                 (--configure-on-demand)'--no-configure-on-demand[Disables the use of configuration on demand. (incubating)]' \
                 (--continue)'--no-continue[Stops task execution after a task failure.]' \
                 (--daemon)'--no-daemon[Runs the build without the Gradle daemon. Useful occasionally if you have configured Gradle to always run with the daemon by default.]' \
+                (--isolated-projects)'--no-isolated-projects[Disables Isolated Projects. (incubating)]' \
                 (--parallel)'--no-parallel[Disables parallel project execution.]' \
                 (--problems-report)'--no-problems-report[Disables the HTML problems report. (incubating)]' \
                 {-a,--no-rebuild}'[Disables rebuilding of project dependencies.]' \
                 (--scan)'--no-scan[Disables the creation of a Build Scan.]' \
                 (--watch-fs)'--no-watch-fs[Disables file system watching.]' \
+                '--non-interactive[Do not do interactive prompting. (incubating)]' \
                 '--offline[Runs the build without accessing network resources.]' \
                 (--no-parallel)'--parallel[Builds projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]' \
                 '--priority[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Supported values are 'normal' (default) or 'low'.]' \
@@ -403,6 +409,7 @@ _gradle() {
         '-Dorg.gradle.configuration-cache.unsafe.ignore.unsupported-build-events-listeners=[]:->argument-expected' \
         '-Dorg.gradle.configuration-cache=[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]:->argument-expected' \
         '-Dorg.gradle.configureondemand=[Configures necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]:->argument-expected' \
+        '-Dorg.gradle.console.interactive=[]:->argument-expected' \
         '-Dorg.gradle.console.unicode=[Specifies which character types are allowed in the console output. Supported values are 'auto' (default), 'disable', or 'enable'.]:->argument-expected' \
         '-Dorg.gradle.console=[Specifies which type of console output to generate. Supported values are 'plain', 'colored', 'auto' (default), 'rich', or 'verbose'.]:org.gradle.console:(plain auto rich verbose):->argument-expected' \
         '-Dorg.gradle.continue=[Continues task execution after a task failure.]:->argument-expected' \
@@ -417,6 +424,9 @@ _gradle() {
         '-Dorg.gradle.debug.suspend=[]:->argument-expected' \
         '-Dorg.gradle.debug=[]:org.gradle.debug:(true false):->argument-expected' \
         '-Dorg.gradle.dependency.verification=[Configures the dependency verification mode. Supported values are 'strict', 'lenient', or 'off'.]:org.gradle.dependency.verification:(strict lenient off):->argument-expected' \
+        '-Dorg.gradle.isolated-projects.dangerously-ignore-problems=[]:->argument-expected' \
+        '-Dorg.gradle.isolated-projects.diagnostics=[]:->argument-expected' \
+        '-Dorg.gradle.isolated-projects=[Enables Isolated Projects. Projects are configured in parallel. Implies `--configuration-cache`.]:->argument-expected' \
         '-Dorg.gradle.java.home=[]:org.gradle.java.home:_directories:->argument-expected' \
         '-Dorg.gradle.java.installations.auto-detect=[]:->argument-expected' \
         '-Dorg.gradle.java.installations.auto-download=[]:->argument-expected' \
@@ -432,7 +442,6 @@ _gradle() {
         '-Dorg.gradle.problems.report=[Enables the HTML problems report.]:->argument-expected' \
         '-Dorg.gradle.projectcachedir=[Specifies the project-specific cache directory. Default is .gradle in the root project directory.]:org.gradle.projectcachedir:_directories:->argument-expected' \
         '-Dorg.gradle.tooling.parallel=[]:->argument-expected' \
-        '-Dorg.gradle.unsafe.isolated-projects=[]:->argument-expected' \
         '-Dorg.gradle.vfs.verbose=[]:->argument-expected' \
         '-Dorg.gradle.vfs.watch=[Enables file system watching. Reuses file system data for subsequent builds.]:org.gradle.vfs.watch:(true false):->argument-expected' \
         '-Dorg.gradle.warning.mode=[Specifies which mode of warnings to generate. Supported values are 'all', 'fail', 'summary' (default), or 'none'.]:->argument-expected' \
@@ -461,17 +470,20 @@ _gradle() {
         \*'--include-build[Includes the specified build in the composite.]:include build:_directories:->argument-expected' \
         (--quiet,-q,--warn,-w,--debug,-d){-i,--info}'[Sets the log level to info.]' \
         \*{-I,--init-script}'[Specifies an initialization script.]:init script:_files -g \*.gradle(|.kts):->argument-expected' \
+        (--no-isolated-projects)'--isolated-projects[Enables Isolated Projects. Projects are configured in parallel. Implies `--configuration-cache`. (incubating)]' \
         '--max-workers[Configures the maximum number of concurrent workers Gradle is allowed to use.]:->argument-expected' \
         (--build-cache)'--no-build-cache[Disables the Gradle build cache.]' \
         (--configuration-cache)'--no-configuration-cache[Disables the configuration cache.]' \
         (--configure-on-demand)'--no-configure-on-demand[Disables the use of configuration on demand. (incubating)]' \
         (--continue)'--no-continue[Stops task execution after a task failure.]' \
         (--daemon)'--no-daemon[Runs the build without the Gradle daemon. Useful occasionally if you have configured Gradle to always run with the daemon by default.]' \
+        (--isolated-projects)'--no-isolated-projects[Disables Isolated Projects. (incubating)]' \
         (--parallel)'--no-parallel[Disables parallel project execution.]' \
         (--problems-report)'--no-problems-report[Disables the HTML problems report. (incubating)]' \
         {-a,--no-rebuild}'[Disables rebuilding of project dependencies.]' \
         (--scan)'--no-scan[Disables the creation of a Build Scan.]' \
         (--watch-fs)'--no-watch-fs[Disables file system watching.]' \
+        '--non-interactive[Do not do interactive prompting. (incubating)]' \
         '--offline[Runs the build without accessing network resources.]' \
         (--no-parallel)'--parallel[Builds projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]' \
         '--priority[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Supported values are 'normal' (default) or 'low'.]:->argument-expected' \

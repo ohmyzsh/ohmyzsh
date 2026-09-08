@@ -137,8 +137,9 @@ function gbda() {
 # Copied and modified from James Roeder (jmaroeder) under MIT License
 # https://github.com/jmaroeder/plugin-git/blob/216723ef4f9e8dde399661c39c80bdf73f4076c4/functions/gbda.fish
 function gbds() {
-  local default_branch=$(git_main_branch)
-  (( ! $? )) || default_branch=$(git_develop_branch)
+  local default_branch
+  default_branch=$(git_main_branch) \
+    || default_branch=$(git_develop_branch)
 
   git for-each-ref refs/heads/ "--format=%(refname:short)" | \
     while read branch; do
@@ -153,7 +154,7 @@ alias gbgd='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk
 alias gbgD='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk '"'"'{print $1}'"'"' | xargs git branch -D'
 alias gbm='git branch --move'
 alias gbnm='git branch --no-merged'
-alias gbr='git branch --remote'
+alias gbr='git branch --remotes'
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 alias gbg='LANG=C git branch -vv | grep ": gone\]"'
 alias gco='git checkout'

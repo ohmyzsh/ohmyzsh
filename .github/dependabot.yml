@@ -6,9 +6,23 @@ updates:
       interval: "weekly"
       day: "sunday"
     labels: []
+    groups:
+      gha-minor:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
   - package-ecosystem: "pip"
     directory: "/.github/workflows/dependencies"
     schedule:
       interval: "weekly"
       day: "sunday"
     labels: []
+    groups:
+      py-minor:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch

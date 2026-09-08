@@ -48,10 +48,11 @@ Default: `no`
 ### `show-group`
 
 ```zsh
-zstyle ':omz:plugins:eza' 'show-group' yes|no
+zstyle ':omz:plugins:eza' 'show-group' yes|no|smart
 ```
 
 If `yes` (default), always add `-g` flag to show the group ownership.
+If `smart`, adds the `--smart-group` flag to only show the group if it has a different name from the owner.
 
 Default: `yes`
 

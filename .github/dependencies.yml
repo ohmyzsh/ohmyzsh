@@ -12,7 +12,7 @@ dependencies:
   plugins/gradle:
     repo: gradle/gradle-completion
     branch: master
-    version: d8bc301a1fdeed8dc1dd9675138e1d9b7ddc5e4e
+    version: e7c881dbef7462bc35ad05328397e1582fe25cb8
     precopy: |
       set -e
       find . ! -name _gradle ! -name LICENSE -delete
@@ -46,9 +46,10 @@ dependencies:
   plugins/z:
     branch: master
     repo: agkozak/zsh-z
-    version: acd0e1984df350c189f8f9c4956ec586b6c73fca
+    version: 102fb78036ed76feedf623907483691777a1d510
     precopy: |
       set -e
+      rm -r tests
       test -e README.md && mv -f README.md MANUAL.md
     postcopy: |
       set -e

@@ -74,3 +74,10 @@ if [[ -x /usr/bin/command-not-found ]]; then
     /usr/bin/command-not-found "$1"
   }
 fi
+
+# Alpine: https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/command-not-found/APKBUILD
+if [[ -x /usr/libexec/command-not-found ]]; then
+  command_not_found_handler() {
+    /usr/libexec/command-not-found "$1"
+  }
+fi

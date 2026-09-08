@@ -11,6 +11,7 @@ alias dnfp="${dnfprog} info"                       # Show package information
 alias dnfs="${dnfprog} search"                     # Search package
 
 alias dnfu="sudo ${dnfprog} upgrade"               # Upgrade package
+alias dnfur="sudo ${dnfprog} upgrade --refresh"    # Upgrade package and refresh repos
 alias dnfi="sudo ${dnfprog} install"               # Install package
 alias dnfr="sudo ${dnfprog} remove"                # Remove package
 alias dnfc="sudo ${dnfprog} clean all"             # Clean cache
