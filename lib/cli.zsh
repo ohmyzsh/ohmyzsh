@@ -24,6 +24,7 @@ function _omz {
   local -a cmds subcmds
   cmds=(
     'changelog:Print the changelog'
+    'diagnose:Run configuration diagnostics'
     'help:Usage information'
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
@@ -163,12 +164,38 @@ function _omz::log {
 
 ## User-facing commands
 
+function _omz::diagnose {
+  # Check the runtime locale: non-UTF-8 charsets are known to cause glitches
+  # such as duplicated characters at the prompt after completions.
+  # https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#i-see-duplicate-typed-characters-after-i-complete-a-command
+  #
+  # The zsh/langinfo module is free of subprocess overhead; fall back to
+  # `locale charmap` when it is not available.
+  if zmodload -F zsh/langinfo b:langinfo 2>/dev/null; then
+    local codeset="$langinfo[CODESET]"
+  elif (( $+commands[locale] )); then
+    local codeset="$(locale charmap 2>/dev/null)"
+  else
+    local codeset="unknown"
+  fi
+
+  if [[ "$codeset" = "UTF-8" ]]; then
+    _omz::log info "locale charmap is UTF-8"
+  else
+    _omz::log warn "your locale is not UTF-8 (charmap: ${codeset:-unknown})"
+    _omz::log info "non-UTF-8 locales may cause glitches in completions and international characters"
+    _omz::log info "consider setting a UTF-8 locale, e.g.: export LANG=C.UTF-8"
+    return 1
+  fi
+}
+
 function _omz::help {
   cat >&2 <<EOF
 Usage: omz <command> [options]
 
 Available commands:
 
+  diagnose            Run configuration diagnostics
   help                Print this help message
   changelog           Print the changelog
   plugin <command>    Manage plugins
