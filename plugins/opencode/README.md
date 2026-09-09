@@ -64,10 +64,16 @@ even though those flags work when typed. Use `opencode --help` or
 | `opcc` | `opencode --continue` | Continue the last session           |
 | `opcr` | `opencode run`        | Run a prompt without opening the UI |
 
-To keep completion but disable aliases, add this before sourcing Oh My Zsh:
+To keep completion but skip the aliases, set this in your `.zshrc`, above the line
+that sources Oh My Zsh:
 
 ```zsh
+# ~/.zshrc
 zstyle ':omz:plugins:opencode' aliases no
+
+plugins=(... opencode)
+
+source $ZSH/oh-my-zsh.sh
 ```
 
 ## Common workflows
