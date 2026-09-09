@@ -79,7 +79,7 @@ function _omz {
         _describe -o 'options' opts ;;
       theme::(browse|preview))
         local -a themes
-        themes=("${(@f)$(source "$ZSH/tools/theme-preview.zsh"; _omz_theme_names)}")
+        themes=("${(@f)$(source "$ZSH/tools/theme-browser/preview.zsh"; _omz_theme_names)}")
         _describe 'theme' themes ;;
       theme::(set|use))
         local -aU themes
@@ -774,7 +774,7 @@ function _omz::theme::preview {
     print -u2 -r -- 'Usage: omz theme preview <theme>'
     return 1
   fi
-  source "$ZSH/tools/theme-preview.zsh"
+  source "$ZSH/tools/theme-browser/preview.zsh"
   _omz_theme_preview "$1"
 }
 
@@ -787,8 +787,8 @@ function _omz::theme::browse {
     print -u2 -r -- 'omz theme browse requires an interactive terminal; use omz theme preview <theme> instead.'
     return 1
   fi
-  source "$ZSH/tools/theme-preview.zsh"
-  source "$ZSH/tools/theme-browser.zsh"
+  source "$ZSH/tools/theme-browser/preview.zsh"
+  source "$ZSH/tools/theme-browser/browser.zsh"
   local selection action name
   selection=$(_omz_theme_browser "$1") || return $?
   [[ -n $selection ]] || return 0

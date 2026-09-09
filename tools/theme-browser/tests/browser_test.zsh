@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Run with: zsh -df tools/tests/theme-browser.zsh
+# Run with: zsh -df tools/theme-browser/tests/browser_test.zsh
 # Optionally pass one group, e.g. `slow-interrupt`, to run it alone.
 # Each browser runs under a real controlling PTY, with no user startup files.
 emulate -R zsh
@@ -85,7 +85,7 @@ setopt err_exit pipe_fail
 zmodload zsh/zpty
 zmodload zsh/datetime
 zmodload zsh/zselect
-typeset -r repo=${0:A:h:h:h} self=${0:A}
+typeset -r repo=${0:A:h:h:h:h} self=${0:A}
 typeset scratch=$(mktemp -d "${TMPDIR:-/tmp}/omz-browser-test.XXXXXXXX")
 scratch=${scratch:A}
 trap 'zpty -d 2>/dev/null; command rm -rf -- "$scratch"' EXIT

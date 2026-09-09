@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
-# Run with: zsh -df tools/tests/theme-preview.zsh
+# Run with: zsh -df tools/theme-browser/tests/preview_test.zsh
 emulate -R zsh
 setopt err_exit pipe_fail
-typeset -r repo=${0:A:h:h:h}
-source "$repo/tools/theme-preview.zsh"
+typeset -r repo=${0:A:h:h:h:h}
+source "$repo/tools/theme-browser/preview.zsh"
 typeset scratch=$(mktemp -d "${TMPDIR:-/tmp}/omz-preview-test.XXXXXXXX")
 scratch=${scratch:A}
 trap 'command rm -rf -- "$scratch"' EXIT
@@ -220,7 +220,7 @@ check test -z "${child_state//[ ZN+]/}"
 # Match the browser's nested-PTY invocation, preserving other owned PTYs.
 zmodload zsh/zpty
 zpty -b unrelated 'exec sleep 30'
-typeset -a nested_command=("$commands[zsh]" -dfc 'source "$1"; _omz_theme_preview status' zsh "$repo/tools/theme-preview.zsh")
+typeset -a nested_command=("$commands[zsh]" -dfc 'source "$1"; _omz_theme_preview status' zsh "$repo/tools/theme-browser/preview.zsh")
 zpty -b browser exec "${(@q)nested_command}"
 output=''
 for attempt in {1..300}; do
@@ -239,7 +239,7 @@ zpty -d browser unrelated
 # Cancellation by the browser's outer process group must also clean the
 # backend's separate inner PTY group and private FIFO directory.
 rm -f "$PREVIEW_PID_FILE"
-nested_command=("$commands[zsh]" -dfc 'source "$1"; _omz_theme_preview slow' zsh "$repo/tools/theme-preview.zsh")
+nested_command=("$commands[zsh]" -dfc 'source "$1"; _omz_theme_preview slow' zsh "$repo/tools/theme-browser/preview.zsh")
 zpty -b browser exec "${(@q)nested_command}"
 typeset browser_group record
 for record in "${(@f)$(zpty)}"; do
@@ -266,7 +266,7 @@ zpty -d browser
 export ZSH=$repo
 git -C "$scratch/work" init -q
 git -C "$scratch/work" symbolic-ref HEAD refs/heads/preview-branch
-output=$(zsh -dfc 'builtin cd "$1"; source tools/theme-preview.zsh; builtin cd "$2"; _omz_theme_preview robbyrussell' zsh "$repo" "$scratch/work")
+output=$(zsh -dfc 'builtin cd "$1"; source tools/theme-browser/preview.zsh; builtin cd "$2"; _omz_theme_preview robbyrussell' zsh "$repo" "$scratch/work")
 check test "${output#*preview-branch}" != "$output"
 for name in robbyrussell dieter agnoster bira nicoulaj half-life; do
   output=$(builtin cd "$scratch/work"; _omz_theme_preview "$name" 7)

@@ -5,7 +5,7 @@ typeset -g _OMZ_THEME_PREVIEW_DIR=${${(%):-%x}:A:h}
 function _omz_theme_names() (
   emulate -L zsh
   setopt extendedglob
-  local root=${ZSH:-${_OMZ_THEME_PREVIEW_DIR:h}}
+  local root=${ZSH:-${_OMZ_THEME_PREVIEW_DIR:h:h}}
   local custom=${ZSH_CUSTOM:-$root/custom} dir file name
   local -a names files
   for dir in "$custom" "$root/themes"; do
@@ -28,7 +28,7 @@ function _omz_theme_names() (
 function _omz_theme_resolve() (
   emulate -L zsh
   setopt extendedglob
-  local name=$1 root=${ZSH:-${_OMZ_THEME_PREVIEW_DIR:h}}
+  local name=$1 root=${ZSH:-${_OMZ_THEME_PREVIEW_DIR:h:h}}
   local custom=${ZSH_CUSTOM:-$root/custom} dir
   if (( $# != 1 )) || [[ -z $name || $name == random || /$name/ == */(.|..)/* || $name == /* || $name == *//* || $name == *[[:cntrl:]\\]* ]]; then
     print -u2 -r -- 'theme preview: invalid or non-selectable theme name'
@@ -60,7 +60,7 @@ function _omz_theme_preview() (
     return 1
   fi
   local tmp fifo_fd pty=omz-preview-$sysparams[pid] record pgid raw='' chunk error=''
-  local selected=$1 custom=${ZSH_CUSTOM:-${ZSH:-$backend:h}/custom}
+  local selected=$1 custom=${ZSH_CUSTOM:-${ZSH:-${backend:h:h}}/custom}
   local -i active=0 cancelled=0 bytes=0 count remaining result=1
   local -F deadline
   trap 'cancelled=130' INT
@@ -73,8 +73,8 @@ function _omz_theme_preview() (
 
     # Exec immediately: a forked shell function could run inherited EXIT traps
     # after returning. Both the launcher and theme worker must start fresh.
-    local -a launch=("$commands[zsh]" -df "$backend/theme-preview-worker.zsh" --supervise
-      "$tmp" "$backend:h" "$theme" "$sample" "$selected" "$custom")
+    local -a launch=("$commands[zsh]" -df "$backend/preview-worker.zsh" --supervise
+      "$tmp" "${backend:h:h}" "$theme" "$sample" "$selected" "$custom")
     deadline=$(( EPOCHREALTIME + 3 ))
     if ! zpty -b "$pty" exec "${(@q)launch}"; then
       print -u2 -r -- 'theme preview: could not allocate a private PTY'

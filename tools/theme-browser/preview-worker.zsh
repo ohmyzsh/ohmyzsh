@@ -1,4 +1,4 @@
-# Invoked only by theme-preview.zsh in a fresh zsh -df process. Themes and hooks
+# Invoked only by preview.zsh in a fresh zsh -df process. Themes and hooks
 # are intentionally sourced/run at top level (not inside a setup function).
 emulate -R zsh
 if [[ $1 == --supervise ]]; then
