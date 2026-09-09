@@ -130,7 +130,7 @@ plugins=(... kubectl)
 | kdss     | `kubectl describe statefulset`                          | Describe statefulset resource in detail                                                          |
 | kdelss   | `kubectl delete statefulset`                            | Delete the statefulset                                                                           |
 | ksss     | `kubectl scale statefulset`                             | Scale a statefulset                                                                              |
-| krsss    | `kubectl rollout status statefulset`                    | Check the rollout status of a deployment                                                         |
+| krsss    | `kubectl rollout status statefulset`                    | Check the rollout status of a statefulset                                                        |
 | krrss    | `kubectl rollout restart statefulset`                   | Rollout restart a statefulset                                                                    |
 |          |                                                         | **Service Accounts management**                                                                  |
 | kdsa     | `kubectl describe sa`                                   | Describe a service account in details                                                            |
