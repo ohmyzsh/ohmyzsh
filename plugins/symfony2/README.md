@@ -1,5 +1,10 @@
 # Symfony2
 
+> **⚠️ DEPRECATION WARNING**  
+> This plugin is deprecated and will be removed in a future release.  
+> **Please migrate to the unified [`symfony`](../symfony/) plugin** which supports all Symfony versions (2.x through 6+).  
+> Simply change `symfony2` to `symfony` in your `.zshrc` plugins list.
+
 This plugin provides completion for [Symfony 2](https://symfony.com/), as well as aliases for frequent Symfony commands.
 
 To use it add symfony2 to the plugins array in your zshrc file.
@@ -7,6 +12,16 @@ To use it add symfony2 to the plugins array in your zshrc file.
 ```bash
 plugins=(... symfony2)
 ```
+
+## Migration
+
+**Recommended:** Use the unified [`symfony`](../symfony/) plugin instead:
+
+```bash
+plugins=(... symfony)  # Replace symfony2 with symfony
+```
+
+The unified plugin provides the same functionality plus automatic version detection and support for all Symfony versions.
 
 ## Aliases
 
