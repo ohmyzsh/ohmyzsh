@@ -11,6 +11,7 @@ if [[ $1 == --child ]]; then
   source "$ZSH/lib/cli.zsh"
   # Match normal OMZ sessions without sourcing any user startup/configuration.
   setopt promptsubst
+  [[ -z $BROWSER_TEST_NO_PROMPT_PERCENT ]] || unsetopt promptpercent
   print -r -- "LAZY:$+functions[_omz_theme_browser]:$+functions[_omz_theme_preview]"
   if [[ $2 == completion ]]; then
     # Capture the real completion function's candidates without loading the
@@ -57,8 +58,18 @@ if [[ $1 == --child ]]; then
   # An interactive script otherwise aborts on SIGINT instead of returning to
   # the next prompt as an interactive command loop would.
   trap ':' INT
+  case $BROWSER_TEST_EXIT_TRAP in
+    function) function TRAPEXIT { print -r -- EXIT_HOOK; } ;;
+    string) trap 'print -r -- EXIT_HOOK' EXIT ;;
+  esac
+  typeset original_exit_trap=${functions[TRAPEXIT]-}
   omz theme browse "$2"
   result=$?
+  if [[ -n $BROWSER_TEST_EXIT_TRAP ]]; then
+    [[ ${functions[TRAPEXIT]-} == "$original_exit_trap" ]] && print -r -- EXIT_FUNCTION_UNCHANGED
+    trap
+    trap - EXIT
+  fi
   typeset restored_tty=$(stty -a)
   restored_tty=${${restored_tty//-pendin/}//pendin/}
   if [[ $restored_tty == "$original_tty" ]]; then
@@ -114,6 +125,8 @@ typeset preview_probe='$(print HIT > $TEST_SCRATCH/preview-executed)'
 # Emit literal preview output, rather than asking the worker to evaluate a
 # prompt expression. Only a second evaluation by the browser can execute it.
 print -rl -- "print -r -- ${(q)preview_probe}" 'PROMPT="literal-preview-ready"' > "$ZSH_CUSTOM/literal-browser.zsh-theme"
+typeset backslash_probe='literal:\e[2J\n\c:end'
+print -rl -- "print -r -- ${(q)backslash_probe}" 'PROMPT="backslash-preview-ready"' > "$ZSH_CUSTOM/backslash-browser.zsh-theme"
 
 typeset buffer='' transcript='' chunk='' label=''
 typeset -F browser_finished_at=0
@@ -265,6 +278,49 @@ function test_save {
   finish '0:set:zz-omz-test-02:zz-omz-test-02'
 }
 
+function test_backslashes {
+  start 'literal backslashes in preview and filter' backslash-browser '> backslash-browser'
+  await "$backslash_probe"
+  await backslash-preview-ready
+  send $'\x15'"$backslash_probe"
+  await "Filter: $backslash_probe"
+  await 'No matching themes.'
+  send $'\e'
+  finish '0::parent-theme'
+}
+
+function test_promptpercent {
+  local -x BROWSER_TEST_NO_PROMPT_PERCENT=1
+  start 'renderer enables promptpercent without changing parent options' zz-omz-test-01 '> zz-omz-test-01'
+  await FIXTURE_PREVIEW
+  check test "${transcript#*'%<<'}" = "$transcript"
+  send $'\e'
+  finish '0::parent-theme'
+}
+
+function test_exittrap {
+  local -x BROWSER_TEST_EXIT_TRAP
+  local action
+  for BROWSER_TEST_EXIT_TRAP in function string; do
+    for action in use set cancel; do
+      start "inherited $BROWSER_TEST_EXIT_TRAP EXIT trap: $action" zz-omz-test-01 '> zz-omz-test-01'
+      await FIXTURE_PREVIEW
+      if [[ $action == cancel ]]; then
+        send $'\e'
+        finish '0::parent-theme'
+      else
+        send $'\r'; await '[u] Use in session'
+        send "${action[1]}"
+        finish "0:$action:zz-omz-test-01:zz-omz-test-01"
+      fi
+      check test "${transcript#*EXIT_FUNCTION_UNCHANGED}" != "$transcript"
+      if [[ $BROWSER_TEST_EXIT_TRAP == string ]]; then
+        check test "${transcript#*"trap -- 'print -r -- EXIT_HOOK' EXIT"}" != "$transcript"
+      fi
+    done
+  done
+}
+
 function test_interrupt {
   start 'Ctrl-C restores terminal' zz-omz-test-01 '> zz-omz-test-01'
   send $'\x03'
@@ -322,7 +378,7 @@ function test_slow {
 # Keep independent regressions running after a failed UI session.
 unsetopt err_exit
 typeset -i failures=0
-for scenario in rejection completion navigation promptsubst use save interrupt resize slow-navigation slow-escape slow-interrupt; do
+for scenario in rejection completion navigation promptsubst backslashes promptpercent exittrap use save interrupt resize slow-navigation slow-escape slow-interrupt; do
   [[ -z $1 || $scenario == "$1" ]] || continue
   (
     setopt err_exit

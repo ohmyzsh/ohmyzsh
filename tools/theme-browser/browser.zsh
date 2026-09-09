@@ -2,7 +2,7 @@
 # two-line data handoff, while all terminal I/O goes through a private tty fd.
 function _omz_theme_browser() (
   emulate -L zsh
-  setopt extendedglob
+  setopt extendedglob promptpercent
   # Displayed names, filter text, and worker output are data, not prompt code.
   unsetopt promptsubst
   zmodload zsh/terminfo && zmodload zsh/zpty && zmodload zsh/system && zmodload zsh/datetime || return 1
@@ -46,7 +46,7 @@ function _omz_theme_browser() (
     done
     formatted+=$text
     echoti cup $row 0 >&$tty
-    print -Pn -u $tty -- "%${width}<..<${formatted}%<<%f%k%b"
+    print -Prn -u $tty -- "%${width}<..<${formatted}%<<%f%k%b"
     (( row++ ))
   }
 
