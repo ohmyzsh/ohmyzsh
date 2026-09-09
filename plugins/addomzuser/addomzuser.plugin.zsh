@@ -1,6 +1,6 @@
-# Copyright (c) 2021 Nikolas Garofil
+# Copyright (c) 2026 Nikolas Garofil
 
-_adduser_result() {
+_addomzuser_result() {
 	local result_string="Installation of 'Oh My Zsh' for '$new_user'"
 
 	#Erase the temporary copy of the installscript when necessary
@@ -17,7 +17,7 @@ _adduser_result() {
 
 }
 
-adduser() {
+addomzuser() {
 	local path_installscript="$ZSH/tools/install.sh"
 	local unattended_options=" --unattended"
 
@@ -32,7 +32,7 @@ adduser() {
 
 	if [[ ! -f $path_installscript ]] ; then
 		echo "Installationscript '$path_installscript' not available" > /dev/stderr;
-		_adduser_result 1
+		_addomzuser_result 1
 		return 1;
 	fi
 
@@ -45,7 +45,7 @@ adduser() {
 
 	if [[ ( ! -x "$commands[sudo]" ) && ( ! -x "$commands[su]" )  ]] ; then
 		echo "You can't become $new_user (no 'sudo' or 'su' available)" > /dev/stderr;
-		_adduser_result 1
+		_addomzuser_result 1
 		return 1;
 	fi
 	if [[ -x "$commands[sudo]" ]] ; then
@@ -59,7 +59,7 @@ adduser() {
 	eval ${install_as_user}
 	#mention the result before changing the shell (even with a bad result it's still installed)
 	if [ ! $? -eq 0 ] ; then
-		_adduser_result 1
+		_addomzuser_result 1
 		return 1
 	fi
 

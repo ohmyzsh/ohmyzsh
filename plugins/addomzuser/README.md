@@ -1,16 +1,16 @@
-# adduser
+# addomzuser
 
 This plugin adds support for installing "Oh My ZSH" when adding new users.
 
-To use it, add `adduser` to the plugins array of your `~/.zshrc` file:
+To use it, add `addomzuser` to the plugins array of your `~/.zshrc` file:
 
 ```zsh
-plugins=(... adduser)
+plugins=(... addomzuser)
 ```
 
 ## Usage
 
-Just run `adduser` as you normally would do and now:
+Just run `addomzuser` as you normally would run `adduser` and now:
 
 1. The regular `adduser` command will run.
 2. The shell of the new user will switch to zsh
@@ -19,7 +19,7 @@ Just run `adduser` as you normally would do and now:
 ## NOTES
 
 - It is assumed that the last argument will be the username.<br>*(In rare cases people provide the group as last argument)*
-- `useradd` behaviour is not changed.
+- The regular `adduser` and `useradd` commands will continue to behave as normal.
 
 ## Author
 
