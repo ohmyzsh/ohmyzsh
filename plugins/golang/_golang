@@ -310,7 +310,8 @@ _go() {
       _arguments -s -w : \
         "-e[attempt to proceed despite errors encountered while loading packages]" \
         "-v[print the names of vendored modules and packages]" \
-        "-o[create the vendor directory at the given path]:output directory:_path_files -/"
+        "-o[create the vendor directory at the given path]:output directory:_path_files -/" \
+        "*:flags"
       ;;
     esac
     ;;
@@ -327,6 +328,7 @@ _go() {
     _arguments -s -w : \
       "-m[print module version information]" \
       "-v[report unrecognized files]" \
+      "-json[print module version information in JSON format]" \
       "*:file:_files"
     ;;
   run)
