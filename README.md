@@ -171,6 +171,19 @@ adds any) and extra goodies that are included in that particular plugin.
 
 ### Themes
 
+Preview installed themes in your current directory without changing your prompt or `.zshrc`:
+
+```zsh
+omz theme browse              # Interactive browser
+omz theme browse agn          # Start with a theme-name filter
+omz theme preview agnoster    # Print one isolated static preview
+```
+
+In the browser, type to filter, use Up/Down or Ctrl-P/Ctrl-N to navigate, and press Enter
+for explicit use/save actions. Esc or Ctrl-C cancels without applying a theme.
+See the [theme browser guide](tools/theme-browser.md) for shortcuts, preview limitations,
+and local testing instructions.
+
 We'll admit it. Early in the Oh My Zsh world, we may have gotten a bit too theme-happy. We have over one
 hundred and fifty themes now bundled. Most of them have
 [screenshots](https://github.com/ohmyzsh/ohmyzsh/wiki/Themes) on the wiki (We are working on updating this!).

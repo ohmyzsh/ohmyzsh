@@ -51,7 +51,7 @@ function _omz {
         _describe 'command' subcmds ;;
       pr) subcmds=('clean:Delete all Pull Request branches' 'test:Test a Pull Request')
         _describe 'command' subcmds ;;
-      theme) subcmds=('list:List themes' 'set:Set a theme in your .zshrc file' 'use:Load a theme')
+      theme) subcmds=('browse:Browse theme previews' 'preview:Preview a theme without applying it' 'list:List themes' 'set:Set a theme in your .zshrc file' 'use:Load a theme')
         _describe 'command' subcmds ;;
     esac
   elif (( CURRENT == 4 )); then
@@ -77,6 +77,10 @@ function _omz {
         local -a opts
         opts=('--enabled:List enabled plugins only')
         _describe -o 'options' opts ;;
+      theme::(browse|preview))
+        local -a themes
+        themes=("${(@f)$(source "$ZSH/tools/theme-preview.zsh"; _omz_theme_names)}")
+        _describe 'theme' themes ;;
       theme::(set|use))
         local -aU themes
         themes=("$ZSH"/themes/*.zsh-theme(-.N:t:r) "$ZSH_CUSTOM"/**/*.zsh-theme(-.N:r:gs:"$ZSH_CUSTOM"/themes/:::gs:"$ZSH_CUSTOM"/:::))
@@ -749,6 +753,8 @@ Usage: ${(j: :)${(s.::.)0#_}} <command> [options]
 
 Available commands:
 
+  browse [filter] Browse installed themes without applying them
+  preview <theme> Preview a theme in the current directory
   list            List all available Oh My Zsh themes
   set <theme>     Set a theme in your .zshrc file
   use <theme>     Load a theme
@@ -761,6 +767,45 @@ EOF
   shift
 
   $0::$command "$@"
+}
+
+function _omz::theme::preview {
+  if (( $# != 1 )); then
+    print -u2 -r -- 'Usage: omz theme preview <theme>'
+    return 1
+  fi
+  source "$ZSH/tools/theme-preview.zsh"
+  _omz_theme_preview "$1"
+}
+
+function _omz::theme::browse {
+  if (( $# > 1 )); then
+    print -u2 -r -- 'Usage: omz theme browse [filter]'
+    return 1
+  fi
+  if [[ ! -o interactive || ! -t 0 || ! -t 1 ]]; then
+    print -u2 -r -- 'omz theme browse requires an interactive terminal; use omz theme preview <theme> instead.'
+    return 1
+  fi
+  source "$ZSH/tools/theme-preview.zsh"
+  source "$ZSH/tools/theme-browser.zsh"
+  local selection action name
+  selection=$(_omz_theme_browser "$1") || return $?
+  [[ -n $selection ]] || return 0
+  action=${selection%%$'\n'*}
+  name=${selection#*$'\n'}
+  _omz_theme_resolve "$name" >/dev/null || return 1
+  case $action in
+    use) _omz::theme::use "$name" ;;
+    set)
+      # The existing set command interpolates the name into shell and awk text.
+      [[ $name != *[^a-zA-Z0-9_./-]* ]] || {
+        print -u2 -r -- 'Cannot save this theme name safely; set ZSH_THEME manually.'
+        return 1
+      }
+      _omz::theme::set "$name" ;;
+    *) return 1 ;;
+  esac
 }
 
 function _omz::theme::list {
