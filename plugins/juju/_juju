@@ -108,14 +108,14 @@ __juju_complete_model()
     if [[ "$current" == *:* ]]; then
         local ctrl="${current%%:*}"
         local models
-        models=("${(@f)$(__juju_models "$ctrl")}")
+        models=(${(f)"$(__juju_models "$ctrl")"})
         completions=("${models[@]/#/${ctrl}:}")
         __juju_debug "[complete_model] ctrl=${ctrl} completions=${#completions}: ${completions[*]}"
         compadd -S '' -q -- "${completions[@]}"
     else
         local -a models ctrls
-        models=("${(@f)$(__juju_models)}")
-        ctrls=("${(@f)$(__juju_controllers)}")
+        models=(${(f)"$(__juju_models)"})
+        ctrls=(${(f)"$(__juju_controllers)"})
         __juju_debug "[complete_model] models=${#models}: ${models[*]}"
         __juju_debug "[complete_model] ctrls=${#ctrls}: ${ctrls[*]}"
         __juju_debug "[complete_model] calling _alternative"
@@ -151,23 +151,36 @@ __juju_applications()
         | command jq -r '.applications // {} | keys | .[]' 2>/dev/null
 }
 
+# Output all SAAS/remote application names consumed by the current model.
+__juju_saas()
+{
+    command juju status --format=json 2>/dev/null \
+        | command jq -r '."application-endpoints" // {} | keys | .[]' 2>/dev/null
+}
+
 # Complete an application token.
 # For integrate/remove-relation the token may be "app:endpoint"; if a colon is
 # already present we return 1 so the caller can fall through to endpoint or
 # generic completion — the application part is already typed.
+# Pass a second arg "nospace" to suppress trailing space (for colon-syntax commands).
 __juju_complete_application()
 {
     local current="$1"
+    local no_suffix="${2:-}"
     local -a apps
     __juju_debug "[complete_app] current='${current}'"
 
     # Colon means "app:" prefix is done; fall through to endpoint/other completion.
     [[ "$current" == *:* ]] && return 1
 
-    apps=("${(@f)$(__juju_applications)}")
+    apps=(${(f)"$(__juju_applications)"})
     __juju_debug "[complete_app] apps=${#apps}"
     (( ${#apps} )) || return 1
-    compadd -S '' -- "${apps[@]}"
+    if [[ -n "$no_suffix" ]]; then
+        compadd -S '' -- "${apps[@]}"
+    else
+        compadd -- "${apps[@]}"
+    fi
 }
 
 # Complete a unit token.  If the token already contains a colon (e.g. the user
@@ -176,6 +189,7 @@ __juju_complete_application()
 __juju_complete_unit()
 {
     local current="$1"
+    local no_suffix="${2:-}"
     local -a units
     __juju_debug "[complete_unit] current='${current}'"
 
@@ -183,10 +197,14 @@ __juju_complete_unit()
     # handle whatever comes after (remote path, etc.).
     [[ "$current" == *:* ]] && return 1
 
-    units=("${(@f)$(__juju_units)}")
+    units=(${(f)"$(__juju_units)"})
     __juju_debug "[complete_unit] units=${#units}"
     (( ${#units} )) || return 1
-    compadd -S '' -- "${units[@]}"
+    if [[ -n "$no_suffix" ]]; then
+        compadd -S '' -- "${units[@]}"
+    else
+        compadd -- "${units[@]}"
+    fi
 }
 
 _juju()
@@ -263,6 +281,9 @@ _juju()
     # Commands that accept one or more application names as ALL positional args.
     local -a _juju_app_multi_commands=(
         remove-application
+    )
+    # Commands that accept one or more SAAS names as positional args.
+    local -a _juju_saas_commands=(
         remove-saas
     )
     # Flags that take an application name as their value.
@@ -282,10 +303,12 @@ _juju()
     # Find the subcommand: first non-flag word typed after "juju", excluding the
     # word currently being completed (words[CURRENT]).
     local subcmd=""
+    local subcmd_idx=0
     local i
     for (( i = 2; i < CURRENT; i++ )); do
         if [[ "${words[i]}" != -* ]]; then
             subcmd="${words[i]}"
+            subcmd_idx=$i
             break
         fi
     done
@@ -297,7 +320,7 @@ _juju()
 
     # Controller name completion: flag value (e.g. juju status -c <TAB>)
     if (( ${_juju_controller_flags[(I)$prev]} )); then
-        completions=("${(@f)$(__juju_controllers)}")
+        completions=(${(f)"$(__juju_controllers)"})
         __juju_debug "[_juju] controller flag completions: ${#completions}"
         (( ${#completions} )) && _describe "controller" completions && return 0
         return 1
@@ -313,7 +336,7 @@ _juju()
     # Unit name completion: flag value (e.g. juju exec --unit <TAB>)
     if (( ${_juju_unit_flags[(I)$prev]} )); then
         __juju_debug "[_juju] unit flag completion, current: '${current}'"
-        __juju_complete_unit "$current" && return 0
+        __juju_complete_unit "$current" nospace && return 0
         return 1
     fi
 
@@ -326,7 +349,7 @@ _juju()
 
     if [[ -z "$subcmd" ]]; then
         # No subcommand yet — complete subcommand names.
-        completions=("${(@f)$(__juju_help_commands)}")
+        completions=(${(f)"$(__juju_help_commands)"})
         __juju_debug "[_juju] command completions count: ${#completions}"
         (( ${#completions} )) && _describe "command" completions && return 0
         return 1
@@ -334,7 +357,7 @@ _juju()
 
     # Controller name completion: positional arg (e.g. juju destroy-controller <TAB>)
     if (( ${_juju_controller_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
-        completions=("${(@f)$(__juju_controllers)}")
+        completions=(${(f)"$(__juju_controllers)"})
         __juju_debug "[_juju] controller command completions: ${#completions}"
         (( ${#completions} )) && _describe "controller" completions && return 0
         return 1
@@ -361,6 +384,16 @@ _juju()
         return 1
     fi
 
+    # SAAS name completion for "juju remove-saas <TAB>".
+    if (( ${_juju_saas_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
+        __juju_debug "[_juju] saas command completion, current: '${current}'"
+        local -a saas
+        saas=(${(f)"$(__juju_saas)"})
+        (( ${#saas} )) || return 1
+        compadd -- "${saas[@]}"
+        return 0
+    fi
+
     # Application name completion for "juju integrate"/"juju relate" and
     # "juju remove-relation": both positional args are "app[:endpoint]".
     # Complete the application part; once a colon is present __juju_complete_application
@@ -368,8 +401,7 @@ _juju()
     if [[ "$subcmd" == "integrate" || "$subcmd" == "relate" || "$subcmd" == "remove-relation" ]] \
        && [[ "$current" != -* ]]; then
         __juju_debug "[_juju] integrate/remove-relation app completion, current: '${current}'"
-        __juju_complete_application "$current" && return 0
-        return 1
+        __juju_complete_application "$current" nospace && return 0
     fi
 
     # Unit name completion: single-unit positional arg commands (e.g. juju ssh <TAB>,
@@ -395,7 +427,7 @@ _juju()
         # Count non-flag positional args after "run" (excluding current word).
         local pos=0
         local last_positional=""
-        for (( i = 3; i < CURRENT; i++ )); do
+        for (( i = subcmd_idx + 1; i < CURRENT; i++ )); do
             if [[ "${words[i]}" != -* ]]; then
                 (( pos++ ))
                 last_positional="${words[i]}"
@@ -413,14 +445,23 @@ _juju()
 
     # Unit name completion for "juju ssh <TAB>" and "juju scp <TAB>":
     # the target may be a bare unit name or a "unit:/remote/path" token.
-    if [[ "$subcmd" == "ssh" || "$subcmd" == "scp" ]] && [[ "$current" != -* ]]; then
-        __juju_debug "[_juju] ssh/scp unit completion, current: '${current}'"
-        __juju_complete_unit "$current" && return 0
+    # For scp, when a colon is present, also offer local files.
+    if [[ "$subcmd" == "ssh" ]] && [[ "$current" != -* ]]; then
+        __juju_debug "[_juju] ssh unit completion, current: '${current}'"
+        __juju_complete_unit "$current" nospace && return 0
         return 1
+    fi
+    if [[ "$subcmd" == "scp" ]] && [[ "$current" != -* ]]; then
+        __juju_debug "[_juju] scp unit completion, current: '${current}'"
+        if [[ "$current" != *:* ]]; then
+            __juju_complete_unit "$current" nospace
+        fi
+        _files
+        return 0
     fi
 
     # Flag completion for all other subcommands (also shown without leading dash)
-    completions=("${(@f)$(__juju_help_options "$subcmd")}")
+    completions=(${(f)"$(__juju_help_options "$subcmd")"})
     __juju_debug "[_juju] option completions count: ${#completions}"
     (( ${#completions} )) && _describe "option" completions && return 0
     return 1
