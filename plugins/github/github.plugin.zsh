@@ -1,3 +1,6 @@
+print -Pru2 -- "%F{yellow}[oh-my-zsh] The \`github\` plugin is deprecated and will be removed in a future release."
+print -Pru2 -- "It supports the legacy \`hub\` CLI. Use the \`gh\` plugin for GitHub CLI completion.%f"
+
 # Set up hub wrapper for git, if it is available; https://github.com/github/hub
 if (( $+commands[hub] )); then
   alias git=hub
@@ -26,7 +29,7 @@ empty_gh() { # [NAME_OF_REPO]
 # This function will add all non-hidden files to git.
 new_gh() { # [DIRECTORY]
   emulate -L zsh
-  local repo="$1"
+  local repo="${1:-.}"
   cd "$repo" \
     || return
 
@@ -42,7 +45,7 @@ new_gh() { # [DIRECTORY]
     || return
   hub create \
     || return
-  git push -u origin master \
+  git push -u origin HEAD \
     || return
 }
 
@@ -52,18 +55,19 @@ new_gh() { # [DIRECTORY]
 # to your GitHub.
 exist_gh() { # [DIRECTORY]
   emulate -L zsh
-  local repo=$1
-  cd "$repo"
+  local repo="${1:-.}"
+  cd "$repo" \
+    || return
 
   hub create \
     || return
-  git push -u origin master
+  git push -u origin HEAD
 }
 
 # git.io "GitHub URL"
 #
 # Shorten GitHub url, example:
-#   https://github.com/nvogel/dotzsh    >   https://git.io/8nU25w
+#   https://github.com/nvogel/dotzsh    > https://git.io/8nU25w
 # source: https://github.com/nvogel/dotzsh
 # documentation: https://github.com/blog/985-git-io-github-url-shortener
 #
@@ -74,4 +78,3 @@ git.io() {
 }
 
 # End Functions #############################################################
-
