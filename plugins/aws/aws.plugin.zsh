@@ -241,7 +241,7 @@ function aws_regions() {
 function aws_profiles() {
   aws --no-cli-pager configure list-profiles 2> /dev/null && return
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([^[:space:]]+)\][[:space:]]*$/\2/g'
+  command grep -Eo '^[[:space:]]*\[[[:space:]]*(profile[[:space:]]+)?[^][:space:]]+[[:space:]]*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | command sed -E 's/^[[:space:]]*\[[[:space:]]*(profile[[:space:]]+)?([^][:space:]]+)[[:space:]]*\]$/\2/'
 }
 
 function _aws_regions() {

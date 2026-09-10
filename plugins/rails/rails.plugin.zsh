@@ -139,7 +139,6 @@ function rdsl() { _rails_db_command db:schema:load "$@" }
 
 # legacy stuff
 alias sc='ruby script/console'
-alias sd='ruby script/destroy'
 alias sd='ruby script/server --debugger'
 alias sg='ruby script/generate'
 alias sp='ruby script/plugin'
