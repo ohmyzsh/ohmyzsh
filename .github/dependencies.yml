@@ -55,3 +55,46 @@ dependencies:
       set -e
       test -e _zshz && mv -f _zshz _z
       test -e zsh-z.plugin.zsh && mv -f zsh-z.plugin.zsh z.plugin.zsh
+  plugins/zsh-autosuggestions:
+    repo: zsh-users/zsh-autosuggestions
+    branch: master
+    version: 85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5
+    precopy: |
+      set -e
+      test -e README.md && mv -f README.md MANUAL.md
+      sed -i 's|\[INSTALL.md\](INSTALL.md)|[the Oh My Zsh plugin README](README.md)|' MANUAL.md
+      rm -f zsh-autosuggestions.plugin.zsh
+      mv -f zsh-autosuggestions.zsh zsh-autosuggestions.plugin.zsh
+      find . -depth -mindepth 1 \
+        ! -path './LICENSE' \
+        ! -path './MANUAL.md' \
+        ! -path './src' \
+        ! -path './src/*' \
+        ! -path './zsh-autosuggestions.plugin.zsh' \
+        -delete
+  plugins/zsh-syntax-highlighting:
+    repo: zsh-users/zsh-syntax-highlighting
+    branch: master
+    version: 2fc57d63067c18b1100ecdbf684fa5baf49459d1
+    precopy: |
+      set -e
+      version=$(<.version)
+      test -e README.md && mv -f README.md MANUAL.md
+      sed -i 's|\[INSTALL.md\](INSTALL.md)|[the Oh My Zsh plugin README](README.md)|' MANUAL.md
+      rm -f zsh-syntax-highlighting.plugin.zsh
+      mv -f zsh-syntax-highlighting.zsh zsh-syntax-highlighting.plugin.zsh
+      mv -f COPYING.md LICENSE
+      sed -i "s|typeset -g ZSH_HIGHLIGHT_VERSION=.*|typeset -g ZSH_HIGHLIGHT_VERSION=$version|" zsh-syntax-highlighting.plugin.zsh
+      sed -i 's|typeset -g ZSH_HIGHLIGHT_REVISION=.*|typeset -g ZSH_HIGHLIGHT_REVISION=HEAD|' zsh-syntax-highlighting.plugin.zsh
+      find highlighters -type d -name test-data -prune -exec rm -rf {} +
+      find . -depth -mindepth 1 \
+        ! -path './LICENSE' \
+        ! -path './MANUAL.md' \
+        ! -path './docs' \
+        ! -path './docs/*' \
+        ! -path './highlighters' \
+        ! -path './highlighters/*' \
+        ! -path './images' \
+        ! -path './images/*' \
+        ! -path './zsh-syntax-highlighting.plugin.zsh' \
+        -delete
