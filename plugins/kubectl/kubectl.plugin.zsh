@@ -82,10 +82,7 @@ alias kgsec='kubectl get secret'
 alias kgseca='kubectl get secret --all-namespaces'
 alias kdsec='kubectl describe secret'
 alias kdelsec='kubectl delete secret'
-alias kdecsec='
-kdecsec_go_template='{{range $k,$v := .data}}{{"### "}}{{$k}}{{"\n"}}{{$v|base64decode}}{{"\n\n"}}{{end}}'
-alias kdecsec="kubectl get secret -o go-template='$kdecsec_go_template'"
-unset kdecsec_go_template
+alias kdecsec='kubectl get secret -o go-template='\''{{range $k,$v := .data}}{{"### "}}{{$k}}{{"\n"}}{{$v|base64decode}}{{"\n\n"}}{{end}}'\'''
 
 # Deployment management.
 alias kgd='kubectl get deployment'
