@@ -15,9 +15,6 @@ This plugin does not add any aliases.
 This plugin caches the completion script and is automatically updated when the
 plugin is loaded, which is usually when you start up a new terminal emulator.
 
-The cache is stored at:
-
-- `$ZSH/plugins/gh/_gh` completions script
-
-- `$ZSH_CACHE_DIR/gh_version` version of GitHub CLI, used to invalidate
-  the cache.
+The completion script is stored at `$ZSH_CACHE_DIR/completions/_gh`. If an
+update fails, the plugin keeps the last successfully generated completion
+script.
