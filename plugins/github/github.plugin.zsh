@@ -3,6 +3,9 @@ if (( $+commands[hub] )); then
   alias git=hub
 fi
 
+# Aliases
+alias gho='open_command "$(git config --get remote.origin.url | sed -e "s#git@.*\.*github\.com:#https://github.com/#" -e "s/\.git$//")"'
+
 # Functions #################################################################
 
 # Based on https://github.com/dbb/githome/blob/master/.config/zsh/functions
