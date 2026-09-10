@@ -71,12 +71,9 @@ if is-at-least 4.2.0; then
   _media_fts=(ape avi flv m4a mkv mov mp3 mpeg mpg ogg ogm rm wav webm)
   for ft in $_media_fts; do alias -s $ft=mplayer; done
 
-  #read documents
-  alias -s pdf=acroread
-  alias -s ps=gv
-  alias -s dvi=xdvi
-  alias -s chm=xchm
-  alias -s djvu=djview
+  # read documents with the platform's default application
+  _doc_fts=(pdf ps dvi chm djvu)
+  for ft in $_doc_fts; do alias -s $ft=open_command; done
 
   #list what's inside packed file
   alias -s zip="unzip -l"
