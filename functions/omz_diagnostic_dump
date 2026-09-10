@@ -1,4 +1,4 @@
-# diagnostics.zsh
+# omz_diagnostic_dump
 #
 # Diagnostic and debugging support for oh-my-zsh
 
@@ -351,3 +351,5 @@ function _omz_diag_dump_os_specific_version() {
   done
 }
 
+
+omz_diagnostic_dump "$@"

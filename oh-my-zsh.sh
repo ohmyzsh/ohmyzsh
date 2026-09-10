@@ -78,6 +78,9 @@ fpath=($ZSH/{functions,completions} $ZSH_CUSTOM/{functions,completions} $fpath)
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit zrecompile
 
+# The omz CLI and omz_diagnostic_dump are loaded on first use
+autoload -Uz omz omz_diagnostic_dump
+
 is_plugin() {
   local base_dir=$1
   local name=$2
