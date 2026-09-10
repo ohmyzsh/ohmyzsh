@@ -30,14 +30,13 @@ if [[ "$TERM" == screen* ]]; then
   # tell GNU screen what the tab window title ($1) and the hardstatus($2) should be
   function screen_set()
   {
-    # set hardstatus of tab window (%h) for screen
-    print -nR $'\033]0;'$2$'\a'
+    [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return 0
 
-    if [[ "$DISABLE_AUTO_TITLE" == true ]]; then
-      return
-    fi
     # set the tab window title (%t) for screen
     print -nR $'\033k'$1$'\033'\\\
+
+    # set hardstatus of tab window (%h) for screen
+    print -nR $'\033]0;'$2$'\a'
   }
   # called by zsh before executing a command
   function preexec()
