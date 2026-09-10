@@ -1,5 +1,5 @@
-print -Pru2 -- "%F{yellow}[oh-my-zsh] The \`github\` plugin is deprecated and will be removed in a future release."
-print -Pru2 -- "It supports the legacy \`hub\` CLI. Use the \`gh\` plugin for GitHub CLI completion.%f"
+print -Pru2 -- '%F{yellow}[oh-my-zsh] The %Bgithub%b plugin is deprecated and will be removed in a future release.'
+print -Pru2 -- 'It supports the legacy %Bhub%b CLI. Use the %Bgh%b plugin for GitHub CLI completion.%f'
 
 # Set up hub wrapper for git, if it is available; https://github.com/github/hub
 if (( $+commands[hub] )); then
