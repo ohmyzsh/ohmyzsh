@@ -4,7 +4,9 @@
 
 To use it, add thefuck to the plugins array of your zshrc file:
 
+```zsh
 plugins=(... thefuck)
+```
 
 ## Usage
 Press `ESC` twice to correct previous console command.
