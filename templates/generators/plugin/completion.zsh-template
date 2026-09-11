@@ -1,0 +1,32 @@
+#compdef %command%
+#
+# Completion for %command%.
+#
+# This is a starting point. Delete what you don't need. Two references:
+#   https://zsh.sourceforge.io/Doc/Release/Completion-System.html
+#   https://github.com/zsh-users/zsh/blob/master/Etc/completion-style-guide
+
+local -a subcommands
+subcommands=(
+  'status:Show the current status'
+  'run:Run something'
+  'help:Show help for a command'
+)
+
+_arguments -C \
+  '(-h --help)'{-h,--help}'[show help]' \
+  '(-v --version)'{-v,--version}'[show the version]' \
+  '1: :->subcommand' \
+  '*:: :->args'
+
+case $state in
+  subcommand)
+    _describe -t commands '%command% subcommand' subcommands
+    ;;
+  args)
+    case $words[1] in
+      status) _arguments '--short[one-line output]' ;;
+      run)    _files ;;
+    esac
+    ;;
+esac
