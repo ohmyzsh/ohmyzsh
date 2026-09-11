@@ -112,7 +112,7 @@ plugins=(... git)
 | `glgp`                 | `git log --stat --patch`                                                                                                        |
 | `gignored`             | `git ls-files -v \| grep "^[[:lower:]]"`                                                                                        |
 | `gfg`                  | `git ls-files \| grep`                                                                                                          |
-| `gm`                   | `git merge`                                                                                                                     |
+| `gme`                  | `git merge`                                                                                                                     |
 | `gma`                  | `git merge --abort`                                                                                                             |
 | `gmc`                  | `git merge --continue`                                                                                                          |
 | `gms`                  | `git merge --squash`                                                                                                            |
