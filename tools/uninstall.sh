@@ -45,18 +45,25 @@ if [ -e "$ZSHRC_ORIG" ]; then
   else
     echo "Skipping restore."
     if [ -n "$ZSHRC_SAVE" ]; then
-      echo ""
-      echo "Your files are at:"
-      echo "  Current config : ${ZSHRC_SAVE}"
-      echo "  Pre-OMZ backup : ${ZSHRC_ORIG}"
-      echo "You can review and merge them manually."
+      mv "${ZSHRC_SAVE}" ~/.zshrc
+      echo "Your current zsh config has been kept at ~/.zshrc."
+      echo "Your pre-OMZ backup is still at ${ZSHRC_ORIG} if you need it."
     fi
   fi
 else
   echo "No original zsh config found."
   if [ -n "$ZSHRC_SAVE" ]; then
-    echo "Your current config is saved at ${ZSHRC_SAVE}."
+    mv "${ZSHRC_SAVE}" ~/.zshrc
+    echo "Your current zsh config has been kept at ~/.zshrc."
   fi
+fi
+
+# Warn if the active .zshrc still sources oh-my-zsh
+if [ -f ~/.zshrc ] && command grep -q 'source.*oh-my-zsh\.sh' ~/.zshrc 2>/dev/null; then
+  echo ""
+  echo "Note: ~/.zshrc still contains a line sourcing oh-my-zsh.sh."
+  echo "Since oh-my-zsh has been removed, that line will cause an error"
+  echo "on every new shell. You may want to remove or comment it out."
 fi
 
 echo "Thanks for trying out Oh My Zsh. It's been uninstalled."
