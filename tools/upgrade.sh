@@ -13,6 +13,8 @@ case "$ZSH_EVAL_CONTEXT" in
   *:file) echo "error: this file should not be sourced" && return 1 ;;
 esac
 
+zmodload zsh/datetime
+
 # Define "$ZSH" if not defined -- in theory this should be `export`ed by the calling script
 if [[ -z "$ZSH" ]]; then
   ZSH="${0:a:h:h}"
@@ -22,8 +24,9 @@ cd "$ZSH"
 
 verbose_mode="default"
 interactive=false
+cooldown_days=0
 
-while getopts "v:i" opt; do
+while getopts "v:ic:" opt; do
   case $opt in
     v)
       if [[ $OPTARG == default || $OPTARG == minimal || $OPTARG == silent ]]; then
@@ -34,6 +37,14 @@ while getopts "v:i" opt; do
       fi
       ;;
     i) interactive=true ;;
+    c)
+      if [[ $OPTARG == <-> ]]; then
+        cooldown_days=$OPTARG
+      else
+        echo "[oh-my-zsh] update cooldown '$OPTARG' is not valid"
+        echo "[oh-my-zsh] valid options are a non-negative integer (days)"
+      fi
+      ;;
   esac
 done
 
@@ -231,6 +242,28 @@ local ret=0
 remote=${"$(git config --local oh-my-zsh.remote)":-origin}
 branch=${"$(git config --local oh-my-zsh.branch)":-master}
 
+update_with_cooldown() {
+  local cutoff_epoch cooldown_ref
+
+  cutoff_epoch=$(( EPOCHSECONDS - cooldown_days * 86400 ))
+  LANG= git fetch --quiet $remote $branch || return $?
+
+  cooldown_ref=$(git log --first-parent --format="%H %ct" FETCH_HEAD \
+    | awk -v c="$cutoff_epoch" '$2 <= c { print $1; exit }')
+
+  [[ -n "$cooldown_ref" ]] || return 0
+
+  LANG= git merge --ff-only --quiet "$cooldown_ref"
+}
+
+perform_update() {
+  if (( cooldown_days > 0 )); then
+    update_with_cooldown
+  else
+    LANG= git pull --quiet --rebase $remote $branch
+  fi
+}
+
 # repository state
 last_head=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
 # checkout update branch
@@ -242,10 +275,17 @@ last_commit=$(git rev-parse "$branch")
 if [[ $verbose_mode != silent ]]; then
   printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
 fi
-if LANG= git pull --quiet --rebase $remote $branch; then
+if perform_update; then
   # Check if it was really updated or not
   if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
-    message="Oh My Zsh is already at the latest version."
+    if (( cooldown_days > 0 )); then
+      head_ct=$(git log -1 --format=%ct HEAD)
+      age_days=$(( (EPOCHSECONDS - head_ct) / 86400 ))
+      (( age_days < 0 )) && age_days=0
+      message="Oh My Zsh is already at a version ${age_days} days old."
+    else
+      message="Oh My Zsh is already at the latest version."
+    fi
   else
     message="Hooray! Oh My Zsh has been updated!"
 

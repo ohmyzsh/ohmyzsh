@@ -903,8 +903,11 @@ function _omz::update {
   }
 
   # Run update script
+  local verbose_mode cooldown_days
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
-  ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode || return $?
+  zstyle -s ':omz:update' cooldown cooldown_days || cooldown_days=0
+  [[ $cooldown_days == <-> ]] || cooldown_days=0
+  ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode -c $cooldown_days || return $?
 
   # Update last updated file
   zmodload zsh/datetime
