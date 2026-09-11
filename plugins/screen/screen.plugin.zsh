@@ -34,6 +34,8 @@ if [[ "$TERM" == screen* ]]; then
   # tell GNU screen what the tab window title ($1) and the hardstatus($2) should be
   function screen_set()
   {
+    [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return 0
+
     # set the tab window title (%t) for screen
     print -nR $'\033k'$1$'\033'\\\
 
