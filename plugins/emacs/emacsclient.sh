@@ -32,8 +32,9 @@ emacsfun() {
   # Check if there are suitable frames
   frames="$(emacsclient -a '' -n -e "$cmd" 2>/dev/null |sed 's/.*\x07//g' )"
 
-  # Only create another X frame if there isn't one present
-  if [ -z "$frames" -o "$frames" = nil ]; then
+  # A bare emacs/e passes only --no-wait, so it still needs --create-frame.
+  if [ -z "$frames" ] || [ "$frames" = nil ] || [ "$#" -eq 0 ] \
+    || { [ "$#" -eq 1 ] && [ "$1" = --no-wait ]; }; then
     emacsclient --alternate-editor="" --create-frame "$@"
     return $?
   fi
