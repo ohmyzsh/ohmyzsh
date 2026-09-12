@@ -4,7 +4,11 @@ globalias() {
    # (A) makes it an array even if there's only one element
    local word=${${(Az)LBUFFER}[-1]}
    if [[ $GLOBALIAS_FILTER_VALUES[(Ie)$word] -eq 0 ]]; then
-      zle _expand_alias
+      # Completion also considers quoted strings and assignment values as aliases.
+      # Only expand when the complete shell word is an alias name.
+      if (( ${+aliases[$word]} || ${+galiases[$word]} )); then
+         zle _expand_alias
+      fi
       zle expand-word
    fi
    zle self-insert
