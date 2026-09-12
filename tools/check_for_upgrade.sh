@@ -185,7 +185,7 @@ function has_typed_input() {
   # Consider that no input can be typed if stty fails
   # (this might happen if stdin is not a terminal)
   local termios
-  termios=$(stty --save 2>/dev/null) || return 1
+  termios=$(stty -g 2>/dev/null) || return 1
   {
     # Disable canonical mode so that typed input counts
     # regardless of whether Enter was pressed
