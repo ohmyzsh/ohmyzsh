@@ -44,6 +44,8 @@ function asp() {
 
   export AWS_PROFILE_REGION=$(aws configure get region)
 
+  aws-mfa $AWS_PROFILE
+
   _aws_update_state
 
   if [[ "$2" == "login" ]]; then
@@ -54,6 +56,38 @@ function asp() {
     fi
   elif [[ "$2" == "logout" ]]; then
     aws sso logout
+  fi
+}
+
+function aws-mfa() {
+  local -a available_profiles
+  available_profiles=($(aws_profiles))
+  if [[ -z "${available_profiles[(r)$1]}" ]]; then
+    echo "${fg[red]}Profile '$1' not found in '${AWS_CONFIG_FILE:-$HOME/.aws/config}'" >&2
+    echo "Available profiles: ${(j:, :)available_profiles:-no profiles found}${reset_color}" >&2
+    return 1
+  fi
+
+  local profile="$1"
+  local mfa_token
+  now=$(gdate +%s)
+  if [[ ! -z $(aws configure get --profile $profile mfa_serial) ]]; then
+    get_expire=`aws configure get --profile $profile expiration`
+    if [[ -z "${get_expire}" || "$now" -ge "$(gdate -d $get_expire +%s)" ]]; then
+        echo -n "Please input MFA token: "
+        read -r mfa_token
+        local output=$(aws sts get-session-token --serial-number `aws configure get mfa_serial` --token-code $mfa_token --profile $profile-long-term)
+        local aws_access_key_id=$(echo $output | jq -r '.Credentials | .AccessKeyId')
+        local aws_secret_access_key=$(echo $output | jq -r '.Credentials | .SecretAccessKey')
+        local aws_session_token=$(echo $output | jq -r '.Credentials | .SessionToken')
+        local expiration=$(echo $output | jq -r '.Credentials | .Expiration')
+        aws configure set --profile $profile aws_access_key_id $aws_access_key_id
+        aws configure set --profile $profile aws_secret_access_key $aws_secret_access_key
+        aws configure set --profile $profile aws_session_token $aws_session_token
+        aws configure set --profile $profile expiration $expiration
+    else
+        echo "SESSION TOKEN STILL VALIDED!!"
+    fi
   fi
 }
 
