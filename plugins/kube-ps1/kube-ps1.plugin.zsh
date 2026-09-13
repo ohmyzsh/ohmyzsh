@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Kubernetes prompt helper for bash/zsh
+# Kubernetes prompt info for bash, fish, and zsh
 # Displays current context and namespace
 
 # Copyright 2026 Jon Mosco
@@ -121,7 +121,7 @@ _kube_ps1_color_fg() {
     if [[ "${_KUBE_PS1_TPUT_AVAILABLE}" == "true" ]]; then
       _KUBE_PS1_FG_CODE="$(tput setaf "${_KUBE_PS1_FG_CODE}")"
     elif [[ $_KUBE_PS1_FG_CODE -ge 0 ]] && [[ $_KUBE_PS1_FG_CODE -le 255 ]]; then
-      _KUBE_PS1_FG_CODE="\033[38;5;${_KUBE_PS1_FG_CODE}m"
+      _KUBE_PS1_FG_CODE=$'\033'"[38;5;${_KUBE_PS1_FG_CODE}m"
     else
       _KUBE_PS1_FG_CODE="${_KUBE_PS1_DEFAULT_FG}"
     fi
@@ -154,7 +154,7 @@ _kube_ps1_color_bg() {
     if [[ "${_KUBE_PS1_TPUT_AVAILABLE}" == "true" ]]; then
       _KUBE_PS1_BG_CODE="$(tput setab "${_KUBE_PS1_BG_CODE}")"
     elif [[ $_KUBE_PS1_BG_CODE -ge 0 ]] && [[ $_KUBE_PS1_BG_CODE -le 255 ]]; then
-      _KUBE_PS1_BG_CODE="\033[48;5;${_KUBE_PS1_BG_CODE}m"
+      _KUBE_PS1_BG_CODE=$'\033'"[48;5;${_KUBE_PS1_BG_CODE}m"
     else
       _KUBE_PS1_BG_CODE="${_KUBE_PS1_DEFAULT_BG}"
     fi
@@ -412,6 +412,8 @@ kube_ps1() {
 
   local KUBE_PS1
   local KUBE_PS1_RESET_COLOR="${_KUBE_PS1_OPEN_ESC}${_KUBE_PS1_DEFAULT_FG}${_KUBE_PS1_CLOSE_ESC}"
+  local ctx_color="${KUBE_PS1_CTX_COLOR-red}"
+  local ns_color="${KUBE_PS1_NS_COLOR-cyan}"
 
   # Background Color
   [[ -n "${KUBE_PS1_BG_COLOR}" ]] && KUBE_PS1+="$(_kube_ps1_color_bg "${KUBE_PS1_BG_COLOR}")"
@@ -432,22 +434,29 @@ kube_ps1() {
 
   # Context
   if [[ "${KUBE_PS1_CONTEXT_ENABLE}" == true ]]; then
-    local ctx_color="${KUBE_PS1_CTX_COLOR:-red}"
-
     # Allow custom function to override color based on context
     if [[ -n "${KUBE_PS1_CTX_COLOR_FUNCTION}" ]]; then
       ctx_color="$("${KUBE_PS1_CTX_COLOR_FUNCTION}" "${KUBE_PS1_CONTEXT}")"
     fi
 
-    KUBE_PS1+="$(_kube_ps1_color_fg "${ctx_color}")${KUBE_PS1_CONTEXT}${KUBE_PS1_RESET_COLOR}"
+    if [[ -n "${ctx_color}" ]]; then
+      KUBE_PS1+="$(_kube_ps1_color_fg "${ctx_color}")${KUBE_PS1_CONTEXT}${KUBE_PS1_RESET_COLOR}"
+    else
+      KUBE_PS1+="${KUBE_PS1_CONTEXT}"
+    fi
   fi
 
   # Namespace
   if [[ "${KUBE_PS1_NS_ENABLE}" == true ]]; then
-    if [[ -n "${KUBE_PS1_DIVIDER}" ]] && [[ "${KUBE_PS1_CONTEXT_ENABLE}" == true ]]; then
+    if [[ -n "${KUBE_PS1_DIVIDER}" && "${KUBE_PS1_CONTEXT_ENABLE}" == true ]]; then
       KUBE_PS1+="${KUBE_PS1_DIVIDER}"
     fi
-    KUBE_PS1+="$(_kube_ps1_color_fg "${KUBE_PS1_NS_COLOR:-cyan}")${KUBE_PS1_NAMESPACE}${KUBE_PS1_RESET_COLOR}"
+
+    if [[ -n "${ns_color}" ]]; then
+      KUBE_PS1+="$(_kube_ps1_color_fg "${ns_color}")${KUBE_PS1_NAMESPACE}${KUBE_PS1_RESET_COLOR}"
+    else
+      KUBE_PS1+="${KUBE_PS1_NAMESPACE}"
+    fi
   fi
 
   # Suffix
@@ -460,5 +469,5 @@ kube_ps1() {
   # Close Background color if defined
   [[ -n "${KUBE_PS1_BG_COLOR}" ]] && KUBE_PS1+="${_KUBE_PS1_OPEN_ESC}${_KUBE_PS1_DEFAULT_BG}${_KUBE_PS1_CLOSE_ESC}"
 
-  echo "${KUBE_PS1}"
+  printf '%s' "${KUBE_PS1}"
 }
