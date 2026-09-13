@@ -19,6 +19,7 @@ plugins=(... systemadmin)
 | mkdir   | `mkdir -pv`                                                                | Automatically create parent directories and display verbose output |
 | psmem   | `ps -e -orss=,args= \| sort -b -k1 -nr`                                    | Display the processes using the most memory                        |
 | psmem10 | `ps -e -orss=,args= \| sort -b -k1 -nr \| head -n 10`                      | Display the top 10 processes using the most memory                 |
+| pszombie| `ps -eo user,pid,ppid,state,comm \| awk '$4=="Z"'`                         | List zombie processes with ownership and parent process details   |
 | pscpu   | `ps -e -o pcpu,cpu,nice,state,cputime,args \|sort -k1 -nr`                 | Display the top processes using the most CPU                       |
 | pscpu10 | `ps -e -o pcpu,cpu,nice,state,cputime,args \|sort -k1 -nr \| head -n 10`   | Display the top 10 processes using the most CPU                    |
 | hist10  | `print -l ${(o)history%% *} \| uniq -c \| sort -nr \| head -n 10`          | Display the top 10 most used commands in the history               |
@@ -48,5 +49,4 @@ plugins=(... systemadmin)
 | d0          | Delete 0 byte files recursively in the current directory or another if specified                                      |
 | geteip      | Gather information regarding an external IP address using [icanhazip.com](https://icanhazip.com)                      |
 | getip       | Determine the local IP Address with `ip addr` or `ifconfig`                                                           |
-| clrz        | Clear zombie processes                                                                                                |
 | conssec     | Show number of concurrent connections per second based on nginx/access.log file or another log file if specified      |
