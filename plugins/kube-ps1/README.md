@@ -7,8 +7,6 @@ A script that lets you add the current Kubernetes context and namespace configur
 
 Inspired by several tools used to simplify usage of `kubectl`.
 
-![prompt demo](img/kube-ps1-demo.gif)
-
 ## Installing
 
 ### Packages
@@ -175,8 +173,8 @@ glyphs, you need to install a patched font that contains the glyph. [Nerd Fonts]
 | ------------- | ------ | ----------- |
 | default (empty string) | ⎈ | Default symbol (Unicode `\u2388`) |
 | img | ☸️ | Symbol often used to represent Kubernetes (Unicode `\u2638`) |
-| oc | ![openshift-glyph](img/openshift-glyph.png) | Symbol representing OpenShift (Unicode `\ue7b7`) |
-| k8s | ![k8s-glyph](img/k8s-glyph.png) | Symbol representing Kubernetes (Unicode `\ue7b7`) |
+| oc | `\ue7b7` | Symbol representing OpenShift (Unicode `\ue7b7`) |
+| k8s | `\ue7b7` | Symbol representing Kubernetes (Unicode `\ue7b7`) |
 
 To set the symbol to one of the custom glyphs, add the following to your `~/.bashrc` or `~/.zshrc`:
 
@@ -185,9 +183,6 @@ KUBE_PS1_SYMBOL_CUSTOM=img
 ```
 
 To set the symbol to the default, set the `KUBE_PS1_SYMBOL` to an empty string.
-
-Heres a demo of the symbols in action:
-![kube-ps1-symbols](img/kube-ps1-symbol-demo.gif)
 
 If the font is not properly installed, and the glyph is not available, it will display an empty set of brackets or similar:
 
