@@ -1,0 +1,189 @@
+#!/usr/bin/env zunit
+
+@setup {
+  typeset -g tmpdir
+  tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv.XXXXXX")"
+}
+
+@teardown {
+  [[ -d "$tmpdir" ]] && command rm -rf "$tmpdir"
+}
+
+@test 'source_env loads multiple files in order' {
+  run zsh -fc '
+    source ./dotenv.plugin.zsh
+    ZSH_DOTENV_PROMPT=false
+
+    tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv.XXXXXX")" || exit 1
+    cd "$tmpdir" || exit 1
+
+    print -r -- "FROM_FIRST=first" > .env.base
+    print -r -- "FROM_SECOND=second" > .env.local
+
+    ZSH_DOTENV_FILE=".env.base .env.local"
+    source_env
+
+    print -r -- "FROM_FIRST=${FROM_FIRST-<unset>}"
+    print -r -- "FROM_SECOND=${FROM_SECOND-<unset>}"
+
+    command rm -rf "$tmpdir"
+  '
+
+  assert $state equals 0
+  assert "$output[1]" equals 'FROM_FIRST=first'
+  assert "$output[2]" equals 'FROM_SECOND=second'
+}
+
+@test 'source_env later files override earlier files' {
+  run zsh -fc '
+    source ./dotenv.plugin.zsh
+    ZSH_DOTENV_PROMPT=false
+
+    tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv.XXXXXX")" || exit 1
+    cd "$tmpdir" || exit 1
+
+    print -r -- "SHARED=from_first" > .env.base
+    print -r -- "SHARED=from_second" > .env.local
+
+    ZSH_DOTENV_FILE=".env.base .env.local"
+    source_env
+
+    print -r -- "SHARED=${SHARED-<unset>}"
+
+    command rm -rf "$tmpdir"
+  '
+
+  assert $state equals 0
+  assert "$output[1]" equals 'SHARED=from_second'
+}
+
+@test 'source_env skips non-existent files' {
+  run zsh -fc '
+    source ./dotenv.plugin.zsh
+    ZSH_DOTENV_PROMPT=false
+
+    tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv.XXXXXX")" || exit 1
+    cd "$tmpdir" || exit 1
+
+    print -r -- "EXISTS=yes" > .env
+
+    ZSH_DOTENV_FILE=".env .env.missing .env.also-missing"
+    source_env
+
+    print -r -- "EXISTS=${EXISTS-<unset>}"
+
+    command rm -rf "$tmpdir"
+  '
+
+  assert $state equals 0
+  assert "$output[1]" equals 'EXISTS=yes'
+}
+
+@test 'source_env returns silently when no files exist' {
+  run zsh -fc '
+    source ./dotenv.plugin.zsh
+    ZSH_DOTENV_PROMPT=false
+
+    tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv.XXXXXX")" || exit 1
+    cd "$tmpdir" || exit 1
+
+    ZSH_DOTENV_FILE=".env.missing .env.also-missing"
+    source_env
+
+    print -r -- "DONE"
+
+    command rm -rf "$tmpdir"
+  '
+
+  assert $state equals 0
+  assert "$output[1]" equals 'DONE'
+}
+
+@test 'source_env single file still works (backward compatibility)' {
+  run zsh -fc '
+    source ./dotenv.plugin.zsh
+    ZSH_DOTENV_PROMPT=false
+
+    tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv.XXXXXX")" || exit 1
+    cd "$tmpdir" || exit 1
+
+    print -r -- "SINGLE=works" > .myenv
+
+    ZSH_DOTENV_FILE=.myenv
+    source_env
+
+    print -r -- "SINGLE=${SINGLE-<unset>}"
+
+    command rm -rf "$tmpdir"
+  '
+
+  assert $state equals 0
+  assert "$output[1]" equals 'SINGLE=works'
+}
+
+@test 'source_env default .env still works when ZSH_DOTENV_FILE unset' {
+  run zsh -fc '
+    source ./dotenv.plugin.zsh
+    ZSH_DOTENV_PROMPT=false
+    unset ZSH_DOTENV_FILE
+
+    tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv.XXXXXX")" || exit 1
+    cd "$tmpdir" || exit 1
+
+    print -r -- "DEFAULT=works" > .env
+
+    source_env
+
+    print -r -- "DEFAULT=${DEFAULT-<unset>}"
+
+    command rm -rf "$tmpdir"
+  '
+
+  assert $state equals 0
+  assert "$output[1]" equals 'DEFAULT=works'
+}
+
+@test 'source_env supports filenames with spaces (quoted)' {
+  run zsh -fc '
+    source ./dotenv.plugin.zsh
+    ZSH_DOTENV_PROMPT=false
+
+    tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv.XXXXXX")" || exit 1
+    cd "$tmpdir" || exit 1
+
+    print -r -- "SPACED=works" > ".my env file"
+
+    ZSH_DOTENV_FILE=".env '\''.my env file'\''"
+    source_env
+
+    print -r -- "SPACED=${SPACED-<unset>}"
+
+    command rm -rf "$tmpdir"
+  '
+
+  assert $state equals 0
+  assert "$output[1]" equals 'SPACED=works'
+}
+
+@test 'source_env variables from earlier files can be referenced in later files' {
+  run zsh -fc '
+    source ./dotenv.plugin.zsh
+    ZSH_DOTENV_PROMPT=false
+
+    tmpdir="$(mktemp -d "${TMPDIR:-/tmp}/dotenv.XXXXXX")" || exit 1
+    cd "$tmpdir" || exit 1
+
+    print -r -- "BASE_URL=https://example.com" > .env.base
+    print -r -- "API_URL=\$BASE_URL/api" > .env.local
+
+    ZSH_DOTENV_FILE=".env.base .env.local"
+    source_env
+
+    print -r -- "API_URL=${API_URL-<unset>}"
+
+    command rm -rf "$tmpdir"
+  '
+
+  assert $state equals 0
+  assert "$output[1]" equals 'API_URL=https://example.com/api'
+}
