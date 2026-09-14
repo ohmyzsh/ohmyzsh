@@ -28,6 +28,8 @@ alias mkdir='mkdir -pv'
 # get top process eating memory
 alias psmem='ps -e -orss=,args= | sort -b -k1 -nr'
 alias psmem10='ps -e -orss=,args= | sort -b -k1 -nr | head -n 10'
+# list all zombie processes with ownership and parent process details
+alias pszombie="ps -eo user,pid,ppid,state,comm | awk '\$4==\"Z\"'"
 # get top process eating cpu if not work try execute : export LC_ALL='C'
 alias pscpu='ps -e -o pcpu,cpu,nice,state,cputime,args | sort -k1,1n -nr'
 alias pscpu10='ps -e -o pcpu,cpu,nice,state,cputime,args | sort -k1,1n -nr | head -n 10'
@@ -175,11 +177,6 @@ function getip() {
   else
     ifconfig | awk '/inet /{print $2}' | command grep -v 127.0.0.1
   fi
-}
-
-# Clear zombie processes
-function clrz() {
-  ps -eal | awk '{ if ($2 == "Z") {print $4}}' | kill -9
 }
 
 # Second concurrent
