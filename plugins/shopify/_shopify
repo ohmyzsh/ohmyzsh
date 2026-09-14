@@ -1,0 +1,2045 @@
+#compdef shopify
+
+# Completion for the Shopify CLI. https://shopify.dev/docs/api/shopify-cli
+#
+# Targets Shopify CLI 4.x. The CLI has no `completion`/`autocomplete` command,
+# so this is generated from `shopify commands --json` and kept here. Nothing
+# runs the CLI at completion time unless theme completion is enabled below.
+
+# Environment names from the project's TOML config. Offline, always enabled.
+_shopify_environments() {
+  setopt localoptions extendedglob
+  local -a envs
+  local file line
+  # (#b) backreferences set $match, which would otherwise be left global.
+  local MATCH MBEGIN MEND
+  local -a match mbegin mend
+  for file in shopify.theme.toml shopify.app.toml; do
+    [[ -r "$file" ]] || continue
+    for line in ${(f)"$(< $file)"}; do
+      [[ $line == (#b)[[:space:]]#\[environments\.([^]]##)\]* ]] && envs+=("$match[1]")
+    done
+  done
+  (( $#envs )) || return 1
+  _describe -t environments 'environment' envs
+}
+
+# Theme IDs, described by name and role. Off by default: needs auth and makes a
+# network call on TAB. Enable with:
+#   zstyle ':omz:plugins:shopify' dynamic-theme-completion yes
+_shopify_themes() {
+  zstyle -t ':omz:plugins:shopify' dynamic-theme-completion || return 1
+
+  local key="${${PWD:A}//\//-}"
+  local cache_file="$ZSH_CACHE_DIR/shopify-themes${key: -100}"
+  local -a themes fresh
+  local json split entry id name role
+  # $match and friends are set by =~ and would otherwise be left global.
+  local MATCH MBEGIN MEND
+  local -a match mbegin mend
+  local nl=$'\n'
+
+  # Reuse the cached list for five minutes.
+  fresh=(${cache_file}(Nms-300))
+  if (( $#fresh )); then
+    themes=("${(@f)$(< "$cache_file")}")
+  else
+    json="$(shopify theme list --json 2>/dev/null)" || return 1
+    split="${json//\{/$nl}"
+    for entry in ${(f)split}; do
+      id="" name="" role=""
+      [[ $entry =~ '"id":[[:space:]]*([0-9]+)' ]] && id=$match[1]
+      [[ $entry =~ '"name":[[:space:]]*"([^"]*)"' ]] && name=$match[1]
+      [[ $entry =~ '"role":[[:space:]]*"([^"]*)"' ]] && role=$match[1]
+      [[ -n $id ]] || continue
+      themes+=("${id}:${name}${role:+ (${role})}")
+    done
+    (( $#themes )) || return 1
+    print -rl -- $themes > "$cache_file"
+  fi
+
+  _describe -t shopify-themes 'theme' themes
+}
+
+_shopify__app__build() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--skip-dependencies-installation[Skips the installation of dependencies]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__bulk__cancel() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--id=[The bulk operation ID to cancel (numeric ID or full GID)]:id:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '(-s --store)'{-s,--store}'=[The store domain]:store:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__bulk__execute() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--output-file=[The file path where results should be written if --watch is specified]:output-file:' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(-q --query)'{-q,--query}'=[The GraphQL query or mutation to run as a bulk operation]:query:' \
+    '--query-file=[Path to a file containing the GraphQL query or mutation]:query-file:' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '(-s --store)'{-s,--store}'=[The store domain]:store:' \
+    '(--variable-file -v --variables)--variable-file=[Path to a file containing GraphQL variables in JSONL format (one JSON...]:variable-file:' \
+    *''{-v,--variables}'=[The values for any GraphQL variables in your mutation, in JSON format]:variables:' \
+    '--verbose[Increase the verbosity of the output]' \
+    '--version=[The API version to use for the bulk operation]:version:' \
+    '--watch[Wait for bulk operation results before exiting]'
+}
+
+_shopify__app__bulk__status() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--id=[The bulk operation ID (numeric ID or full GID)]:id:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '(-s --store)'{-s,--store}'=[The store domain]:store:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__bulk() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'cancel:Cancel a bulk operation'
+    'execute:Execute bulk operations'
+    'status:Check the status of bulk operations'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'app bulk command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        cancel) _shopify__app__bulk__cancel && ret=0 ;;
+        execute) _shopify__app__bulk__execute && ret=0 ;;
+        status) _shopify__app__bulk__status && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__app__config__link() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '(--file-name -c --config)--file-name=[The name of the app configuration file to create or overwrite]:file-name:' \
+    '--force[Overwrite an existing configuration file without prompting]' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__config__pull() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__config__use() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '--client-id=[The Client ID of your app]:client-id:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]' \
+    '*:file:_files'
+}
+
+_shopify__app__config__validate() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__config() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'link:Fetch your app configuration from the Developer Dashboard'
+    'pull:Refresh an already-linked app configuration without prompts'
+    'use:Activate an app configuration'
+    'validate:Validate your app configuration and extensions'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'app config command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        link) _shopify__app__config__link && ret=0 ;;
+        pull) _shopify__app__config__pull && ret=0 ;;
+        use) _shopify__app__config__use && ret=0 ;;
+        validate) _shopify__app__config__validate && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__app__deploy() {
+  _arguments -s -S \
+    '--allow-deletes[Allows removing extensions and configuration without requiring user...]' \
+    '--allow-updates[Allows adding and updating extensions and configuration without requiring...]' \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--message=[Optional message that will be associated with this version]:message:' \
+    '--no-build[Use with caution\: Skips building any elements of the app that require...]' \
+    '--no-color[Disable color output]' \
+    '(--no-release --allow-updates --allow-deletes)--no-release[Creates a version but doesn'\''t release it - it'\''s not made available to...]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--source-control-url=[URL associated with the new app version]:source-control-url:' \
+    '--verbose[Increase the verbosity of the output]' \
+    '--version=[Optional version tag that will be associated with this app version]:version:'
+}
+
+_shopify__app__dev__clean() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__dev() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'clean:Cleans up the dev preview from the selected store'
+  )
+
+  _arguments -s -C \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '--checkout-cart-url=[Resource URL for checkout UI extension]:checkout-cart-url:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--install-mkcert[Install and use mkcert to generate localhost certificates when...]' \
+    '--localhost-port=[Port to use for localhost]:localhost-port:' \
+    '--no-color[Disable color output]' \
+    '--no-update[Uses the app URL from the toml file instead an autogenerated URL for dev]' \
+    '--notify=[The file path or URL]:notify:_files' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--skip-dependencies-installation[Skips the installation of dependencies]' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '--store-password=[The password for storefronts with password protection]:store-password:' \
+    '--subscription-product-url=[Resource URL for subscription UI extension]:subscription-product-url:' \
+    '(-t --theme)'{-t,--theme}'=[Theme ID or name of the theme app extension host theme]:theme:' \
+    '--theme-app-extension-port=[Local port of the theme app extension development server]:theme-app-extension-port:' \
+    '--tunnel-url=[Use a custom tunnel, it must be running before executing dev]:tunnel-url:' \
+    '(--use-localhost --tunnel-url)--use-localhost[Service entry point will listen to localhost]' \
+    '--verbose[Increase the verbosity of the output]' \
+    '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'app dev command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        clean) _shopify__app__dev__clean && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__app__env__pull() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--env-file=[Specify an environment file to update if the update flag is set]:env-file:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__env__show() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__env() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'pull:Pull app and extensions environment variables'
+    'show:Display app and extensions environment variables'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'app env command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        pull) _shopify__app__env__pull && ret=0 ;;
+        show) _shopify__app__env__show && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__app__execute() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--output-file=[The file name where results should be written, instead of STDOUT]:output-file:' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(-q --query)'{-q,--query}'=[The GraphQL query or mutation, as a string]:query:' \
+    '--query-file=[Path to a file containing the GraphQL query or mutation]:query-file:' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '(-s --store)'{-s,--store}'=[The myshopify.com domain of the store to execute against]:store:' \
+    '(--variable-file -v --variables)--variable-file=[Path to a file containing GraphQL variables in JSON format]:variable-file:' \
+    '(-v --variables --variable-file)'{-v,--variables}'=[The values for any GraphQL variables in your query or mutation, in JSON...]:variables:' \
+    '--verbose[Increase the verbosity of the output]' \
+    '--version=[The API version to use for the query or mutation]:version:'
+}
+
+_shopify__app__function__build() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your function directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__function__info() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your function directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__function__replay() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '(-l --log)'{-l,--log}'=[Specifies a log identifier to replay instead of selecting from a list]:log:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your function directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]' \
+    '(-w --watch)'{-w,--watch}'[Re-run the function when the source code changes]'
+}
+
+_shopify__app__function__run() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '(-e --export)'{-e,--export}'=[Name of the WebAssembly export to invoke]:export:' \
+    '(-i --input)'{-i,--input}'=[The input JSON to pass to the function]:input:' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your function directory]:path:_files -/' \
+    '--profile[Generate a WebAssembly performance profile for the function run]' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__function__schema() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your function directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--stdout[Output the schema to stdout instead of writing to a file]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__function__typegen() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your function directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__function() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'build:Compile a function to wasm'
+    'info:Print basic information about your function'
+    'replay:Replays a function run from an app log'
+    'run:Run a function locally for testing'
+    'schema:Fetch the latest GraphQL schema for a function'
+    'typegen:Generate GraphQL types for a function'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'app function command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        build) _shopify__app__function__build && ret=0 ;;
+        info) _shopify__app__function__info && ret=0 ;;
+        replay) _shopify__app__function__replay && ret=0 ;;
+        run) _shopify__app__function__run && ret=0 ;;
+        schema) _shopify__app__function__schema && ret=0 ;;
+        typegen) _shopify__app__function__typegen && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__app__generate__extension() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--flavor=[Choose a starting template for your extension, where applicable]:flavor:(vanilla-js react typescript typescript-react wasm rust)' \
+    '(-n --name)'{-n,--name}'=[name of your Extension]:name:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '(-t --template)'{-t,--template}'=[Extension template]:template:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__generate() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'extension:Generate a new app Extension'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'app generate command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        extension) _shopify__app__generate__extension && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__app__graphiql() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '--port=[Local port for the GraphiQL server]:port:' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '(-s --store)'{-s,--store}'=[The myshopify.com domain of the store to open GraphiQL against]:store:' \
+    '(-v --variables)'{-v,--variables}'=[The values for any GraphQL variables in your query or mutation, in JSON...]:variables:' \
+    '--verbose[Increase the verbosity of the output]' \
+    '--version=[The API version to use in GraphiQL]:version:'
+}
+
+_shopify__app__import_custom_data_definitions() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--include-existing[Include existing declared definitions in the output]' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__import_extensions() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__info() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]' \
+    '--web-env[Outputs environment variables necessary for running and deploying web/]'
+}
+
+_shopify__app__init() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '--client-id=[The Client ID of your app]:client-id:' \
+    '--flavor=[Which flavor of the given template to use]:flavor:' \
+    '(-n --name)'{-n,--name}'=[The name for the new app]:name:' \
+    '--no-color[Disable color output]' \
+    '(--organization-id --client-id)--organization-id=[The organization ID]:organization-id:' \
+    '(-d --package-manager)'{-d,--package-manager}'=[]:package-manager:(npm yarn pnpm bun)' \
+    '(-p --path)'{-p,--path}'=[]:path:_files -/' \
+    '--template=[The app template]:template:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__logs__sources() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__logs() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'sources:Print out a list of sources that may be used with the logs command'
+  )
+
+  _arguments -s -C \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    *'--source=[Filters output to the specified log source]:source:' \
+    '--status=[Filters output to the specified status (success or failure)]:status:(success failure)' \
+    *''{-s,--store}'=[Store URL]:store:' \
+    '--verbose[Increase the verbosity of the output]' \
+    '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'app logs command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        sources) _shopify__app__logs__sources && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__app__release() {
+  _arguments -s -S \
+    '--allow-deletes[Allows removing extensions and configuration without requiring user...]' \
+    '--allow-updates[Allows adding and updating extensions and configuration without requiring...]' \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]' \
+    '--version=[The name of the app version to release]:version:'
+}
+
+_shopify__app__versions__list() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__app__versions() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'list:List deployed versions of your app'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'app versions command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        list) _shopify__app__versions__list && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__app__webhook__trigger() {
+  _arguments -s -S \
+    '--address=[The URL where the webhook payload should be sent]:address:' \
+    '--api-version=[The API Version of the webhook topic]:api-version:' \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(--client-id -c --config)--client-id=[The Client ID of your app]:client-id:' \
+    '--client-secret=[Your app'\''s client secret]:client-secret:' \
+    '(-c --config)'{-c,--config}'=[The name of the app configuration]:config:' \
+    '--delivery-method=[Method chosen to deliver the topic payload]:delivery-method:(http google-pub-sub event-bridge)' \
+    '--help[This help]' \
+    '--path=[The path to your app directory]:path:_files -/' \
+    '(--reset -c --config)--reset[Reset all your settings]' \
+    '--topic=[The requested webhook topic]:topic:'
+}
+
+_shopify__app__webhook() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'trigger:Trigger delivery of a sample webhook topic payload to a designated address'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'app webhook command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        trigger) _shopify__app__webhook__trigger && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__app() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'build:Build the app, including extensions'
+    'bulk:Run bulk operations'
+    'config:Manage app configuration files'
+    'deploy:Deploy your Shopify app'
+    'dev:Run the app'
+    'env:Manage app environment variables'
+    'execute:Execute GraphQL queries and mutations'
+    'function:Work with Shopify Functions'
+    'generate:Scaffold app extensions'
+    'graphiql:Open a local GraphiQL UI for your app and store'
+    'import-custom-data-definitions:Import metafield and metaobject definitions'
+    'import-extensions:Import dashboard-managed extensions into your app'
+    'info:Print basic information about your app and extensions'
+    'init:Create a new app project'
+    'logs:Stream detailed logs for your Shopify app'
+    'release:Release an app version'
+    'versions:Work with deployed app versions'
+    'webhook:Trigger sample webhooks'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'app command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        build) _shopify__app__build && ret=0 ;;
+        bulk) _shopify__app__bulk && ret=0 ;;
+        config) _shopify__app__config && ret=0 ;;
+        deploy) _shopify__app__deploy && ret=0 ;;
+        dev) _shopify__app__dev && ret=0 ;;
+        env) _shopify__app__env && ret=0 ;;
+        execute) _shopify__app__execute && ret=0 ;;
+        function) _shopify__app__function && ret=0 ;;
+        generate) _shopify__app__generate && ret=0 ;;
+        graphiql) _shopify__app__graphiql && ret=0 ;;
+        import-custom-data-definitions) _shopify__app__import_custom_data_definitions && ret=0 ;;
+        import-extensions) _shopify__app__import_extensions && ret=0 ;;
+        info) _shopify__app__info && ret=0 ;;
+        init) _shopify__app__init && ret=0 ;;
+        logs) _shopify__app__logs && ret=0 ;;
+        release) _shopify__app__release && ret=0 ;;
+        versions) _shopify__app__versions && ret=0 ;;
+        webhook) _shopify__app__webhook && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__auth__login() {
+  _arguments -s -S \
+    '--alias=[Alias of an existing session you want to use]:alias:'
+}
+
+_shopify__auth__logout() {
+  _arguments -s -S '*:file:_files'
+}
+
+_shopify__auth() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'login:Logs you in to your Shopify account'
+    'logout:Logs you out of the Shopify account or Partner account and store'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'auth command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        login) _shopify__auth__login && ret=0 ;;
+        logout) _shopify__auth__logout && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__commands() {
+  _arguments -s -S \
+    *''{-c,--columns}'=[Only show provided columns (comma-separated)]:columns:(id plugin summary type)' \
+    '--deprecated[Show deprecated commands]' \
+    '(-x --extended --tree)'{-x,--extended}'[Show extra columns]' \
+    '--hidden[Show hidden commands]' \
+    '--json[Format output as json]' \
+    '(--no-truncate --tree)--no-truncate[Do not truncate output]' \
+    '(--sort --tree)--sort=[Property to sort by]:sort:(id plugin summary type)' \
+    '--tree[Show tree of commands]'
+}
+
+_shopify__config__autocorrect__off() {
+  _arguments -s -S '*:file:_files'
+}
+
+_shopify__config__autocorrect__on() {
+  _arguments -s -S '*:file:_files'
+}
+
+_shopify__config__autocorrect__status() {
+  _arguments -s -S '*:file:_files'
+}
+
+_shopify__config__autocorrect() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'off:Disable autocorrect'
+    'on:Enable autocorrect'
+    'status:Check whether autocorrect is enabled or disabled'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'config autocorrect command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        off) _shopify__config__autocorrect__off && ret=0 ;;
+        on) _shopify__config__autocorrect__on && ret=0 ;;
+        status) _shopify__config__autocorrect__status && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__config__autoupgrade__off() {
+  _arguments -s -S '*:file:_files'
+}
+
+_shopify__config__autoupgrade__on() {
+  _arguments -s -S '*:file:_files'
+}
+
+_shopify__config__autoupgrade__status() {
+  _arguments -s -S '*:file:_files'
+}
+
+_shopify__config__autoupgrade() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'off:Disable automatic upgrades for Shopify CLI'
+    'on:Enable automatic upgrades for Shopify CLI'
+    'status:Check whether auto-upgrade is enabled, disabled, or not yet configured'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'config autoupgrade command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        off) _shopify__config__autoupgrade__off && ret=0 ;;
+        on) _shopify__config__autoupgrade__on && ret=0 ;;
+        status) _shopify__config__autoupgrade__status && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__config() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'autocorrect:Enable or disable command autocorrect'
+    'autoupgrade:Enable or disable automatic upgrades'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'config command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        autocorrect) _shopify__config__autocorrect && ret=0 ;;
+        autoupgrade) _shopify__config__autoupgrade && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__doc__fetch() {
+  _arguments -s -S \
+    '--no-color[Disable color output]' \
+    '--output=[Write the document to this file path instead of printing it to stdout]:output:' \
+    '--url=[The shopify.dev URL to fetch]:url:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__doc__search() {
+  _arguments -s -S \
+    '--api-name=[Limit results to a specific API (for example\: admin, storefront, hydrogen,...]:api-name:' \
+    '--api-version=[Limit results to a specific API version (for example\: 2025-10, latest,...]:api-version:' \
+    '--no-color[Disable color output]' \
+    '--query=[The search query]:query:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__doc() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'fetch:Download a complete document from shopify.dev'
+    'search:Query the shopify.dev vector store and print the most relevant...'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'doc command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        fetch) _shopify__doc__fetch && ret=0 ;;
+        search) _shopify__doc__search && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__help() {
+  _arguments -s -S \
+    '(-n --nested-commands)'{-n,--nested-commands}'[Include all nested commands in the output]' \
+    '*:file:_files'
+}
+
+_shopify__hydrogen__build() {
+  _arguments -s -S \
+    '--bundle-stats[Show a bundle size summary after building]' \
+    '--codegen[Automatically generates GraphQL types for your project’s Storefront API...]' \
+    '--codegen-config-path=[Specifies a path to a codegen configuration file]:codegen-config-path:' \
+    '--disable-route-warning[Disables any warnings about missing standard routes]' \
+    '--entry=[Entry file for the worker]:entry:_files' \
+    '--force-client-sourcemap[Client sourcemapping is avoided by default because it makes backend code...]' \
+    '--lockfile-check[Checks that there is exactly one valid lockfile in the project]' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '--sourcemap[Controls whether server sourcemaps are generated]' \
+    '--watch[Watches for changes and rebuilds the project writing output to disk]'
+}
+
+_shopify__hydrogen__check() {
+  _arguments -s -S \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '*:file:_files'
+}
+
+_shopify__hydrogen__codegen() {
+  _arguments -s -S \
+    '--codegen-config-path=[Specify a path to a codegen configuration file]:codegen-config-path:' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '--watch[Watch the project for changes to update types on file save]'
+}
+
+_shopify__hydrogen__customer_account_push() {
+  _arguments -s -S \
+    '--dev-origin=[The development domain of your application]:dev-origin:' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '--relative-logout-uri=[The relative url of allowed url that will be redirected to post-logout for...]:relative-logout-uri:' \
+    '--relative-redirect-uri=[The relative url of allowed callback url for Customer Account API OAuth flow]:relative-redirect-uri:' \
+    '--storefront-id=[The id of the storefront the configuration should be pushed to]:storefront-id:'
+}
+
+_shopify__hydrogen__debug__cpu() {
+  _arguments -s -S \
+    '--entry=[Entry file for the worker]:entry:_files' \
+    '--output=[Specify a path to generate the profile file]:output:' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/'
+}
+
+_shopify__hydrogen__debug() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'cpu:Builds and profiles the server startup time the app'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'hydrogen debug command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        cpu) _shopify__hydrogen__debug__cpu && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__hydrogen__deploy() {
+  _arguments -s -S \
+    '--assets-dir=[Directory containing the client assets to deploy, relative to the project...]:assets-dir:' \
+    '--auth-bypass-token[Generate an authentication bypass token, which can be used to perform...]' \
+    '--auth-bypass-token-duration=[Specify the duration (in hours) up to 12 hours for the authentication...]:auth-bypass-token-duration:' \
+    '--build-command=[Specify a build command to run before deploying]:build-command:' \
+    '--entry=[Entry file for the worker]:entry:_files' \
+    '(--env --env-branch)--env=[Specifies the environment to perform the operation using its handle]:env:' \
+    '--env-branch=[Specifies the environment to perform the operation using its Git branch name]:env-branch:' \
+    '--env-file=[Path to an environment file to override existing environment variables for...]:env-file:' \
+    '(-f --force)'{-f,--force}'[Forces a deployment to proceed if there are uncommitted changes in its Git...]' \
+    '--force-client-sourcemap[Client sourcemapping is avoided by default because it makes backend code...]' \
+    '--json-output[Create a JSON file containing the deployment details in CI environments]' \
+    '--lockfile-check[Checks that there is exactly one valid lockfile in the project]' \
+    '--metadata-description=[Description of the changes in the deployment]:metadata-description:' \
+    '--metadata-user=[User that initiated the deployment]:metadata-user:' \
+    '--no-verify[Skip the routability verification step after deployment]' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '--preview[Deploys to the Preview environment]' \
+    '(-s --shop)'{-s,--shop}'=[Shop URL]:shop:' \
+    '(-t --token)'{-t,--token}'=[Oxygen deployment token]:token:' \
+    '--worker-dir=[Directory containing the Oxygen worker entry point (`index.js` or...]:worker-dir:'
+}
+
+_shopify__hydrogen__dev() {
+  _arguments -s -S \
+    '--codegen[Automatically generates GraphQL types for your project’s Storefront API...]' \
+    '--codegen-config-path=[Specifies a path to a codegen configuration file]:codegen-config-path:' \
+    '--customer-account-push[Use tunneling for local development and push the tunneling domain to admin]' \
+    '--debug[Enables inspector connections to the server with a debugger such as Visual...]' \
+    '--disable-deps-optimizer[Disable adding dependencies to Vite'\''s `ssr.optimizeDeps.include`...]' \
+    '--disable-version-check[Skip the version check when running `hydrogen dev`]' \
+    '--disable-virtual-routes[Disable rendering fallback routes when a route file doesn'\''t exist]' \
+    '--entry=[Entry file for the worker]:entry:_files' \
+    '(--env --env-branch)--env=[Specifies the environment to perform the operation using its handle]:env:' \
+    '--env-branch=[Specifies the environment to perform the operation using its Git branch name]:env-branch:' \
+    '--env-file=[Path to an environment file to override existing environment variables]:env-file:' \
+    '--host[Expose the server to the local network]' \
+    '--inspector-port=[The port where the inspector is available]:inspector-port:' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '--port=[The port to run the server on]:port:' \
+    '--verbose[Outputs more information about the command'\''s execution]'
+}
+
+_shopify__hydrogen__env__list() {
+  _arguments -s -S \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/'
+}
+
+_shopify__hydrogen__env__pull() {
+  _arguments -s -S \
+    '(--env --env-branch)--env=[Specifies the environment to perform the operation using its handle]:env:' \
+    '--env-branch=[Specifies the environment to perform the operation using its Git branch name]:env-branch:' \
+    '--env-file=[Path to an environment file to override existing environment variables]:env-file:' \
+    '(-f --force)'{-f,--force}'[Overwrites the destination directory and files if they already exist]' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/'
+}
+
+_shopify__hydrogen__env__push() {
+  _arguments -s -S \
+    '(--dry-run -f --force)--dry-run[Preview environment variable changes without pushing them]' \
+    '--env=[Specifies the environment to perform the operation using its handle]:env:' \
+    '--env-file=[Path to an environment file to override existing environment variables]:env-file:' \
+    '(-f --force)'{-f,--force}'[Push environment variable changes without confirmation]' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/'
+}
+
+_shopify__hydrogen__env() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'list:List the environments on your linked Hydrogen storefront'
+    'pull:Populate your .env with variables from your Hydrogen storefront'
+    'push:Push environment variables from the local .env file to your linked Hydrogen...'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'hydrogen env command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        list) _shopify__hydrogen__env__list && ret=0 ;;
+        pull) _shopify__hydrogen__env__pull && ret=0 ;;
+        push) _shopify__hydrogen__env__push && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__hydrogen__generate__route() {
+  _arguments -s -S \
+    '--adapter=[React Router adapter used in the route]:adapter:' \
+    '(-f --force)'{-f,--force}'[Overwrites the destination directory and files if they already exist]' \
+    '--locale-param=[The param name in Remix routes for the i18n locale, if any]:locale-param:' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '--typescript[Generate TypeScript files]' \
+    '*:file:_files'
+}
+
+_shopify__hydrogen__generate__routes() {
+  _arguments -s -S \
+    '--adapter=[React Router adapter used in the route]:adapter:' \
+    '(-f --force)'{-f,--force}'[Overwrites the destination directory and files if they already exist]' \
+    '--locale-param=[The param name in Remix routes for the i18n locale, if any]:locale-param:' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '--typescript[Generate TypeScript files]'
+}
+
+_shopify__hydrogen__generate() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'route:Generates a standard Shopify route'
+    'routes:Generates all supported standard shopify routes'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'hydrogen generate command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        route) _shopify__hydrogen__generate__route && ret=0 ;;
+        routes) _shopify__hydrogen__generate__routes && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__hydrogen__init() {
+  _arguments -s -S \
+    '(-f --force)'{-f,--force}'[Overwrites the destination directory and files if they already exist]' \
+    '--git[Init Git and create initial commits]' \
+    '--install-deps[Auto installs dependencies using the active package manager]' \
+    '--language=[Sets the template language to use]:language:' \
+    '--markets=[Sets the URL structure to support multiple markets]:markets:' \
+    '--mock-shop[Use mock.shop as the data source for the storefront]' \
+    '--path=[The path to the directory of the new Hydrogen storefront]:path:_files -/' \
+    '--quickstart[Scaffolds a new Hydrogen project with a set of sensible defaults]' \
+    '--shortcut[Creates a global h2 shortcut for Shopify CLI using shell aliases]' \
+    '--styling=[Sets the styling strategy to use]:styling:' \
+    '--template=[Scaffolds project based on an existing template or example from the...]:template:'
+}
+
+_shopify__hydrogen__link() {
+  _arguments -s -S \
+    '(--create-storefront --storefront)--create-storefront[Create a new Hydrogen storefront]' \
+    '(-f --force)'{-f,--force}'[Overwrites the destination directory and files if they already exist]' \
+    '(--name --storefront)--name=[The name to use when creating a new Hydrogen storefront]:name:' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '(-s --shop)'{-s,--shop}'=[Shop URL]:shop:' \
+    '(--storefront --create-storefront --name)--storefront=[The name of a Hydrogen Storefront (e.g]:storefront:'
+}
+
+_shopify__hydrogen__list() {
+  _arguments -s -S \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/'
+}
+
+_shopify__hydrogen__login() {
+  _arguments -s -S \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '(-s --shop)'{-s,--shop}'=[Shop URL]:shop:'
+}
+
+_shopify__hydrogen__logout() {
+  _arguments -s -S \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/'
+}
+
+_shopify__hydrogen__preview() {
+  _arguments -s -S \
+    '--build[Builds the app before starting the preview server]' \
+    '--codegen[Automatically generates GraphQL types for your project’s Storefront API...]' \
+    '--codegen-config-path=[Specifies a path to a codegen configuration file]:codegen-config-path:' \
+    '--debug[Enables inspector connections to the server with a debugger such as Visual...]' \
+    '--entry=[Entry file for the worker]:entry:_files' \
+    '(--env --env-branch)--env=[Specifies the environment to perform the operation using its handle]:env:' \
+    '--env-branch=[Specifies the environment to perform the operation using its Git branch name]:env-branch:' \
+    '--env-file=[Path to an environment file to override existing environment variables]:env-file:' \
+    '--inspector-port=[The port where the inspector is available]:inspector-port:' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '--port=[The port to run the server on]:port:' \
+    '--verbose[Outputs more information about the command'\''s execution]' \
+    '--watch[Watches for changes and rebuilds the project]'
+}
+
+_shopify__hydrogen__setup__css() {
+  _arguments -s -S \
+    '(-f --force)'{-f,--force}'[Overwrites the destination directory and files if they already exist]' \
+    '--install-deps[Auto installs dependencies using the active package manager]' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '*:file:_files'
+}
+
+_shopify__hydrogen__setup__markets() {
+  _arguments -s -S \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '*:file:_files'
+}
+
+_shopify__hydrogen__setup__vite() {
+  _arguments -s -S \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/'
+}
+
+_shopify__hydrogen__setup() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'css:Setup CSS strategies for your project'
+    'markets:Setup support for multiple markets in your project'
+    'vite:EXPERIMENTAL\: Upgrades the project to use Vite'
+  )
+
+  _arguments -s -C \
+    '(-f --force)'{-f,--force}'[Overwrites the destination directory and files if they already exist]' \
+    '--install-deps[Auto installs dependencies using the active package manager]' \
+    '--markets=[Sets the URL structure to support multiple markets]:markets:' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '--shortcut[Creates a global h2 shortcut for Shopify CLI using shell aliases]' \
+    '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'hydrogen setup command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        css) _shopify__hydrogen__setup__css && ret=0 ;;
+        markets) _shopify__hydrogen__setup__markets && ret=0 ;;
+        vite) _shopify__hydrogen__setup__vite && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__hydrogen__shortcut() {
+  _arguments -s -S '*:file:_files'
+}
+
+_shopify__hydrogen__unlink() {
+  _arguments -s -S \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/'
+}
+
+_shopify__hydrogen__upgrade() {
+  _arguments -s -S \
+    '(-f --force)'{-f,--force}'[Ignore warnings and force the upgrade to the target version]' \
+    '--path=[The path to the directory of the Hydrogen storefront]:path:_files -/' \
+    '(-v --version)'{-v,--version}'=[A target hydrogen version to update to]:version:'
+}
+
+_shopify__hydrogen() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'build:Builds a Hydrogen storefront for production'
+    'check:Returns diagnostic information about a Hydrogen storefront'
+    'codegen:Generate types for the Storefront API queries found in your project'
+    'customer-account-push:Push project configuration to admin'
+    'debug:Profile the storefront'
+    'deploy:Builds and deploys a Hydrogen storefront to Oxygen'
+    'dev:Runs Hydrogen storefront in an Oxygen worker for development'
+    'env:Manage storefront environment variables'
+    'generate:Generate standard Shopify routes'
+    'init:Creates a new Hydrogen storefront'
+    'link:Link a local project to one of your shop'\''s Hydrogen storefronts'
+    'list:Returns a list of Hydrogen storefronts available on a given shop'
+    'login:Login to your Shopify account'
+    'logout:Logout of your local session'
+    'preview:Runs a Hydrogen storefront in an Oxygen worker for production'
+    'setup:Scaffold routes and core functionality'
+    'shortcut:Creates a global `h2` shortcut for the Hydrogen CLI'
+    'unlink:Unlink a local project from a Hydrogen storefront'
+    'upgrade:Upgrade Remix and Hydrogen npm dependencies'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'hydrogen command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        build) _shopify__hydrogen__build && ret=0 ;;
+        check) _shopify__hydrogen__check && ret=0 ;;
+        codegen) _shopify__hydrogen__codegen && ret=0 ;;
+        customer-account-push) _shopify__hydrogen__customer_account_push && ret=0 ;;
+        debug) _shopify__hydrogen__debug && ret=0 ;;
+        deploy) _shopify__hydrogen__deploy && ret=0 ;;
+        dev) _shopify__hydrogen__dev && ret=0 ;;
+        env) _shopify__hydrogen__env && ret=0 ;;
+        generate) _shopify__hydrogen__generate && ret=0 ;;
+        init) _shopify__hydrogen__init && ret=0 ;;
+        link) _shopify__hydrogen__link && ret=0 ;;
+        list) _shopify__hydrogen__list && ret=0 ;;
+        login) _shopify__hydrogen__login && ret=0 ;;
+        logout) _shopify__hydrogen__logout && ret=0 ;;
+        preview) _shopify__hydrogen__preview && ret=0 ;;
+        setup) _shopify__hydrogen__setup && ret=0 ;;
+        shortcut) _shopify__hydrogen__shortcut && ret=0 ;;
+        unlink) _shopify__hydrogen__unlink && ret=0 ;;
+        upgrade) _shopify__hydrogen__upgrade && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__organization__list() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__organization() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'list:List Shopify organizations you have access to'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'organization command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        list) _shopify__organization__list && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__search() {
+  _arguments -s -S \
+    '--no-color[Disable color output]' \
+    '--verbose[Increase the verbosity of the output]' \
+    '*:file:_files'
+}
+
+_shopify__store__auth__list() {
+  _arguments -s -S \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__store__auth() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'list:List stores authenticated directly with store auth'
+  )
+
+  _arguments -s -C \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--scopes=[Comma-separated Admin API scopes to request for the app]:scopes:' \
+    '(-s --store)'{-s,--store}'=[The myshopify.com domain of the store]:store:' \
+    '--verbose[Increase the verbosity of the output]' \
+    '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'store auth command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        list) _shopify__store__auth__list && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__store__bulk__cancel() {
+  _arguments -s -S \
+    '--id=[The bulk operation ID to cancel (numeric ID or full GID)]:id:' \
+    '--no-color[Disable color output]' \
+    '(-s --store)'{-s,--store}'=[The myshopify.com domain of the store]:store:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__store__bulk__execute() {
+  _arguments -s -S \
+    '--allow-mutations[Allow GraphQL mutations to run against the target store]' \
+    '--no-color[Disable color output]' \
+    '--output-file=[The file path where results should be written if --watch is specified]:output-file:' \
+    '(-q --query)'{-q,--query}'=[The GraphQL query or mutation to run as a bulk operation]:query:' \
+    '--query-file=[Path to a file containing the GraphQL query or mutation]:query-file:' \
+    '(-s --store)'{-s,--store}'=[The myshopify.com domain of the store]:store:' \
+    '(--variable-file -v --variables)--variable-file=[Path to a file containing GraphQL variables in JSONL format (one JSON...]:variable-file:' \
+    *''{-v,--variables}'=[The values for any GraphQL variables in your mutation, in JSON format]:variables:' \
+    '--verbose[Increase the verbosity of the output]' \
+    '--version=[The API version to use for the bulk operation]:version:' \
+    '--watch[Wait for bulk operation results before exiting]'
+}
+
+_shopify__store__bulk__status() {
+  _arguments -s -S \
+    '--id=[The bulk operation ID (numeric ID or full GID)]:id:' \
+    '--no-color[Disable color output]' \
+    '(-s --store)'{-s,--store}'=[The myshopify.com domain of the store]:store:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__store__bulk() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'cancel:Cancel a bulk operation on a store'
+    'execute:Execute bulk operations on a store'
+    'status:Check the status of bulk operations on a store'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'store bulk command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        cancel) _shopify__store__bulk__cancel && ret=0 ;;
+        execute) _shopify__store__bulk__execute && ret=0 ;;
+        status) _shopify__store__bulk__status && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__store__create__preview() {
+  _arguments -s -S \
+    '--country=[Two-letter country code for the store, such as US, CA, or GB]:country:' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--name=[The name of the store]:name:' \
+    '--no-color[Disable color output]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__store__create() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'preview:Create a preview Shopify store'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'store create command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        preview) _shopify__store__create__preview && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__store__execute() {
+  _arguments -s -S \
+    '--allow-mutations[Allow GraphQL mutations to run against the target store]' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--output-file=[The file name where results should be written, instead of STDOUT]:output-file:' \
+    '(-q --query)'{-q,--query}'=[The GraphQL query or mutation, as a string]:query:' \
+    '--query-file=[Path to a file containing the GraphQL query or mutation]:query-file:' \
+    '(-s --store)'{-s,--store}'=[The myshopify.com domain of the store]:store:' \
+    '(--variable-file -v --variables)--variable-file=[Path to a file containing GraphQL variables in JSON format]:variable-file:' \
+    '(-v --variables --variable-file)'{-v,--variables}'=[The values for any GraphQL variables in your query or mutation, in JSON...]:variables:' \
+    '--verbose[Increase the verbosity of the output]' \
+    '--version=[The API version to use for the query or mutation]:version:'
+}
+
+_shopify__store__graphiql() {
+  _arguments -s -S \
+    '--allow-mutations[Allow GraphQL mutations to run against the target store]' \
+    '--no-color[Disable color output]' \
+    '--port=[Local port for the GraphiQL server]:port:' \
+    '(-s --store)'{-s,--store}'=[The myshopify.com domain of the store]:store:' \
+    '(-v --variables)'{-v,--variables}'=[The values for any GraphQL variables in your query or mutation, in JSON...]:variables:' \
+    '--verbose[Increase the verbosity of the output]' \
+    '--version=[The API version to use in GraphiQL]:version:'
+}
+
+_shopify__store__info() {
+  _arguments -s -S \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '(-s --store)'{-s,--store}'=[The myshopify.com domain of the store]:store:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__store__list() {
+  _arguments -s -S \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--organization-id=[The numeric organization ID]:organization-id:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__store__open() {
+  _arguments -s -S \
+    '--no-color[Disable color output]' \
+    '(-s --store)'{-s,--store}'=[The myshopify.com domain of the store]:store:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__store() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'auth:Authenticate an app against a store for store commands'
+    'bulk:Run bulk store operations'
+    'create:Create a store'
+    'execute:Execute GraphQL queries and mutations on a store'
+    'graphiql:Open a local GraphiQL UI for a store'
+    'info:Surface metadata about a Shopify store'
+    'list:List stores in a Shopify organization'
+    'open:Open your Shopify store in the default web browser'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'store command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        auth) _shopify__store__auth && ret=0 ;;
+        bulk) _shopify__store__bulk && ret=0 ;;
+        create) _shopify__store__create && ret=0 ;;
+        execute) _shopify__store__execute && ret=0 ;;
+        graphiql) _shopify__store__graphiql && ret=0 ;;
+        info) _shopify__store__info && ret=0 ;;
+        list) _shopify__store__list && ret=0 ;;
+        open) _shopify__store__open && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__theme__check() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(-a --auto-correct)'{-a,--auto-correct}'[Automatically fix offenses]' \
+    '(-C --config)'{-C,--config}'=[Use the config provided, overriding .theme-check.yml if present]:config:' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '--fail-level=[Minimum severity for exit with error code]:fail-level:(crash error suggestion style warning info)' \
+    '--init[Generate a .theme-check.yml file]' \
+    '--list[List enabled checks]' \
+    '--no-color[Disable color output]' \
+    '(-o --output)'{-o,--output}'=[The output format to use]:output:(text json)' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '--print[Output active config to STDOUT]' \
+    '--verbose[Increase the verbosity of the output]' \
+    '(-v --version)'{-v,--version}'[Print Theme Check version]'
+}
+
+_shopify__theme__console() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '--no-color[Disable color output]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '--store-password=[The password for storefronts with password protection]:store-password:' \
+    '--url=[The url to be used as context]:url:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__delete() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(-d --development)'{-d,--development}'[Delete your development theme]' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '(-f --force)'{-f,--force}'[Skip confirmation]' \
+    '--no-color[Disable color output]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '(-a --show-all)'{-a,--show-all}'[Include other development themes in the theme list]' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    *''{-t,--theme}'=[Theme ID or name of the remote theme]:theme:_shopify_themes' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__dev() {
+  _arguments -s -S \
+    '(-a --allow-live)'{-a,--allow-live}'[Allow development on a live theme]' \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '--error-overlay=[Controls the visibility of the error overlay when an theme asset upload...]:error-overlay:(silent default)' \
+    '--host=[Set which network interface the web server listens on]:host:_hosts' \
+    *''{-x,--ignore}'=[Skip hot reloading any files that match the specified pattern]:ignore:_files' \
+    '--listing=[The listing preset to use for multi-preset themes]:listing:' \
+    '--live-reload=[The live reload mode switches the server behavior when a file is modified\:]:live-reload:(hot-reload full-page off)' \
+    '--no-color[Disable color output]' \
+    '(-n --nodelete)'{-n,--nodelete}'[Prevents files from being deleted in the remote theme when a file has been...]' \
+    '--notify=[The file path or URL]:notify:_files' \
+    *''{-o,--only}'=[Hot reload only files that match the specified pattern]:only:_files' \
+    '--open[Automatically launch the theme preview in your default web browser]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '--port=[Local port to serve theme preview from]:port:' \
+    '--reconciliation-strategy=[How to resolve JSON conflicts when --theme-editor-sync is enabled]:reconciliation-strategy:(keep-local keep-remote abort)' \
+    '--standard-events-inspector[Inject the standard events inspector into storefront HTML]' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '--store-password=[The password for storefronts with password protection]:store-password:' \
+    '(-t --theme)'{-t,--theme}'=[Theme ID or name of the remote theme]:theme:_shopify_themes' \
+    '--theme-editor-sync[Synchronize Theme Editor updates in the local theme files]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__duplicate() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '(-f --force)'{-f,--force}'[Force the duplicate operation to run without prompts or confirmations]' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '(-n --name)'{-n,--name}'=[Name of the newly duplicated theme]:name:' \
+    '--no-color[Disable color output]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '(-t --theme)'{-t,--theme}'=[Theme ID or name of the remote theme]:theme:_shopify_themes' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__info() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(-d --development)'{-d,--development}'[Retrieve info from your development theme]' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '(-t --theme)'{-t,--theme}'=[Theme ID or name of the remote theme]:theme:_shopify_themes' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__init() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(-u --clone-url)'{-u,--clone-url}'=[The Git URL to clone from]:clone-url:' \
+    '(-l --latest)'{-l,--latest}'[Downloads the latest release of the `clone-url`]' \
+    '--no-color[Disable color output]' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '--verbose[Increase the verbosity of the output]' \
+    '*:file:_files'
+}
+
+_shopify__theme__language_server() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '--no-color[Disable color output]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__list() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '--id=[Only list theme with the given ID]:id:' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--name=[Only list themes that contain the given name]:name:' \
+    '--no-color[Disable color output]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '--role=[Only list themes with the given role]:role:(live unpublished development)' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__metafields__pull() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '--no-color[Disable color output]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__metafields() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'pull:Download metafields definitions from your shop into a local file'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'theme metafields command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        pull) _shopify__theme__metafields__pull && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__theme__open() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(-d --development)'{-d,--development}'[Open your development theme]' \
+    '(-E --editor)'{-E,--editor}'[Open the theme editor for the specified theme in the browser]' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '(-l --live)'{-l,--live}'[Open your live (published) theme]' \
+    '--no-color[Disable color output]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '(-t --theme)'{-t,--theme}'=[Theme ID or name of the remote theme]:theme:_shopify_themes' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__package() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '--no-color[Disable color output]' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__preview() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '--json[Output the preview URL and identifier as JSON]' \
+    '--no-color[Disable color output]' \
+    '--open[Automatically launch the theme preview in your default web browser]' \
+    '--overrides=[Path to a JSON overrides file]:overrides:' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '--preview-id=[An existing preview identifier to update instead of creating a new preview]:preview-id:' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '(-t --theme)'{-t,--theme}'=[Theme ID or name of the remote theme]:theme:_shopify_themes' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__profile() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--no-color[Disable color output]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '--store-password=[The password for storefronts with password protection]:store-password:' \
+    '(-t --theme)'{-t,--theme}'=[Theme ID or name of the remote theme]:theme:_shopify_themes' \
+    '--url=[The url to be used as context]:url:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__publish() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '(-f --force)'{-f,--force}'[Skip confirmation]' \
+    '--no-color[Disable color output]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '(-t --theme)'{-t,--theme}'=[Theme ID or name of the remote theme]:theme:_shopify_themes' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__pull() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(-d --development)'{-d,--development}'[Pull theme files from your remote development theme]' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    *''{-x,--ignore}'=[Skip downloading the specified files (Multiple flags allowed)]:ignore:_files' \
+    '(-l --live)'{-l,--live}'[Pull theme files from your remote live theme]' \
+    '--no-color[Disable color output]' \
+    '(-n --nodelete)'{-n,--nodelete}'[Prevent deleting local files that don'\''t exist remotely]' \
+    *''{-o,--only}'=[Download only the specified files (Multiple flags allowed)]:only:_files' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '(-t --theme)'{-t,--theme}'=[Theme ID or name of the remote theme]:theme:_shopify_themes' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__push() {
+  _arguments -s -S \
+    '(-a --allow-live)'{-a,--allow-live}'[Allow push to a live theme]' \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(-d --development)'{-d,--development}'[Push theme files from your remote development theme]' \
+    '(-c --development-context -t --theme)'{-c,--development-context}'=[Unique identifier for a development theme context (e.g., PR number, branch...]:development-context:' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    *''{-x,--ignore}'=[Skip uploading the specified files (Multiple flags allowed)]:ignore:_files' \
+    '(-j --json)'{-j,--json}'[Output the result as JSON]' \
+    '--listing=[The listing preset to use for multi-preset themes]:listing:' \
+    '(-l --live)'{-l,--live}'[Push theme files from your remote live theme]' \
+    '--no-color[Disable color output]' \
+    '(-n --nodelete)'{-n,--nodelete}'[Prevent deleting remote files that don'\''t exist locally]' \
+    *''{-o,--only}'=[Upload only the specified files (Multiple flags allowed)]:only:_files' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '(-p --publish)'{-p,--publish}'[Publish as the live theme after uploading]' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '--strict[Require theme check to pass without errors before pushing]' \
+    '(-t --theme)'{-t,--theme}'=[Theme ID or name of the remote theme]:theme:_shopify_themes' \
+    '(-u --unpublished)'{-u,--unpublished}'[Create a new unpublished theme and push to it]' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__rename() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    '(-d --development)'{-d,--development}'[Rename your development theme]' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '(-l --live)'{-l,--live}'[Rename your remote live theme]' \
+    '(-n --name)'{-n,--name}'=[The new name for the theme]:name:' \
+    '--no-color[Disable color output]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '(-t --theme)'{-t,--theme}'=[Theme ID or name of the remote theme]:theme:_shopify_themes' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme__share() {
+  _arguments -s -S \
+    '--auth-alias=[Alias of the Shopify account to use for authentication]:auth-alias:' \
+    *''{-e,--environment}'=[The environment to apply to the current command]:environment:_shopify_environments' \
+    '--listing=[The listing preset to use for multi-preset themes]:listing:' \
+    '--no-color[Disable color output]' \
+    '--password=[Password generated from the Theme Access app or an Admin API token]:password:' \
+    '--path=[The path where you want to run the command]:path:_files -/' \
+    '(-s --store)'{-s,--store}'=[Store URL]:store:' \
+    '--verbose[Increase the verbosity of the output]'
+}
+
+_shopify__theme() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'check:Validate the theme'
+    'console:Shopify Liquid REPL (read-eval-print loop) tool'
+    'delete:Delete remote themes from the connected store'
+    'dev:Uploads the current theme as a development theme to the connected store,...'
+    'duplicate:Duplicates a theme from your theme library'
+    'info:Displays information about your theme environment, including your current...'
+    'init:Clones a Git repository to use as a starting point for building a new theme'
+    'language-server:Start a Language Server Protocol server'
+    'list:Lists the themes in your store, along with their IDs and statuses'
+    'metafields:Theme metafield operations'
+    'open:Opens the preview of your remote theme'
+    'package:Package your theme into a .zip file, ready to upload to the Online Store'
+    'preview:Applies JSON overrides to a theme and returns a preview URL'
+    'profile:Profile the Liquid rendering of a theme page'
+    'publish:Set a remote theme as the live theme'
+    'pull:Download your remote theme files locally'
+    'push:Uploads your local theme files to the connected store, overwriting the...'
+    'rename:Renames an existing theme'
+    'share:Creates a shareable, unpublished, and new theme on your theme library with...'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'theme command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        check) _shopify__theme__check && ret=0 ;;
+        console) _shopify__theme__console && ret=0 ;;
+        delete) _shopify__theme__delete && ret=0 ;;
+        dev) _shopify__theme__dev && ret=0 ;;
+        duplicate) _shopify__theme__duplicate && ret=0 ;;
+        info) _shopify__theme__info && ret=0 ;;
+        init) _shopify__theme__init && ret=0 ;;
+        language-server) _shopify__theme__language_server && ret=0 ;;
+        list) _shopify__theme__list && ret=0 ;;
+        metafields) _shopify__theme__metafields && ret=0 ;;
+        open) _shopify__theme__open && ret=0 ;;
+        package) _shopify__theme__package && ret=0 ;;
+        preview) _shopify__theme__preview && ret=0 ;;
+        profile) _shopify__theme__profile && ret=0 ;;
+        publish) _shopify__theme__publish && ret=0 ;;
+        pull) _shopify__theme__pull && ret=0 ;;
+        push) _shopify__theme__push && ret=0 ;;
+        rename) _shopify__theme__rename && ret=0 ;;
+        share) _shopify__theme__share && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify__upgrade() {
+  _arguments -s -S '*:file:_files'
+}
+
+_shopify__version() {
+  _arguments -s -S '*:file:_files'
+}
+
+_shopify() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'app:Build Shopify apps'
+    'auth:Authentication operations'
+    'commands:List all shopify commands'
+    'config:CLI configuration options'
+    'doc:Search the Shopify documentation'
+    'help:Display help for Shopify CLI'
+    'hydrogen:Build Hydrogen storefronts'
+    'organization:Work with your organizations'
+    'search:Search shopify.dev for the most relevant content matching a query'
+    'store:Work with a store'
+    'theme:Build Liquid themes'
+    'upgrade:Upgrades Shopify CLI'
+    'version:Shopify CLI version currently installed'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'shopify command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        app) _shopify__app && ret=0 ;;
+        auth) _shopify__auth && ret=0 ;;
+        commands) _shopify__commands && ret=0 ;;
+        config) _shopify__config && ret=0 ;;
+        doc) _shopify__doc && ret=0 ;;
+        help) _shopify__help && ret=0 ;;
+        hydrogen) _shopify__hydrogen && ret=0 ;;
+        organization) _shopify__organization && ret=0 ;;
+        search) _shopify__search && ret=0 ;;
+        store) _shopify__store && ret=0 ;;
+        theme) _shopify__theme && ret=0 ;;
+        upgrade) _shopify__upgrade && ret=0 ;;
+        version) _shopify__version && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_shopify "$@"
