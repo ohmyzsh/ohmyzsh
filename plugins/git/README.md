@@ -212,6 +212,7 @@ plugins=(... git)
 | `gswd`                 | `git switch $(git_develop_branch)`                                                                                              |
 | `gswm`                 | `git switch $(git_main_branch)`                                                                                                 |
 | `gta`                  | `git tag --annotate`                                                                                                            |
+| `gtb`                  | `git tag backup-$(date +"%Y-%m-%d-%H%M%S")`                                                                                     |
 | `gts`                  | `git tag -s`                                                                                                                    |
 | `gtv`                  | `git tag \| sort -V`                                                                                                            |
 | `gignore`              | `git update-index --assume-unchanged`                                                                                           |
