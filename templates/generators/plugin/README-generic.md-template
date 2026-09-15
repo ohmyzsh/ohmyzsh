@@ -1,0 +1,11 @@
+# %name% plugin
+
+%description%
+
+To use it, add `%name%` to the plugins array in your zshrc file:
+
+```zsh
+plugins=(... %name%)
+```
+
+This plugin does not add any aliases.

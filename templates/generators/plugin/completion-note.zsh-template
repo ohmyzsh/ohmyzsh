@@ -1,0 +1,6 @@
+#
+# Completion
+#
+# Oh My Zsh adds this directory to $fpath, so a file named `_%command%` next to
+# this one is picked up automatically as the completion for %command%.
+#
