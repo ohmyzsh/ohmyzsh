@@ -1,4 +1,11 @@
 # Symfony2 basic command completion
+#
+# DEPRECATION WARNING: This plugin is deprecated and will be removed in a future release.
+# Please migrate to the unified 'symfony' plugin which supports all Symfony versions.
+# Simply change 'symfony2' to 'symfony' in your .zshrc plugins list.
+#
+echo "⚠️  WARNING: The 'symfony2' plugin is deprecated. Please use the unified 'symfony' plugin instead." >&2
+echo "   Change 'symfony2' to 'symfony' in your .zshrc plugins list." >&2
 
 _symfony_console () {
   echo "php $(find . -maxdepth 2 -mindepth 1 -name 'console' -type f | head -n 1)"
