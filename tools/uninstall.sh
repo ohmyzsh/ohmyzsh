@@ -16,8 +16,14 @@ if [ "$confirmation" != y ] && [ "$confirmation" != Y ]; then
   exit
 fi
 
-echo "Removing ~/.oh-my-zsh"
-if [ -d ~/.oh-my-zsh ]; then
+# echo "Removing ~/.oh-my-zsh"
+# if [ -d ~/.oh-my-zsh ]; then
+#   rm -rf ~/.oh-my-zsh
+# fi
+echo "Removing oh-my-zsh directory"
+if [ -n "$ZSH" -a -d "$ZSH" ]; then
+  rm -rf "$ZSH"
+elif [ -d ~/.oh-my-zsh ]; then
   rm -rf ~/.oh-my-zsh
 fi
 
