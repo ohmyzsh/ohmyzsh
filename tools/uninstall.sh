@@ -35,6 +35,12 @@ if [ -e "$ZSHRC_ORIG" ]; then
   echo "Your original zsh config was restored."
 else
   echo "No original zsh config found"
+  if [ -e "${ZSHRC_SAVE}" ]; then
+    echo "Restoring your current config and removing Oh My Zsh lines..."
+    grep -v 'source.*oh-my-zsh\.sh' "${ZSHRC_SAVE}" > ~/.zshrc
+    echo "Your config was restored with Oh My Zsh lines removed."
+    echo "Original file saved at: ${ZSHRC_SAVE}"
+  fi
 fi
 
 echo "Thanks for trying out Oh My Zsh. It's been uninstalled."
