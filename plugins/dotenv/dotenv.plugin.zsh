@@ -273,12 +273,28 @@ _dotenv_check_syntax() {
 }
 
 source_env() {
-  if [[ ! -f "$ZSH_DOTENV_FILE" ]] && [[ ! -p "$ZSH_DOTENV_FILE" ]]; then
+  # Support multiple dotenv files: ZSH_DOTENV_FILE is a space-separated list
+  # of filenames. Shell tokenization is used so filenames with spaces can be
+  # quoted, e.g. ZSH_DOTENV_FILE=".env '.my env file' .env.local".
+  local -a dotenv_files existing_files
+  dotenv_files=(${(z)ZSH_DOTENV_FILE})
+
+  # Collect files that exist (regular files or named pipes) in the current directory
+  local file
+  for file in "${dotenv_files[@]}"; do
+    if [[ -f "$file" ]] || [[ -p "$file" ]]; then
+      existing_files+=("$file")
+    fi
+  done
+
+  # Nothing to source
+  if [[ ${#existing_files} -eq 0 ]]; then
     return
   fi
 
   if [[ "$ZSH_DOTENV_PROMPT" != false ]]; then
     local confirmation dirpath="${PWD:A}"
+    local files_display="${(j:, :)existing_files}"
 
     # make sure there is an (dis-)allowed file
     touch "$ZSH_DOTENV_ALLOWED_LIST"
@@ -299,7 +315,7 @@ source_env() {
       [[ $column -eq 1 ]] || echo
 
       # print same-line prompt and output newline character if necessary
-      echo -n "dotenv: found '$ZSH_DOTENV_FILE' file. Source it? ([y]es/[N]o/[a]lways/n[e]ver) "
+      echo -n "dotenv: found '$files_display' file(s). Source them? ([y]es/[N]o/[a]lways/n[e]ver) "
       read -k 1 confirmation
       [[ "$confirmation" = $'\n' ]] || echo
 
@@ -313,21 +329,23 @@ source_env() {
     fi
   fi
 
-  local content
-  if [[ -p "$ZSH_DOTENV_FILE" ]]; then
-    _dotenv_read_limited "$ZSH_DOTENV_FILE" || return 1
-    content="$REPLY"
-    _dotenv_check_syntax "$ZSH_DOTENV_FILE" "$content" || return 1
-
-    setopt localoptions allexport
-    _parse_dotenv_content "$content"
-    return
-  fi
-
-  _dotenv_check_syntax "$ZSH_DOTENV_FILE" || return 1
-
   setopt localoptions allexport
-  parse_dotenv "$ZSH_DOTENV_FILE"
+
+  # Source each existing file in the order specified
+  for file in "${existing_files[@]}"; do
+    if [[ -p "$file" ]]; then
+      local content
+      _dotenv_read_limited "$file" || continue
+      content="$REPLY"
+      _dotenv_check_syntax "$file" "$content" || continue
+
+      _parse_dotenv_content "$content"
+    else
+      _dotenv_check_syntax "$file" || continue
+
+      parse_dotenv "$file"
+    fi
+  done
 }
 
 autoload -U add-zsh-hook
