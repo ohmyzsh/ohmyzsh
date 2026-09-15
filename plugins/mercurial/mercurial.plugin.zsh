@@ -73,46 +73,32 @@ function hg_get_bookmark_name() {
   echo "$(<"$dir/.hg/bookmarks.current")"
 }
 
+ZSH_THEME_HG_PROMPT_IDENTIFY_DEFAULT='{separate(" ",ifeq(branch,"default","",branch),strip(bookmarks % "{bookmark}{ifeq(bookmark,activebookmark,"*")} "),tags)}'
+
 function hg_prompt_info {
-  local dir branch dirty
-  if ! dir=$(hg_root); then
+  if ! hg_root >/dev/null; then
     return
   fi
 
-  if [[ ! -f "$dir/.hg/branch" ]]; then
-    branch=default
-  else
-    branch="$(<"$dir/.hg/branch")"
-  fi
-
-  dirty="$(hg_dirty)"
-
-  echo "${ZSH_THEME_HG_PROMPT_PREFIX}${branch:gs/%/%%}${dirty}${ZSH_THEME_HG_PROMPT_SUFFIX}"
-}
-
-function hg_dirty {
-  # Do nothing if clean / dirty settings aren't defined
-  if [[ -z "$ZSH_THEME_HG_PROMPT_DIRTY" && -z "$ZSH_THEME_HG_PROMPT_CLEAN" ]]; then
+  local pieces dirty
+  if ! pieces="$(hg identify -T'{if(dirty,"x","-")} '"${ZSH_THEME_HG_PROMPT_IDENTIFY:-$ZSH_THEME_HG_PROMPT_IDENTIFY_DEFAULT}")"; then
     return
   fi
+  dirty="${pieces%% *}"
+  pieces="${pieces#* }"
+  dirty="${dirty%-}"
 
-  # Check if there are modifications
-  local hg_status
-  if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" = true ]]; then
-    if ! hg_status="$(hg status -q 2>/dev/null)"; then
-      return
-    fi
-  else
-    if ! hg_status="$(hg status 2>/dev/null)"; then
-      return
-    fi
+  # Check for untracked files unless that is disabled or the repo is already known to be dirty.
+  if [[ x"${DISABLE_UNTRACKED_FILES_DIRTY-}" != xtrue && -z "$dirty" ]]; then
+    dirty="$(hg status -u --template=x 2>/dev/null | head -c1; [[ 0 = ${pipestatus[1]} ]] || echo error)"
+    case "$dirty" in
+      error) return ;;
+    esac
   fi
 
-  # grep exits with 0 when dirty
-  if command grep -Eq '^\s*[ACDIMR!?L].*$' <<< "$hg_status"; then
-    echo $ZSH_THEME_HG_PROMPT_DIRTY
-    return
-  fi
-
-  echo $ZSH_THEME_HG_PROMPT_CLEAN
+  case "$dirty" in
+    ?*) dirty="$ZSH_THEME_HG_PROMPT_DIRTY" ;;
+    '') dirty="$ZSH_THEME_HG_PROMPT_CLEAN" ;;
+  esac
+  echo "${ZSH_THEME_HG_PROMPT_PREFIX}${pieces:gs/%/%%}$dirty${ZSH_THEME_HG_PROMPT_SUFFIX}"
 }
