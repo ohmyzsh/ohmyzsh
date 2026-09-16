@@ -739,8 +739,8 @@ function _omz::reload {
   # Old zsh versions don't have ZSH_ARGZERO
   local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
   # ZSH_ARGZERO is how zsh was invoked, not the path to it, so re-resolve
-  # anything that is not absolute (see #13919)
-  [[ "${zsh#-}" != /* ]] && (( $+commands[zsh] )) && zsh="$commands[zsh]"
+  # anything that is not absolute via $PATH at exec time (see #13919)
+  [[ "${zsh#-}" != /* ]] && (( $+commands[zsh] )) && zsh="zsh"
   # Check whether to run a login shell
   [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
 }
@@ -923,8 +923,8 @@ function _omz::update {
     # Old zsh versions don't have ZSH_ARGZERO
     local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
     # ZSH_ARGZERO is how zsh was invoked, not the path to it, so re-resolve
-    # anything that is not absolute (see #13919)
-    [[ "${zsh#-}" != /* ]] && (( $+commands[zsh] )) && zsh="$commands[zsh]"
+    # anything that is not absolute via $PATH at exec time (see #13919)
+    [[ "${zsh#-}" != /* ]] && (( $+commands[zsh] )) && zsh="zsh"
     # Check whether to run a login shell
     [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
   fi
