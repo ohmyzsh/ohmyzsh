@@ -49,13 +49,25 @@ plugins=(... mercurial)
   PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)$(hg_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
   ```
 
-You can also redefine additional vars used in the plugin (after Oh My Zsh is sourced):
+You can define the below variables to customize the prompt, after Oh-My-Zsh is source.  The prompt will be generated in this order:
+
+1. PREFIX variable.
+2. IDENTIFY variable, which is used with "hg identify --template":
+    * Branch name, if not "default".
+    * Bookmarks, if any.  The active bookmark will have '*' appended.
+    * Tags, if any.
+3. Either the DIRTY or CLEAN variables.
+4. SUFFIX variable.
+
+Spaces are only needed to separate non-empty parts, but no space will be inserted before DIRTY or CLEAN.
 
 ```zsh
-ZSH_THEME_HG_PROMPT_PREFIX="%{$fg_bold[magenta]%}hg:(%{$fg[red]%}"
-ZSH_THEME_HG_PROMPT_SUFFIX="%{$reset_color%}"
-ZSH_THEME_HG_PROMPT_DIRTY="%{$fg[magenta]%}) %{$fg[yellow]%}✗%{$reset_color%}"
+ZSH_THEME_HG_PROMPT_PREFIX="%{$fg[magenta]%}hg:(%{$fg[red]%}"
+ZSH_THEME_HG_PROMPT_IDENTIFY='{separate(" ",ifeq(branch,"default","",branch),"{activebookmark}*",tags)}'
+    # See "hg help templates"; the default is $ZSH_THEME_HG_PROMPT_IDENTIFY_DEFAULT.
+ZSH_THEME_HG_PROMPT_DIRTY="%{$fg[magenta]%}) %{$fg_bold[yellow]%}✗"
 ZSH_THEME_HG_PROMPT_CLEAN="%{$fg[magenta]%})"
+ZSH_THEME_HG_PROMPT_SUFFIX="%{$reset_color%}"
 ```
 
 ### Display repo branch and directory status in prompt
