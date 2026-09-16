@@ -60,7 +60,7 @@ plugins=(... kubectl)
 |          |                                                         | **Namespace management**                                                                         |
 | kgns     | `kubectl get namespaces`                                | List the current namespaces in a cluster                                                         |
 | kcn      | `kubectl config set-context --current --namespace`      | Change current namespace                                                                         |
-| kcgetns  | `kubectl config view --minify -o jsonpath=...`          | Get the current context namespace                                                                |
+| kcgetns  | `kubectl config view --minify -o jsonpath={.contexts[0].context.namespace}`          | Get the current context's namespace                                |
 | kens     | `kubectl edit namespace`                                | Edit namespace resource from the default editor                                                  |
 | kdns     | `kubectl describe namespace`                            | Describe namespace resource in detail                                                            |
 | kdelns   | `kubectl delete namespace`                              | Delete the namespace. WARNING! This deletes everything in the namespace                          |
