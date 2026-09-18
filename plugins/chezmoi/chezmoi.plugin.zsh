@@ -16,3 +16,14 @@ zmodload -F zsh/files b:zf_mv
   local TMPPREFIX="$ZSH_CACHE_DIR/completions/_chezmoi"
   zf_mv -f -- =( chezmoi completion zsh ) "$TMPPREFIX"
 } &|
+
+# Chezmoi aliases
+alias cz="chezmoi"
+alias cza="chezmoi apply"
+alias czc="chezmoi cd"
+alias czd="chezmoi diff"
+alias cze="chezmoi edit"
+alias czg="chezmoi git"
+alias czi="chezmoi init"
+alias czs="chezmoi status"
+alias czu="chezmoi update"
