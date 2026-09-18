@@ -18,13 +18,13 @@ zmodload -F zsh/files b:zf_mv
 } &|
 
 # Chezmoi aliases
-alias cz="chezmoi"
-alias cza="chezmoi apply"
-alias czr="chezmoi re-apply"
-alias czc="chezmoi cd"
-alias czd="chezmoi diff"
-alias cze="chezmoi edit"
-alias czg="chezmoi git"
-alias czi="chezmoi init"
-alias czs="chezmoi status"
-alias czu="chezmoi update"
+alias cm="chezmoi"
+alias cma="chezmoi apply"
+alias cmr="chezmoi re-apply"
+alias cmc="chezmoi cd"
+alias cmd="chezmoi diff"
+alias cme="chezmoi edit"
+alias cmg="chezmoi git"
+alias cmi="chezmoi init"
+alias cms="chezmoi status"
+alias cmu="chezmoi update"
