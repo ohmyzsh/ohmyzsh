@@ -100,7 +100,28 @@ done
 # Figure out the SHORT hostname
 if [[ "$OSTYPE" = darwin* ]]; then
   # macOS's $HOST changes with dhcp, etc. Use LocalHostName if possible.
-  SHORT_HOST=$(scutil --get LocalHostName 2>/dev/null) || SHORT_HOST="${HOST/.*/}"
+  # scutil costs a fork on every start, so remember its answer for a day
+  # (like lib/grep.zsh) and re-check sooner if $HOST changes.
+  __omz_host_cache="$ZSH_CACHE_DIR/localhostname"
+  __omz_host_cached=("$__omz_host_cache"(Nm-1))
+  __omz_host_key=
+  SHORT_HOST=
+  if [[ -n "$__omz_host_cached" ]]; then
+    if ! { read -r __omz_host_key && read -r SHORT_HOST } < "$__omz_host_cache"; then
+      __omz_host_key=
+      SHORT_HOST=
+    fi
+  fi
+  if [[ "$__omz_host_key" != "$HOST" || -z "$SHORT_HOST" ]]; then
+    # only cache what scutil actually answered, so a transient failure
+    # doesn't pin the fallback name for a day
+    if SHORT_HOST=$(scutil --get LocalHostName 2>/dev/null) && [[ -n "$SHORT_HOST" ]]; then
+      [[ ! -w "$ZSH_CACHE_DIR" ]] || print -rl -- "$HOST" "$SHORT_HOST" >| "$__omz_host_cache"
+    else
+      SHORT_HOST="${HOST/.*/}"
+    fi
+  fi
+  unset __omz_host_cache __omz_host_cached __omz_host_key
 else
   SHORT_HOST="${HOST/.*/}"
 fi
