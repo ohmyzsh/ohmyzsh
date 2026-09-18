@@ -70,14 +70,14 @@ function _alias_eza() {
   alias "$1"="eza${_head:+ -}${_head}${_tail:+ }${_tail}${3:+ }$3"
 }
 
-_alias_eza la   la
+_alias_eza la   laHhog
 _alias_eza ldot ld ".*"
-_alias_eza lD   lD
-_alias_eza lDD  lDa
-_alias_eza ll   l
+_alias_eza lD   lDHhog
+_alias_eza lDD  lDaHhog
+_alias_eza ll   lHhog
 _alias_eza ls
 _alias_eza lsd  d
-_alias_eza lsdl dl
+_alias_eza lsdl dlHhog
 _alias_eza lS   "l -ssize"
 _alias_eza lT   "l -snewest"
 
