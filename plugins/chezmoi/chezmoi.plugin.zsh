@@ -20,6 +20,7 @@ zmodload -F zsh/files b:zf_mv
 # Chezmoi aliases
 alias cz="chezmoi"
 alias cza="chezmoi apply"
+alias czr="chezmoi re-apply"
 alias czc="chezmoi cd"
 alias czd="chezmoi diff"
 alias cze="chezmoi edit"
