@@ -122,7 +122,9 @@ _omz_git_head() {
   # .git may be a file pointing at the real git dir
   if [[ -f "$gitdir" ]]; then
     read -r head 2>/dev/null < "$gitdir" || return 1
+    [[ "$head" = "gitdir: "* ]] || return 1
     gitdir="${head#gitdir: }"
+    [[ -n "$gitdir" ]] || return 1
     [[ "$gitdir" = /* ]] || gitdir="$ZSH/$gitdir"
   fi
 
@@ -138,6 +140,21 @@ _omz_git_head() {
 
   if [[ "$head" = ref:\ * ]]; then
     ref="${head#ref: }"
+
+    # Only use well-formed full ref names as paths. Besides matching Git's ref
+    # rules, this prevents a malformed HEAD from escaping the git directory.
+    [[ "$ref" = refs/?* \
+      && "$ref" != *..* \
+      && "$ref" != *//* \
+      && "$ref" != */ \
+      && "$ref" != */.* \
+      && "$ref" != *.lock \
+      && "$ref" != *.lock/* \
+      && "$ref" != *. \
+      && "$ref" != *'@{'* \
+      && "$ref" != *[[:cntrl:]\ \~\^\:\?\*\[\\]* \
+    ]] || return 1
+
     case "$ref" in
       # These namespaces are private to each worktree and are never resolved
       # from the common directory or its packed-refs file.
