@@ -138,14 +138,24 @@ _omz_git_head() {
 
   if [[ "$head" = ref:\ * ]]; then
     ref="${head#ref: }"
-    if [[ -r "$common/$ref" ]]; then
-      read -r REPLY 2>/dev/null < "$common/$ref" || return 1
-    elif [[ -r "$common/packed-refs" ]]; then
-      lines=("${(@f)$(<"$common/packed-refs")}")
-      REPLY="${lines[(r)* ${(b)ref}]%% *}"
-    else
-      return 1
-    fi
+    case "$ref" in
+      # These namespaces are private to each worktree and are never resolved
+      # from the common directory or its packed-refs file.
+      refs/bisect/*|refs/worktree/*|refs/rewritten/*)
+        [[ -r "$gitdir/$ref" ]] || return 1
+        read -r REPLY 2>/dev/null < "$gitdir/$ref" || return 1
+        ;;
+      *)
+        if [[ -r "$common/$ref" ]]; then
+          read -r REPLY 2>/dev/null < "$common/$ref" || return 1
+        elif [[ -r "$common/packed-refs" ]]; then
+          lines=("${(@f)$(<"$common/packed-refs")}")
+          REPLY="${lines[(r)* ${(b)ref}]%% *}"
+        else
+          return 1
+        fi
+        ;;
+    esac
   else
     # detached HEAD: the file holds the commit itself
     REPLY="$head"
