@@ -253,6 +253,7 @@ alias glolm='git log $(git_main_branch) --graph --pretty="%Cred%h%Creset -%C(aut
 alias glo='git log --oneline --decorate'
 alias glog='git log --oneline --decorate --graph'
 alias gloga='git log --oneline --decorate --graph --all'
+alias glom='git log --oneline --decorate $(git_main_branch)..'
 
 # Pretty log messages
 function _git_log_prettily(){
