@@ -131,9 +131,89 @@ if [[ -z "$ZSH_COMPDUMP" ]]; then
   ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 fi
 
-# Construct zcompdump OMZ metadata
-zcompdump_revision="#omz revision: $(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
+# Resolve the commit $ZSH is checked out at into $REPLY by reading the git
+# directory, so that no git process is forked on every startup.
+# Handles .git files (worktrees, submodules), worktree common dirs, detached
+# HEADs and packed refs. Returns 1 if anything is unexpected.
+_omz_git_head() {
+  local gitdir="$ZSH/.git" common head ref
+  local -a lines
+  REPLY=
+
+  # .git may be a file pointing at the real git dir
+  if [[ -f "$gitdir" ]]; then
+    read -r head 2>/dev/null < "$gitdir" || return 1
+    [[ "$head" = "gitdir: "* ]] || return 1
+    gitdir="${head#gitdir: }"
+    [[ -n "$gitdir" ]] || return 1
+    [[ "$gitdir" = /* ]] || gitdir="$ZSH/$gitdir"
+  fi
+
+  # worktrees keep their refs in the common git dir
+  common="$gitdir"
+  if [[ -f "$gitdir/commondir" ]]; then
+    read -r common 2>/dev/null < "$gitdir/commondir" || return 1
+    [[ "$common" = /* ]] || common="$gitdir/$common"
+  fi
+
+  [[ -r "$gitdir/HEAD" ]] || return 1
+  read -r head 2>/dev/null < "$gitdir/HEAD" || return 1
+
+  if [[ "$head" = ref:\ * ]]; then
+    ref="${head#ref: }"
+
+    # Only use well-formed full ref names as paths. Besides matching Git's ref
+    # rules, this prevents a malformed HEAD from escaping the git directory.
+    [[ "$ref" = refs/?* \
+      && "$ref" != *..* \
+      && "$ref" != *//* \
+      && "$ref" != */ \
+      && "$ref" != */.* \
+      && "$ref" != *.lock \
+      && "$ref" != *.lock/* \
+      && "$ref" != *. \
+      && "$ref" != *'@{'* \
+      && "$ref" != *[[:cntrl:]\ \~\^\:\?\*\[\\]* \
+    ]] || return 1
+
+    case "$ref" in
+      # These namespaces are private to each worktree and are never resolved
+      # from the common directory or its packed-refs file.
+      refs/bisect/*|refs/worktree/*|refs/rewritten/*)
+        [[ -r "$gitdir/$ref" ]] || return 1
+        read -r REPLY 2>/dev/null < "$gitdir/$ref" || return 1
+        ;;
+      *)
+        if [[ -r "$common/$ref" ]]; then
+          read -r REPLY 2>/dev/null < "$common/$ref" || return 1
+        elif [[ -r "$common/packed-refs" ]]; then
+          lines=("${(@f)$(<"$common/packed-refs")}")
+          REPLY="${lines[(r)* ${(b)ref}]%% *}"
+        else
+          return 1
+        fi
+        ;;
+    esac
+  else
+    # detached HEAD: the file holds the commit itself
+    REPLY="$head"
+  fi
+
+  # only an object ID is a usable answer: a symbolic ref, a malformed file or
+  # a missed packed entry all fall through to the git fallback instead
+  [[ -n "$REPLY" && -z "${REPLY//[0-9a-f]/}" ]] \
+    && (( ${#REPLY} == 40 || ${#REPLY} == 64 ))
+}
+
+# Construct zcompdump OMZ metadata. The helper reports through $REPLY, so
+# call it in a scope that keeps that out of the global namespace.
+() {
+  local REPLY
+  _omz_git_head || REPLY="$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
+  typeset -g zcompdump_revision="#omz revision: $REPLY"
+}
 zcompdump_fpath="#omz fpath: $fpath"
+unset -f _omz_git_head
 
 # Check whether the zcompdump file carries the current OMZ metadata lines
 _omz_compdump_has_metadata() {
