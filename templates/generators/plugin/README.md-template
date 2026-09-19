@@ -1,0 +1,20 @@
+# %name% plugin
+
+%description%
+
+To use it, add `%name%` to the plugins array in your zshrc file:
+
+```zsh
+plugins=(... %name%)
+```
+
+## Aliases
+
+| Alias        | Command            | Description           |
+| :----------- | ------------------ | :-------------------- |
+| `%command%s` | `%command% status` | Show %command% status |
+
+## Requirements
+
+This plugin requires [%command%](https://example.com) to be installed.
+%cache%
