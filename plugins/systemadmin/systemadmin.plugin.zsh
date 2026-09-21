@@ -71,11 +71,13 @@ function sortcons() {
   } | sort | uniq -c | sort -rn
 }
 
-# View all 80 Port Connections
+# View all connections on the given ports (default 80 and 443)
 function con80() {
+  local -a ports=($@)
+  (( $# )) || ports=(80 443)
   {
     LANG= ss -nat || LANG= netstat -nat
-  } | grep -E ":80[^0-9]" | wc -l
+  } | grep -E ":(${(j:|:)ports})[^0-9]" | wc -l
 }
 
 # On the connected IP sorted by the number of connections
@@ -86,17 +88,21 @@ function sortconip() {
   } | cut -d: -f1 | sort | uniq -c | sort -n
 }
 
-# top20 of Find the number of requests on 80 port
+# top20 of Find the number of requests on the given ports (default 80 and 443)
 function req20() {
+  local -a ports=($@)
+  (( $# )) || ports=(80 443)
   {
-    LANG= ss -tn | awk '$4 ~ /:80$/ {print $5}' \
-    || LANG= netstat -tn | awk '$4 ~ /:80$/ {print $5}'
+    LANG= ss -tn | awk -v ports="${(j:|:)ports}" '$4 ~ ":("ports")$" {print $5}' \
+    || LANG= netstat -tn | awk -v ports="${(j:|:)ports}" '$4 ~ ":("ports")$" {print $5}'
   } | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n 20
 }
 
-# top20 of Using tcpdump port 80 access to view
+# top20 of Using tcpdump to view access to the given ports (default 80 and 443)
 function http20() {
-  sudo tcpdump -i eth0 -tnn dst port 80 -c 1000 | awk -F"." '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -nr | head -n 20
+  local -a ports=($@)
+  (( $# )) || ports=(80 443)
+  sudo tcpdump -i eth0 -tnn -c 1000 "dst port ${(j: or :)ports}" | awk -F"." '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -nr | head -n 20
 }
 
 # top20 of Find time_wait connection

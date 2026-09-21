@@ -33,10 +33,10 @@ plugins=(... systemadmin)
 | killit      | Kills any process that matches a regular expression passed to it                                                      |
 | tree        | List contents of directories in a tree-like format (if tree isn't installed)                                          |
 | sortcons    | Sort connections by state                                                                                             |
-| con80       | View all 80 Port Connections                                                                                          |
+| con80       | View all connections on ports 80 and 443, or on the ports given as arguments (`con80 8080`)                           |
 | sortconip   | On the connected IP sorted by the number of connections                                                               |
-| req20       | List the top 20 requests on port 80                                                                                   |
-| http20      | List the top 20 connections to port 80 based on tcpdump data                                                          |
+| req20       | List the top 20 requests on ports 80 and 443, or on the ports given as arguments (`req20 8080`)                       |
+| http20      | List the top 20 connections to ports 80 and 443 based on tcpdump data, or to the ports given as arguments             |
 | timewait20  | List the top 20 time_wait connections                                                                                 |
 | syn20       | List the top 20 SYN connections                                                                                       |
 | port_pro    | Output all processes according to the port number                                                                     |
