@@ -19,6 +19,7 @@ alias gofa='go fmt ./...'
 alias gofx='go fix'
 alias gog='go get'
 alias goga='go get ./...'
+alias goge='go generate'
 alias goi='go install'
 alias gol='go list'
 alias gom='go mod'
@@ -45,4 +46,3 @@ function go_prompt_info() {
   [[ -z "${go_prompt}" ]] && return
   echo "${ZSH_THEME_GO_PROMPT_PREFIX}${go_prompt:gs/%/%%}${ZSH_THEME_GO_PROMPT_SUFFIX}"
 }
-alias goge='go generate'

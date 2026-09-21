@@ -22,6 +22,7 @@ plugins=(... golang)
 | gofx   | `go fix`          | Update packages to use a new API                              |
 | gog    | `go get`          | Downloads packages and then installs them to $GOPATH          |
 | goga   | `go get ./...`    | Installs all dependencies in current directory, recursively   |
+| goge   | `go generate`     | Generate Go files by processing source                        |
 | goi    | `go install`      | Compiles and installs packages to $GOPATH                     |
 | gol    | `go list`         | Lists Go packages                                             |
 | gom    | `go mod`          | Access to operations on modules                               |
@@ -39,7 +40,6 @@ plugins=(... golang)
 | gov    | `go vet`          | Vet examines Go source code and reports suspicious constructs |
 | gove   | `go version`      | Prints Go version                                             |
 | gow    | `go work`         | Work provides access to operations on workspaces              |
-| goge   | `go generate`     | Generate Go files by processing source                        |
 
 ## Prompt
 
