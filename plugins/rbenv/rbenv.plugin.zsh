@@ -2,7 +2,6 @@
 # the 'rbenv_prompt_info' function.
 
 FOUND_RBENV=$+commands[rbenv]
-RBENV_ROOT=''
 
 if [[ $FOUND_RBENV -ne 1 ]]; then
   rbenvdirs=("$HOME/.rbenv" "/usr/local/rbenv" "/opt/rbenv" "/usr/local/opt/rbenv")
@@ -10,7 +9,6 @@ if [[ $FOUND_RBENV -ne 1 ]]; then
     if [[ -d $dir/bin ]]; then
       export PATH="$dir/bin:$PATH"
       FOUND_RBENV=1
-      RBENV_ROOT="$dir"
       break
     fi
   done
@@ -26,8 +24,11 @@ if [[ $FOUND_RBENV -ne 1 ]]; then
 fi
 
 if [[ $FOUND_RBENV -eq 1 ]]; then
-  if [[ -d "$RBENV_ROOT/completions" ]]; then
-    fpath+=("$RBENV_ROOT/completions")
+  rbenv_completions="${commands[rbenv]:A:h:h}/completions"
+  if [[ -f "$rbenv_completions/_rbenv" ]]; then
+    fpath+=("$rbenv_completions")
+    autoload -Uz _rbenv
+    compdef _rbenv rbenv
   fi
 
   eval "$(rbenv init --no-rehash - zsh)"
@@ -71,4 +72,4 @@ else
   }
 fi
 
-unset FOUND_RBENV rbenvdirs dir
+unset FOUND_RBENV rbenvdirs dir rbenv_completions
