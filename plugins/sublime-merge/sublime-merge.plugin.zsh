@@ -4,15 +4,21 @@
 
 	if [[ "$OSTYPE" == linux* ]]; then
 		local _sublime_linux_paths
-		_sublime_linux_paths=(
-			"$HOME/bin/sublime_merge"
-			"/opt/sublime_merge/sublime_merge"
-			"/usr/bin/sublime_merge"
-			"/usr/local/bin/sublime_merge"
-			"/usr/bin/sublime_merge"
-			"/usr/local/bin/smerge"
-			"/usr/bin/smerge"
+		if [[ "$(uname -r)" = *icrosoft* ]]; then
+			_sublime_linux_paths=(
+				"$(wslpath -u 'C:\Program Files\Sublime Merge\sublime_merge.exe' 2>/dev/null)"
 			)
+		else
+			_sublime_linux_paths=(
+				"$HOME/bin/sublime_merge"
+				"/opt/sublime_merge/sublime_merge"
+				"/usr/bin/sublime_merge"
+				"/usr/local/bin/sublime_merge"
+				"/usr/bin/sublime_merge"
+				"/usr/local/bin/smerge"
+				"/usr/bin/smerge"
+				)
+		fi
 		for _sublime_merge_path in $_sublime_linux_paths; do
 			if [[ -a $_sublime_merge_path ]]; then
 				sm_run() { $_sublime_merge_path "$@" >/dev/null 2>&1 &| }
