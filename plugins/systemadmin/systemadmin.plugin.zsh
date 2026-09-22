@@ -65,10 +65,11 @@ fi
 
 # Sort connection state
 function sortcons() {
-  {
-    LANG= ss -nat | awk 'NR > 1 {print $1}' \
-    || LANG= netstat -nat | awk 'NR > 2 {print $6}'
-  } | sort | uniq -c | sort -rn
+  if (( $+commands[ss] )); then
+    LANG= ss -nat | awk 'NR > 1 {print $1}'
+  else
+    LANG= netstat -nat | awk 'NR > 2 {print $6}'
+  fi | sort | uniq -c | sort -rn
 }
 
 function _systemadmin_validate_ports() {
@@ -86,17 +87,20 @@ function con80() {
   local -a ports=("$@")
   (( $# )) || ports=(80 443)
   _systemadmin_validate_ports "${ports[@]}" || return
-  {
-    LANG= ss -nat || LANG= netstat -nat
-  } | grep -E ":(${(j:|:)ports})([[:space:]]|$)" | wc -l
+  if (( $+commands[ss] )); then
+    LANG= ss -nat
+  else
+    LANG= netstat -nat
+  fi | grep -E ":(${(j:|:)ports})([[:space:]]|$)" | wc -l
 }
 
 # On the connected IP sorted by the number of connections
 function sortconip() {
-  {
-    LANG= ss -ntu | awk 'NR > 1 {print $6}' \
-    || LANG= netstat -ntu | awk 'NR > 2 {print $5}'
-  } | cut -d: -f1 | sort | uniq -c | sort -n
+  if (( $+commands[ss] )); then
+    LANG= ss -ntu | awk 'NR > 1 {print $6}'
+  else
+    LANG= netstat -ntu | awk 'NR > 2 {print $5}'
+  fi | cut -d: -f1 | sort | uniq -c | sort -n
 }
 
 # top20 of Find the number of requests on the given ports (default 80 and 443)
@@ -104,10 +108,12 @@ function req20() {
   local -a ports=("$@")
   (( $# )) || ports=(80 443)
   _systemadmin_validate_ports "${ports[@]}" || return
-  {
-    LANG= ss -tn | awk -v ports="${(j:|:)ports}" '$4 ~ ":("ports")$" {print $5}' \
-    || LANG= netstat -tn | awk -v ports="${(j:|:)ports}" '$4 ~ ":("ports")$" {print $5}'
-  } | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n 20
+  if (( $+commands[ss] )); then
+    LANG= ss -tn
+  else
+    LANG= netstat -tn
+  fi | awk -v ports="${(j:|:)ports}" '$4 ~ ":("ports")$" {print $5}' \
+    | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n 20
 }
 
 # top20 of Using tcpdump to view access to the given ports (default 80 and 443)
@@ -120,24 +126,29 @@ function http20() {
 
 # top20 of Find time_wait connection
 function timewait20() {
-  {
-    LANG= ss -nat | awk 'NR > 1 && /TIME-WAIT/ {print $5}' \
-    || LANG= netstat -nat | awk 'NR > 2 && /TIME_WAIT/ {print $5}'
-  } | sort | uniq -c | sort -rn | head -n 20
+  if (( $+commands[ss] )); then
+    LANG= ss -nat
+  else
+    LANG= netstat -nat
+  fi | awk '/TIME[-_]WAIT/ {print $5}' | sort | uniq -c | sort -rn | head -n 20
 }
 
 # top20 of Find SYN connection
 function syn20() {
-  {
-    LANG= ss -an | awk '/SYN/ {print $5}' \
-    || LANG= netstat -an | awk '/SYN/ {print $5}'
-  } | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n20
+  if (( $+commands[ss] )); then
+    LANG= ss -an
+  else
+    LANG= netstat -an
+  fi | awk '/SYN/ {print $5}' | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n20
 }
 
 # Printing process according to the port number
 function port_pro() {
-  LANG= ss -ntlp | awk "NR > 1 && /:${1:-}/ {print \$6}" | sed 's/.*pid=\([^,]*\).*/\1/' \
-  || LANG= netstat -ntlp | awk "NR > 2 && /:${1:-}/ {print \$7}" | cut -d/ -f1
+  if (( $+commands[ss] )); then
+    LANG= ss -ntlp | awk "NR > 1 && /:${1:-}/ {print \$6}" | sed 's/.*pid=\([^,]*\).*/\1/'
+  else
+    LANG= netstat -ntlp | awk "NR > 2 && /:${1:-}/ {print \$7}" | cut -d/ -f1
+  fi
 }
 
 # top10 of gain access to the ip address
