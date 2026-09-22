@@ -1,7 +1,9 @@
 # Poetry Environment Plugin
 
-This plugin automatically changes poetry environment when you cd into or out of the project directory.
-Note: Script looks for pyproject.toml file to determine poetry if its a poetry environment
+This plugin automatically activates a Poetry environment when you enter a
+directory containing both `pyproject.toml` and `poetry.lock`. It keeps the
+environment active in project subdirectories, switches to nested Poetry
+projects, and deactivates it when you leave the project tree.
 
 To use it, add `poetry-env` to the plugins array in your zshrc file:
 

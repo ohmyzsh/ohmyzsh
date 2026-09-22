@@ -9,5 +9,9 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_hasura" ]]; then
   source "$ZSH_CACHE_DIR/completions/_hasura"
 else
   source "$ZSH_CACHE_DIR/completions/_hasura"
-  hasura completion zsh --file "$ZSH_CACHE_DIR/completions/_hasura" >/dev/null &|
+  zmodload -F zsh/files b:zf_mv
+  () {
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_hasura"
+    zf_mv -f -- =( hasura completion zsh ) "$TMPPREFIX"
+  } &|
 fi

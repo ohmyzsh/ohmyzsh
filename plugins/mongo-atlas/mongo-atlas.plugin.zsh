@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_atlas" ]]; then
   _comps[atlas]=_atlas
 fi
 
-atlas completion zsh >| "$ZSH_CACHE_DIR/completions/atlas" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_atlas"
+  zf_mv -f -- =( atlas completion zsh ) "$TMPPREFIX"
+} &|

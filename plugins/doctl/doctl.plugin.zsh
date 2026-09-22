@@ -14,4 +14,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_doctl" ]]; then
   _comps[doctl]=_doctl
 fi
 
-doctl completion zsh >| "$ZSH_CACHE_DIR/completions/_doctl" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_doctl"
+  zf_mv -f -- =( doctl completion zsh ) "$TMPPREFIX"
+} &|

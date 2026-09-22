@@ -23,6 +23,14 @@ Twitter), and join us on [Discord](https://discord.gg/ohmyzsh).
 [![Mastodon Follow](https://img.shields.io/mastodon/follow/111169632522566717?label=%40ohmyzsh&domain=https%3A%2F%2Fmstdn.social&logo=mastodon&style=flat)](https://mstdn.social/@ohmyzsh)
 [![Discord server](https://img.shields.io/discord/642496866407284746)](https://discord.gg/ohmyzsh)
 
+<a href="https://commitgoods.com/collections/oh-my-zsh?utm_source=github">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://cdn.shopify.com/s/files/1/0101/8752/files/commitgoods-badge-stacked-navy-dark.svg">
+    <img src="https://cdn.shopify.com/s/files/1/0101/8752/files/commitgoods-badge-stacked-navy.svg" height="28" alt="Official merch on commitgoods.com">
+  </picture>
+</a>
+
+
 <details>
 <summary>Table of Contents</summary>
 
@@ -464,6 +472,22 @@ NOTE: you can control how often Oh My Zsh checks for updates with the following 
 zstyle ':omz:update' frequency 7
 # This will check for updates every time you open the terminal (not recommended)
 zstyle ':omz:update' frequency 0
+```
+
+By default, updates always pull the latest changes. If you'd rather let others kick the tires first
+before an update reaches your machine, you can set a cooldown (in days). You'll still get everything —
+just a little later:
+
+```sh
+# Only apply updates that are at least 10 days old
+zstyle ':omz:update' cooldown 10
+```
+
+`omz update` honors this setting. If you call `upgrade.sh` directly, pass the same
+value with `-c`, because that script does not read your `.zshrc`:
+
+```sh
+$ZSH/tools/upgrade.sh -c 10
 ```
 
 ### Updates Verbosity

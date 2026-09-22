@@ -23,7 +23,8 @@ function mygit() {
   if [[ "$(git config --get oh-my-zsh.hide-status)" != "1" ]]; then
     ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(git_prompt_short_sha)$(git_prompt_status)%{$fg_bold[blue]%}$ZSH_THEME_GIT_PROMPT_SUFFIX "
+    ref=${${ref#refs/heads/}//\%/%%}
+    echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref}$(git_prompt_short_sha)$(git_prompt_status)%{$fg_bold[blue]%}${ZSH_THEME_GIT_PROMPT_SUFFIX} "
   fi
 }
 

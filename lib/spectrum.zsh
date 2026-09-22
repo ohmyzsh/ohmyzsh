@@ -14,10 +14,16 @@ FX=(
   reverse   "%{[07m%}" no-reverse   "%{[27m%}"
 )
 
-for color in {000..255}; do
-  FG[$color]="%{[38;5;${color}m%}"
-  BG[$color]="%{[48;5;${color}m%}"
-done
+# Build the tables with array operations instead of a 256-iteration loop
+() {
+  setopt localoptions noksharrays
+  local -a codes fg bg
+  codes=({000..255})
+  fg=( "%{"$'\e'"[38;5;"${^codes}"m%}" )
+  bg=( "%{"$'\e'"[48;5;"${^codes}"m%}" )
+  FG=( ${codes:^fg} )
+  BG=( ${codes:^bg} )
+}
 
 # Show all 256 colors with color number
 function spectrum_ls() {

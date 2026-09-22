@@ -23,12 +23,32 @@ zstyle -s ':omz:update' mode update_mode || {
 # - the automatic update is disabled
 # - the current user doesn't have write permissions nor owns the $ZSH directory
 # - is not run from a tty
-# - git is unavailable on the system
-# - $ZSH is not a git repository
 if [[ "$update_mode" = disabled ]] \
    || [[ ! -w "$ZSH" || ! -O "$ZSH" ]] \
-   || [[ ! -t 1 && ${POWERLEVEL9K_INSTANT_PROMPT:-off} == off ]] \
-   || ! command git --version 2>&1 >/dev/null \
+   || [[ ! -t 1 && ${POWERLEVEL9K_INSTANT_PROMPT:-off} == off ]]; then
+  unset update_mode
+  return
+fi
+
+# Cancel update if it's not time to check yet. This runs before the git checks
+# below because those fork on every startup. Skipped when a background update
+# left a result that still needs to be reported (EXIT_STATUS is set).
+() {
+  local LAST_EPOCH EXIT_STATUS ERROR epoch_target
+  zmodload zsh/datetime
+  source "${ZSH_CACHE_DIR}/.zsh-update" 2>/dev/null || return 1
+  [[ -n "$LAST_EPOCH" && -z "$EXIT_STATUS" ]] || return 1
+  zstyle -s ':omz:update' frequency epoch_target || epoch_target=${UPDATE_ZSH_DAYS:-13}
+  (( ( EPOCHSECONDS / 60 / 60 / 24 - LAST_EPOCH ) < epoch_target ))
+} && {
+  unset update_mode
+  return
+}
+
+# Cancel update if:
+# - git is unavailable on the system
+# - $ZSH is not a git repository
+if ! command git --version >/dev/null 2>&1 \
    || (builtin cd -q "$ZSH"; ! command git rev-parse --is-inside-work-tree &>/dev/null); then
   unset update_mode
   return
@@ -46,6 +66,26 @@ function is_update_available() {
   local remote remote_url remote_repo
   remote=${"$(builtin cd -q "$ZSH"; git config --local oh-my-zsh.remote)":-origin}
   remote_url=$(builtin cd -q "$ZSH"; git config remote.$remote.url)
+
+  local cooldown_days
+  zstyle -s ':omz:update' cooldown cooldown_days || cooldown_days=0
+  [[ $cooldown_days == <-> ]] || cooldown_days=0
+
+  if (( cooldown_days > 0 )); then
+    local local_head cutoff_epoch cooldown_ref
+    local_head=$(builtin cd -q "$ZSH"; git rev-parse $branch 2>/dev/null) || return 0
+    (builtin cd -q "$ZSH"; LANG= git fetch --quiet $remote $branch) || return 1
+    zmodload zsh/datetime
+    cutoff_epoch=$(( EPOCHSECONDS - cooldown_days * 86400 ))
+    cooldown_ref=$(builtin cd -q "$ZSH"; git log --first-parent --format="%H %ct" FETCH_HEAD \
+      | awk -v c="$cutoff_epoch" '$2 <= c { print $1; exit }')
+    [[ -n "$cooldown_ref" ]] || return 1
+    [[ "$cooldown_ref" != "$local_head" ]] || return 1
+    if (builtin cd -q "$ZSH"; git merge-base --is-ancestor "$cooldown_ref" "$local_head" 2>/dev/null); then
+      return 1
+    fi
+    return 0
+  fi
 
   local repo
   case "$remote_url" in
@@ -109,8 +149,10 @@ EOD
 }
 
 function update_ohmyzsh() {
-  local verbose_mode
+  local verbose_mode cooldown_days
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
+  zstyle -s ':omz:update' cooldown cooldown_days || cooldown_days=0
+  [[ $cooldown_days == <-> ]] || cooldown_days=0
 
   # Force verbose mode to silent if p10k instant prompt is enabled
   if [[ ${POWERLEVEL9K_INSTANT_PROMPT:-off} != "off" ]]; then
@@ -118,13 +160,13 @@ function update_ohmyzsh() {
   fi
 
   if [[ "$update_mode" != background-alpha ]] \
-    && LANG= ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode; then
+    && LANG= ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode -c $cooldown_days; then
     update_last_updated_file
     return $?
   fi
 
   local exit_status error
-  if error=$(LANG= ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" -i -v silent 2>&1); then
+  if error=$(LANG= ZSH="$ZSH" zsh -f "$ZSH/tools/upgrade.sh" -i -v silent -c $cooldown_days 2>&1); then
     update_last_updated_file 0 "Update successful"
   else
     exit_status=$?
@@ -143,7 +185,7 @@ function has_typed_input() {
   # Consider that no input can be typed if stty fails
   # (this might happen if stdin is not a terminal)
   local termios
-  termios=$(stty --save 2>/dev/null) || return 1
+  termios=$(stty -g 2>/dev/null) || return 1
   {
     # Disable canonical mode so that typed input counts
     # regardless of whether Enter was pressed

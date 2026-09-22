@@ -87,8 +87,8 @@ _build_tmux_alias "tkss" "kill-session" "-t"
 
 unfunction _build_tmux_alias
 
-# Determine if the terminal supports 256 colors
-if [[ $terminfo[colors] == 256 ]]; then
+# Determine if the terminal supports at least 256 colors
+if (( ${+terminfo[colors]} )) && [[ $terminfo[colors] -ge 256 ]]; then
   export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITH_256COLOR
 else
   export ZSH_TMUX_TERM=$ZSH_TMUX_FIXTERM_WITHOUT_256COLOR
@@ -167,7 +167,7 @@ function _zsh_tmux_plugin_preexec()
   local -a tmux_cmd
   tmux_cmd=(command tmux)
 
-  eval $($tmux_cmd show-environment -s)
+  eval "$($tmux_cmd show-environment -s)"
 }
 
 # Use the completions for tmux for our function
@@ -178,12 +178,20 @@ alias tmux=_zsh_tmux_plugin_run
 function _tmux_directory_session() {
   # current directory without leading path
   local dir=${PWD##*/}
+  # tmux target syntax treats '.' and ':' as separators, a leading '$', '@' or '%'
+  # as an id and a leading '=' as an exact-match prefix, so a session named after
+  # such a directory can't be found on reattach
+  dir=${dir//[.:]/_}
+  dir=${dir/#[\$@%=]/_}
   # md5 hash for the full working directory path
   local md5=$(printf '%s' "$PWD" | md5sum | cut -d  ' ' -f 1)
   # human friendly unique session name for this directory
   local session_name="${dir}-${md5:0:6}"
   # create or attach to the session
-  tmux new -As "$session_name"
+  local -a tmux_cmd
+  tmux_cmd=(command tmux)
+  [[ "$ZSH_TMUX_UNICODE" == "true" ]] && tmux_cmd+=(-u)
+  $tmux_cmd new -As "$session_name"
 }
 
 alias tds=_tmux_directory_session

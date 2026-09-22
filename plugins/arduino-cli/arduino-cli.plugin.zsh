@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_arduino-cli" ]]; then
 fi
 
 # Generate and load arduino-cli completion
-arduino-cli completion zsh >! "$ZSH_CACHE_DIR/completions/_arduino-cli" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_arduino-cli"
+  zf_mv -f -- =( arduino-cli completion zsh ) "$TMPPREFIX"
+} &|

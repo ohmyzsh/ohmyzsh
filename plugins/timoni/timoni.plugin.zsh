@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_timoni" ]]; then
   _comps[timoni]=_timoni
 fi
 
-timoni completion zsh >| "$ZSH_CACHE_DIR/completions/_timoni" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_timoni"
+  zf_mv -f -- =( timoni completion zsh ) "$TMPPREFIX"
+} &|

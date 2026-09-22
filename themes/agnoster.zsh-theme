@@ -314,8 +314,11 @@ prompt_dir() {
 
 # Virtualenv: current working virtualenv
 prompt_virtualenv() {
-  if [ -n "$CONDA_DEFAULT_ENV" ]; then
-    prompt_segment magenta $CURRENT_FG "🐍 $CONDA_DEFAULT_ENV"
+  # Skip the conda segment when conda is already showing the environment itself,
+  # i.e. when changeps1 is left on. This mirrors how VIRTUAL_ENV_DISABLE_PROMPT
+  # is handled below, and stops the name appearing twice in the prompt.
+  if [[ -n "$CONDA_DEFAULT_ENV" && -z "$CONDA_PROMPT_MODIFIER" ]]; then
+    prompt_segment magenta $CURRENT_FG "🐍 ${CONDA_DEFAULT_ENV:t:gs/%/%%}"
   fi
   if [[ -n "$VIRTUAL_ENV" && -n "$VIRTUAL_ENV_DISABLE_PROMPT" ]]; then
     prompt_segment "$AGNOSTER_VENV_BG" "$AGNOSTER_VENV_FG" "(${VIRTUAL_ENV:t:gs/%/%%})"

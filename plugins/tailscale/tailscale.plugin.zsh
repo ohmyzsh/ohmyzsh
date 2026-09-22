@@ -22,4 +22,8 @@ if (( $+aliases[tailscale] )); then
   _comps[${aliases[tailscale]:t}]=_tailscale
 fi
 
-tailscale completion zsh >| "$ZSH_CACHE_DIR/completions/_tailscale" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_tailscale"
+  zf_mv -f -- =( tailscale completion zsh ) "$TMPPREFIX"
+} &|

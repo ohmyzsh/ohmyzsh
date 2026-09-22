@@ -1,14 +1,14 @@
 # ALIASES
-alias db='deno bundle'
 alias dc='deno compile'
 alias dca='deno cache'
+alias dck='deno check'
 alias dfmt='deno fmt'
 alias dh='deno help'
 alias dli='deno lint'
 alias drn='deno run'
 alias drA='deno run -A'
 alias drw='deno run --watch'
-alias dru='deno run --unstable'
+alias dsv='deno serve'
 alias dts='deno test'
 alias dup='deno upgrade'
 
@@ -25,4 +25,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_deno" ]]; then
   _comps[deno]=_deno
 fi
 
-deno completions zsh >| "$ZSH_CACHE_DIR/completions/_deno" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_deno"
+  zf_mv -f -- =( deno completions zsh ) "$TMPPREFIX"
+} &|

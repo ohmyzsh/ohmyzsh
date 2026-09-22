@@ -10,4 +10,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_minikube" ]]; then
   _comps[minikube]=_minikube
 fi
 
-minikube completion zsh >| "$ZSH_CACHE_DIR/completions/_minikube" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_minikube"
+  zf_mv -f -- =( minikube completion zsh ) "$TMPPREFIX"
+} &|

@@ -26,7 +26,7 @@ typeset -g VI_MODE_CURSOR_OPPEND=${VI_MODE_CURSOR_OPPEND:=0}
 typeset -g VI_KEYMAP=${VI_KEYMAP:=main}
 
 function _vi-mode-set-cursor-shape-for-keymap() {
-  [[ "$VI_MODE_SET_CURSOR" = true ]] || return
+  [[ "$VI_MODE_SET_CURSOR" = true ]] || return 0
 
   # https://vt100.net/docs/vt510-rm/DECSCUSR
   local _shape=0

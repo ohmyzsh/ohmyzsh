@@ -22,7 +22,8 @@ function title {
       print -Pn "\e]1;${1:q}\a" # set tab name
       ;;
     screen*|tmux*)
-      print -Pn "\ek${1:q}\e\\" # set screen hardstatus
+      print -Pn "\e]2;${2:q}\e\\" # set tmux pane title
+      print -Pn "\ek${1:q}\e\\" # set screen hardstatus/tmux window name if `allow-rename` is on
       ;;
     *)
       if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
@@ -31,7 +32,12 @@ function title {
       else
         # Try to use terminfo to set the title if the feature is available
         if (( ${+terminfo[fsl]} && ${+terminfo[tsl]} )); then
-          print -Pn "${terminfo[tsl]}$1${terminfo[fsl]}"
+          # Emit the capabilities with echoti so terminfo does its own parameter
+          # substitution: some terminals (vt320) take a column argument, and
+          # running prompt expansion over the capability string mangles it.
+          echoti tsl 0
+          print -Pn "$1"
+          echoti fsl
         fi
       fi
       ;;

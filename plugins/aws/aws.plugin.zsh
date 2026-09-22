@@ -9,14 +9,14 @@ function agr() {
 # Update state file if enabled
 function _aws_update_state() {
   if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
-    test -d $(dirname ${AWS_STATE_FILE}) || exit 1
+    test -d "$(dirname "${AWS_STATE_FILE}")" || return 1
     echo "${AWS_PROFILE} ${AWS_REGION}" > "${AWS_STATE_FILE}"
   fi
 }
 
 function _aws_clear_state() {
   if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
-    test -d $(dirname ${AWS_STATE_FILE}) || exit 1
+    test -d "$(dirname "${AWS_STATE_FILE}")" || return 1
     echo -n > "${AWS_STATE_FILE}"
   fi
 }
@@ -69,7 +69,7 @@ function asr() {
   local -a available_regions
   available_regions=($(aws_regions))
   if [[ -z "${available_regions[(r)$1]}" ]]; then
-    echo "${fg[red]}Available regions: \n$(aws_regions)"
+    echo "${fg[red]}Available regions: \n$(aws_regions)${reset_color}" >&2
     return 1
   fi
 
@@ -241,7 +241,7 @@ function aws_regions() {
 function aws_profiles() {
   aws --no-cli-pager configure list-profiles 2> /dev/null && return
   [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  grep --color=never -Eo '\[.*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | sed -E 's/^[[:space:]]*\[(profile)?[[:space:]]*([^[:space:]]+)\][[:space:]]*$/\2/g'
+  command grep -Eo '^[[:space:]]*\[[[:space:]]*(profile[[:space:]]+)?[^][:space:]]+[[:space:]]*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | command sed -E 's/^[[:space:]]*\[[[:space:]]*(profile[[:space:]]+)?([^][:space:]]+)[[:space:]]*\]$/\2/'
 }
 
 function _aws_regions() {

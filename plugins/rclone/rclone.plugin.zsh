@@ -11,4 +11,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_rclone" ]]; then
   _comps[rclone]=_rclone
 fi
 
-rclone completion zsh - >| "$ZSH_CACHE_DIR/completions/_rclone" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_rclone"
+  zf_mv -f -- =( rclone completion zsh - ) "$TMPPREFIX"
+} &|

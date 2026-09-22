@@ -49,6 +49,16 @@ function git_main_branch() {
   return 1
 }
 
+function gbcopy() {
+  command git rev-parse --git-dir &>/dev/null || return
+
+  local branch
+  branch="$(git_current_branch)" || return
+  [[ -n "$branch" ]] || return 1
+
+  print -rn -- "$branch" | clipcopy
+}
+
 function grename() {
   if [[ -z "$1" || -z "$2" ]]; then
     echo "Usage: $0 old_branch new_branch"
@@ -137,8 +147,9 @@ function gbda() {
 # Copied and modified from James Roeder (jmaroeder) under MIT License
 # https://github.com/jmaroeder/plugin-git/blob/216723ef4f9e8dde399661c39c80bdf73f4076c4/functions/gbda.fish
 function gbds() {
-  local default_branch=$(git_main_branch)
-  (( ! $? )) || default_branch=$(git_develop_branch)
+  local default_branch
+  default_branch=$(git_main_branch) \
+    || default_branch=$(git_develop_branch)
 
   git for-each-ref refs/heads/ "--format=%(refname:short)" | \
     while read branch; do
@@ -153,7 +164,7 @@ alias gbgd='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk
 alias gbgD='LANG=C git branch --no-color -vv | grep ": gone\]" | cut -c 3- | awk '"'"'{print $1}'"'"' | xargs git branch -D'
 alias gbm='git branch --move'
 alias gbnm='git branch --no-merged'
-alias gbr='git branch --remote'
+alias gbr='git branch --remotes'
 alias ggsup='git branch --set-upstream-to=origin/$(git_current_branch)'
 alias gbg='LANG=C git branch -vv | grep ": gone\]"'
 alias gco='git checkout'
@@ -238,6 +249,7 @@ alias glod='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgre
 alias glola='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset" --all'
 alias glols='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset" --stat'
 alias glol='git log --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"'
+alias glolm='git log $(git_main_branch) --graph --pretty="%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset"'
 alias glo='git log --oneline --decorate'
 alias glog='git log --oneline --decorate --graph'
 alias gloga='git log --oneline --decorate --graph --all'

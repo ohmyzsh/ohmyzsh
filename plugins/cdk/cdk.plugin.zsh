@@ -1,0 +1,13 @@
+# Aliases
+alias cdkl='cdk list'
+alias cdksynth='cdk synth'
+alias cdkdiff='cdk diff'
+alias cdkdeploy='cdk deploy'
+alias cdkdestroy='cdk destroy'
+alias cdkboot='cdk bootstrap'
+alias cdkdoc='cdk docs'
+alias cdkinit='cdk init'
+alias cdkwatch='cdk watch'
+alias cdkctx='cdk context'
+alias cdkack='cdk acknowledge'
+alias cdkver='cdk --version'

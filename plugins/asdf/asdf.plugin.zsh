@@ -12,4 +12,8 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_asdf" ]]; then
   autoload -Uz _asdf
   _comps[asdf]=_asdf
 fi
-asdf completion zsh >| "$ZSH_CACHE_DIR/completions/_asdf" &|
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_asdf"
+  zf_mv -f -- =( asdf completion zsh ) "$TMPPREFIX"
+} &|

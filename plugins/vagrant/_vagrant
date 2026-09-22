@@ -47,6 +47,7 @@ _box_arguments=(
     'help:COMMAND List subcommands'
     'list:Lists all installed boxes'
     'outdated:Checks if a box has newer version'
+    'prune:Removes old versions of installed boxes'
     'remove:NAME Removes a box from the system'
     'repackage:NAME PROVIDER VERSION Repackages an installed box into a `.box` file'
     'update:Updates box to a newer version, if available'
@@ -126,7 +127,7 @@ case $state in
       (box)
           __vagrant-box
       ;;
-      (up|provision|port|package|destroy|reload|ssh|ssh-config|halt|resume|status)
+      (up|provision|port|package|destroy|reload|ssh|ssh-config|halt|resume|status|suspend|rdp)
       _arguments ':feature:__vm_list'
     esac
   ;;

@@ -9,7 +9,11 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_helm" ]]; then
   source "$ZSH_CACHE_DIR/completions/_helm"
 else
   source "$ZSH_CACHE_DIR/completions/_helm"
-  helm completion zsh | tee "$ZSH_CACHE_DIR/completions/_helm" >/dev/null &|
+  zmodload -F zsh/files b:zf_mv
+  () {
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_helm"
+    zf_mv -f -- =( helm completion zsh ) "$TMPPREFIX"
+  } &|
 fi
 
 alias h='helm'

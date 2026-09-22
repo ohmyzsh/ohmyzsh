@@ -12,14 +12,14 @@ dependencies:
   plugins/gradle:
     repo: gradle/gradle-completion
     branch: master
-    version: dd3a8adb47e51b1f6e4dc180cb04bd02d5fccd4a
+    version: e7c881dbef7462bc35ad05328397e1582fe25cb8
     precopy: |
       set -e
       find . ! -name _gradle ! -name LICENSE -delete
   plugins/history-substring-search:
     repo: zsh-users/zsh-history-substring-search
     branch: master
-    version: 14c8d2e0ffaee98f2df9850b19944f32546fdea5
+    version: a0bdb0d47dbaba31dba2db7af8c48a5d9c74049a
     precopy: |
       set -e
       rm -f zsh-history-substring-search.plugin.zsh
@@ -30,7 +30,7 @@ dependencies:
   plugins/kube-ps1:
     repo: jonmosco/kube-ps1
     branch: master
-    version: e19c9ee867c5655814c384a6bf543e330e6ef1b7
+    version: b4cd09ec8d4dc007173e28da40aeebf8eff8c87f
     precopy: |
       set -e
       find . ! -name kube-ps1.sh ! -name LICENSE ! -name README.md -delete
@@ -46,11 +46,55 @@ dependencies:
   plugins/z:
     branch: master
     repo: agkozak/zsh-z
-    version: cf9225feebfae55e557e103e95ce20eca5eff270
+    version: 102fb78036ed76feedf623907483691777a1d510
     precopy: |
       set -e
+      rm -r tests
       test -e README.md && mv -f README.md MANUAL.md
     postcopy: |
       set -e
       test -e _zshz && mv -f _zshz _z
       test -e zsh-z.plugin.zsh && mv -f zsh-z.plugin.zsh z.plugin.zsh
+  plugins/zsh-autosuggestions:
+    repo: zsh-users/zsh-autosuggestions
+    branch: master
+    version: 85919cd1ffa7d2d5412f6d3fe437ebdbeeec4fc5
+    precopy: |
+      set -e
+      test -e README.md && mv -f README.md MANUAL.md
+      sed -i 's|\[INSTALL.md\](INSTALL.md)|[the Oh My Zsh plugin README](README.md)|' MANUAL.md
+      rm -f zsh-autosuggestions.plugin.zsh
+      mv -f zsh-autosuggestions.zsh zsh-autosuggestions.plugin.zsh
+      find . -depth -mindepth 1 \
+        ! -path './LICENSE' \
+        ! -path './MANUAL.md' \
+        ! -path './src' \
+        ! -path './src/*' \
+        ! -path './zsh-autosuggestions.plugin.zsh' \
+        -delete
+  plugins/zsh-syntax-highlighting:
+    repo: zsh-users/zsh-syntax-highlighting
+    branch: master
+    version: 2fc57d63067c18b1100ecdbf684fa5baf49459d1
+    precopy: |
+      set -e
+      version=$(<.version)
+      test -e README.md && mv -f README.md MANUAL.md
+      sed -i 's|\[INSTALL.md\](INSTALL.md)|[the Oh My Zsh plugin README](README.md)|' MANUAL.md
+      rm -f zsh-syntax-highlighting.plugin.zsh
+      mv -f zsh-syntax-highlighting.zsh zsh-syntax-highlighting.plugin.zsh
+      mv -f COPYING.md LICENSE
+      sed -i "s|typeset -g ZSH_HIGHLIGHT_VERSION=.*|typeset -g ZSH_HIGHLIGHT_VERSION=$version|" zsh-syntax-highlighting.plugin.zsh
+      sed -i 's|typeset -g ZSH_HIGHLIGHT_REVISION=.*|typeset -g ZSH_HIGHLIGHT_REVISION=HEAD|' zsh-syntax-highlighting.plugin.zsh
+      find highlighters -type d -name test-data -prune -exec rm -rf {} +
+      find . -depth -mindepth 1 \
+        ! -path './LICENSE' \
+        ! -path './MANUAL.md' \
+        ! -path './docs' \
+        ! -path './docs/*' \
+        ! -path './highlighters' \
+        ! -path './highlighters/*' \
+        ! -path './images' \
+        ! -path './images/*' \
+        ! -path './zsh-syntax-highlighting.plugin.zsh' \
+        -delete

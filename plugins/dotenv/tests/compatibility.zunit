@@ -1,0 +1,27 @@
+#!/usr/bin/env zunit
+
+@setup {
+  unset DOTENV_TEST_VARS DOTENV_SOURCE_VARS 2>/dev/null
+}
+
+@teardown {
+  unset DOTENV_TEST_VARS DOTENV_SOURCE_VARS 2>/dev/null
+}
+
+@test 'compatibility: dotenvjs fixture matches native source' {
+  local fixture="${testdir:A}/_support/fixtures/dotenvjs.env"
+
+  _parse_dotenv_test "$fixture"
+  _source_with_allexport "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "DOTENV_SOURCE_VARS"
+}
+
+@test 'compatibility: features fixture matches native source' {
+  local fixture="${testdir:A}/_support/fixtures/features.env"
+
+  _parse_dotenv_test "$fixture"
+  _source_with_allexport "$fixture"
+
+  assert "DOTENV_TEST_VARS" var_same_as "DOTENV_SOURCE_VARS"
+}

@@ -14,39 +14,59 @@ plugins=(... jj)
 | ------ | ----------------------------- |
 | jja    | `jj abandon`                  |
 | jjb    | `jj bookmark`                 |
+| jjba   | `jj bookmark advance`         |
 | jjbc   | `jj bookmark create`          |
 | jjbd   | `jj bookmark delete`          |
 | jjbf   | `jj bookmark forget`          |
 | jjbl   | `jj bookmark list`            |
+| jjblt  | `jj bookmark list --tracked`  |
 | jjbm   | `jj bookmark move`            |
 | jjbr   | `jj bookmark rename`          |
 | jjbs   | `jj bookmark set`             |
 | jjbt   | `jj bookmark track`           |
 | jjbu   | `jj bookmark untrack`         |
 | jjc    | `jj commit`                   |
+| jjcfg  | `jj config`                   |
+| jjcfgl | `jj config list`              |
 | jjcmsg | `jj commit --message`         |
 | jjd    | `jj diff`                     |
 | jjdmsg | `jj desc --message`           |
 | jjds   | `jj desc`                     |
+| jjdst  | `jj diff --stat`              |
 | jje    | `jj edit`                     |
+| jjev   | `jj evolog`                   |
+| jjf    | `jj file`                     |
+| jjfl   | `jj file list`                |
+| jjg    | `jj git`                      |
 | jjgcl  | `jj git clone`                |
 | jjgf   | `jj git fetch`                |
 | jjgfa  | `jj git fetch --all-remotes`  |
+| jjgi   | `jj git init`                 |
 | jjgp   | `jj git push`                 |
 | jjgpa  | `jj git push --all`           |
 | jjgpd  | `jj git push --deleted`       |
 | jjgpt  | `jj git push --tracked`       |
+| jjgrl  | `jj git remote list`          |
 | jjl    | `jj log`                      |
 | jjla   | `jj log -r "all()"`           |
 | jjn    | `jj new`                      |
 | jjnt   | `jj new "trunk()"`            |
+| jjop   | `jj op`                       |
+| jjopl  | `jj op log`                   |
+| jjor   | `jj op restore`               |
 | jjrb   | `jj rebase`                   |
-| jjrbm  | `jj rebase -d "trunk()"`      |
+| jjrbm  | `jj rebase -o "trunk()"`      |
 | jjrs   | `jj restore`                  |
 | jjrt   | `cd "$(jj root \|\| echo .)"` |
+| jjs    | `jj show`                     |
 | jjsp   | `jj split`                    |
 | jjsq   | `jj squash`                   |
 | jjst   | `jj status`                   |
+| jju    | `jj undo`                     |
+| jjw    | `jj workspace`                |
+| jjwa   | `jj workspace add`            |
+| jjwf   | `jj workspace forget`         |
+| jjwl   | `jj workspace list`           |
 
 ## Prompt usage
 
@@ -100,10 +120,10 @@ that.
 
 ### Git async-prompt compatibility
 
-If you use a wrapper function that calls `git_prompt_info` (as shown above), it won't work with
-the default git async-prompt mode. This is because async-prompt only registers its background worker
-when it detects `$(git_prompt_info)` literally in your prompt variables. A wrapper like
-`$(_my_theme_vcs_info)` won't match, so the async output stays empty.
+If you use a wrapper function that calls `git_prompt_info` (as shown above), it won't work with the default
+git async-prompt mode. This is because async-prompt only registers its background worker when it detects
+`$(git_prompt_info)` literally in your prompt variables. A wrapper like `$(_my_theme_vcs_info)` won't match,
+so the async output stays empty.
 
 To fix this, add one of the following to your `.zshrc` **before** Oh My Zsh is sourced:
 
