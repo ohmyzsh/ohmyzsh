@@ -74,8 +74,8 @@ function sortcons() {
 function _systemadmin_validate_ports() {
   local port
   for port in "$@"; do
-    if [[ $port != <0-65535> ]]; then
-      print -u2 "systemadmin: invalid port '$port' (expected a number from 0 to 65535)"
+    if [[ $port != <0-65535> || ( $port == 0* && $port != 0 ) ]]; then
+      print -u2 "systemadmin: invalid port '$port' (expected 0 to 65535 without leading zeros)"
       return 1
     fi
   done
