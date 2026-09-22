@@ -12,12 +12,7 @@ This plugin does not add any aliases.
 
 ## Cache
 
-This plugin caches the completion script and is automatically updated when the
-plugin is loaded, which is usually when you start up a new terminal emulator.
+This plugin caches the completion script at `$ZSH_CACHE_DIR/completions/_glab`.
 
-The cache is stored at:
-
-- `$ZSH/plugins/glab/_glab` completions script
-
-- `$ZSH_CACHE_DIR/glab_version` version of GitLab CLI, used to invalidate
-  the cache.
+The cache is regenerated in the background whenever the plugin is loaded, which
+usually happens when you start a new Zsh session.
