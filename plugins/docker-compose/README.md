@@ -35,3 +35,6 @@ plugins=(... docker-compose)
 | dcpull    | `docker-compose pull`            | Pull image of a service                                                          |
 | dcstart   | `docker-compose start`           | Start a container                                                                |
 | dck       | `docker-compose kill`            | Kills containers                                                                 |
+| dcv       | `docker-compose version`         | Show version information                                                         |
+| dcsts     | `docker-compose stats`           | Show stats of containers                                                         |
+| dci       | `docker-compose images`          | List images                                                                      |
