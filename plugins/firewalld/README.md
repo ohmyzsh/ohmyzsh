@@ -8,15 +8,16 @@ plugins=(... firewalld)
 
 ## Aliases
 
-| Alias | Command                                    | Description                  |
-| :---- | :----------------------------------------- | :--------------------------- |
-| fw    | `sudo firewall-cmd`                        | Shorthand                    |
-| fwr   | `sudo firewall-cmd --reload`               | Reload current configuration |
-| fwp   | `sudo firewall-cmd --permanent`            | Create permanent rule        |
-| fwrp  | `sudo firewall-cmd --runtime-to-permanent` | Save current configuration   |
+| Alias   | Command                                    | Description                  |
+| :------ | :----------------------------------------- | :--------------------------- |
+| `fw`    | `sudo firewall-cmd`                        | Shorthand                    |
+| `fwr`   | `sudo firewall-cmd --reload`               | Reload current configuration |
+| `fwp`   | `sudo firewall-cmd --permanent`            | Create permanent rule        |
+| `fwrp`  | `sudo firewall-cmd --runtime-to-permanent` | Save current configuration   |
 
 ## Functions
 
-| Function | Description                                                |
-| :------- | :--------------------------------------------------------- |
-| fwl      | Lists configuration from all active zones and direct rules |
+| Function   | Description                                                                               |
+| :--------- | :---------------------------------------------------------------------------------------- |
+| `fwl`      | Lists configuration from all active zones and direct rules                                |
+| `fwbackup` | Saves the current firewall configuration by copying all zone files to `~/firewall-backup` |
