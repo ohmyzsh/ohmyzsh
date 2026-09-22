@@ -71,11 +71,24 @@ function sortcons() {
   } | sort | uniq -c | sort -rn
 }
 
-# View all 80 Port Connections
+function _systemadmin_validate_ports() {
+  local port
+  for port in "$@"; do
+    if [[ $port != <0-65535> || ( $port == 0* && $port != 0 ) ]]; then
+      print -u2 "systemadmin: invalid port '$port' (expected 0 to 65535 without leading zeros)"
+      return 1
+    fi
+  done
+}
+
+# View all connections on the given ports (default 80 and 443)
 function con80() {
+  local -a ports=("$@")
+  (( $# )) || ports=(80 443)
+  _systemadmin_validate_ports "${ports[@]}" || return
   {
     LANG= ss -nat || LANG= netstat -nat
-  } | grep -E ":80[^0-9]" | wc -l
+  } | grep -E ":(${(j:|:)ports})([[:space:]]|$)" | wc -l
 }
 
 # On the connected IP sorted by the number of connections
@@ -86,17 +99,23 @@ function sortconip() {
   } | cut -d: -f1 | sort | uniq -c | sort -n
 }
 
-# top20 of Find the number of requests on 80 port
+# top20 of Find the number of requests on the given ports (default 80 and 443)
 function req20() {
+  local -a ports=("$@")
+  (( $# )) || ports=(80 443)
+  _systemadmin_validate_ports "${ports[@]}" || return
   {
-    LANG= ss -tn | awk '$4 ~ /:80$/ {print $5}' \
-    || LANG= netstat -tn | awk '$4 ~ /:80$/ {print $5}'
+    LANG= ss -tn | awk -v ports="${(j:|:)ports}" '$4 ~ ":("ports")$" {print $5}' \
+    || LANG= netstat -tn | awk -v ports="${(j:|:)ports}" '$4 ~ ":("ports")$" {print $5}'
   } | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n 20
 }
 
-# top20 of Using tcpdump port 80 access to view
+# top20 of Using tcpdump to view access to the given ports (default 80 and 443)
 function http20() {
-  sudo tcpdump -i eth0 -tnn dst port 80 -c 1000 | awk -F"." '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -nr | head -n 20
+  local -a ports=("$@")
+  (( $# )) || ports=(80 443)
+  _systemadmin_validate_ports "${ports[@]}" || return
+  sudo tcpdump -i eth0 -tnn -c 1000 "dst port ${(j: or :)ports}" | awk -F"." '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -nr | head -n 20
 }
 
 # top20 of Find time_wait connection
