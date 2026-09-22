@@ -71,13 +71,24 @@ function sortcons() {
   } | sort | uniq -c | sort -rn
 }
 
+function _systemadmin_validate_ports() {
+  local port
+  for port in "$@"; do
+    if [[ $port != <0-65535> ]]; then
+      print -u2 "systemadmin: invalid port '$port' (expected a number from 0 to 65535)"
+      return 1
+    fi
+  done
+}
+
 # View all connections on the given ports (default 80 and 443)
 function con80() {
-  local -a ports=($@)
+  local -a ports=("$@")
   (( $# )) || ports=(80 443)
+  _systemadmin_validate_ports "${ports[@]}" || return
   {
     LANG= ss -nat || LANG= netstat -nat
-  } | grep -E ":(${(j:|:)ports})[^0-9]" | wc -l
+  } | grep -E ":(${(j:|:)ports})([[:space:]]|$)" | wc -l
 }
 
 # On the connected IP sorted by the number of connections
@@ -90,8 +101,9 @@ function sortconip() {
 
 # top20 of Find the number of requests on the given ports (default 80 and 443)
 function req20() {
-  local -a ports=($@)
+  local -a ports=("$@")
   (( $# )) || ports=(80 443)
+  _systemadmin_validate_ports "${ports[@]}" || return
   {
     LANG= ss -tn | awk -v ports="${(j:|:)ports}" '$4 ~ ":("ports")$" {print $5}' \
     || LANG= netstat -tn | awk -v ports="${(j:|:)ports}" '$4 ~ ":("ports")$" {print $5}'
@@ -100,8 +112,9 @@ function req20() {
 
 # top20 of Using tcpdump to view access to the given ports (default 80 and 443)
 function http20() {
-  local -a ports=($@)
+  local -a ports=("$@")
   (( $# )) || ports=(80 443)
+  _systemadmin_validate_ports "${ports[@]}" || return
   sudo tcpdump -i eth0 -tnn -c 1000 "dst port ${(j: or :)ports}" | awk -F"." '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -nr | head -n 20
 }
 
