@@ -21,6 +21,16 @@ RPROMPT='$(toolbox_prompt_info)'
 
 In the same way, it adds `toolbox_prompt_name()`, showing the name of the containerized environment.
 
+## Hostname customization
+
+This plugin automatically modifies the `HOST` variable when inside a toolbox container. This enables
+prompt formats using `%m` to display the toolbox name with the format `toolbx-{name}` instead of just
+the regular hostname.
+
+For example, if you're in a toolbox named "dev", your prompt will show `toolbx-dev` instead of just `toolbx` wherever `%m` is used.
+
+This functionality is enabled by default when loading the plugin and doesn't require any additional configuration.
+
 ## Aliases
 
 | Alias | Command         | Description                          |
