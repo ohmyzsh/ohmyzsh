@@ -1,0 +1,155 @@
+#autoload
+
+# This function serves a specified file over HTTP 1.0 on localhost, at a random
+# available port. It waits for a single GET request to the correct URL and then
+# responds with the file contents. If any other request is received, it responds
+# with a 404 Not Found. The server automatically shuts down after serving the
+# file or after a specified timeout.
+#
+# Usage:
+#   serve-file-and-quit <file-to-serve> [timeout-secs] [Access-Control-Allow-Origin]
+#   <file-to-serve>    Path to the file to be served (required)
+#   [timeout-secs]     Number of seconds to wait for a connection before quitting (default: 30, max: 60)
+#   [Access-Control-Allow-Origin]  Value for the Access-Control-Allow-Origin header (default: "null")
+#
+# If called from a subshell, it outputs the URL where the file can be accessed, and
+# then closes stdout to avoid hanging while the server is listening. The caller can
+# capture this output.
+#
+# It is intended for temporary sharing of files between local applications,
+# such as opening a trace file in a web-based viewer (trace.ohmyz.sh). It is not
+# meant for production use or serving files over the internet.
+#
+# It's a minimal implementation using zsh's built-in TCP capabilities, primarily
+# to avoid external dependencies.
+#
+# Security considerations:
+#
+# - This server listens on 0.0.0.0 (all interfaces), so it may be accessible from
+#   other devices on the same network. I haven't found a way to bind only to localhost
+#   using zsh's ztcp module.
+# - As the port is randomized, and the server is short-lived, the risk is mitigated,
+#   but not eliminated. An additional mitigation could be to use a random URL path segment.
+# - It's not a proper HTTP server, so it uses very rudimentary request parsing and
+#   response generation. It currently does not support binary files, and probably
+#   never will.
+
+setopt localoptions localtraps
+
+zmodload zsh/net/tcp
+zmodload zsh/zselect
+
+local file="$1"
+local timeout_secs="${2:-30}"
+local AccessControlAllowOrigin=${3:-"null"}
+
+if [[ -z "$file" ]]; then
+  print -ru2 "Usage: $0 <file-to-serve> [timeout-secs] [Access-Control-Allow-Origin]"
+  return 1
+fi
+
+if [[ ! -r "$file" ]]; then
+  print -ru2 "Error: file '$file' not found or not readable."
+  return 1
+fi
+
+if (( timeout_secs < 1 || timeout_secs > 60 )); then
+  print -ru2 "Error: timeout must be a positive integer between 1 and 60."
+  return 1
+fi
+
+local pathname="$(omz_urlencode -P "/${file:t}")"
+
+# 1. Get a random available port
+local port=$(( RANDOM % 32767 + 1100 ))
+while ! ztcp -l "$port" &>/dev/null; do
+  (( port++ ))
+
+  if (( port > 65535 )); then
+    print -ru2 "Error: failed to start server: no available ports."
+    return 1
+  fi
+done
+ztcp -c $REPLY # inmediately close the test connection
+
+# 2. Output file URL to stdout for caller to use
+# Here the subcommand substitution captures the output and returns it to the caller
+if [[ $ZSH_SUBSHELL -gt 0 ]]; then
+  echo "http://localhost:$port${pathname}"
+  exec >/dev/null # close stdout in the subshell to avoid hanging
+fi
+
+# Start of asynchronous server block
+{
+  local response_body request_line listen_fd fd
+
+  # 1. Start listening on the selected port
+  if ! ztcp -l $port; then
+    print -ru2 "Error: failed to start server on port $port."
+    return 1
+  fi
+  listen_fd=$REPLY
+
+  print -ru2 "Serving file '${file:t}' on http://localhost:$port${pathname} ..."
+
+  # 2. Wait for a connection, with a timeout (in hundredths of a second)
+  while zselect -t $(( timeout_secs * 100 )) -r $listen_fd; do
+    # 3. Accept the connection
+    ztcp -a $listen_fd
+    fd=$REPLY
+
+    # 4. Read the request line (the first line is usually enough to determine the path)
+    #    Note: read up to 2048 bytes to avoid blocking indefinitely
+    sysread -s 2048 -i $fd request
+    local request_line="${${(f)request}[1]}"
+
+    # 5. If the request is not for the expected pathname, respond with 404 Not Found
+    if [[ "${${(f)request}[1]}" != "GET ${pathname} HTTP/1."* ]]; then
+      local response_body="404 Not Found"
+      local http_response=$'HTTP/1.0 404 Not Found\r
+Content-Type: text/plain\r
+Content-Length: %d\r
+\r
+%s\r
+'
+      >&$fd builtin printf -- "$http_response" \
+        $(( ${#response_body} + 2 )) \
+        "$response_body"
+
+      # 5.1. Close the connection file descriptor and try again
+      ztcp -c $fd
+      continue
+    fi
+
+    # 6. If the request matches the pathname, respond with the contents of the file
+    local response_body="$(<$file)"
+    local http_response=$'HTTP/1.0 200 OK\r
+Access-Control-Allow-Origin: %s\r
+Content-Type: text/plain;charset=utf-8\r
+Content-Length: %d\r
+\r
+%s\r
+'
+    >&$fd builtin printf -- "$http_response" \
+      "$AccessControlAllowOrigin" \
+      $(( ${#response_body} + 2 )) \
+      "$response_body"
+
+    # 6.1. Close the connection file descriptor and stop the loop
+    ztcp -c $fd
+    break
+  done
+
+  return 0
+} always {
+  # Non-zero if error or timeout occurred
+  local ret=$?
+
+  # 7. Close remaining file descriptors and shut down the server
+  print -ru2 "Server stopped."
+
+  [[ -z "$fd" ]] || ztcp -c $fd 2>/dev/null
+  [[ -z "$listen_fd" ]] || ztcp -c $listen_fd 2>/dev/null
+
+  return $ret
+} &|
