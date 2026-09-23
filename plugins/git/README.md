@@ -202,6 +202,7 @@ plugins=(... git)
 | `gst`                  | `git status`                                                                                                                    |
 | `gss`                  | `git status --short`                                                                                                            |
 | `gsb`                  | `git status --short -b`                                                                                                         |
+| `gsnut`                | `git status --untracked-files=no`                                                                                                         |
 | `gsi`                  | `git submodule init`                                                                                                            |
 | `gsu`                  | `git submodule update`                                                                                                          |
 | `gsd`                  | `git svn dcommit`                                                                                                               |
