@@ -404,6 +404,8 @@ alias gsts='git stash show --patch'
 alias gst='git status'
 alias gss='git status --short'
 alias gsb='git status --short --branch'
+# -uno === --untracked-files=no
+alias gsnut='git status --untracked-files=no'
 alias gsi='git submodule init'
 alias gsu='git submodule update'
 alias gsd='git svn dcommit'
