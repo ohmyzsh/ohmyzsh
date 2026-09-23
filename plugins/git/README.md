@@ -18,6 +18,8 @@ plugins=(... git)
 | `g`                    | `git`                                                                                                                           |
 | `ga`                   | `git add`                                                                                                                       |
 | `gaa`                  | `git add --all`                                                                                                                 |
+| `gan`                  | `git add --intent-to-add`                                                                                |
+| `ganpa`                | `git add --intent-to-add && git add --patch`                                                             |
 | `gapa`                 | `git add --patch`                                                                                                               |
 | `gau`                  | `git add --update`                                                                                                              |
 | `gav`                  | `git add --verbose`                                                                                                             |
