@@ -239,10 +239,28 @@ function aws_regions() {
 }
 
 function aws_profiles() {
-  aws --no-cli-pager configure list-profiles 2> /dev/null && return
-  [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  command grep -Eo '^[[:space:]]*\[[[:space:]]*(profile[[:space:]]+)?[^][:space:]]+[[:space:]]*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | command sed -E 's/^[[:space:]]*\[[[:space:]]*(profile[[:space:]]+)?([^][:space:]]+)[[:space:]]*\]$/\2/'
+  emulate -L zsh
+  local config="${AWS_CONFIG_FILE:-$HOME/.aws/config}"
+  local creds="${AWS_SHARED_CREDENTIALS_FILE:-$HOME/.aws/credentials}"
+  # Read the files directly; the AWS CLI is slow to start
+  if [[ ! -r "$config" && ! -r "$creds" ]]; then
+    aws --no-cli-pager configure list-profiles 2> /dev/null
+    return
+  fi
+  local line words
+  # Only read the section headers, so the credentials never enter the shell
+  for line in "${(@f)$(command grep -h '^[[:space:]]*\[' -- "$config" "$creds" 2> /dev/null)}"; do
+    line=${line#*\[}  # drop up to the first [
+    line=${line%\]*}  # drop from the last ] (comments, CR)
+    words=(${=line})
+    if (( $#words == 1 )); then
+      print -r -- $words[1]  # [default], or [foo] in the credentials file
+    elif (( $#words == 2 )) && [[ $words[1] == profile ]]; then
+      print -r -- $words[2]
+    fi
+  done | command sort -u
 }
+
 
 function _aws_regions() {
   reply=($(aws_regions))
