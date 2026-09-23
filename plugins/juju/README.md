@@ -1,7 +1,7 @@
 # juju plugin
 
-This plugin provides useful aliases and functions for [juju](https://juju.is/) (for TAB completion,
-refer to the [official repo](https://github.com/juju/juju/blob/develop/etc/bash_completion.d/juju)).
+This plugin provides useful aliases and functions for [juju](https://juju.is/), including
+zsh tab completion for juju commands, flags, models, controllers, applications, and units.
 
 To use this plugin, add `juju` to the plugins array in your zshrc file.
 
