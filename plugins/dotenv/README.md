@@ -66,6 +66,23 @@ For example, this will make the plugin look for files named `.dotenv` and load t
 ZSH_DOTENV_FILE=.dotenv
 ```
 
+You can also specify multiple files as a space-separated list. The plugin will look for
+each file in the current directory and source all that exist, in the order specified:
+
+```zsh
+# Load .env first, then .env.local (if it exists)
+ZSH_DOTENV_FILE=".env .env.local"
+```
+
+Filenames containing spaces can be quoted:
+
+```zsh
+ZSH_DOTENV_FILE=".env '.my env file' .env.local"
+```
+
+Files that don't exist in the current directory are silently skipped. The default
+behavior (loading only `.env`) is unchanged when `ZSH_DOTENV_FILE` is not set.
+
 ### ZSH_DOTENV_PROMPT
 
 Set `ZSH_DOTENV_PROMPT=false` in your zshrc file if you don't want the confirmation message.
