@@ -13,6 +13,6 @@ fi
 # Generate and load buf completion
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_buf"
-  zf_mv -f -- =( buf completion zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/_buf"
+  zf_mv -f -- =( buf completion zsh ) "$ZSH_CACHE_DIR/completions/_buf"
 } &|

@@ -15,8 +15,8 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_hcloud"
-  zf_mv -f -- =( hcloud completion zsh 2> /dev/null ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/_hcloud"
+  zf_mv -f -- =( hcloud completion zsh 2> /dev/null ) "$ZSH_CACHE_DIR/completions/_hcloud"
 } &|
 
 # Main alias

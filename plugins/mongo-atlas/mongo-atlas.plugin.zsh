@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_atlas"
-  zf_mv -f -- =( atlas completion zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/_atlas"
+  zf_mv -f -- =( atlas completion zsh ) "$ZSH_CACHE_DIR/completions/_atlas"
 } &|

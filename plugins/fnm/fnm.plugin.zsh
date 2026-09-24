@@ -12,8 +12,8 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_fnm"
-  zf_mv -f -- =( fnm completions --shell=zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/_fnm"
+  zf_mv -f -- =( fnm completions --shell=zsh ) "$ZSH_CACHE_DIR/completions/_fnm"
 } &|
 
 if zstyle -t ':omz:plugins:fnm' autostart; then

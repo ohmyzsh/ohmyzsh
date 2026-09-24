@@ -63,6 +63,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_herdr"
-  zf_mv -f -- =( herdr completion zsh < /dev/null 2> /dev/null ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/_herdr"
+  zf_mv -f -- =( herdr completion zsh < /dev/null 2> /dev/null ) "$ZSH_CACHE_DIR/completions/_herdr"
 } &|

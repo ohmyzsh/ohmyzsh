@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_skaffold"
-  zf_mv -f -- =( skaffold completion zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/_skaffold"
+  zf_mv -f -- =( skaffold completion zsh ) "$ZSH_CACHE_DIR/completions/_skaffold"
 } &|

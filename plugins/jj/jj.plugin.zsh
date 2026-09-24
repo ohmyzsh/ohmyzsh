@@ -13,8 +13,8 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_jj"
-  zf_mv -f -- =( COMPLETE=zsh jj ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/_jj"
+  zf_mv -f -- =( COMPLETE=zsh jj ) "$ZSH_CACHE_DIR/completions/_jj"
 } &|
 
 function __jj_prompt_jj() {

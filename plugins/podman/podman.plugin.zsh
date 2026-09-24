@@ -12,8 +12,8 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_podman"
-  zf_mv -f -- =( podman completion zsh 2> /dev/null ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/_podman"
+  zf_mv -f -- =( podman completion zsh 2> /dev/null ) "$ZSH_CACHE_DIR/completions/_podman"
 } &|
 
 alias pbl='podman build'

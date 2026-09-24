@@ -13,6 +13,6 @@ fi
 # the actual completion file will be loaded.
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_k9s"
-  zf_mv -f -- =( k9s completion zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/_k9s"
+  zf_mv -f -- =( k9s completion zsh ) "$ZSH_CACHE_DIR/completions/_k9s"
 } &|

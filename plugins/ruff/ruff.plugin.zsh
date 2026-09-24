@@ -22,6 +22,6 @@ fi
 # Overwrites the file each time as completions might change with ruff versions.
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_ruff"
-  zf_mv -f -- =( ruff generate-shell-completion zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/_ruff"
+  zf_mv -f -- =( ruff generate-shell-completion zsh ) "$ZSH_CACHE_DIR/completions/_ruff"
 } &|
