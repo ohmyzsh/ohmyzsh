@@ -12,7 +12,7 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_kubectl"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._kubectl"
   zf_mv -f -- =( kubectl completion zsh 2> /dev/null ) "$ZSH_CACHE_DIR/completions/_kubectl"
 } &|
 

@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_flux"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._flux"
   zf_mv -f -- =( flux completion zsh ) "$ZSH_CACHE_DIR/completions/_flux"
 } &|

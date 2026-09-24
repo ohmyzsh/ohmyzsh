@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_volta"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._volta"
   zf_mv -f -- =( volta completions zsh ) "$ZSH_CACHE_DIR/completions/_volta"
 } &|

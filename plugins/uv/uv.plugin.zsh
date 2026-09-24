@@ -45,10 +45,10 @@ fi
 # Overwrites the file each time as completions might change with uv versions.
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_uv"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._uv"
   zf_mv -f -- =( uv generate-shell-completion zsh ) "$ZSH_CACHE_DIR/completions/_uv"
 } &|
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_uvx"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._uvx"
   zf_mv -f -- =( uvx --generate-shell-completion zsh ) "$ZSH_CACHE_DIR/completions/_uvx"
 } &|

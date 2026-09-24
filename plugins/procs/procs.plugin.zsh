@@ -12,7 +12,7 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_procs"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._procs"
   autoload -Uz is-at-least
   local _version=$(procs --version)
   zf_mv -f -- =(

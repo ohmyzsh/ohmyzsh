@@ -12,6 +12,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_stripe"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._stripe"
   zf_mv -f -- =( stripe completion --shell zsh --write-to-stdout ) "$ZSH_CACHE_DIR/completions/_stripe"
 } &|

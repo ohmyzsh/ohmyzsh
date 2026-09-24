@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_argocd"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._argocd"
   zf_mv -f -- =( argocd completion zsh ) "$ZSH_CACHE_DIR/completions/_argocd"
 } &|

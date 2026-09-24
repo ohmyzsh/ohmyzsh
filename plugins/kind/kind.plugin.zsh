@@ -13,7 +13,7 @@ fi
 # Generate and load kind completion
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_kind"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._kind"
   zf_mv -f -- =( kind completion zsh ) "$ZSH_CACHE_DIR/completions/_kind"
 } &|
 

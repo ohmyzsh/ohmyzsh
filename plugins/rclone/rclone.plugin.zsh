@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_rclone"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._rclone"
   zf_mv -f -- =( rclone completion zsh - ) "$ZSH_CACHE_DIR/completions/_rclone"
 } &|

@@ -12,7 +12,7 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_rbw"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._rbw"
   zf_mv -f -- =( rbw gen-completions zsh ) "$ZSH_CACHE_DIR/completions/_rbw"
 } &|
 

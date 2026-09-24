@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_qodana"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._qodana"
   zf_mv -f -- =( qodana completion zsh ) "$ZSH_CACHE_DIR/completions/_qodana"
 } &|

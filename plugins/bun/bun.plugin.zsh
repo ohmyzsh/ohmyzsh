@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_bun"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._bun"
   zf_mv -f -- =( SHELL=zsh bun completions ) "$ZSH_CACHE_DIR/completions/_bun"
 } &|

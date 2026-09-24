@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_timoni"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._timoni"
   zf_mv -f -- =( timoni completion zsh ) "$ZSH_CACHE_DIR/completions/_timoni"
 } &|

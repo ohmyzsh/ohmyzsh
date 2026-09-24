@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_glab"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._glab"
   zf_mv -f -- =( glab completion -s zsh ) "$ZSH_CACHE_DIR/completions/_glab"
 } &|

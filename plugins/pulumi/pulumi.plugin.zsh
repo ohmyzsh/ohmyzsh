@@ -12,7 +12,7 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_pulumi"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._pulumi"
   zf_mv -f -- =( pulumi gen-completion zsh ) "$ZSH_CACHE_DIR/completions/_pulumi"
 } &|
 

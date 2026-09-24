@@ -24,6 +24,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_tailscale"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._tailscale"
   zf_mv -f -- =( tailscale completion zsh ) "$ZSH_CACHE_DIR/completions/_tailscale"
 } &|

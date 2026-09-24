@@ -10,6 +10,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/_hermes"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._hermes"
   zf_mv -f -- =( hermes completion zsh < /dev/null 2> /dev/null ) "$ZSH_CACHE_DIR/completions/_hermes"
 } &|

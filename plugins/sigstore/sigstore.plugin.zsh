@@ -14,7 +14,7 @@ function install_autocompletion {
 
   zmodload -F zsh/files b:zf_mv
   () {
-    local TMPPREFIX="$ZSH_CACHE_DIR/_$1"
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/._$1"
     zf_mv -f -- =( $1 completion zsh ) "$ZSH_CACHE_DIR/completions/_$1"
   } "$1" &|
 }
