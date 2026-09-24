@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_ngrok"
-  zf_mv -f -- =( ngrok completion zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._ngrok"
+  zf_mv -f -- =( ngrok completion zsh ) "$ZSH_CACHE_DIR/completions/_ngrok"
 } &|

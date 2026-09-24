@@ -21,8 +21,8 @@ fi
 # Generate completion files in the background
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_rustup"
-  zf_mv -f -- =( rustup completions zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._rustup"
+  zf_mv -f -- =( rustup completions zsh ) "$ZSH_CACHE_DIR/completions/_rustup"
 } &|
 cat >| "$ZSH_CACHE_DIR/completions/_cargo" <<'EOF'
 #compdef cargo

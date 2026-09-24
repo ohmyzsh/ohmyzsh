@@ -27,6 +27,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_deno"
-  zf_mv -f -- =( deno completions zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._deno"
+  zf_mv -f -- =( deno completions zsh ) "$ZSH_CACHE_DIR/completions/_deno"
 } &|

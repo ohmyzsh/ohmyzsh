@@ -41,6 +41,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_poetry"
-  zf_mv -f -- =( poetry completions zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._poetry"
+  zf_mv -f -- =( poetry completions zsh ) "$ZSH_CACHE_DIR/completions/_poetry"
 } &|

@@ -9,8 +9,8 @@ if (( $+commands[nsc] )); then
 
   zmodload -F zsh/files b:zf_mv
   () {
-    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_nsc"
-    zf_mv -f -- =( nsc completion zsh ) "$TMPPREFIX"
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/._nsc"
+    zf_mv -f -- =( nsc completion zsh ) "$ZSH_CACHE_DIR/completions/_nsc"
   } &|
 fi
 
@@ -25,7 +25,7 @@ if (( $+commands[nats] )); then
 
   zmodload -F zsh/files b:zf_mv
   () {
-    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_nats"
-    zf_mv -f -- =( nats --completion-script-zsh ) "$TMPPREFIX"
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/._nats"
+    zf_mv -f -- =( nats --completion-script-zsh ) "$ZSH_CACHE_DIR/completions/_nats"
   } &|
 fi

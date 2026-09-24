@@ -68,7 +68,7 @@ zmodload -F zsh/files b:zf_mv
     ! is-at-least 23.0.0 ${${(s:,:z)"$(command docker --version)"}[3]}; then
         command cp "${plugin_dir}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
       else
-        local TMPPREFIX="$ZSH_CACHE_DIR/completions/_docker"
-        zf_mv -f -- =( command docker completion zsh ) "$TMPPREFIX"
+        local TMPPREFIX="$ZSH_CACHE_DIR/completions/._docker"
+        zf_mv -f -- =( command docker completion zsh ) "$ZSH_CACHE_DIR/completions/_docker"
   fi
 } "${0:A:h}" &|

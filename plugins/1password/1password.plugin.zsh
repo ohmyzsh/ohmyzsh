@@ -11,8 +11,8 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_op"
-  zf_mv -f -- =( op completion zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._op"
+  zf_mv -f -- =( op completion zsh ) "$ZSH_CACHE_DIR/completions/_op"
 } &|
 
 # Load opswd function

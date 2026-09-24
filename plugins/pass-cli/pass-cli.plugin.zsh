@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_pass-cli"
-  zf_mv -f -- =( pass-cli completions zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._pass-cli"
+  zf_mv -f -- =( pass-cli completions zsh ) "$ZSH_CACHE_DIR/completions/_pass-cli"
 } &|

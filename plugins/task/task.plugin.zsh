@@ -13,6 +13,6 @@ fi
 # Generate and load task completion
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_task"
-  zf_mv -f -- =( task --completion zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._task"
+  zf_mv -f -- =( task --completion zsh ) "$ZSH_CACHE_DIR/completions/_task"
 } &|

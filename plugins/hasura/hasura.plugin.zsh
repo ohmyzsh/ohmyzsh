@@ -11,7 +11,7 @@ else
   source "$ZSH_CACHE_DIR/completions/_hasura"
   zmodload -F zsh/files b:zf_mv
   () {
-    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_hasura"
-    zf_mv -f -- =( hasura completion zsh ) "$TMPPREFIX"
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/._hasura"
+    zf_mv -f -- =( hasura completion zsh ) "$ZSH_CACHE_DIR/completions/_hasura"
   } &|
 fi
