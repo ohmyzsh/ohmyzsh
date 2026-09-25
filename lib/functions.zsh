@@ -178,7 +178,10 @@ function omz_urlencode() {
   setopt norematchpcre
 
   local -a opts
-  zparseopts -D -E -a opts r m P
+  # Quote the specs: bare words are subject to global alias expansion at parse
+  # time, so e.g. common-aliases' `P` would splice a pipeline in here when this
+  # file is re-parsed with that plugin's aliases already defined.
+  zparseopts -D -E -a opts 'r' 'm' 'P'
 
   local in_str="$@"
   local url_str=""
