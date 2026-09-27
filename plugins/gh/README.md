@@ -18,3 +18,5 @@ plugin is loaded, which is usually when you start up a new terminal emulator.
 The cache is stored at:
 
 - `$ZSH_CACHE_DIR/completions/_gh` completions script
+
+If an update fails, the last successfully generated completion script is kept.
