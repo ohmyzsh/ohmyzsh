@@ -267,6 +267,7 @@ __gradle_subcommand() {
                 '-Dorg.gradle.configuration-cache.problems=[Configures how the configuration cache handles problems (fail or warn). Supported values are 'warn', or 'fail' (default).]:org.gradle.configuration cache.problems:(fail warn)' \
                 '-Dorg.gradle.configuration-cache.read-only=[]' \
                 '-Dorg.gradle.configuration-cache.unsafe.ignore.unsupported-build-events-listeners=[]' \
+                '-Dorg.gradle.configuration-cache.unsafe.skip-task-logging-listeners-serialization=[]' \
                 '-Dorg.gradle.configuration-cache=[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]' \
                 '-Dorg.gradle.configureondemand=[Configures necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]' \
                 '-Dorg.gradle.console.interactive=[]' \
@@ -296,6 +297,7 @@ __gradle_subcommand() {
                 '-Dorg.gradle.jvmargs=[]' \
                 '-Dorg.gradle.logging.level=[]:org.gradle.logging.level:(quiet warn info debug)' \
                 '-Dorg.gradle.logging.stacktrace=[]' \
+                '-Dorg.gradle.mirror.maven.settings=[]' \
                 '-Dorg.gradle.native=[]' \
                 '-Dorg.gradle.parallel=[Builds projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]:org.gradle.parallel:(true false)' \
                 '-Dorg.gradle.priority=[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Supported values are 'normal' (default) or 'low'.]:org.gradle.priority:(normal low)' \
@@ -407,6 +409,7 @@ _gradle() {
         '-Dorg.gradle.configuration-cache.problems=[Configures how the configuration cache handles problems (fail or warn). Supported values are 'warn', or 'fail' (default).]:org.gradle.configuration cache.problems:(fail warn):->argument-expected' \
         '-Dorg.gradle.configuration-cache.read-only=[]:->argument-expected' \
         '-Dorg.gradle.configuration-cache.unsafe.ignore.unsupported-build-events-listeners=[]:->argument-expected' \
+        '-Dorg.gradle.configuration-cache.unsafe.skip-task-logging-listeners-serialization=[]:->argument-expected' \
         '-Dorg.gradle.configuration-cache=[Enables the configuration cache. Gradle will try to reuse the build configuration from previous builds.]:->argument-expected' \
         '-Dorg.gradle.configureondemand=[Configures necessary projects only. Gradle will attempt to reduce configuration time for large multi-project builds.]:->argument-expected' \
         '-Dorg.gradle.console.interactive=[]:->argument-expected' \
@@ -436,6 +439,7 @@ _gradle() {
         '-Dorg.gradle.jvmargs=[]:->argument-expected' \
         '-Dorg.gradle.logging.level=[]:org.gradle.logging.level:(quiet warn info debug):->argument-expected' \
         '-Dorg.gradle.logging.stacktrace=[]:->argument-expected' \
+        '-Dorg.gradle.mirror.maven.settings=[]:->argument-expected' \
         '-Dorg.gradle.native=[]:->argument-expected' \
         '-Dorg.gradle.parallel=[Builds projects in parallel. Gradle will attempt to determine the optimal number of executor threads to use.]:org.gradle.parallel:(true false):->argument-expected' \
         '-Dorg.gradle.priority=[Specifies the scheduling priority for the Gradle daemon and all processes launched by it. Supported values are 'normal' (default) or 'low'.]:org.gradle.priority:(normal low):->argument-expected' \
