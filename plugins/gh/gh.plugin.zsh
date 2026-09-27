@@ -13,6 +13,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_gh"
-  zf_mv -f -- =( gh completion --shell zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._gh"
+  zf_mv -f -- =( gh completion --shell zsh ) "$ZSH_CACHE_DIR/completions/_gh"
 } &|

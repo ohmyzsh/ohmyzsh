@@ -45,8 +45,8 @@ else
 
   zmodload -F zsh/files b:zf_mv
   () {
-    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_pipenv"
-    zf_mv -f -- =( _PIPENV_COMPLETE=zsh_source pipenv ) "$TMPPREFIX"
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/._pipenv"
+    zf_mv -f -- =( _PIPENV_COMPLETE=zsh_source pipenv ) "$ZSH_CACHE_DIR/completions/_pipenv"
   } &|
 fi
 

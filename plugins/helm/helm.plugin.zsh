@@ -11,8 +11,8 @@ else
   source "$ZSH_CACHE_DIR/completions/_helm"
   zmodload -F zsh/files b:zf_mv
   () {
-    local TMPPREFIX="$ZSH_CACHE_DIR/completions/_helm"
-    zf_mv -f -- =( helm completion zsh ) "$TMPPREFIX"
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/._helm"
+    zf_mv -f -- =( helm completion zsh ) "$ZSH_CACHE_DIR/completions/_helm"
   } &|
 fi
 
