@@ -32,6 +32,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_flutter"
-  zf_mv -f -- =( flutter zsh-completion < /dev/null ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._flutter"
+  zf_mv -f -- =( flutter zsh-completion < /dev/null ) "$ZSH_CACHE_DIR/completions/_flutter"
 } &|

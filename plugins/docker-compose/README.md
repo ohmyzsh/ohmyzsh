@@ -17,7 +17,7 @@ plugins=(... docker-compose)
 |-----------|----------------------------------|----------------------------------------------------------------------------------|
 | dco       | `docker-compose`                 | Docker-compose main command                                                      |
 | dcb       | `docker-compose build`           | Build containers                                                                 |
-| dcc       | `docker-compose config`                 | Parse, resolve and render compose file in canonical format |
+| dcc       | `docker-compose config`          | Parse, resolve and render compose file in canonical format                       |
 | dce       | `docker-compose exec`            | Execute command inside a container                                               |
 | dcps      | `docker-compose ps`              | List containers                                                                  |
 | dcrestart | `docker-compose restart`         | Restart container                                                                |
@@ -35,3 +35,6 @@ plugins=(... docker-compose)
 | dcpull    | `docker-compose pull`            | Pull image of a service                                                          |
 | dcstart   | `docker-compose start`           | Start a container                                                                |
 | dck       | `docker-compose kill`            | Kills containers                                                                 |
+| dcv       | `docker-compose version`         | Show version information                                                         |
+| dcsts     | `docker-compose stats`           | Show stats of containers                                                         |
+| dci       | `docker-compose images`          | List images                                                                      |

@@ -738,6 +738,9 @@ function _omz::reload {
 
   # Old zsh versions don't have ZSH_ARGZERO
   local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+  # ZSH_ARGZERO is how zsh was invoked, not the path to it, so re-resolve
+  # anything that is not absolute via $PATH at exec time (see #13919)
+  [[ "${zsh#-}" != /* ]] && (( $+commands[zsh] )) && zsh="zsh"
   # Check whether to run a login shell
   [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
 }
@@ -903,8 +906,11 @@ function _omz::update {
   }
 
   # Run update script
+  local verbose_mode cooldown_days
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
-  ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode || return $?
+  zstyle -s ':omz:update' cooldown cooldown_days || cooldown_days=0
+  [[ $cooldown_days == <-> ]] || cooldown_days=0
+  ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode -c $cooldown_days || return $?
 
   # Update last updated file
   zmodload zsh/datetime
@@ -916,6 +922,9 @@ function _omz::update {
   if [[ "$(builtin cd -q "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
     # Old zsh versions don't have ZSH_ARGZERO
     local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+    # ZSH_ARGZERO is how zsh was invoked, not the path to it, so re-resolve
+    # anything that is not absolute via $PATH at exec time (see #13919)
+    [[ "${zsh#-}" != /* ]] && (( $+commands[zsh] )) && zsh="zsh"
     # Check whether to run a login shell
     [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
   fi

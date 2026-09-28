@@ -21,6 +21,15 @@ function _configure_eza() {
   if zstyle -t ':omz:plugins:eza' 'header'; then
     _EZA_HEAD+=("h")
   fi
+  if zstyle -t ':omz:plugins:eza' 'links'; then
+    _EZA_HEAD+=("H")
+  fi
+  if zstyle -t ':omz:plugins:eza' 'octal'; then
+    _EZA_HEAD+=("o")
+  fi
+  if zstyle -t ':omz:plugins:eza' 'inodes'; then
+    _EZA_HEAD+=("i")
+  fi
   zstyle -s ':omz:plugins:eza' 'size-prefix' _val
   case "${_val:l}" in
     binary)

@@ -24,5 +24,8 @@ alias dclF="$dccmd logs -f --tail 0"
 alias dcpull="$dccmd pull"
 alias dcstart="$dccmd start"
 alias dck="$dccmd kill"
+alias dcv="$dccmd version"
+alias dcsts="$dccmd stats"
+alias dci="$dccmd images"
 
 unset dccmd

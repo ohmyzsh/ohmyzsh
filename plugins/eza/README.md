@@ -45,6 +45,36 @@ If `yes`, always add `-h` flag to add a header row for each column.
 
 Default: `no`
 
+### `links`
+
+```zsh
+zstyle ':omz:plugins:eza' 'links' yes|no
+```
+
+If `yes`, always add `-H` flag to show hard links for each file.
+
+Default: `no`
+
+### `octal`
+
+```zsh
+zstyle ':omz:plugins:eza' 'octal' yes|no
+```
+
+If `yes`, always add `-o` flag to show file permissions as octal numbers.
+
+Default: `no`
+
+### `inodes`
+
+```zsh
+zstyle ':omz:plugins:eza' 'inodes' yes|no
+```
+
+If `yes`, always add `-i` flag to show the inode for each file.
+
+Default: `no`
+
 ### `show-group`
 
 ```zsh

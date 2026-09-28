@@ -12,8 +12,8 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_rbw"
-  zf_mv -f -- =( rbw gen-completions zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._rbw"
+  zf_mv -f -- =( rbw gen-completions zsh ) "$ZSH_CACHE_DIR/completions/_rbw"
 } &|
 
 # rbwpw function copies the password of a service to the clipboard

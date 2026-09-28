@@ -178,6 +178,11 @@ alias tmux=_zsh_tmux_plugin_run
 function _tmux_directory_session() {
   # current directory without leading path
   local dir=${PWD##*/}
+  # tmux target syntax treats '.' and ':' as separators, a leading '$', '@' or '%'
+  # as an id and a leading '=' as an exact-match prefix, so a session named after
+  # such a directory can't be found on reattach
+  dir=${dir//[.:]/_}
+  dir=${dir/#[\$@%=]/_}
   # md5 hash for the full working directory path
   local md5=$(printf '%s' "$PWD" | md5sum | cut -d  ' ' -f 1)
   # human friendly unique session name for this directory

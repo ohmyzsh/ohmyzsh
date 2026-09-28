@@ -474,6 +474,22 @@ zstyle ':omz:update' frequency 7
 zstyle ':omz:update' frequency 0
 ```
 
+By default, updates always pull the latest changes. If you'd rather let others kick the tires first
+before an update reaches your machine, you can set a cooldown (in days). You'll still get everything —
+just a little later:
+
+```sh
+# Only apply updates that are at least 10 days old
+zstyle ':omz:update' cooldown 10
+```
+
+`omz update` honors this setting. If you call `upgrade.sh` directly, pass the same
+value with `-c`, because that script does not read your `.zshrc`:
+
+```sh
+$ZSH/tools/upgrade.sh -c 10
+```
+
 ### Updates Verbosity
 
 You can also limit the update verbosity with the following settings:

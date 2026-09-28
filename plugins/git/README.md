@@ -103,6 +103,7 @@ plugins=(... git)
 | `glods`                | `git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --date=short`           |
 | `glol`                 | `git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'`                        |
 | `glola`                | `git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --all`                  |
+| `glolm`                | `git log $(git_main_branch) --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset'`     |
 | `glols`                | `git log --graph --pretty='%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset' --stat`                 |
 | `glo`                  | `git log --oneline --decorate`                                                                                                  |
 | `glog`                 | `git log --oneline --decorate --graph`                                                                                          |
@@ -201,6 +202,7 @@ plugins=(... git)
 | `gst`                  | `git status`                                                                                                                    |
 | `gss`                  | `git status --short`                                                                                                            |
 | `gsb`                  | `git status --short -b`                                                                                                         |
+| `gsnut`                | `git status --untracked-files=no`                                                                                               |
 | `gsi`                  | `git submodule init`                                                                                                            |
 | `gsu`                  | `git submodule update`                                                                                                          |
 | `gsd`                  | `git svn dcommit`                                                                                                               |
@@ -254,6 +256,7 @@ receive further support.
 | `git_current_user_name`  | Returns the `user.name` config value (Lives in `lib/git.zsh`)                                                  |
 | `git_develop_branch`     | Returns the name of the “development” branch: `dev`, `devel`, `development` if they exist, `develop` otherwise |
 | `git_main_branch`        | Returns the name of the main branch: `main` if it exists, `master` otherwise                                   |
+| `gbcopy`                 | Copies current branch name to clipboard                                                                        |
 | `grename <old> <new>`    | Renames branch `<old>` to `<new>`, including on the origin remote                                              |
 | `gbda`                   | Deletes all merged branches                                                                                    |
 | `gbds`                   | Deletes all squash-merged branches (**Note: performance degrades with number of branches**)                    |

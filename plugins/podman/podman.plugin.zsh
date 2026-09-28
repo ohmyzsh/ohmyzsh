@@ -12,8 +12,8 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_podman"
-  zf_mv -f -- =( podman completion zsh 2> /dev/null ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._podman"
+  zf_mv -f -- =( podman completion zsh 2> /dev/null ) "$ZSH_CACHE_DIR/completions/_podman"
 } &|
 
 alias pbl='podman build'
@@ -26,6 +26,16 @@ alias pils='podman image ls'
 alias pipu='podman image push'
 alias pirm='podman image rm'
 alias pit='podman image tag'
+alias pmif='podman machine info'
+alias pmit='podman machine init'
+alias pmis='podman machine inspect'
+alias pml='podman machine list'
+alias pmo='podman machine os'
+alias pmrm='podman machine rm'
+alias pms='podman machine set'
+alias pmss='podman machine ssh'
+alias pmst='podman machine start'
+alias pmsp='podman machine stop'
 alias plo='podman container logs'
 alias pnc='podman network create'
 alias pncn='podman network connect'

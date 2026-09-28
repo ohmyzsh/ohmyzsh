@@ -16,6 +16,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_doctl"
-  zf_mv -f -- =( doctl completion zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._doctl"
+  zf_mv -f -- =( doctl completion zsh ) "$ZSH_CACHE_DIR/completions/_doctl"
 } &|

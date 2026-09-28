@@ -12,6 +12,6 @@ fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_minikube"
-  zf_mv -f -- =( minikube completion zsh ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._minikube"
+  zf_mv -f -- =( minikube completion zsh ) "$ZSH_CACHE_DIR/completions/_minikube"
 } &|

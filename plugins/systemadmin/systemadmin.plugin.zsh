@@ -28,6 +28,8 @@ alias mkdir='mkdir -pv'
 # get top process eating memory
 alias psmem='ps -e -orss=,args= | sort -b -k1 -nr'
 alias psmem10='ps -e -orss=,args= | sort -b -k1 -nr | head -n 10'
+# list all zombie processes with ownership and parent process details
+alias pszombie="ps -eo user,pid,ppid,state,comm | awk '\$4==\"Z\"'"
 # get top process eating cpu if not work try execute : export LC_ALL='C'
 alias pscpu='ps -e -o pcpu,cpu,nice,state,cputime,args | sort -k1,1n -nr'
 alias pscpu10='ps -e -o pcpu,cpu,nice,state,cputime,args | sort -k1,1n -nr | head -n 10'
@@ -63,60 +65,90 @@ fi
 
 # Sort connection state
 function sortcons() {
-  {
-    LANG= ss -nat | awk 'NR > 1 {print $1}' \
-    || LANG= netstat -nat | awk 'NR > 2 {print $6}'
-  } | sort | uniq -c | sort -rn
+  if (( $+commands[ss] )); then
+    LANG= ss -nat | awk 'NR > 1 {print $1}'
+  else
+    LANG= netstat -nat | awk 'NR > 2 {print $6}'
+  fi | sort | uniq -c | sort -rn
 }
 
-# View all 80 Port Connections
+function _systemadmin_validate_ports() {
+  local port
+  for port in "$@"; do
+    if [[ $port != <0-65535> || ( $port == 0* && $port != 0 ) ]]; then
+      print -u2 "systemadmin: invalid port '$port' (expected 0 to 65535 without leading zeros)"
+      return 1
+    fi
+  done
+}
+
+# View all connections on the given ports (default 80 and 443)
 function con80() {
-  {
-    LANG= ss -nat || LANG= netstat -nat
-  } | grep -E ":80[^0-9]" | wc -l
+  local -a ports=("$@")
+  (( $# )) || ports=(80 443)
+  _systemadmin_validate_ports "${ports[@]}" || return
+  if (( $+commands[ss] )); then
+    LANG= ss -nat
+  else
+    LANG= netstat -nat
+  fi | grep -E ":(${(j:|:)ports})([[:space:]]|$)" | wc -l
 }
 
 # On the connected IP sorted by the number of connections
 function sortconip() {
-  {
-    LANG= ss -ntu | awk 'NR > 1 {print $6}' \
-    || LANG= netstat -ntu | awk 'NR > 2 {print $5}'
-  } | cut -d: -f1 | sort | uniq -c | sort -n
+  if (( $+commands[ss] )); then
+    LANG= ss -ntu | awk 'NR > 1 {print $6}'
+  else
+    LANG= netstat -ntu | awk 'NR > 2 {print $5}'
+  fi | cut -d: -f1 | sort | uniq -c | sort -n
 }
 
-# top20 of Find the number of requests on 80 port
+# top20 of Find the number of requests on the given ports (default 80 and 443)
 function req20() {
-  {
-    LANG= ss -tn | awk '$4 ~ /:80$/ {print $5}' \
-    || LANG= netstat -tn | awk '$4 ~ /:80$/ {print $5}'
-  } | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n 20
+  local -a ports=("$@")
+  (( $# )) || ports=(80 443)
+  _systemadmin_validate_ports "${ports[@]}" || return
+  if (( $+commands[ss] )); then
+    LANG= ss -tn
+  else
+    LANG= netstat -tn
+  fi | awk -v ports="${(j:|:)ports}" '$4 ~ ":("ports")$" {print $5}' \
+    | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n 20
 }
 
-# top20 of Using tcpdump port 80 access to view
+# top20 of Using tcpdump to view access to the given ports (default 80 and 443)
 function http20() {
-  sudo tcpdump -i eth0 -tnn dst port 80 -c 1000 | awk -F"." '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -nr | head -n 20
+  local -a ports=("$@")
+  (( $# )) || ports=(80 443)
+  _systemadmin_validate_ports "${ports[@]}" || return
+  sudo tcpdump -i eth0 -tnn -c 1000 "dst port ${(j: or :)ports}" | awk -F"." '{print $1"."$2"."$3"."$4}' | sort | uniq -c | sort -nr | head -n 20
 }
 
 # top20 of Find time_wait connection
 function timewait20() {
-  {
-    LANG= ss -nat | awk 'NR > 1 && /TIME-WAIT/ {print $5}' \
-    || LANG= netstat -nat | awk 'NR > 2 && /TIME_WAIT/ {print $5}'
-  } | sort | uniq -c | sort -rn | head -n 20
+  if (( $+commands[ss] )); then
+    LANG= ss -nat
+  else
+    LANG= netstat -nat
+  fi | awk '/TIME[-_]WAIT/ {print $5}' | sort | uniq -c | sort -rn | head -n 20
 }
 
 # top20 of Find SYN connection
 function syn20() {
-  {
-    LANG= ss -an | awk '/SYN/ {print $5}' \
-    || LANG= netstat -an | awk '/SYN/ {print $5}'
-  } | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n20
+  if (( $+commands[ss] )); then
+    LANG= ss -an
+  else
+    LANG= netstat -an
+  fi | awk '/SYN/ {print $5}' | awk -F: '{print $1}' | sort | uniq -c | sort -nr | head -n20
 }
 
 # Printing process according to the port number
 function port_pro() {
-  LANG= ss -ntlp | awk "NR > 1 && /:${1:-}/ {print \$6}" | sed 's/.*pid=\([^,]*\).*/\1/' \
-  || LANG= netstat -ntlp | awk "NR > 2 && /:${1:-}/ {print \$7}" | cut -d/ -f1
+  if (( $+commands[ss] )); then
+    LANG= ss -ntlp | awk "NR > 1 && /:${1:-}/ {print \$6}" | sed 's/.*pid=\([^,]*\).*/\1/'
+  else
+    LANG= netstat -ntlp | awk "NR > 2 && /:${1:-}/ {print \$7}" | cut -d/ -f1
+  fi
 }
 
 # top10 of gain access to the ip address
@@ -175,11 +207,6 @@ function getip() {
   else
     ifconfig | awk '/inet /{print $2}' | command grep -v 127.0.0.1
   fi
-}
-
-# Clear zombie processes
-function clrz() {
-  ps -eal | awk '{ if ($2 == "Z") {print $4}}' | kill -9
 }
 
 # Second concurrent
