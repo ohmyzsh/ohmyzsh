@@ -29,7 +29,7 @@ empty_gh() { # [NAME_OF_REPO]
 # This function will add all non-hidden files to git.
 new_gh() { # [DIRECTORY]
   emulate -L zsh
-  local repo="${1:-.}"
+  local repo="${1-.}"
   cd "$repo" \
     || return
 
