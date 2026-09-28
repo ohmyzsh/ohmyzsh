@@ -18,12 +18,21 @@ alias-finder() {
   zstyle -t ':omz:plugins:alias-finder' exact && exact=true
   zstyle -t ':omz:plugins:alias-finder' cheaper && cheaper=true
 
-  # format cmd for grep
+  # normalize the command before expanding a leading shell alias
   ## - replace newlines with spaces
   ## - trim both ends
   ## - replace multiple spaces with one space
-  ## - add escaping character to special characters
-  cmd=$(echo -n "$cmd" | tr '\n' ' ' | xargs | tr -s '[:space:]' | sed 's/[].\|$(){}?+*^[]/\\&/g')
+  cmd=$(echo -n "$cmd" | tr '\n' ' ' | xargs | tr -s '[:space:]')
+  local typed_cmd=$cmd first_word=${cmd%% *}
+  local -A expanded_aliases
+  while [[ -n "$first_word" && -n "${aliases[$first_word]}" && -z "${expanded_aliases[$first_word]}" ]]; do
+    expanded_aliases[$first_word]=1
+    cmd="${aliases[$first_word]}${cmd:${#first_word}}"
+    first_word=${cmd%% *}
+  done
+
+  # normalize alias values (which may end in a space), then escape the grep pattern
+  cmd=$(printf %s "$cmd" | tr -s '[:space:]' | sed 's/^ //; s/ $//; s/[].\|$(){}?+*^[]/\\&/g')
 
   if [[ $longer == true ]]; then
     wordEnd="" # remove wordEnd to find longer aliases
@@ -35,7 +44,7 @@ alias-finder() {
 
     # make filter to find only shorter results than current cmd
     if [[ $cheaper == true ]]; then
-      cmdLen=$(echo -n "$cmd" | wc -c)
+      cmdLen=$(printf %s "$typed_cmd" | wc -c)
       if [[ $cmdLen -le 1 ]]; then
         return
       fi
@@ -56,6 +65,7 @@ alias-finder() {
     fi
 
     cmd=$(sed -E 's/ {0,}[^ ]*$//' <<< "$cmd") # remove last word
+    typed_cmd=$(sed -E 's/ {0,}[^ ]*$//' <<< "$typed_cmd")
   done
 }
 
