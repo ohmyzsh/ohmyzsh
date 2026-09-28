@@ -14,5 +14,5 @@ fi
 zmodload -F zsh/files b:zf_mv
 () {
   local TMPPREFIX="$ZSH_CACHE_DIR/completions/._sops"
-  zf_mv -f -- =( sops completions zsh ) "$ZSH_CACHE_DIR/completions/_sops"
+  zf_mv -f -- =( sops completion zsh ) "$ZSH_CACHE_DIR/completions/_sops"
 } &|
