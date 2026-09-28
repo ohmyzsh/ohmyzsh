@@ -108,6 +108,7 @@ plugins=(... git)
 | `glo`                  | `git log --oneline --decorate`                                                                                                  |
 | `glog`                 | `git log --oneline --decorate --graph`                                                                                          |
 | `gloga`                | `git log --oneline --decorate --graph --all`                                                                                    |
+| `glom`                 | `git log --oneline --decorate --color $(git_main_branch)..`                                                                     |
 | `glp`                  | `git log --pretty=<format>`                                                                                                     |
 | `glg`                  | `git log --stat`                                                                                                                |
 | `glgp`                 | `git log --stat --patch`                                                                                                        |
@@ -155,6 +156,8 @@ plugins=(... git)
 | `grba`                 | `git rebase --abort`                                                                                                            |
 | `grbc`                 | `git rebase --continue`                                                                                                         |
 | `grbi`                 | `git rebase --interactive`                                                                                                      |
+| `grbmi`                | `git rebase $(git_main_branch) --interactive`                                                                                   |
+| `grbmia`               | `git rebase $(git_main_branch) --interactive --autosquash`                                                                      |
 | `grbo`                 | `git rebase --onto`                                                                                                             |
 | `grbs`                 | `git rebase --skip`                                                                                                             |
 | `grbd`                 | `git rebase $(git_develop_branch)`                                                                                              |
@@ -205,6 +208,7 @@ plugins=(... git)
 | `gsnut`                | `git status --untracked-files=no`                                                                                               |
 | `gsi`                  | `git submodule init`                                                                                                            |
 | `gsu`                  | `git submodule update`                                                                                                          |
+| `gsuri`                | `git submodule update --recursive --init`                                                                                       |
 | `gsd`                  | `git svn dcommit`                                                                                                               |
 | `git-svn-dcommit-push` | `git svn dcommit && git push github $(git_main_branch):svntrunk`                                                                |
 | `gsr`                  | `git svn rebase`                                                                                                                |
