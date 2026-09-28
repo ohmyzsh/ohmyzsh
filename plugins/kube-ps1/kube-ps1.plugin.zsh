@@ -39,6 +39,7 @@ KUBE_PS1_HIDE_IF_NOCONTEXT="${KUBE_PS1_HIDE_IF_NOCONTEXT:-false}"
 _KUBE_PS1_KUBECONFIG_CACHE="${KUBECONFIG}"
 _KUBE_PS1_DISABLE_PATH="${HOME}/.kube/kube-ps1/disabled"
 _KUBE_PS1_LAST_TIME=0
+_KUBE_PS1_HAS_CONTEXT=false
 
 # Determine our shell
 _kube_ps1_shell_type() {
@@ -264,15 +265,21 @@ _kube_ps1_prompt_update() {
   [[ "${KUBE_PS1_ENABLED}" == "off" ]] && return $return_code
 
   if ! _kube_ps1_binary_check "${KUBE_PS1_BINARY}"; then
-    # No ability to fetch context/namespace; display N/A.
+    # Unable to determine context availability; preserve the existing
+    # BINARY-N/A prompt instead of treating it as no context.
     KUBE_PS1_CONTEXT="BINARY-N/A"
     KUBE_PS1_NAMESPACE="N/A"
+    unset _KUBE_PS1_HAS_CONTEXT
+    # Refresh when the binary becomes available again.
+    _KUBE_PS1_LAST_TIME=0
     return $return_code
   fi
 
-  if [[ "${KUBECONFIG}" != "${_KUBE_PS1_KUBECONFIG_CACHE}" ]]; then
-    # User changed KUBECONFIG; unconditionally refetch.
-    _KUBE_PS1_KUBECONFIG_CACHE=${KUBECONFIG}
+  if [[ "${_KUBE_PS1_LAST_TIME}" == 0 ]] ||
+     [[ "${KUBECONFIG}" != "${_KUBE_PS1_KUBECONFIG_CACHE}" ]]; then
+    # Fetch initially, even if no config file exists, and whenever the
+    # user changes KUBECONFIG.
+    _KUBE_PS1_KUBECONFIG_CACHE="${KUBECONFIG}"
     _kube_ps1_get_context_ns
     return $return_code
   fi
@@ -300,13 +307,30 @@ _kube_ps1_prompt_update() {
 }
 
 _kube_ps1_get_context() {
-  if [[ "${KUBE_PS1_CONTEXT_ENABLE}" == true ]]; then
-    KUBE_PS1_CONTEXT="$(${KUBE_PS1_BINARY} config current-context 2>/dev/null)"
-    KUBE_PS1_CONTEXT="${KUBE_PS1_CONTEXT:-N/A}"
+  local context
 
-    if [[ -n "${KUBE_PS1_CLUSTER_FUNCTION}" ]]; then
-      KUBE_PS1_CONTEXT="$("${KUBE_PS1_CLUSTER_FUNCTION}" "${KUBE_PS1_CONTEXT}")"
-    fi
+  # Context availability must be detected even when context display is
+  # disabled but KUBE_PS1_HIDE_IF_NOCONTEXT is enabled.
+  if [[ "${KUBE_PS1_CONTEXT_ENABLE}" != true ]] &&
+     [[ "${KUBE_PS1_HIDE_IF_NOCONTEXT}" != true ]]; then
+    KUBE_PS1_CONTEXT=
+    return
+  fi
+
+  context="$("${KUBE_PS1_BINARY}" config current-context 2>/dev/null)"
+
+  _KUBE_PS1_HAS_CONTEXT=false
+  [[ -n "${context}" ]] && _KUBE_PS1_HAS_CONTEXT=true
+
+  if [[ "${KUBE_PS1_CONTEXT_ENABLE}" != true ]]; then
+    KUBE_PS1_CONTEXT=
+    return
+  fi
+
+  KUBE_PS1_CONTEXT="${context:-N/A}"
+
+  if [[ -n "${KUBE_PS1_CLUSTER_FUNCTION}" ]]; then
+    KUBE_PS1_CONTEXT="$("${KUBE_PS1_CLUSTER_FUNCTION}" "${KUBE_PS1_CONTEXT}")"
   fi
 }
 
@@ -325,7 +349,7 @@ _kube_ps1_get_context_ns() {
   # Set the command time
   if [[ "${_KUBE_PS1_SHELL}" == "bash" ]]; then
     if ((BASH_VERSINFO[0] > 4 || (BASH_VERSINFO[0] == 4 && BASH_VERSINFO[1] >= 2))); then
-      _KUBE_PS1_LAST_TIME=$(printf '%(%s)T')
+      printf -v _KUBE_PS1_LAST_TIME '%(%s)T' -1
     else
       _KUBE_PS1_LAST_TIME=$(date +%s)
     fi
@@ -407,8 +431,11 @@ kubeoff() {
 # Build our prompt
 kube_ps1() {
   [[ "${KUBE_PS1_ENABLED}" == "off" ]] && return
+
+  [[ "${KUBE_PS1_HIDE_IF_NOCONTEXT}" == true ]] &&
+    [[ "${_KUBE_PS1_HAS_CONTEXT}" == false ]] && return
+
   [[ -z "${KUBE_PS1_CONTEXT}" ]] && [[ "${KUBE_PS1_CONTEXT_ENABLE}" == true ]] && return
-  [[ "${KUBE_PS1_CONTEXT}" == "N/A" ]] && [[ ${KUBE_PS1_HIDE_IF_NOCONTEXT} == true ]] && return
 
   local KUBE_PS1
   local KUBE_PS1_RESET_COLOR="${_KUBE_PS1_OPEN_ESC}${_KUBE_PS1_DEFAULT_FG}${_KUBE_PS1_CLOSE_ESC}"
