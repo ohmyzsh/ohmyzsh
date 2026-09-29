@@ -44,6 +44,11 @@ zstyle ':omz:plugins:nvm' lazy-cmd eslint prettier typescript ...
 
 There will be a function `_omz_nvm_load` available to load `nvm` without executing any other trigger command.
 
+In lazy mode, the plugin also puts the `default` node version on your `PATH` at startup, without loading nvm.
+So global npm tools (`eslint`, `tsc`, ...) work before nvm loads, with no `lazy-cmd` entry. This works when the
+`default` alias resolves to an installed version (`22`, `22.11`, `v22.11.0`, `lts/*`). For other values
+(`node`, `stable`, `system`, no `default` alias) nothing is added, and node is on `PATH` only after nvm loads.
+
 #### `.nvmrc` autoload
 
 Note: _if used at the same time as `lazy`, `autoload` will start working only after nvm has been lazy-loaded_
