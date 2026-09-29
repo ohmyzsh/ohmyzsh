@@ -119,7 +119,17 @@ EOF
         fi ;;
       (*.rpm)
         rpm2cpio "$full_path" | cpio --quiet -id ;;
-      (*.7z | *.7z.[0-9]* | *.pk7) 7za x "$full_path" ;;
+      (*.7z | *.7z.[0-9]* | *.pk7)
+        if (( $+commands[7zz] )); then
+          7zz x "$full_path"
+        elif (( $+commands[7z] )); then
+          7z x "$full_path"
+        elif (( $+commands[7za] )); then
+          7za x "$full_path"
+        else
+          echo "extract: cannot extract 7z files: install 7zz, 7z or 7za" >&2
+          success=1
+        fi ;;
       (*.deb)
         command mkdir -p "control" "data"
         ar vx "$full_path" > /dev/null
