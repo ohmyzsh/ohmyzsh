@@ -52,7 +52,7 @@ The plugin will generate a default archive filename based on the input:
 
 | Format           | Description                    | Tool Used        |
 |:-----------------|:-------------------------------|:-----------------|
-| `7z`             | 7zip archive                   | `7z`             |
+| `7z`             | 7zip archive                   | `7zz`,`7z`,`7za` |
 | `bz2`            | Bzip2-compressed file          | `bzip2`          |
 | `gz`             | Gzip-compressed file           | `gzip`           |
 | `lzma`           | LZMA-compressed file           | `lzma`           |
