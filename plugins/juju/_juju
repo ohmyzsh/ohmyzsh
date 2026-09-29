@@ -207,6 +207,63 @@ __juju_complete_unit()
     fi
 }
 
+# Complete the remote path of a "unit:/remote/path" scp argument by listing
+# matching paths on the unit via "juju ssh"; the remote shell expands the
+# glob, mirroring how zsh's own ssh/scp completions work.  The "unit:" part of
+# the word must already have been moved into the ignored prefix with
+# "compset -P '[^:]##:'".
+#
+# This runs "juju ssh" on every TAB, which is slow for unreachable units;
+# disable it (falling back to local file completion) with:
+#   zstyle ':completion:juju:scp:files' remote-access no
+#
+# Returns non-zero if no remote files could be listed (unit unreachable, no
+# model connection, ...); local files are not offered in that case because
+# they are meaningless for a remote path.
+__juju_remote_files()
+{
+    local unit="$1"
+    local out remdir
+    local -a remfiles remdispf remdispd
+
+    __juju_debug "[remote_files] unit: '${unit}', PREFIX: '${PREFIX}'"
+
+    # Everything up to the last path component; the remote shell globs the
+    # rest.  An empty prefix lists the unit's home directory.
+    remdir="${(Q)${PREFIX%%[^./][^/]#}}"
+
+    # "juju ssh" runs the command through the remote shell; ls flags: -d one
+    # entry per line, -F mark directories with a trailing slash, -L show
+    # symlinked directories as directories.  stdin is closed so that no
+    # prompt can hang completion; errors are discarded.
+    out=$(command juju ssh "$unit" \
+        "command ls -d1FL -- ${(q)remdir}*" </dev/null 2>/dev/null) || return 1
+
+    # Keep only the last path component of each line, including the ls -F
+    # classifiers ("/" for directories, "*" for executables, ...).
+    remfiles=(${(M)${(f)out}%%[^/]#(|/)})
+    remfiles=(${remfiles:#./})
+    remfiles=(${remfiles:#../})
+    remfiles=(${remfiles:#})
+    (( ${#remfiles} )) || return 1
+
+    # Display strings keep the -F markers; the inserted matches do not.
+    remdispf=(${remfiles:#*/})
+    remdispd=(${(M)remfiles:#*/})
+
+    # The directory part is already typed; complete the final component.
+    compset -P '*/'
+
+    local ret=1
+    if (( ${#remdispf} )); then
+        compadd -d remdispf -- ${(q)remdispf%[*=@|>]} && ret=0
+    fi
+    if (( ${#remdispd} )); then
+        compadd -q -S / -d remdispd -- ${(q)remdispd%/} && ret=0
+    fi
+    return $ret
+}
+
 _juju()
 {
     # Initialise lookup arrays here so they are set on the very first invocation.
@@ -294,29 +351,69 @@ _juju()
         --apps
         --applications
     )
+    # Global flags that take a separate value word.  The word following one of
+    # these belongs to the flag, so it must never be mistaken for the
+    # subcommand or a positional argument (e.g. "juju -m model run <TAB>").
+    local -a _juju_global_value_flags=(
+        -m
+        --model
+        -c
+        --controller
+    )
 
     __juju_debug "[_juju] curcontext: ${curcontext}"
     local -a completions
 
     __juju_debug "[_juju] words: ${words[*]}, CURRENT: $CURRENT"
 
-    # Find the subcommand: first non-flag word typed after "juju", excluding the
-    # word currently being completed (words[CURRENT]).
+    # Find the subcommand: first non-flag word typed after "juju", excluding
+    # the word currently being completed (words[CURRENT]).  A word following a
+    # global option that takes a value (e.g. "juju -m model run") is the
+    # option's value, not the subcommand, so it is skipped as well.
     local subcmd=""
     local subcmd_idx=0
-    local i
+    local -i skip_value=0
+    local i w
     for (( i = 2; i < CURRENT; i++ )); do
-        if [[ "${words[i]}" != -* ]]; then
-            subcmd="${words[i]}"
-            subcmd_idx=$i
-            break
+        w="${words[i]}"
+        if (( skip_value )); then
+            skip_value=0
+            continue
         fi
+        if [[ "$w" == -* ]]; then
+            (( ${_juju_global_value_flags[(I)$w]} )) && skip_value=1
+            continue
+        fi
+        subcmd="$w"
+        subcmd_idx=$i
+        break
     done
 
     local current="${words[CURRENT]}"
     local prev="${words[CURRENT-1]}"
 
     __juju_debug "[_juju] subcmd: '${subcmd}', current: '${current}', prev: '${prev}'"
+
+    # Position (1-based) that the word being completed would occupy among the
+    # positional arguments of the subcommand, and the last positional seen so
+    # far.  Flags and the values of global value-taking flags are not counted.
+    local -i position=0
+    local last_positional=""
+    if (( subcmd_idx )); then
+        skip_value=0
+        for (( i = subcmd_idx + 1; i < CURRENT; i++ )); do
+            w="${words[i]}"
+            if (( skip_value )); then
+                skip_value=0
+            elif (( ${_juju_global_value_flags[(I)$w]} )); then
+                skip_value=1
+            elif [[ "$w" != -* ]]; then
+                (( position++ ))
+                last_positional="$w"
+            fi
+        done
+    fi
+    __juju_debug "[_juju] position: ${position}, last_positional: '${last_positional}'"
 
     # Controller name completion: flag value (e.g. juju status -c <TAB>)
     if (( ${_juju_controller_flags[(I)$prev]} )); then
@@ -355,33 +452,34 @@ _juju()
         return 1
     fi
 
-    # Controller name completion: positional arg (e.g. juju destroy-controller <TAB>)
-    if (( ${_juju_controller_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
+    # Controller name completion: positional arg (e.g. juju destroy-controller <TAB>).
+    # Only the first positional is a controller name; if name completion comes
+    # up empty (no controllers / juju unavailable) fall through to options.
+    if (( ${_juju_controller_commands[(I)$subcmd]} )) && [[ "$current" != -* ]] && (( position == 0 )); then
         completions=(${(f)"$(__juju_controllers)"})
         __juju_debug "[_juju] controller command completions: ${#completions}"
         (( ${#completions} )) && _describe "controller" completions && return 0
-        return 1
     fi
 
-    # Model name completion: positional arg (e.g. juju destroy-model <TAB> or ctrl:<TAB>)
-    if (( ${_juju_model_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
+    # Model name completion: positional arg (e.g. juju destroy-model <TAB> or ctrl:<TAB>).
+    # Only the first positional is a model name; fall through to options on failure.
+    if (( ${_juju_model_commands[(I)$subcmd]} )) && [[ "$current" != -* ]] && (( position == 0 )); then
         __juju_debug "[_juju] model command completion, current: '${current}'"
         __juju_complete_model "$current" && return 0
-        return 1
     fi
 
     # Application name completion: single-application positional arg commands.
-    if (( ${_juju_app_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
+    # Only the first positional is an application name; if name completion
+    # fails (e.g. "juju status" unavailable) fall through to option completion.
+    if (( ${_juju_app_commands[(I)$subcmd]} )) && [[ "$current" != -* ]] && (( position == 0 )); then
         __juju_debug "[_juju] app command completion, current: '${current}'"
         __juju_complete_application "$current" && return 0
-        return 1
     fi
 
     # Application name completion: commands that accept multiple application names.
     if (( ${_juju_app_multi_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
         __juju_debug "[_juju] app multi command completion, current: '${current}'"
         __juju_complete_application "$current" && return 0
-        return 1
     fi
 
     # SAAS name completion for "juju remove-saas <TAB>".
@@ -389,9 +487,7 @@ _juju()
         __juju_debug "[_juju] saas command completion, current: '${current}'"
         local -a saas
         saas=(${(f)"$(__juju_saas)"})
-        (( ${#saas} )) || return 1
-        compadd -- "${saas[@]}"
-        return 0
+        (( ${#saas} )) && compadd -- "${saas[@]}" && return 0
     fi
 
     # Application name completion for "juju integrate"/"juju relate" and
@@ -404,12 +500,12 @@ _juju()
         __juju_complete_application "$current" nospace && return 0
     fi
 
-    # Unit name completion: single-unit positional arg commands (e.g. juju ssh <TAB>,
-    # juju show-unit <TAB>, juju add-storage <TAB>).
-    if (( ${_juju_unit_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
+    # Unit name completion: single-unit positional arg commands (e.g. juju
+    # show-unit <TAB>, juju add-storage <TAB>).  Only the first positional is
+    # a unit name; fall through to option completion when unit completion fails.
+    if (( ${_juju_unit_commands[(I)$subcmd]} )) && [[ "$current" != -* ]] && (( position == 0 )); then
         __juju_debug "[_juju] unit command completion, current: '${current}'"
         __juju_complete_unit "$current" && return 0
-        return 1
     fi
 
     # Unit name completion: commands that accept multiple unit names as positional
@@ -417,46 +513,48 @@ _juju()
     if (( ${_juju_unit_multi_commands[(I)$subcmd]} )) && [[ "$current" != -* ]]; then
         __juju_debug "[_juju] unit multi command completion, current: '${current}'"
         __juju_complete_unit "$current" && return 0
-        return 1
     fi
 
     # Unit name completion for "juju run <unit> [<unit>...] <action>":
     # complete units until a non-unit word has been seen after the subcommand,
     # then fall through to flag/option completion.
     if [[ "$subcmd" == "run" ]] && [[ "$current" != -* ]]; then
-        # Count non-flag positional args after "run" (excluding current word).
-        local pos=0
-        local last_positional=""
-        for (( i = subcmd_idx + 1; i < CURRENT; i++ )); do
-            if [[ "${words[i]}" != -* ]]; then
-                (( pos++ ))
-                last_positional="${words[i]}"
-            fi
-        done
-        __juju_debug "[_juju] run: pos=${pos} last_positional='${last_positional}'"
+        __juju_debug "[_juju] run: position=${position} last_positional='${last_positional}'"
         # If no positional args yet, or all previous positional args look like
         # units (app/N), keep completing units.
-        if (( pos == 0 )) || [[ "$last_positional" == */* ]]; then
+        if (( position == 0 )) || [[ "$last_positional" == */* ]]; then
             __juju_debug "[_juju] run: completing unit"
             __juju_complete_unit "$current" && return 0
-            return 1
         fi
     fi
 
-    # Unit name completion for "juju ssh <TAB>" and "juju scp <TAB>":
-    # the target may be a bare unit name or a "unit:/remote/path" token.
-    # For scp, when a colon is present, also offer local files.
-    if [[ "$subcmd" == "ssh" ]] && [[ "$current" != -* ]]; then
+    # Unit name completion for "juju ssh <TAB>": the target may be a bare unit
+    # name or a "unit:/remote/path" token.  Only the first positional is the
+    # target; later words belong to the remote command.
+    if [[ "$subcmd" == "ssh" ]] && [[ "$current" != -* ]] && (( position == 0 )); then
         __juju_debug "[_juju] ssh unit completion, current: '${current}'"
         __juju_complete_unit "$current" nospace && return 0
-        return 1
     fi
+
+    # Unit name completion for "juju scp <TAB>": either argument may be a bare
+    # unit name or a "unit:/remote/path" token.  For the remote-path form the
+    # path after the colon is completed by listing the unit's filesystem via
+    # "juju ssh" (see __juju_remote_files).  With remote access disabled via
+    #   zstyle ':completion:juju:scp:files' remote-access no
+    # local file completion is offered instead.
     if [[ "$subcmd" == "scp" ]] && [[ "$current" != -* ]]; then
         __juju_debug "[_juju] scp unit completion, current: '${current}'"
         if [[ "$current" != *:* ]]; then
             __juju_complete_unit "$current" nospace
+            _files
+        else
+            compset -P '[^:]##:'
+            if zstyle -T ':completion:juju:scp:files' remote-access; then
+                __juju_remote_files "${IPREFIX%:}"
+            else
+                _files
+            fi
         fi
-        _files
         return 0
     fi
 
