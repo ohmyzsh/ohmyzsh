@@ -41,6 +41,38 @@
   assert "${lines[3]}" same_as "g=git"
 }
 
+@test 'find aliases when the command starts with another alias' {
+  set_git_aliases
+
+  run alias-finder "g commit -v"
+
+  assert "${#lines[@]}" equals 3
+  assert "${lines[1]}" same_as "gcv='git commit -v'"
+  assert "${lines[2]}" same_as "gc='git commit'"
+  assert "${lines[3]}" same_as "g=git"
+}
+
+@test 'expand chained aliases' {
+  set_git_aliases
+  alias gg=g
+
+  run alias-finder -e "gg commit -v"
+
+  assert "${#lines[@]}" equals 1
+  assert "${lines[1]}" same_as "gcv='git commit -v'"
+}
+
+@test 'find aliases when the leading alias has a trailing space' {
+  unalias -a
+  alias k='kubectl '
+  alias kgp='kubectl get pods'
+
+  run alias-finder -e "k get pods"
+
+  assert "${#lines[@]}" equals 1
+  assert "${lines[1]}" same_as "kgp='kubectl get pods'"
+}
+
 @test 'find alias that is the same with input when --exact option is set' {
   set_git_aliases
 
@@ -104,4 +136,15 @@
   assert "${lines[1]}" same_as "gcv='git commit -v'"
   assert "${lines[2]}" same_as "gc='git commit'"
   assert "${lines[3]}" same_as "g=git"
+}
+
+@test 'compare alias length with the typed command when --cheap is set' {
+  unalias -a
+  alias k=kubectl
+  alias kgp='kubectl get pods'
+
+  run alias-finder -c "k get pods"
+
+  assert "${#lines[@]}" equals 1
+  assert "${lines[1]}" same_as "kgp='kubectl get pods'"
 }
