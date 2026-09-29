@@ -1,0 +1,220 @@
+#compdef iw
+#
+
+# ZSH completion for iw (Linux wireless configuration utility).
+# Parses 'iw help' output to discover commands and caches the result.
+#
+# $service is used as the iw binary name. This allows this completion to work
+# for differently-named iw binaries: compdef _iw my-iw-binary
+
+# Parse 'iw help' output and write a sourceable cache file.
+_iw_build_cache() {
+  local iw_cmd="$1"
+  local version="$2"
+  local cache_file="$3"
+  local help_output
+
+  help_output=$($iw_cmd help 2>&1) || return 1
+
+  local -a top_cmds dev_subcmds phy_subcmds wdev_subcmds reg_subcmds
+  local -A dev_subs phy_subs wdev_subs
+  local line
+  local -a words lines
+
+  # Single pass: collect top-level commands, subcmds, and sub-subcommands.
+  # words[4] entries starting with '<', '[', or '-' are placeholders, not completions.
+  lines=(${(f)help_output})
+  for line in $lines; do
+    words=(${=line})
+    [[ $line == $'\t'[a-z]* && $line != $'\t\t'* ]] && top_cmds+=($words[1])
+    case $words[1] in
+      dev)
+        if [[ $words[2] == '<devname>' && $words[3] == [a-z]* ]]; then
+          dev_subcmds+=($words[3])
+          if (( ${#words} > 3 )); then
+            case $words[4] in
+              '<'*|'['*|'-'*) ;;
+              *) dev_subs[$words[3]]+=" $words[4]" ;;
+            esac
+          fi
+        fi
+        ;;
+      phy)
+        if [[ $words[2] == '<phyname>' && $words[3] == [a-z]* ]]; then
+          phy_subcmds+=($words[3])
+          if (( ${#words} > 3 )); then
+            case $words[4] in
+              '<'*|'['*|'-'*) ;;
+              *) phy_subs[$words[3]]+=" $words[4]" ;;
+            esac
+          fi
+        fi
+        ;;
+      wdev)
+        if [[ $words[2] == '<idx>' && $words[3] == [a-z]* ]]; then
+          wdev_subcmds+=($words[3])
+          if (( ${#words} > 3 )); then
+            case $words[4] in
+              '<'*|'['*|'-'*) ;;
+              *) wdev_subs[$words[3]]+=" $words[4]" ;;
+            esac
+          fi
+        fi
+        ;;
+      reg)
+        [[ $words[2] == [a-z]* ]] && reg_subcmds+=($words[2])
+        ;;
+    esac
+  done
+
+  # (ou): sorted + unique, replacing sort -u
+  top_cmds=(${(ou)top_cmds})
+  dev_subcmds=(${(ou)dev_subcmds})
+  phy_subcmds=(${(ou)phy_subcmds})
+  wdev_subcmds=(${(ou)wdev_subcmds})
+  reg_subcmds=(${(ou)reg_subcmds})
+
+  local subcmd subs_str
+  local -a subs_arr tmp_arr
+
+  {
+    print "# iw completion cache"
+    print "# version: ${version}"
+
+    print "_iw_top_cmds=(${top_cmds[*]})"
+    print "_iw_dev_subcmds=(${dev_subcmds[*]})"
+    for subcmd in $dev_subcmds; do
+      if [[ -n "${dev_subs[$subcmd]}" ]]; then
+        tmp_arr=(${=dev_subs[$subcmd]})
+        subs_arr=(${(ou)tmp_arr})
+        subs_str="${(j: :)subs_arr}"
+        print "_iw_dev_subsubcmds[${subcmd}]=${(qq)subs_str}"
+      fi
+    done
+
+    print "_iw_phy_subcmds=(${phy_subcmds[*]})"
+    for subcmd in $phy_subcmds; do
+      if [[ -n "${phy_subs[$subcmd]}" ]]; then
+        tmp_arr=(${=phy_subs[$subcmd]})
+        subs_arr=(${(ou)tmp_arr})
+        subs_str="${(j: :)subs_arr}"
+        print "_iw_phy_subsubcmds[${subcmd}]=${(qq)subs_str}"
+      fi
+    done
+
+    print "_iw_wdev_subcmds=(${wdev_subcmds[*]})"
+    for subcmd in $wdev_subcmds; do
+      if [[ -n "${wdev_subs[$subcmd]}" ]]; then
+        tmp_arr=(${=wdev_subs[$subcmd]})
+        subs_arr=(${(ou)tmp_arr})
+        subs_str="${(j: :)subs_arr}"
+        print "_iw_wdev_subsubcmds[${subcmd}]=${(qq)subs_str}"
+      fi
+    done
+
+    print "_iw_reg_subcmds=(${reg_subcmds[*]})"
+
+  } >| "$cache_file"
+}
+
+_iw() {
+  local context state line curcontext="$curcontext"
+  integer ret=1
+
+  # Declare cache variables; populated by sourcing the cache file below.
+  local -a _iw_top_cmds _iw_dev_subcmds _iw_phy_subcmds _iw_wdev_subcmds _iw_reg_subcmds
+  local -A _iw_dev_subsubcmds _iw_phy_subsubcmds _iw_wdev_subsubcmds
+
+  local cache_file="${ZSH_CACHE_DIR:-${HOME}/.cache}/_iw_cache"
+  local current_version ver_output
+  ver_output=$(${service} --version 2>&1)
+  [[ $ver_output =~ '([0-9]+\.[0-9]+)' ]] && current_version=$match[1] || current_version=""
+
+  local cache_ver="" _l1 _l2
+  if [[ -f "$cache_file" ]]; then
+    { IFS= read -r _l1; IFS= read -r _l2; } < "$cache_file" 2>/dev/null
+    cache_ver=${_l2#\# version: }
+  fi
+
+  if [[ $cache_ver != $current_version ]]; then
+    _iw_build_cache "${service}" "$current_version" "$cache_file"
+  fi
+
+  source "$cache_file" 2>/dev/null
+
+  _arguments -C \
+    '--debug[enable netlink debugging]' \
+    '(- 1 2 3 4)--version[show version]' \
+    '1:: :->cmd' \
+    '2:: :->arg2' \
+    '3:: :->arg3' \
+    '4:: :->arg4' \
+    && return 0
+
+  case "$state" in
+    cmd)
+      local -A _iw_cmd_descs
+      _iw_cmd_descs=(
+        dev      'network interface commands'
+        phy      'wireless hardware commands'
+        wdev     'wireless device commands'
+        reg      'regulatory domain commands'
+        list     'list all wireless devices and their capabilities'
+        event    'monitor kernel events'
+        features 'list supported features'
+        commands 'list all known commands'
+        help     'show command usage'
+      )
+      local -a top_cmds
+      local _cmd
+      for _cmd in $_iw_top_cmds; do
+        if [[ -n "${_iw_cmd_descs[$_cmd]}" ]]; then
+          top_cmds+=("${_cmd}:${_iw_cmd_descs[$_cmd]}")
+        else
+          top_cmds+=("$_cmd")
+        fi
+      done
+      _describe -t commands 'iw command' top_cmds && ret=0
+      ;;
+
+    arg2)
+      case "$line[1]" in
+        dev)
+          local -a wlan_devs
+          wlan_devs=(/sys/class/net/*/phy80211(N:h:t))
+          compadd -a wlan_devs && ret=0
+          ;;
+        phy)
+          local -a phy_devs
+          phy_devs=(/sys/class/ieee80211/*(N:t))
+          compadd -a phy_devs && ret=0
+          ;;
+        reg)
+          compadd -a _iw_reg_subcmds && ret=0
+          ;;
+      esac
+      ;;
+
+    arg3)
+      case "$line[1]" in
+        dev)  compadd -a _iw_dev_subcmds  && ret=0 ;;
+        phy)  compadd -a _iw_phy_subcmds  && ret=0 ;;
+        wdev) compadd -a _iw_wdev_subcmds && ret=0 ;;
+      esac
+      ;;
+
+    arg4)
+      local -a subs
+      case "$line[1]" in
+        dev)  subs=(${=_iw_dev_subsubcmds[$line[3]]})  ;;
+        phy)  subs=(${=_iw_phy_subsubcmds[$line[3]]})  ;;
+        wdev) subs=(${=_iw_wdev_subsubcmds[$line[3]]}) ;;
+      esac
+      (( ${#subs} > 0 )) && compadd -a subs && ret=0
+      ;;
+  esac
+
+  return ret
+}
+
+_iw "$@"
