@@ -29,8 +29,17 @@ alias 'drm!'='docker container rm -f'
 alias dsprune='docker system prune'
 alias dst='docker container start'
 alias drs='docker container restart'
-alias dsta='docker stop $(docker ps -q)'
 alias dstp='docker container stop'
+# Function to stop all running containers (handles empty list gracefully)
+function dsta() {
+  local containers
+  containers=(${(f)"$(docker ps -q)"})
+  if (( ${#containers} > 0 )); then
+    docker stop "${containers[@]}"
+  else
+    echo "docker: no running containers to stop"
+  fi
+}
 alias dsts='docker stats'
 alias dtop='docker top'
 alias dvi='docker volume inspect'
