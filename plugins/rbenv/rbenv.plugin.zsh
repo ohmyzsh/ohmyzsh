@@ -24,6 +24,13 @@ if [[ $FOUND_RBENV -ne 1 ]]; then
 fi
 
 if [[ $FOUND_RBENV -eq 1 ]]; then
+  rbenv_completions="${commands[rbenv]:A:h:h}/completions"
+  if [[ -f "$rbenv_completions/_rbenv" ]]; then
+    fpath+=("$rbenv_completions")
+    autoload -Uz _rbenv
+    compdef _rbenv rbenv
+  fi
+
   eval "$(rbenv init --no-rehash - zsh)"
 
   alias rubies="rbenv versions"
@@ -65,4 +72,4 @@ else
   }
 fi
 
-unset FOUND_RBENV rbenvdirs dir
+unset FOUND_RBENV rbenvdirs dir rbenv_completions
