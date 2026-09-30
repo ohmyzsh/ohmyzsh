@@ -49,6 +49,10 @@ else
 fi
 # Set -u option to support unicode
 : ${ZSH_TMUX_UNICODE:=false}
+# Space-separated list of POSIX ERE regex patterns to exclude sessions when
+# autostarting. If all running sessions match, a new one is created.
+# Example: ZSH_TMUX_AUTOSTART_EXCLUDE="^dev-.* staging$"
+: ${ZSH_TMUX_AUTOSTART_EXCLUDE:=""}
 
 # ALIASES
 function _build_tmux_alias {
@@ -107,6 +111,31 @@ else
   export _ZSH_TMUX_FIXED_CONFIG="${0:h:a}/tmux.only.conf"
 fi
 
+# Finds the first tmux session not matching any of the given patterns.
+# $1 = space-separated list of POSIX ERE regex patterns.
+# Prints session name and returns 0, or returns 1 if all match or none exist.
+function _tmux_find_first_non_excluded_session() {
+  local _patterns="${1}"
+  # If empty or only whitespace, no patterns to match
+  [[ -z "${_patterns// }" ]] && return 1
+  # Strip all leading and trailing spaces
+  _patterns="${_patterns#"${_patterns%%[! ]*}"}"
+  _patterns="${_patterns%"${_patterns##*[! ]}"}"
+
+  local _combined="${(j:|:)${(s: :)_patterns}}"
+  local session_name
+
+  while IFS= read -r session_name; do
+    [[ -z "$session_name" ]] && continue
+    if [[ ! "$session_name" =~ $_combined ]]; then
+      print -- "$session_name"
+      return 0
+    fi
+  done < <(command tmux list-sessions -F '#S' 2>/dev/null)
+
+  return 1
+}
+
 # Wrapper function for tmux.
 function _zsh_tmux_plugin_run() {
   if [[ -n "$@" ]]; then
@@ -132,6 +161,17 @@ function _zsh_tmux_plugin_run() {
     [[ "$PWD" == "/" ]] && session_name="ROOT"
   else
       session_name="$ZSH_TMUX_DEFAULT_SESSION_NAME"
+   fi
+
+  # Check for non-excluded sessions
+  if [[ -n "$ZSH_TMUX_AUTOSTART_EXCLUDE" ]]; then
+    local _exclude_session
+    _exclude_session="$(_tmux_find_first_non_excluded_session "$ZSH_TMUX_AUTOSTART_EXCLUDE")"
+    if [[ $? -eq 0 ]]; then
+      $tmux_cmd attach $_detached -t "$_exclude_session"
+      [[ "$ZSH_TMUX_AUTOQUIT" == "true" ]] && exit
+      return
+    fi
   fi
 
   # Try to connect to an existing session.
