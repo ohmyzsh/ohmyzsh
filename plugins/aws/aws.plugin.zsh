@@ -221,6 +221,50 @@ function aws_change_access_key() {
   aws --no-cli-pager iam list-access-keys
 }
 
+calculate_time_difference() {
+  # Check if both arguments are provided
+  if [[ $# -lt 2 ]]; then
+    echo "Error: Two arguments are required."
+    return 1
+  fi
+
+  # Assign the arguments to variables
+  local time1=$1
+  local time2=$2
+
+  # Convert times to Unix timestamps
+  local timestamp1=$(date -u -j -f "%Y-%m-%dT%H:%M:%SZ" "$time1" +"%s")
+  local timestamp2=$(date -u -j -f "%Y-%m-%dT%H:%M:%SZ" "$time2" +"%s")
+
+  # Calculate the difference in seconds
+  diff_seconds=$((timestamp2 - timestamp1))
+
+  # Convert the difference to HH:MM:SS format
+  local hours=$((diff_seconds / 3600))
+  local minutes=$(( (diff_seconds / 60) % 60 ))
+  local seconds=$((diff_seconds % 60))
+
+  # Place diff in time_diff
+  time_diff="${hours}:${minutes}:${seconds}"
+}
+
+function tte() {
+  # calculates and displays time until current AWS creds expire
+
+  cachedir=$HOME/.aws/sso/cache
+  current_cache_file="$cachedir/$(ls -tU $cachedir | head -n1)"  
+  expiration_time=$(jq -r .expiresAt $current_cache_file)
+  current_time=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  calculate_time_difference $current_time $expiration_time
+  if [[ $diff_seconds -le 0 ]];then
+    echo "Creds have expired. Run `aws sso login` to renew."
+    return 1
+  else
+    echo "Time remaining: $time_diff"
+  fi
+}
+
+
 function aws_regions() {
   local region
   if [[ $AWS_DEFAULT_REGION ]];then
