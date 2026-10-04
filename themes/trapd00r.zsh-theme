@@ -10,7 +10,7 @@
 # scp1@shiva:pts/9-> /home » scp1 (0)
 # >
 #
-# that's  user@host:pts/-> splitted path (return status)
+# that's  user@host:pts/-> split path (return status)
 #
 # If the current directory is a git repository, we span 3 lines;
 #

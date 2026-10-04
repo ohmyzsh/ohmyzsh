@@ -54,6 +54,10 @@ plugins=(... react-native)
 | **rnios14pl**   | `react-native run-ios --simulator "iPhone 14 Plus"`                        |
 | **rnios14p**    | `react-native run-ios --simulator "iPhone 14 Pro"`                         |
 | **rnios14pm**   | `react-native run-ios --simulator "iPhone 14 Pro Max"`                     |
+| **rnios15**     | `react-native run-ios --simulator "iPhone 15"`                             |
+| **rnios15pl**   | `react-native run-ios --simulator "iPhone 15 Plus"`                        |
+| **rnios15p**    | `react-native run-ios --simulator "iPhone 15 Pro"`                         |
+| **rnios15pm**   | `react-native run-ios --simulator "iPhone 15 Pro Max"`                     |
 | _iPad_          |                                                                            |
 | **rnipad2**     | `react-native run-ios --simulator "iPad 2"`                                |
 | **rnipad5**     | `react-native run-ios --simulator "iPad (5th generation)"`                 |

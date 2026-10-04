@@ -1,3 +1,16 @@
+function fzf_setup_using_fzf() {
+  (( ${+commands[fzf]} )) || return 1
+
+  # we remove "fzf " prefix, this fixes really old fzf versions behaviour
+  # see https://github.com/ohmyzsh/ohmyzsh/issues/12387
+  local fzf_ver=${"$(fzf --version)"#fzf }
+
+  autoload -Uz is-at-least
+  is-at-least 0.48.0 ${${(s: :)fzf_ver}[1]} || return 1
+
+  eval "$(fzf --zsh)"
+}
+
 function fzf_setup_using_base_dir() {
   local fzf_base fzf_shell fzfdirs dir
 
@@ -8,6 +21,7 @@ function fzf_setup_using_base_dir() {
       "${HOME}/.fzf"
       "${HOME}/.nix-profile/share/fzf"
       "${XDG_DATA_HOME:-$HOME/.local/share}/fzf"
+      "${MSYSTEM_PREFIX}/share/fzf"
       "/usr/local/opt/fzf"
       "/opt/homebrew/opt/fzf"
       "/usr/share/fzf"
@@ -61,7 +75,7 @@ function fzf_setup_using_base_dir() {
 
 function fzf_setup_using_debian() {
   if (( ! $+commands[apt] && ! $+commands[apt-get] )); then
-    # Not a debian based distro 
+    # Not a debian based distro
     return 1
   fi
 
@@ -127,6 +141,27 @@ function fzf_setup_using_opensuse() {
   fi
 
   # Key bindings
+  if [[ "$DISABLE_FZF_KEY_BINDINGS" != "true" ]]; then
+    source "$key_bindings" 2>/dev/null
+  fi
+
+  return 0
+}
+
+function fzf_setup_using_fedora() {
+  (( $+commands[fzf] )) || return 1
+
+  local completions="/usr/share/zsh/site-functions/fzf"
+  local key_bindings="/usr/share/fzf/shell/key-bindings.zsh"
+
+  if [[ ! -f "$completions" || ! -f "$key_bindings" ]]; then
+    return 1
+  fi
+
+  if [[ -o interactive && "$DISABLE_FZF_AUTO_COMPLETION" != "true" ]]; then
+    source "$completions" 2>/dev/null
+  fi
+
   if [[ "$DISABLE_FZF_KEY_BINDINGS" != "true" ]]; then
     source "$key_bindings" 2>/dev/null
   fi
@@ -216,9 +251,11 @@ Please add `export FZF_BASE=/path/to/fzf/install/dir` to your .zshrc
 EOF
 }
 
-fzf_setup_using_openbsd \
+fzf_setup_using_fzf \
+  || fzf_setup_using_openbsd \
   || fzf_setup_using_debian \
   || fzf_setup_using_opensuse \
+  || fzf_setup_using_fedora \
   || fzf_setup_using_cygwin \
   || fzf_setup_using_macports \
   || fzf_setup_using_base_dir \

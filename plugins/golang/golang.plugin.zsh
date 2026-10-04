@@ -22,6 +22,7 @@ alias goga='go get ./...'
 alias goi='go install'
 alias gol='go list'
 alias gom='go mod'
+alias gomt='go mod tidy'
 alias gopa='cd $GOPATH'
 alias gopb='cd $GOPATH/bin'
 alias gops='cd $GOPATH/src'
@@ -35,3 +36,12 @@ alias gotofx='go tool fix'
 alias gov='go vet'
 alias gove='go version'
 alias gow='go work'
+
+## prompt
+function go_prompt_info() {
+  (( $+commands[go] )) || return
+  local go_prompt
+  go_prompt=$(go version | awk '{ print substr($3, 3) }')
+  [[ -z "${go_prompt}" ]] && return
+  echo "${ZSH_THEME_GO_PROMPT_PREFIX}${go_prompt:gs/%/%%}${ZSH_THEME_GO_PROMPT_SUFFIX}"
+}

@@ -6,7 +6,7 @@ __timer_current_time() {
 }
 
 __timer_format_duration() {
-  local mins=$(printf '%.0f' $(($1 / 60)))
+  local mins=$(printf '%.0f' $(($(IFS='.' read int dec <<< "$1"; echo $int) / 60)))
   local secs=$(printf "%.${TIMER_PRECISION:-1}f" $(($1 - 60 * mins)))
   local duration_str=$(echo "${mins}m${secs}s")
   local format="${TIMER_FORMAT:-/%d}"
@@ -23,9 +23,12 @@ __timer_display_timer_precmd() {
     local tdiff=$((cmd_end_time - __timer_cmd_start_time))
     unset __timer_cmd_start_time
     if [[ -z "${TIMER_THRESHOLD}" || ${tdiff} -ge "${TIMER_THRESHOLD}" ]]; then
+      local last_cmd="${history[$((HISTCMD - 1))]%% *}"
+      if [[ "$last_cmd" != clear ]]; then
         local tdiffstr=$(__timer_format_duration ${tdiff})
         local cols=$((COLUMNS - ${#tdiffstr} - 1))
         echo -e "\033[1A\033[${cols}C ${tdiffstr}"
+      fi 
     fi
   fi
 }

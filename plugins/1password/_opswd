@@ -6,14 +6,4 @@ function _opswd() {
   [[ -z "$services" ]] || compadd -a -- services
 }
 
-# TODO: 2022-03-26: Remove support for op CLI 1
-autoload -Uz is-at-least
-is-at-least 2.0.0 $(op --version) || {
-  function _opswd() {
-    local -a services
-    services=("${(@f)$(op list items --categories Login 2>/dev/null | op get item - --fields title 2>/dev/null)}")
-    [[ -z "$services" ]] || compadd -a -- services
-  }
-}
-
 _opswd "$@"

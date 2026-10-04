@@ -9,7 +9,7 @@ function fwl () {
   zones=("${(@f)$(sudo firewall-cmd --get-active-zones | grep -v 'interfaces\|sources')}")
 
   for i in $zones; do
-    sudo firewall-cmd --zone $i --list-all
+    sudo firewall-cmd --zone ${i/ \(default\)} --list-all
   done
 
   echo 'Direct Rules:'

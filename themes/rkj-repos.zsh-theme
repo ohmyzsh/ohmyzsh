@@ -1,7 +1,7 @@
 # user, host, full path, and time/date on two lines for easier vgrepping
 
 function hg_prompt_info {
-  if (( $+commands[hg] )) && grep -q "prompt" ~/.hgrc; then
+  if (( $+commands[hg] )) && [[ -e ~/.hgrc ]] && grep -q "prompt" ~/.hgrc; then
     hg prompt --angle-brackets "\
 <hg:%{$fg[magenta]%}<branch>%{$reset_color%}><:%{$fg[magenta]%}<bookmark>%{$reset_color%}>\
 </%{$fg[yellow]%}<tags|%{$reset_color%}, %{$fg[yellow]%}>%{$reset_color%}>\
@@ -23,7 +23,8 @@ function mygit() {
   if [[ "$(git config --get oh-my-zsh.hide-status)" != "1" ]]; then
     ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(git_prompt_short_sha)$(git_prompt_status)%{$fg_bold[blue]%}$ZSH_THEME_GIT_PROMPT_SUFFIX "
+    ref=${${ref#refs/heads/}//\%/%%}
+    echo "${ZSH_THEME_GIT_PROMPT_PREFIX}${ref}$(git_prompt_short_sha)$(git_prompt_status)%{$fg_bold[blue]%}${ZSH_THEME_GIT_PROMPT_SUFFIX} "
   fi
 }
 

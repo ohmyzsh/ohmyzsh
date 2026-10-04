@@ -1,6 +1,6 @@
 # ------------------------------------------------------------------------------
 # FILE: n98-magerun.plugin.zsh
-# DESCRIPTION: oh-my-zsh n98-magerun plugin file. Adapted from composer plugin 
+# DESCRIPTION: oh-my-zsh n98-magerun plugin file. Adapted from composer plugin
 # AUTHOR: Andrew Dwyer (andrewrdwyer at gmail dot com)
 # AUTHOR: Jisse Reitsma (jisse at yireo dot com)
 # VERSION: 1.1.0

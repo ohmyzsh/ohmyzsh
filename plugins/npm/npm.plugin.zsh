@@ -58,7 +58,7 @@ alias npmt="npm test"
 # Run npm scripts
 alias npmR="npm run"
 
-# Run npm publish 
+# Run npm publish
 alias npmP="npm publish"
 
 # Run npm init
@@ -69,6 +69,12 @@ alias npmi="npm info"
 
 # Run npm search
 alias npmSe="npm search"
+
+# Run npm run dev
+alias npmrd="npm run dev"
+
+# Run npm run build
+alias npmrb="npm run build"
 
 npm_toggle_install_uninstall() {
   # Look up to the previous 2 history commands

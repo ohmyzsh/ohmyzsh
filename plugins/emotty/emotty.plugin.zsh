@@ -4,7 +4,7 @@
 #        AUTHOR: Alexis Hildebrandt (afh[at]surryhill.net)
 #       VERSION: 1.0.0
 #       DEPENDS: emoji plugin
-#       
+#
 # There are different sets of emoji characters available, to choose a different
 # set export emotty_set to the name of the set you would like to use, e.g.:
 # % export emotty_set=nature

@@ -1,4 +1,4 @@
-PROMPT="${FG[117]}%~%{$reset_color%}\$(git_prompt_info)\$(virtualenv_prompt_info)${FG[133]}\$(git_prompt_status) ${FG[077]}ᐅ%{$reset_color%} "
+PROMPT="${FG[117]}%~%{$reset_color%}\$(git_prompt_info)\$(virtualenv_prompt_info)${FG[133]}\$(git_prompt_status) ${FG[077]}%(?..${FG[160]}[%?] )ᐅ%{$reset_color%} "
 
 ZSH_THEME_GIT_PROMPT_PREFIX=" ${FG[012]}("
 ZSH_THEME_GIT_PROMPT_SUFFIX="${FG[012]})%{$reset_color%}"

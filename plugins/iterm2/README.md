@@ -9,7 +9,7 @@ plugins=(... iterm2)
 ```
 
 Optionally, the plugin also applies the [Shell Integration Script for iTerm2](https://iterm2.com/documentation-shell-integration.html).
-You can enable the integration with zstyle. It's important to add this line 
+You can enable the integration with zstyle. It's important to add this line
 before the line sourcing oh-my-zsh:
 
 ```

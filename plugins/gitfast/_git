@@ -2,23 +2,11 @@
 
 # zsh completion wrapper for git
 #
-# Copyright (c) 2012-2020 Felipe Contreras <felipe.contreras@gmail.com>
+# Copyright (c) 2012-2024 Felipe Contreras <felipe.contreras@gmail.com>
 #
-# The recommended way to install this script is to make a copy of it as a
-# file named '_git' inside any directory in your fpath.
+# The recommended way to use this script is to prepend its location to your $fpath:
 #
-# For example, create a directory '~/.zsh/', copy this file to '~/.zsh/_git',
-# and then add the following to your ~/.zshrc file:
-#
-#  fpath=(~/.zsh $fpath)
-#
-# You need git's bash completion script installed. By default bash-completion's
-# location will be used (e.g. pkg-config --variable=completionsdir bash-completion).
-#
-# If your bash completion script is somewhere else, you can specify the
-# location in your ~/.zshrc:
-#
-#  zstyle ':completion:*:*:git:*' script ~/.git-completion.bash
+#  fpath=($git_completion_srcdir $fpath)
 #
 
 zstyle -T ':completion:*:*:git:*' tag-order && \

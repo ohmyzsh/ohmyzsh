@@ -1,7 +1,7 @@
 # Systemadmin plugin
 
 This plugin adds a series of aliases and functions which make a System Administrator's life easier.
- 
+
 To use it, add `systemadmin` to the plugins array in your zshrc file:
 
 ```zsh
@@ -13,11 +13,13 @@ plugins=(... systemadmin)
 | Alias   | Command                                                                    | Description                                                        |
 |---------|----------------------------------------------------------------------------|--------------------------------------------------------------------|
 | ping    | `ping -c 5`                                                                | Sends only 5 ICMP Messages                                         |
+| ping6   | `ping6 -c 5`                                                               | Sends only 5 ICMPv6 Messages                                       |
 | clr     | `clear; echo Currently logged in on $TTY, as $USERNAME in directory $PWD.` | Clears the screen and prints the current user, TTY, and directory  |
 | path    | `print -l $path`                                                           | Displays PATH with each entry on a separate line                   |
 | mkdir   | `mkdir -pv`                                                                | Automatically create parent directories and display verbose output |
 | psmem   | `ps -e -orss=,args= \| sort -b -k1 -nr`                                    | Display the processes using the most memory                        |
 | psmem10 | `ps -e -orss=,args= \| sort -b -k1 -nr \| head -n 10`                      | Display the top 10 processes using the most memory                 |
+| pszombie| `ps -eo user,pid,ppid,state,comm \| awk '$4=="Z"'`                         | List zombie processes with ownership and parent process details   |
 | pscpu   | `ps -e -o pcpu,cpu,nice,state,cputime,args \|sort -k1 -nr`                 | Display the top processes using the most CPU                       |
 | pscpu10 | `ps -e -o pcpu,cpu,nice,state,cputime,args \|sort -k1 -nr \| head -n 10`   | Display the top 10 processes using the most CPU                    |
 | hist10  | `print -l ${(o)history%% *} \| uniq -c \| sort -nr \| head -n 10`          | Display the top 10 most used commands in the history               |
@@ -31,10 +33,10 @@ plugins=(... systemadmin)
 | killit      | Kills any process that matches a regular expression passed to it                                                      |
 | tree        | List contents of directories in a tree-like format (if tree isn't installed)                                          |
 | sortcons    | Sort connections by state                                                                                             |
-| con80       | View all 80 Port Connections                                                                                          |
+| con80       | View all connections on ports 80 and 443, or on the ports given as arguments (`con80 8080`)                           |
 | sortconip   | On the connected IP sorted by the number of connections                                                               |
-| req20       | List the top 20 requests on port 80                                                                                   |
-| http20      | List the top 20 connections to port 80 based on tcpdump data                                                          |
+| req20       | List the top 20 requests on ports 80 and 443, or on the ports given as arguments (`req20 8080`)                       |
+| http20      | List the top 20 connections to ports 80 and 443 based on tcpdump data, or to the ports given as arguments             |
 | timewait20  | List the top 20 time_wait connections                                                                                 |
 | syn20       | List the top 20 SYN connections                                                                                       |
 | port_pro    | Output all processes according to the port number                                                                     |
@@ -47,5 +49,4 @@ plugins=(... systemadmin)
 | d0          | Delete 0 byte files recursively in the current directory or another if specified                                      |
 | geteip      | Gather information regarding an external IP address using [icanhazip.com](https://icanhazip.com)                      |
 | getip       | Determine the local IP Address with `ip addr` or `ifconfig`                                                           |
-| clrz        | Clear zombie processes                                                                                                |
-| conssec     | Show number of concurrent connections per second based on ngnix/access.log file or another log file if specified      |
+| conssec     | Show number of concurrent connections per second based on nginx/access.log file or another log file if specified      |

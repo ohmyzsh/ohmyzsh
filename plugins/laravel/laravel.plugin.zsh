@@ -4,6 +4,8 @@ alias bob='php artisan bob::build'
 
 # Development
 alias pas='php artisan serve'
+alias pad='php artisan dev'
+alias pats='php artisan test'
 
 # Database
 alias pam='php artisan migrate'
@@ -11,6 +13,7 @@ alias pamf='php artisan migrate:fresh'
 alias pamfs='php artisan migrate:fresh --seed'
 alias pamr='php artisan migrate:rollback'
 alias pads='php artisan db:seed'
+alias padw='php artisan db:wipe'
 
 # Makers
 alias pamm='php artisan make:model'
@@ -24,6 +27,12 @@ alias pamj='php artisan make:job'
 alias paml='php artisan make:listener'
 alias pamn='php artisan make:notification'
 alias pampp='php artisan make:provider'
+alias pamcl='php artisan make:class'
+alias pamen='php artisan make:enum'
+alias pami='php artisan make:interface'
+alias pamtr='php artisan make:trait'
+alias pamv='php artisan make:view'
+alias pammig='php artisan make:migration'
 
 
 # Clears
@@ -31,6 +40,7 @@ alias pacac='php artisan cache:clear'
 alias pacoc='php artisan config:clear'
 alias pavic='php artisan view:clear'
 alias paroc='php artisan route:clear'
+alias paopc='php artisan optimize:clear'
 
 # queues
 alias paqf='php artisan queue:failed'

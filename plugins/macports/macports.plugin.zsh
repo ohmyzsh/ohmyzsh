@@ -8,7 +8,7 @@ alias puo="sudo port upgrade outdated"
 alias pup="sudo port selfupdate && sudo port upgrade outdated"
 
 port-livecheck-maintainer() {
-  (( ${+commands[port]} == 0 )) || {
+  (( ${+commands[port]} )) || {
     print -- "port: not found" >&2
     return 1
   }

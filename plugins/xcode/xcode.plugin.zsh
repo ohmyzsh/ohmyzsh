@@ -17,6 +17,13 @@ function xc {
   local active_path
   active_path=${"$(xcode-select -p)"%%/Contents/Developer*}
   echo "Found ${xcode_files[1]}. Opening with ${active_path}"
+
+  # If Xcode is already opened in another Desk, we need this double call
+  # with -g to open the project window in the current Desk and focus it.
+  # See https://github.com/ohmyzsh/ohmyzsh/issues/10384
+  if command pgrep -q "^Xcode"; then
+    open -g -a "$active_path" "${xcode_files[1]}"
+  fi
   open -a "$active_path" "${xcode_files[1]}"
 }
 

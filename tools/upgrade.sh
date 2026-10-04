@@ -1,4 +1,7 @@
 #!/usr/bin/env zsh
+set +u # disable nounset
+
+local ret=0 # exit code
 
 # Protect against running with shells other than zsh
 if [ -z "$ZSH_VERSION" ]; then
@@ -7,10 +10,43 @@ fi
 
 # Protect against unwanted sourcing
 case "$ZSH_EVAL_CONTEXT" in
-  *:file) echo "error: this file should not be sourced" && return ;;
+  *:file) echo "error: this file should not be sourced" && return 1 ;;
 esac
 
+zmodload zsh/datetime
+
+# Define "$ZSH" if not defined -- in theory this should be `export`ed by the calling script
+if [[ -z "$ZSH" ]]; then
+  ZSH="${0:a:h:h}"
+fi
+
 cd "$ZSH"
+
+verbose_mode="default"
+interactive=false
+cooldown_days=0
+
+while getopts "v:ic:" opt; do
+  case $opt in
+    v)
+      if [[ $OPTARG == default || $OPTARG == minimal || $OPTARG == silent ]]; then
+        verbose_mode=$OPTARG
+      else
+        echo "[oh-my-zsh] update verbosity '$OPTARG' is not valid"
+        echo "[oh-my-zsh] valid options are 'default', 'minimal' and 'silent'"
+      fi
+      ;;
+    i) interactive=true ;;
+    c)
+      if [[ $OPTARG == <-> ]]; then
+        cooldown_days=$OPTARG
+      else
+        echo "[oh-my-zsh] update cooldown '$OPTARG' is not valid"
+        echo "[oh-my-zsh] valid options are a non-negative integer (days)"
+      fi
+      ;;
+  esac
+done
 
 # Use colors, but only if connected to a terminal
 # and that terminal supports them.
@@ -70,11 +106,16 @@ supports_hyperlinks() {
 
   # If $TERM_PROGRAM is set, these terminals support hyperlinks
   case "$TERM_PROGRAM" in
-  Hyper|iTerm.app|terminology|WezTerm) return 0 ;;
+  ghostty|Hyper|iTerm.app|terminology|vscode|WezTerm) return 0 ;;
   esac
 
-  # kitty supports hyperlinks
-  if [ "$TERM" = xterm-kitty ]; then
+  # These termcap entries support hyperlinks
+  case "$TERM" in
+  alacritty|alacritty-direct|xterm-ghostty|xterm-kitty) return 0 ;;
+  esac
+
+  # xfce4-terminal supports hyperlinks
+  if [ "$COLORTERM" = "xfce4-terminal" ]; then
     return 0
   fi
 
@@ -164,17 +205,23 @@ fi
 # Update upstream remote to ohmyzsh org
 git remote -v | while read remote url extra; do
   case "$url" in
-  https://github.com/robbyrussell/oh-my-zsh(|.git))
-    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git"
-    break ;;
-  git@github.com:robbyrussell/oh-my-zsh(|.git))
-    git remote set-url "$remote" "git@github.com:ohmyzsh/ohmyzsh.git"
-    break ;;
-  # Update out-of-date "unauthenticated git protocol on port 9418" to https
   git://github.com/robbyrussell/oh-my-zsh(|.git))
-    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git"
-    break ;;
+    # Update out-of-date "unauthenticated git protocol on port 9418" to https
+    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git" ;;
+  https://github.com/robbyrussell/oh-my-zsh(|.git))
+    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git" ;;
+  git@github.com:robbyrussell/oh-my-zsh(|.git))
+    git remote set-url "$remote" "git@github.com:ohmyzsh/ohmyzsh.git" ;;
+  https://github.com/ohmyzsh/ohmyzsh(|.git)) ;;
+  git@github.com:ohmyzsh/ohmyzsh(|.git)) ;;
+  *) continue ;;
   esac
+
+  # If we reach this point we have found the proper ohmyzsh upstream remote. If we don't,
+  # we'll only update from the set remote if `oh-my-zsh.remote` has been set to a remote,
+  # as when installing from a fork.
+  git config --local oh-my-zsh.remote "$remote"
+  break
 done
 
 # Set git-config values known to fix git errors
@@ -195,6 +242,28 @@ local ret=0
 remote=${"$(git config --local oh-my-zsh.remote)":-origin}
 branch=${"$(git config --local oh-my-zsh.branch)":-master}
 
+update_with_cooldown() {
+  local cutoff_epoch cooldown_ref
+
+  cutoff_epoch=$(( EPOCHSECONDS - cooldown_days * 86400 ))
+  LANG= git fetch --quiet $remote $branch || return $?
+
+  cooldown_ref=$(git log --first-parent --format="%H %ct" FETCH_HEAD \
+    | awk -v c="$cutoff_epoch" '$2 <= c { print $1; exit }')
+
+  [[ -n "$cooldown_ref" ]] || return 0
+
+  LANG= git merge --ff-only --quiet "$cooldown_ref"
+}
+
+perform_update() {
+  if (( cooldown_days > 0 )); then
+    update_with_cooldown
+  else
+    LANG= git pull --quiet --rebase $remote $branch
+  fi
+}
+
 # repository state
 last_head=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
 # checkout update branch
@@ -203,11 +272,20 @@ git checkout -q "$branch" -- || exit 1
 last_commit=$(git rev-parse "$branch")
 
 # Update Oh My Zsh
-printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
-if LANG= git pull --quiet --rebase $remote $branch; then
+if [[ $verbose_mode != silent ]]; then
+  printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
+fi
+if perform_update; then
   # Check if it was really updated or not
   if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
-    message="Oh My Zsh is already at the latest version."
+    if (( cooldown_days > 0 )); then
+      head_ct=$(git log -1 --format=%ct HEAD)
+      age_days=$(( (EPOCHSECONDS - head_ct) / 86400 ))
+      (( age_days < 0 )) && age_days=0
+      message="Oh My Zsh is already at a version ${age_days} days old."
+    else
+      message="Oh My Zsh is already at the latest version."
+    fi
   else
     message="Hooray! Oh My Zsh has been updated!"
 
@@ -215,24 +293,39 @@ if LANG= git pull --quiet --rebase $remote $branch; then
     git config oh-my-zsh.lastVersion "$last_commit"
 
     # Print changelog to the terminal
-    if [[ "$1" = --interactive ]]; then
-      "$ZSH/tools/changelog.sh" HEAD "$last_commit"
+    if [[ $interactive == true && $verbose_mode == default ]]; then
+      ZSH="$ZSH" command zsh -f "$ZSH/tools/changelog.sh" HEAD "$last_commit"
     fi
 
-    printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog with" "omz changelog"
+    if [[ $verbose_mode != silent ]]; then
+      printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog with" "omz changelog"
+    fi
   fi
 
-  printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
-  printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
-  printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
-  printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n'      $RAINBOW $RESET
-  printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $RAINBOW $RESET
-  printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
-  printf '\n'
-  printf "${BLUE}%s${RESET}\n\n" "$message"
-  printf "${BLUE}${BOLD}%s %s${RESET}\n" "To keep up with the latest news and updates, follow us on Twitter:" "$(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
-  printf "${BLUE}${BOLD}%s %s${RESET}\n" "Want to get involved in the community? Join our Discord:" "$(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
-  printf "${BLUE}${BOLD}%s %s${RESET}\n" "Get your Oh My Zsh swag at:" "$(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
+  if [[ $verbose_mode == default ]]; then
+    printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
+    printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
+    printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
+    printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n'      $RAINBOW $RESET
+    printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $RAINBOW $RESET
+    printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
+    printf '\n'
+    printf "${BLUE}%s${RESET}\n\n" "$message"
+    printf "${BLUE}${BOLD}%s %s %s %s${RESET}\n" \
+      "Follow along on X" "($(fmt_link @ohmyzsh https://x.com/ohmyzsh))" \
+      "or Bluesky" "($(fmt_link @ohmyz.sh https://bsky.app/profile/ohmyz.sh))"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" \
+      "Questions or ideas? Join the community on" \
+      "$(fmt_link Discord https://discord.gg/ohmyzsh)"
+    printf "${BLUE}${BOLD}%s %s,${RESET}\n" \
+      "Help support the project: sponsor us on" \
+      "$(fmt_link "Open Collective" https://opencollective.com/ohmyzsh)"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" \
+      "or grab stickers, shirts, and swag from" \
+      "$(fmt_link CommitGoods https://commitgoods.com/ohmyzsh)"
+  elif [[ $verbose_mode == minimal ]]; then
+    printf "${BLUE}%s${RESET}\n" "$message"
+  fi
 else
   ret=$?
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'

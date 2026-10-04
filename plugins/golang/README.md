@@ -25,6 +25,7 @@ plugins=(... golang)
 | goi    | `go install`      | Compiles and installs packages to $GOPATH                     |
 | gol    | `go list`         | Lists Go packages                                             |
 | gom    | `go mod`          | Access to operations on modules                               |
+| gomt   | `go mod tidy`     | Tidies up the go.mod file                                     |
 | gopa   | `cd $GOPATH`      | Takes you to `$GOPATH`                                        |
 | gopb   | `cd $GOPATH/bin`  | Takes you to `$GOPATH/bin`                                    |
 | gops   | `cd $GOPATH/src`  | Takes you to `$GOPATH/src`                                    |
@@ -38,3 +39,18 @@ plugins=(... golang)
 | gov    | `go vet`          | Vet examines Go source code and reports suspicious constructs |
 | gove   | `go version`      | Prints Go version                                             |
 | gow    | `go work`         | Work provides access to operations on workspaces              |
+
+## Prompt
+
+This plugin provides the `go_prompt_info` function to add the installed Go
+version to your prompt.
+
+For example:
+```
+PROMPT="%~$ "
+RPROMPT='$(go_prompt_info)'
+```
+changes your prompt to:
+```
+~/go/project$ ▋                                                     1.22.3
+```

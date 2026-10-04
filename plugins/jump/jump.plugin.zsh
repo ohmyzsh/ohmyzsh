@@ -8,8 +8,10 @@
 #
 export MARKPATH=$HOME/.marks
 
+
 jump() {
-	builtin cd -P "$MARKPATH/$1" 2>/dev/null || {echo "No such mark: $1"; return 1}
+	local markpath="$(readlink $MARKPATH/$1)" || {echo "No such mark: $1"; return 1}
+	builtin cd "$markpath" 2>/dev/null || {echo "Destination does not exist for mark [$1]: $markpath"; return 2}
 }
 
 mark() {
@@ -35,12 +37,11 @@ marks() {
 			max=${#link:t}
 		fi
 	done
-	local printf_markname_template="$(printf -- "%%%us " "$max")"
+	local printf_markname_template="$(printf -- "%%%us" "$max")"
 	for link in $MARKPATH/{,.}*(@N); do
-		local markname="$fg[cyan]${link:t}$reset_color"
+		local markname="$fg[cyan]$(printf -- "$printf_markname_template" "${link:t}")$reset_color"
 		local markpath="$fg[blue]$(readlink $link)$reset_color"
-		printf -- "$printf_markname_template" "$markname"
-		printf -- "-> %s\n" "$markpath"
+		printf -- "%s -> %s\n" "$markname" "$markpath"
 	done
 }
 

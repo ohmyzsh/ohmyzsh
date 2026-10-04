@@ -8,7 +8,7 @@
 if [[ "$OSTYPE" == darwin* ]] && [[ -n "$ITERM_SESSION_ID" ]] ; then
 
   # maybe make it the default in the future and allow opting out?
-  if zstyle -t ':omz:plugins:iterm2' shell-integration; then 
+  if zstyle -t ':omz:plugins:iterm2' shell-integration; then
     # Handle $0 according to the standard:
     # https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
     0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"

@@ -202,7 +202,7 @@ _ipfs_subcommand(){
               _arguments \
                 '--resolve[Check if the given path can be resolved before publishing. Default: true.]' \
                 '(-t --lifetime)'{-t,--lifetime}'[Time duration that the record will be valid for. Default: 24h.]' \
-                '--allow-offline[When offline, save the IPNS record to the the local datastore without broadcasting to the network instead of simply failing.]' \
+                '--allow-offline[When offline, save the IPNS record to the local datastore without broadcasting to the network instead of simply failing.]' \
                 '--ttl[Time duration this record should be cached for. Uses the same syntax as the lifetime option. (caution: experimental).]' \
                 '(-k --key)'{-k,--key}"[Name of the key to be used or a valid PeerID, as listed by 'ipfs key list -l'. Default: self.]" \
                 '(-Q --quieter)'{-Q,--quieter}'[Write only final hash.]' \

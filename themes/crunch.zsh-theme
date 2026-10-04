@@ -1,15 +1,15 @@
 # CRUNCH - created from Steve Eley's cat waxing.
 # Initially hacked from the Dallas theme. Thanks, Dallas Reedy.
 #
-# This theme assumes you do most of your oh-my-zsh'ed "colorful" work at a single machine, 
-# and eschews the standard space-consuming user and hostname info.  Instead, only the 
+# This theme assumes you do most of your oh-my-zsh'ed "colorful" work at a single machine,
+# and eschews the standard space-consuming user and hostname info.  Instead, only the
 # things that vary in my own workflow are shown:
 #
 # * The time (not the date)
 # * The RVM version and gemset (omitting the 'ruby' name if it's MRI)
 # * The current directory
 # * The Git branch and its 'dirty' state
-# 
+#
 # Colors are at the top so you can mess with those separately if you like.
 # For the most part I stuck with Dallas's.
 

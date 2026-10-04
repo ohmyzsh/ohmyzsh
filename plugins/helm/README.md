@@ -10,9 +10,10 @@ plugins=(... helm)
 
 ## Aliases
 
-| Alias | Full command |
-| ----- | ------------ |
-| h     | helm         |
-| hin   | helm install |
-| hse   | helm search  |
-| hup   | helm upgrade |
+| Alias |  Full command  |
+| ----- | -------------- |
+| h     | helm           |
+| hin   | helm install   |
+| hun   | helm uninstall |
+| hse   | helm search    |
+| hup   | helm upgrade   |

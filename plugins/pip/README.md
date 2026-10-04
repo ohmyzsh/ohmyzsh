@@ -20,17 +20,17 @@ the next time you autocomplete `pip install`.
 
 ## Aliases
 
-| Alias    | Description                                   |
-| :------- | :-------------------------------------------- |
-| pipi     | Install packages                              |
-| pipig    | Install package from GitHub repository        |
-| pipigb   | Install package from GitHub branch            |
-| pipigp   | Install package from GitHub pull request      |
-| pipu     | Upgrade packages                              |
-| pipun    | Uninstall packages                            |
-| pipgi    | Grep through installed packages               |
-| piplo    | List outdated packages                        |
-| pipreq   | Create requirements file                      |
-| pipir    | Install packages from `requirements.txt` file |
-| pipupall | Update all installed packages                 |
-| pipunall | Uninstall all installed packages              |
+| Alias    | Command                                                                           | Description                                   |
+| :--------|:----------------------------------------------------------------------------------|:--------------------------------------------- |
+| pipi     | `pip install`                                                                     | Install packages                              |
+| pipig    | `pip install "git+https://github.com/user/repo.git"`                              | Install package from GitHub repository        |
+| pipigb   | `pip install "git+https://github.com/user/repo.git@branch"`                       | Install package from GitHub branch            |
+| pipigp   | `pip install "git+https://github.com/user/repo.git@refs/pull/PR_NUMBER/head"`     | Install package from GitHub pull request      |
+| pipu     | `pip install --upgrade`                                                           | Upgrade packages                              |
+| pipun    | `pip uninstall`                                                                   | Uninstall packages                            |
+| pipgi    | `pip freeze \| grep`                                                              | Grep through installed packages               |
+| piplo    | `pip list --outdated`                                                             | List outdated packages                        |
+| pipreq   | `pip freeze > requirements.txt`                                                   | Create requirements file                      |
+| pipir    | `pip install -r requirements.txt`                                                 | Install packages from `requirements.txt` file |
+| pipupall | `pip list --outdated \| awk 'NR > 2 { print $1 }' \| xargs pip install --upgrade` | Update all installed packages                 |
+| pipunall | `pip list --format freeze \| cut -d= -f1 \| xargs pip uninstall`                  | Uninstall all installed packages              |

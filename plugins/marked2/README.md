@@ -1,6 +1,6 @@
 ## marked2
 
-Plugin for Marked 2, a previewer for Markdown files on Mac OS X 
+Plugin for Marked 2, a previewer for Markdown files on Mac OS X
 
 ### Requirements
 

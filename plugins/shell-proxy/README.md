@@ -23,6 +23,7 @@ Set `SHELLPROXY_URL` environment variable to the URL of the proxy server:
 
 ```sh
 SHELLPROXY_URL="http://127.0.0.1:8123"
+SHELLPROXY_NO_PROXY="localhost,127.0.0.1"
 proxy enable
 ```
 
@@ -36,11 +37,15 @@ Example:
 ```sh
 #!/bin/bash
 
+# HTTP Proxy
 if [[ "$(uname)" = Darwin ]]; then
   echo "http://127.0.0.1:6152" # Surge Mac
 else
   echo "http://127.0.0.1:8123" # polipo
 fi
+
+# No Proxy
+echo "localhost,127.0.0.1"
 ```
 
 ### Method 3

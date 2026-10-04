@@ -99,28 +99,31 @@ $ find . -type f 2>/dev/null
 ## File extension aliases
 
 These are special aliases that are triggered when a file name is passed as the command. For example,
-if the pdf file extension is aliased to `acroread` (a popular Linux pdf reader), when running `file.pdf`
-that file will be open with `acroread`.
+if the pdf file extension is aliased to `open_command`, running `file.pdf` opens that file with
+whatever application your system uses for PDFs.
 
 ### Reading Docs
 
-| Alias | Command    | Description                        |
-| ----- | ---------- | ---------------------------------- |
-| pdf   | `acroread` | Opens up a document using acroread |
-| ps    | `gv`       | Opens up a .ps file using gv       |
-| dvi   | `xdvi`     | Opens up a .dvi file using xdvi    |
-| chm   | `xchm`     | Opens up a .chm file using xchm    |
-| djvu  | `djview`   | Opens up a .djvu file using djview |
+These use `open_command`, which picks the right opener for your platform: `open` on macOS,
+`xdg-open` on Linux, `cygstart` on Cygwin.
+
+| Alias | Command        | Description                                     |
+| ----- | -------------- | ----------------------------------------------- |
+| pdf   | `open_command` | Opens up a .pdf file in your default viewer     |
+| ps    | `open_command` | Opens up a .ps file in your default viewer      |
+| dvi   | `open_command` | Opens up a .dvi file in your default viewer     |
+| chm   | `open_command` | Opens up a .chm file in your default viewer     |
+| djvu  | `open_command` | Opens up a .djvu file in your default viewer    |
 
 ### Listing files inside a packed file
 
-| Alias  | Command    | Description                       |
-| ------ | ---------- | --------------------------------- |
-| zip    | `unzip -l` | Lists files inside a .zip file    |
-| rar    | `unrar l`  | Lists files inside a .rar file    |
-| tar    | `tar tf`   | Lists files inside a .tar file    |
-| tar.gz | `echo`     | Lists files inside a .tar.gz file |
-| ace    | `unace l`  | Lists files inside a .ace file    |
+| Alias  | Command      | Description                       |
+| ------ | ------------ | --------------------------------- |
+| zip    | `unzip -l`   | Lists files inside a .zip file    |
+| rar    | `unrar l`    | Lists files inside a .rar file    |
+| tar    | `tar tf`     | Lists files inside a .tar file    |
+| tar.gz | `tar -ztf`   | Lists files inside a .tar.gz file |
+| ace    | `unace l`    | Lists files inside a .ace file    |
 
 ### Some other features
 

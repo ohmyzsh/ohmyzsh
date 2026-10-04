@@ -3,10 +3,10 @@
 # Grab the current date (%W) and time (%t):
 JUNKFOOD_TIME_="%{$fg_bold[red]%}#%{$fg_bold[white]%}( %{$fg_bold[yellow]%}%W%{$reset_color%}@%{$fg_bold[white]%}%t )( %{$reset_color%}"
 
-# Grab the current machine name 
+# Grab the current machine name
 JUNKFOOD_MACHINE_="%{$fg_bold[blue]%}%m%{$fg[white]%} ):%{$reset_color%}"
 
-# Grab the current username 
+# Grab the current username
 JUNKFOOD_CURRENT_USER_="%{$fg_bold[green]%}%n%{$reset_color%}"
 
 # Grab the current filepath, use shortcuts: ~/Desktop

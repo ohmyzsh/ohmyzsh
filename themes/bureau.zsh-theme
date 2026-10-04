@@ -15,6 +15,7 @@ ZSH_THEME_GIT_PROMPT_BEHIND="%{$fg[magenta]%}▾%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_STAGED="%{$fg_bold[green]%}●%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_UNSTAGED="%{$fg_bold[yellow]%}●%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$fg_bold[red]%}●%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_STASHED="(%{$fg_bold[blue]%}✹%{$reset_color%})"
 
 bureau_git_info () {
   local ref
@@ -67,6 +68,12 @@ bureau_git_status() {
 }
 
 bureau_git_prompt() {
+  # ignore non git folders and hidden repos (adapted from lib/git.zsh)
+  if ! command git rev-parse --git-dir &> /dev/null \
+     || [[ "$(command git config --get oh-my-zsh.hide-info 2>/dev/null)" == 1 ]]; then
+    return
+  fi
+
   # check git information
   local gitinfo=$(bureau_git_info)
   if [[ -z "$gitinfo" ]]; then

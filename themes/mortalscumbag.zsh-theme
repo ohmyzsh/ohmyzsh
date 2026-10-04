@@ -1,6 +1,6 @@
 function my_git_prompt() {
   tester=$(git rev-parse --git-dir 2> /dev/null) || return
-  
+
   INDEX=$(git status --porcelain 2> /dev/null)
   STATUS=""
 
@@ -42,7 +42,9 @@ function my_git_prompt() {
 }
 
 function my_current_branch() {
-  echo $(git_current_branch || echo "(no branch)")
+  local branch
+  branch=$(git_current_branch || echo "(no branch)")
+  echo "${branch//\%/%%}"
 }
 
 function ssh_connection() {
@@ -51,8 +53,14 @@ function ssh_connection() {
   fi
 }
 
+function _toolbox_prompt_info() {
+  if typeset -f toolbox_prompt_info > /dev/null; then
+    toolbox_prompt_info
+  fi
+}
+
 local ret_status="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})%?%{$reset_color%}"
-PROMPT=$'\n$(ssh_connection)%{$fg_bold[green]%}%n@%m%{$reset_color%}$(my_git_prompt) : %~\n[${ret_status}] %# '
+PROMPT=$'\n$(_toolbox_prompt_info)$(ssh_connection)%{$fg_bold[green]%}%n@%m%{$reset_color%}$(my_git_prompt) : %~\n[${ret_status}] %# '
 
 ZSH_THEME_PROMPT_RETURNCODE_PREFIX="%{$fg_bold[red]%}"
 ZSH_THEME_GIT_PROMPT_PREFIX=" $fg[white]‹ %{$fg_bold[yellow]%}"

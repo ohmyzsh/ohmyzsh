@@ -36,13 +36,14 @@ function colored() {
   # Prefer `less` whenever available, since we specifically configured
   # environment for it.
   environment+=( PAGER="${commands[less]:-$PAGER}" )
+  environment+=( GROFF_NO_SGR=1 )
 
   # See ./nroff script.
   if [[ "$OSTYPE" = solaris* ]]; then
     environment+=( PATH="${__colored_man_pages_dir}:$PATH" )
   fi
 
-  command env $environment "$@"
+  command env "${environment[@]}" "$@"
 }
 
 # Colorize man and dman/debman (from debian-goodies)

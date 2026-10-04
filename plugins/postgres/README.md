@@ -19,4 +19,4 @@ plugins=(... postgres)
 | stoppost    | `pg_ctl -D /usr/local/var/postgres stop -s -m fast`                             | Stop postgres server                                        |
 | restartpost | `stoppost && sleep 1 && startpost`                                              | Restart (calls stop, then start)                            |
 | reloadpost  | `pg_ctl reload -D /usr/local/var/postgres -s`                                   | Reload postgres configuration (some setting require restart)|
-| statuspost  | `pg_ctl status -D /usr/local/var/postgres -s`                                   | Check startus of postgres server (running, stopped)         |
+| statuspost  | `pg_ctl status -D /usr/local/var/postgres -s`                                   | Check status of postgres server (running, stopped)          |

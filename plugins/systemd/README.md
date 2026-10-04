@@ -12,6 +12,7 @@ plugins=(... systemd)
 
 | Alias                  | Command                            | Description                                                      |
 |:-----------------------|:-----------------------------------|:-----------------------------------------------------------------|
+| `sc-failed`            | `systemctl --failed`               | List failed systemd units                                        |
 | `sc-list-units`        | `systemctl list-units`             | List all units systemd has in memory                             |
 | `sc-is-active`         | `systemctl is-active`              | Show whether a unit is active                                    |
 | `sc-status`            | `systemctl status`                 | Show terse runtime status information about one or more units    |
@@ -44,6 +45,7 @@ plugins=(... systemd)
 | `sc-set-environment`   | `sudo systemctl set-environment`   | Set one or more systemd manager environment variables            |
 | `sc-unset-environment` | `sudo systemctl unset-environment` | Unset one or more systemd manager environment variables          |
 | `sc-edit`              | `sudo systemctl edit`              | Edit a drop-in snippet or a whole replacement file with `--full` |
+| `sc-edit-full`         | `sudo systemctl edit --full`       | Edit the whole unit file instead of a drop-in snippet            |
 | `sc-enable-now`        | `sudo systemctl enable --now`      | Enable and start unit(s)                                         |
 | `sc-disable-now`       | `sudo systemctl disable --now`     | Disable and stop unit(s)                                         |
 | `sc-mask-now`          | `sudo systemctl mask --now`        | Mask and stop unit(s)                                            |

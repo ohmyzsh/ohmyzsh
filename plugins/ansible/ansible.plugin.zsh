@@ -1,13 +1,13 @@
 # Functions
-function ansible-version(){
+function ansible-version() {
     ansible --version
 }
 
-function ansible-role-init(){
-    if ! [ -z $1 ] ; then
+function ansible-role-init() {
+    if [[ -n "$1" ]]; then
         echo "Ansible Role : $1 Creating...."
-        ansible-galaxy init $1
-        tree $1
+        ansible-galaxy init "$1"
+        tree "$1"
     else
         echo "Usage : ansible-role-init <role name>"
         echo "Example : ansible-role-init role1"

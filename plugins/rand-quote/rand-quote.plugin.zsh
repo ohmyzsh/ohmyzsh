@@ -8,7 +8,7 @@ function quote {
 
   # Get random quote data
   local data
-  data="$(command curl -s --connect-timeout 2 "http://www.quotationspage.com/random.php" \
+  data="$(command curl -s --connect-timeout 2 "https://www.quotationspage.com/random.php" \
     | iconv -c -f ISO-8859-1 -t UTF-8 \
     | command grep -a -m 1 'dt class="quote"')"
 

@@ -6,7 +6,9 @@ import argparse
 
 def parse(line):
     left = line[0:line.find('=')].strip()
-    right = line[line.find('=')+1:].strip('\'"\n ')
+    right = line[line.find('=')+1:].strip('\n ')
+    if len(right) >= 2 and right[0] == right[-1] and right[0] in '\'"':
+        right = right[1:-1]
     try:
         cmd = next(part for part in right.split() if len([char for char in '=<>' if char in part])==0)
     except StopIteration:
@@ -57,7 +59,7 @@ def pretty_print(cheatsheet, wfilter, group_list=None, groups_only=False):
             pretty_print_group(key, [ alias for alias in aliases if alias[0].find(wfilter)>-1 or alias[1].find(wfilter)>-1], wfilter)
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Pretty print aliases.", prog="acs")
+    parser = argparse.ArgumentParser(description="Pretty print aliases.", prog="als")
     parser.add_argument('filter', nargs="*", metavar="<keyword>", help="search aliases matching keywords")
     parser.add_argument('-g', '--group', dest="group_list", action='append', help="only print aliases in given groups")
     parser.add_argument('--groups', dest='groups_only', action='store_true', help="only print alias groups")

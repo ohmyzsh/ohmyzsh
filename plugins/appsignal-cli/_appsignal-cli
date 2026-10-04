@@ -1,0 +1,1080 @@
+#compdef appsignal-cli
+
+# Completion for the AppSignal CLI. https://docs.appsignal.com/cli
+#
+# Targets AppSignal CLI 2.1.x. The CLI has no `completions` command, no
+# clap_complete and no machine-readable command dump, so this is written from
+# its command definitions and kept here. Nothing runs the CLI at completion
+# time unless app completion is enabled below.
+
+# Organization slugs from the TOML config. Offline, always enabled.
+# The CLI reads .appsignal.toml from the current directory upwards, stopping at
+# the git root, and falls back to the global config.
+_appsignal_cli_orgs() {
+  setopt localoptions extendedglob
+  local -a orgs files
+  local dir file line
+  # (#b) backreferences set $match, which would otherwise be left global.
+  local MATCH MBEGIN MEND
+  local -a match mbegin mend
+
+  dir="$PWD"
+  while [[ -n "$dir" && "$dir" != "/" ]]; do
+    files+=("$dir/.appsignal.toml")
+    [[ -e "$dir/.git" ]] && break
+    dir="${dir:h}"
+  done
+  files+=("${XDG_CONFIG_HOME:-$HOME/.config}/appsignal/config.toml")
+  files+=("$HOME/Library/Application Support/appsignal/config.toml")
+
+  for file in $files; do
+    [[ -r "$file" ]] || continue
+    for line in ${(f)"$(< $file)"}; do
+      [[ $line == (#b)[[:space:]]#org[[:space:]]#=[[:space:]]#\"([^\"]##)\"* ]] && orgs+=("$match[1]")
+    done
+  done
+
+  orgs=(${(u)orgs})
+  (( $#orgs )) || return 1
+  _describe -t orgs 'organization' orgs
+}
+
+# One tab-separated record per app, in $apps. Off by default: needs
+# `appsignal-cli auth login` and makes a network call on TAB. Enable with:
+#   zstyle ':omz:plugins:appsignal-cli' dynamic-app-completion yes
+_appsignal_cli_app_cache() {
+  zstyle -t ':omz:plugins:appsignal-cli' dynamic-app-completion || return 1
+
+  local cache_file="${ZSH_CACHE_DIR:-$HOME/.cache}/appsignal-cli-apps"
+  local -a fresh
+  local json split entry id name environment
+  # $match and friends are set by =~ and would otherwise be left global.
+  local MATCH MBEGIN MEND
+  local -a match mbegin mend
+  local nl=$'\n' tab=$'\t'
+
+  # Reuse the cached list for five minutes.
+  fresh=(${cache_file}(Nms-300))
+  if (( $#fresh )); then
+    apps=("${(@f)$(< "$cache_file")}")
+    (( $#apps ))
+    return
+  fi
+
+  json="$(command appsignal-cli apps list --output json 2>/dev/null)" || return 1
+  # The CLI pretty-prints its JSON, so flatten it first, then take one chunk
+  # per object. Done in zsh so there is no dependency on jq.
+  json="${json//$nl/ }"
+  split="${json//\{/$nl}"
+  for entry in ${(f)split}; do
+    id="" name="" environment=""
+    [[ $entry =~ '"id":[[:space:]]*"([^"]*)"' ]] && id=$match[1]
+    [[ $entry =~ '"name":[[:space:]]*"([^"]*)"' ]] && name=$match[1]
+    [[ $entry =~ '"environment":[[:space:]]*"([^"]*)"' ]] && environment=$match[1]
+    [[ -n $id && -n $name ]] || continue
+    apps+=("${id}${tab}${name}${tab}${environment}")
+  done
+
+  (( $#apps )) || return 1
+  print -rl -- $apps > "$cache_file" 2>/dev/null
+}
+
+# Application names.
+_appsignal_cli_apps() {
+  local -a apps names
+  local entry name
+  _appsignal_cli_app_cache || return 1
+  for entry in $apps; do
+    name="${${(@ps:\t:)entry}[2]}"
+    names+=("${name//:/\\:}")
+  done
+  names=(${(u)names})
+  _describe -t apps 'application' names
+}
+
+# Application IDs, described by name and environment.
+_appsignal_cli_app_ids() {
+  local -a apps ids
+  local entry id name environment
+  _appsignal_cli_app_cache || return 1
+  for entry in $apps; do
+    id="${${(@ps:\t:)entry}[1]}"
+    name="${${(@ps:\t:)entry}[2]}"
+    environment="${${(@ps:\t:)entry}[3]}"
+    ids+=("${id}:${name//:/ }${environment:+ (${environment})}")
+  done
+  _describe -t app-ids 'application' ids
+}
+
+# Environments seen across the account's apps.
+_appsignal_cli_environments() {
+  local -a apps environments
+  local entry environment
+  _appsignal_cli_app_cache || return 1
+  for entry in $apps; do
+    environment="${${(@ps:\t:)entry}[3]}"
+    [[ -n $environment ]] && environments+=("${environment//:/\\:}")
+  done
+  (( $#environments )) || return 1
+  environments=(${(u)environments})
+  _describe -t environments 'environment' environments
+}
+
+# Log severity levels, as a comma-separated list.
+_appsignal_cli_severities() {
+  _values -s , 'severity' UNKNOWN TRACE DEBUG INFO NOTICE WARN ERROR CRITICAL ALERT FATAL
+}
+
+# The global flags, and the app reference group carried by most data commands.
+# Filled into caller-local arrays so the specs are written once, not forty times.
+_appsignal_cli_base_args() {
+  base_args=(
+    '(- *)'{-h,--help}'[Print help]'
+    '(-o --output --format)'{-o,--output,--format}'=[Output format for command results]:format:(human json)'
+  )
+}
+
+_appsignal_cli_app_args() {
+  app_args=(
+    '--app-id=[Application ID, an alternative to --app plus --environment]:app id:_appsignal_cli_app_ids'
+    '--app=[Application name, used with optional --environment to find the app]:app:_appsignal_cli_apps'
+    '--environment=[Environment filter, for example production]:environment:_appsignal_cli_environments'
+    '--org=[Organization slug, uses the saved default if omitted]:org:_appsignal_cli_orgs'
+  )
+}
+
+_appsignal_cli__about() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args
+}
+
+_appsignal_cli__auth__login() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args \
+    '--endpoint=[Override the AppSignal base URL]:url:_urls' \
+    '--rest-endpoint=[Override the AppSignal REST API base URL]:url:_urls' \
+    '--oauth-client-id=[Override the OAuth client ID used during login]:client id:' \
+    '--org=[Set the default organization slug during login]:org:_appsignal_cli_orgs'
+}
+
+_appsignal_cli__auth__logout() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args
+}
+
+_appsignal_cli__auth__status() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args
+}
+
+_appsignal_cli__auth() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'login:Authenticate with AppSignal via OAuth'
+    'logout:Remove stored credentials'
+    'status:Show the current authentication status'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'auth command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        login) _appsignal_cli__auth__login && ret=0 ;;
+        logout) _appsignal_cli__auth__logout && ret=0 ;;
+        status) _appsignal_cli__auth__status && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_appsignal_cli__apps__list() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args
+}
+
+_appsignal_cli__apps__info() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args \
+    '--app-id=[The application ID]:app id:_appsignal_cli_app_ids'
+}
+
+_appsignal_cli__apps__find() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args \
+    '--name=[Application name, case-insensitive]:name:_appsignal_cli_apps' \
+    '--environment=[Environment filter, for example production]:environment:_appsignal_cli_environments' \
+    '--org=[Organization slug, uses the saved default if omitted]:org:_appsignal_cli_orgs'
+}
+
+_appsignal_cli__apps__set_org() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args \
+    '--org=[Organization slug]:org:_appsignal_cli_orgs'
+}
+
+_appsignal_cli__apps__show_org() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args
+}
+
+_appsignal_cli__apps__resources__any() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args
+}
+
+_appsignal_cli__apps__resources() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'all:Show all supported app resources'
+    'users:Show app users'
+    'notifiers:Show app notifiers'
+    'namespaces:Show app namespaces'
+    'dashboards:Show app dashboards'
+    'deploy-markers:Show recent deploy markers'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'apps resources command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        all|users|notifiers|namespaces|dashboards|deploy-markers)
+          _appsignal_cli__apps__resources__any && ret=0
+          ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_appsignal_cli__apps() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'list:List all applications for the organization attached to the current OAuth token'
+    'info:Show details for a specific application by ID'
+    'find:Find an application by name and optional environment'
+    'set-org:Set the default organization slug'
+    'show-org:Show the current default organization'
+    'resources:Show resources for an app'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'apps command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        list) _appsignal_cli__apps__list && ret=0 ;;
+        info) _appsignal_cli__apps__info && ret=0 ;;
+        find) _appsignal_cli__apps__find && ret=0 ;;
+        set-org) _appsignal_cli__apps__set_org && ret=0 ;;
+        show-org) _appsignal_cli__apps__show_org && ret=0 ;;
+        resources) _appsignal_cli__apps__resources && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_appsignal_cli__project__init() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args \
+    '--endpoint=[Override the AppSignal base URL]:url:_urls' \
+    '--rest-endpoint=[Override the AppSignal REST API base URL]:url:_urls' \
+    '--oauth-client-id=[Override the OAuth client ID for this project]:client id:' \
+    '--org=[Set the default organization slug for this project]:org:_appsignal_cli_orgs'
+}
+
+_appsignal_cli__project() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'init:Create or update the project-local .appsignal.toml'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'project command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        init) _appsignal_cli__project__init && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+# Shared by every `incidents list*` command.
+_appsignal_cli_incident_list_args() {
+  incident_list_args=(
+    '--limit=[Maximum number of incidents to return]:limit:'
+    '--offset=[Offset for pagination]:offset:'
+    '--state=[Filter by state]:state:(OPEN CLOSED WIP)'
+    '--order=[Sort order, LAST for most recent activity or ID for creation order]:order:(LAST ID)'
+  )
+}
+
+_appsignal_cli__incidents__list() {
+  local -a base_args app_args incident_list_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _appsignal_cli_incident_list_args
+  _arguments -s -S $base_args $app_args $incident_list_args \
+    '--namespaces=[Filter by namespaces, comma-separated, for example web,background]:namespaces:' \
+    '--action=[Filter by action name, for example UsersController#show]:action:'
+}
+
+_appsignal_cli__incidents__list_exceptions() {
+  local -a base_args app_args incident_list_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _appsignal_cli_incident_list_args
+  _arguments -s -S $base_args $app_args $incident_list_args \
+    '--namespaces=[Filter by namespaces, comma-separated, for example web,background]:namespaces:' \
+    '--action=[Filter by action name, for example UsersController#show]:action:' \
+    '--query=[Search query to filter exception incidents by name or message]:query:'
+}
+
+_appsignal_cli__incidents__list_performance() {
+  local -a base_args app_args incident_list_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _appsignal_cli_incident_list_args
+  _arguments -s -S $base_args $app_args $incident_list_args \
+    '--namespaces=[Filter by namespaces, comma-separated, for example web,background]:namespaces:' \
+    '--action=[Filter by action name, for example UsersController#show]:action:' \
+    '--query=[Search query to filter performance incidents by action name]:query:'
+}
+
+_appsignal_cli__incidents__list_anomalies() {
+  local -a base_args app_args incident_list_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _appsignal_cli_incident_list_args
+  _arguments -s -S $base_args $app_args $incident_list_args
+}
+
+_appsignal_cli__incidents__show() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--number=[Incident number]:number:'
+}
+
+_appsignal_cli__incidents__update() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '*--number=[Incident number, repeat or pass a comma-separated list for bulk state changes]:number:' \
+    '--state=[New state]:state:(OPEN CLOSED WIP)' \
+    '--severity=[New severity]:severity:(UNTRIAGED CRITICAL HIGH LOW NONE INFORMATIONAL)' \
+    '--notification-frequency=[How often to notify about this incident]:frequency:(ALWAYS NEVER FIRST_IN_DEPLOY FIRST_AFTER_CLOSE NTH_IN_HOUR NTH_IN_DAY)' \
+    '--notification-threshold=[Threshold for the NTH_IN_HOUR and NTH_IN_DAY frequencies]:threshold:' \
+    '--assign=[Comma-separated user names or IDs to add as assignees]:assignees:' \
+    '--assign-me[Assign the incident to the authenticated CLI user]' \
+    '--unassign=[Comma-separated user names or IDs to remove from assignees]:assignees:' \
+    '--description=[New description]:description:'
+}
+
+_appsignal_cli__incidents__add_note() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--number=[Incident number]:number:' \
+    '--content=[Note content, markdown supported]:content:'
+}
+
+_appsignal_cli__incidents__list_notes() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--number=[Incident number]:number:'
+}
+
+_appsignal_cli__incidents__update_note() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--number=[Incident number]:number:' \
+    '--id=[ID of the note to update]:note id:' \
+    '--content=[Note content, markdown supported]:content:'
+}
+
+_appsignal_cli__incidents__delete_note() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--number=[Incident number]:number:' \
+    '--id=[ID of the note to delete]:note id:'
+}
+
+_appsignal_cli__incidents() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'list:List incidents for an application (all types)'
+    'list-exceptions:List exception incidents (with text search support)'
+    'list-performance:List performance incidents (with text search support)'
+    'list-anomalies:List anomaly detection incidents'
+    'show:Show details for a specific incident by number'
+    'update:Update an incident (state, severity, notification frequency, assignees)'
+    'add-note:Add a note to an incident'
+    'list-notes:List notes on an incident, including their IDs'
+    'update-note:Update one of your notes on an incident'
+    'delete-note:Delete one of your notes from an incident'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'incidents command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        list) _appsignal_cli__incidents__list && ret=0 ;;
+        list-exceptions) _appsignal_cli__incidents__list_exceptions && ret=0 ;;
+        list-performance) _appsignal_cli__incidents__list_performance && ret=0 ;;
+        list-anomalies) _appsignal_cli__incidents__list_anomalies && ret=0 ;;
+        show) _appsignal_cli__incidents__show && ret=0 ;;
+        update) _appsignal_cli__incidents__update && ret=0 ;;
+        add-note) _appsignal_cli__incidents__add_note && ret=0 ;;
+        list-notes) _appsignal_cli__incidents__list_notes && ret=0 ;;
+        update-note) _appsignal_cli__incidents__update_note && ret=0 ;;
+        delete-note) _appsignal_cli__incidents__delete_note && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+# Shared by `logs tail` and `logs search`.
+_appsignal_cli_log_filter_args() {
+  log_filter_args=(
+    '--query=[Log query filter, supports field filters and free text]:query:'
+    '--severities=[Comma-separated severity levels, for example ERROR,CRITICAL]:severities:_appsignal_cli_severities'
+    '--source-ids=[Comma-separated source IDs to filter by]:source ids:'
+    '--view=[Log view name or ID, applies the saved filters of the view as defaults]:view:'
+  )
+}
+
+_appsignal_cli__logs__tail() {
+  local -a base_args app_args log_filter_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _appsignal_cli_log_filter_args
+  _arguments -s -S $base_args $app_args $log_filter_args
+}
+
+_appsignal_cli__logs__search() {
+  local -a base_args app_args log_filter_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _appsignal_cli_log_filter_args
+  _arguments -s -S $base_args $app_args $log_filter_args \
+    '--start=[Start time, ISO 8601]:timestamp:' \
+    '--end=[End time, ISO 8601]:timestamp:' \
+    '(--page-all)--limit=[Maximum number of log lines to return, at most 100]:limit:' \
+    '(--page-all)--order=[Sort order, ASC for oldest first or DESC for newest first]:order:(ASC DESC)' \
+    '(--limit --order)--page-all[Paginate to fetch all results, requires --start]'
+}
+
+_appsignal_cli__logs__views() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args
+}
+
+_appsignal_cli__logs__sources() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args
+}
+
+_appsignal_cli__logs__metrics__list() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args
+}
+
+_appsignal_cli__logs__metrics__create() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--name=[Metric configuration name]:name:' \
+    '--query=[Query expression to match against log lines]:query:' \
+    '*--source-id=[Scope the metric to a source ID, repeat to add more]:source id:' \
+    '*--metric=[Metric definition in key=value form, for example name=log.error_count,type=counter]:metric:'
+}
+
+_appsignal_cli__logs__metrics__update() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--id=[ID of the metric to update]:metric id:' \
+    '--name=[Metric configuration name]:name:' \
+    '--query=[Query expression to match against log lines]:query:' \
+    '(--clear-sources)*--source-id=[Scope the metric to a source ID, repeat to add more]:source id:' \
+    '(--source-id)--clear-sources[Remove every source from the metric]' \
+    '(--clear-metrics)*--metric=[Metric definition in key=value form]:metric:' \
+    '(--metric)--clear-metrics[Remove every metric definition]'
+}
+
+_appsignal_cli__logs__metrics__delete() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--id=[ID of the metric to delete]:metric id:'
+}
+
+_appsignal_cli__logs__metrics() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'list:List log-derived metrics for an app'
+    'create:Create a new log-derived metric'
+    'update:Update a log-derived metric'
+    'delete:Delete a log-derived metric'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'logs metrics command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        list) _appsignal_cli__logs__metrics__list && ret=0 ;;
+        create) _appsignal_cli__logs__metrics__create && ret=0 ;;
+        update) _appsignal_cli__logs__metrics__update && ret=0 ;;
+        delete) _appsignal_cli__logs__metrics__delete && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_appsignal_cli__logs__triggers__list() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args
+}
+
+_appsignal_cli__logs__triggers__create() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--name=[Trigger name]:name:' \
+    '--query=[Query expression to match against log lines]:query:' \
+    '*--source-id=[Scope the trigger to a source ID, repeat to add more]:source id:' \
+    '--description=[Optional description shown with the trigger]:description:' \
+    '*--notifier-id=[Notifier to alert, repeat to add more]:notifier id:' \
+    '*--severity=[Match only this severity, repeat to add more]:severity:(UNKNOWN TRACE DEBUG INFO NOTICE WARN ERROR CRITICAL ALERT FATAL)'
+}
+
+_appsignal_cli__logs__triggers__update() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--id=[ID of the trigger to update]:trigger id:' \
+    '--name=[Trigger name]:name:' \
+    '--query=[Query expression to match against log lines]:query:' \
+    '(--clear-sources)*--source-id=[Scope the trigger to a source ID, repeat to add more]:source id:' \
+    '(--source-id)--clear-sources[Remove every source from the trigger]' \
+    '(--clear-description)--description=[Optional description shown with the trigger]:description:' \
+    '(--description)--clear-description[Remove the description]' \
+    '(--clear-notifiers)*--notifier-id=[Notifier to alert, repeat to add more]:notifier id:' \
+    '(--notifier-id)--clear-notifiers[Remove every notifier from the trigger]' \
+    '(--clear-severities)*--severity=[Match only this severity, repeat to add more]:severity:(UNKNOWN TRACE DEBUG INFO NOTICE WARN ERROR CRITICAL ALERT FATAL)' \
+    '(--severity)--clear-severities[Match every severity]'
+}
+
+_appsignal_cli__logs__triggers__delete() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--id=[ID of the trigger to delete]:trigger id:'
+}
+
+_appsignal_cli__logs__triggers() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'list:List log-based triggers for an app'
+    'create:Create a new log-based trigger'
+    'update:Update an existing log-based trigger'
+    'delete:Delete a log-based trigger'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'logs triggers command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        list) _appsignal_cli__logs__triggers__list && ret=0 ;;
+        create) _appsignal_cli__logs__triggers__create && ret=0 ;;
+        update) _appsignal_cli__logs__triggers__update && ret=0 ;;
+        delete) _appsignal_cli__logs__triggers__delete && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_appsignal_cli__logs() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'tail:Tail (stream) log lines in real time, with optional filters'
+    'search:Search log lines (one-shot query)'
+    'views:List saved log views (filter presets) for an app'
+    'sources:List log sources for an app'
+    'metrics:Create and manage log-derived metrics'
+    'triggers:Create and manage log-based triggers'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'logs command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        tail) _appsignal_cli__logs__tail && ret=0 ;;
+        search) _appsignal_cli__logs__search && ret=0 ;;
+        views) _appsignal_cli__logs__views && ret=0 ;;
+        sources) _appsignal_cli__logs__sources && ret=0 ;;
+        metrics) _appsignal_cli__logs__metrics && ret=0 ;;
+        triggers) _appsignal_cli__logs__triggers && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_appsignal_cli__traces__list() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--namespace=[Namespace to search in, for example web, background, graphql]:namespace:' \
+    '--action=[Action name to fetch traces for, for example UsersController#show]:action:' \
+    '--start=[Start time, ISO 8601, defaults to 24 hours ago]:timestamp:' \
+    '--end=[End time, ISO 8601, defaults to now]:timestamp:' \
+    '--min-duration-ms=[Minimum trace duration in milliseconds]:duration:' \
+    '--query=[Filter by tags or revision, for example tag.region=eu-west]:query:' \
+    '(--page-all)--limit=[Maximum number of traces to return, 1 to 100]:limit:' \
+    '(--limit)--page-all[Paginate to fetch all traces]'
+}
+
+_appsignal_cli__traces__incident() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--number=[Performance incident number]:number:' \
+    '--action=[Restrict lookup to one action if the incident has several]:action:' \
+    '--start=[Start time, ISO 8601, defaults to 24 hours ago]:timestamp:' \
+    '--end=[End time, ISO 8601, defaults to now]:timestamp:' \
+    '--min-duration-ms=[Minimum trace duration in milliseconds]:duration:' \
+    '--query=[Filter by tags or revision, for example tag.region=eu-west]:query:' \
+    '(--page-all)--limit=[Maximum number of traces to return per action, 1 to 100]:limit:' \
+    '(--limit)--page-all[Paginate to fetch all traces for each action]'
+}
+
+_appsignal_cli__traces__errors() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--digest=[Exception incident digest]:digest:' \
+    '--query=[Filter by tags or revision, for example tag.region=eu-west]:query:' \
+    '(--page-all)--limit=[Maximum number of error traces to return, 1 to 100]:limit:' \
+    '(--limit)--page-all[Paginate to fetch all error traces]'
+}
+
+_appsignal_cli__traces__show() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--namespace=[Namespace to search in, for example web, background, graphql]:namespace:' \
+    '--action=[Action name for the trace, for example UsersController#show]:action:' \
+    '--trace-id=[Trace ID returned by traces list]:trace id:' \
+    '--span-id=[Span ID to inspect within the trace]:span id:' \
+    '--include-sensitive[Include HTTP headers, request parameters, session data and function parameters]' \
+    '--start=[Start time, ISO 8601, defaults to 24 hours ago]:timestamp:' \
+    '--end=[End time, ISO 8601, defaults to now]:timestamp:'
+}
+
+_appsignal_cli__traces__show_error() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--digest=[Exception incident digest]:digest:' \
+    '--trace-id=[Trace ID returned by traces errors or traces incident]:trace id:' \
+    '--span-id=[Span ID to inspect within the trace]:span id:' \
+    '--include-sensitive[Include HTTP headers, request parameters, session data and function parameters]'
+}
+
+_appsignal_cli__traces__show_incident() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--number=[Performance or exception incident number]:number:' \
+    '--trace-id=[Trace ID returned by traces incident]:trace id:' \
+    '--span-id=[Span ID to inspect within the trace]:span id:' \
+    '--include-sensitive[Include HTTP headers, request parameters, session data and function parameters]' \
+    '--start=[Start time, ISO 8601, defaults to 24 hours ago]:timestamp:' \
+    '--end=[End time, ISO 8601, defaults to now]:timestamp:'
+}
+
+_appsignal_cli__traces() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'list:List performance samples/traces for an action'
+    'incident:List performance samples/traces for an incident'
+    'errors:List error traces for an exception digest'
+    'show:Show a performance sample/trace span tree, or one span with --span-id'
+    'show-error:Show an error trace span tree, or one span with --span-id'
+    'show-incident:Show a trace from a performance or exception incident'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'traces command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        list) _appsignal_cli__traces__list && ret=0 ;;
+        incident) _appsignal_cli__traces__incident && ret=0 ;;
+        errors) _appsignal_cli__traces__errors && ret=0 ;;
+        show) _appsignal_cli__traces__show && ret=0 ;;
+        show-error) _appsignal_cli__traces__show_error && ret=0 ;;
+        show-incident) _appsignal_cli__traces__show_incident && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_appsignal_cli__dashboards__list() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args
+}
+
+_appsignal_cli__dashboards__create() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--title=[Dashboard title]:title:' \
+    '--description=[Dashboard description]:description:'
+}
+
+_appsignal_cli__dashboards__update() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--id=[ID of the dashboard to update]:dashboard id:' \
+    '--title=[Dashboard title]:title:' \
+    '--description=[Dashboard description]:description:'
+}
+
+_appsignal_cli__dashboards() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'list:List dashboards for an application'
+    'create:Create a new dashboard'
+    'update:Update an existing dashboard'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'dashboards command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        list) _appsignal_cli__dashboards__list && ret=0 ;;
+        create) _appsignal_cli__dashboards__create && ret=0 ;;
+        update) _appsignal_cli__dashboards__update && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+# `triggers create` and `triggers update` share this block. Note that --format
+# here is the trigger's own value format, not the global --output alias, so the
+# global flag is offered as -o/--output only.
+_appsignal_cli_trigger_definition_args() {
+  trigger_definition_args=(
+    '--name=[Display name for the trigger, defaults to the metric name]:name:'
+    '--metric-name=[Metric name to monitor]:metric name:'
+    '--kind=[Trigger kind or classification, for example Advanced, Performance, HostCPUUsage]:kind:'
+    '--field=[Metric field to compare]:field:(count counter gauge mean p90 p95)'
+    '--comparison-operator=[Comparison operator]:operator:(> >= < <= == !=)'
+    '--condition-value=[Threshold value to compare against]:value:'
+    '--warmup-duration=[Warmup duration in minutes before opening an alert]:minutes:'
+    '--cooldown-duration=[Cooldown duration in minutes before closing an alert]:minutes:'
+    '--notifier-ids=[Comma-separated notifier IDs to attach to the trigger]:notifier ids:'
+    '*--tag=[Tag filter in key=value form, repeat or use commas]:tag:'
+    '--description=[Optional description shown with the trigger]:description:'
+    '--no-match-is-zero[Treat missing datapoints as 0]'
+    '--dashboard-id=[Dashboard to link the trigger to]:dashboard id:'
+    '--format=[Format for the metric value, for example duration, number, percent]:metric format:'
+    '--format-input=[Input unit for the size format, for example byte, kilobyte, megabyte]:unit:'
+  )
+}
+
+_appsignal_cli__triggers__list() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--metric-name=[Filter by metric name]:metric name:' \
+    '--kind=[Filter by trigger kind]:kind:' \
+    '*--tag=[Tag filter in key=value form, repeat or use commas]:tag:'
+}
+
+_appsignal_cli__triggers__create() {
+  local -a app_args trigger_definition_args
+  _appsignal_cli_app_args
+  _appsignal_cli_trigger_definition_args
+  _arguments -s -S $app_args $trigger_definition_args \
+    '(- *)'{-h,--help}'[Print help]' \
+    '(-o --output)'{-o,--output}'=[Output format for command results]:format:(human json)'
+}
+
+_appsignal_cli__triggers__update() {
+  local -a app_args trigger_definition_args
+  _appsignal_cli_app_args
+  _appsignal_cli_trigger_definition_args
+  _arguments -s -S $app_args $trigger_definition_args \
+    '(- *)'{-h,--help}'[Print help]' \
+    '(-o --output)'{-o,--output}'=[Output format for command results]:format:(human json)' \
+    '--id=[ID of the existing trigger to update]:trigger id:'
+}
+
+_appsignal_cli__triggers__archive() {
+  local -a base_args app_args
+  _appsignal_cli_base_args
+  _appsignal_cli_app_args
+  _arguments -s -S $base_args $app_args \
+    '--id=[ID of the trigger to archive]:trigger id:'
+}
+
+_appsignal_cli__triggers() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'list:List triggers for an application'
+    'create:Create a new anomaly detection trigger'
+    'update:Update a trigger by creating a new version linked to the existing trigger'
+    'archive:Archive a trigger and close its associated alerts/incidents'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'triggers command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        list) _appsignal_cli__triggers__list && ret=0 ;;
+        create) _appsignal_cli__triggers__create && ret=0 ;;
+        update) _appsignal_cli__triggers__update && ret=0 ;;
+        archive) _appsignal_cli__triggers__archive && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_appsignal_cli__feedback() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args \
+    '(:)'{-m,--message}'=[Feedback text, read from stdin if omitted]:text:' \
+    '(--no-email)--email=[Contact email for follow-up, saved for next time]:email:' \
+    '(--email)--no-email[Do not include a contact email, even if one is saved]' \
+    '(-m --message)*:feedback text:'
+}
+
+_appsignal_cli__skill__install() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args \
+    '*--target=[Install target]:target:(opencode codex claude all)' \
+    '--dir=[Install into this skills root directory instead of the default of the target]:directory:_files -/' \
+    '--force[Overwrite an existing installed skill]'
+}
+
+_appsignal_cli__skill__update() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args \
+    '*--target=[Update target]:target:(opencode codex claude all)' \
+    '--dir=[Update a skill installed in this skills root directory]:directory:_files -/'
+}
+
+_appsignal_cli__skill__status() {
+  local -a base_args
+  _appsignal_cli_base_args
+  _arguments -s -S $base_args \
+    '*--target=[Status target]:target:(opencode codex claude all)' \
+    '--dir=[Check a skill installed in this skills root directory]:directory:_files -/'
+}
+
+_appsignal_cli__skill() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'install:Install the bundled AppSignal skill into an agent skills directory'
+    'update:Update an installed AppSignal skill to the bundled version'
+    'status:Show whether installed AppSignal skills are current'
+  )
+
+  _arguments -C '1: :->cmd' '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'skill command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        install) _appsignal_cli__skill__install && ret=0 ;;
+        update) _appsignal_cli__skill__update && ret=0 ;;
+        status) _appsignal_cli__skill__status && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_appsignal-cli() {
+  local curcontext="$curcontext" state line ret=1
+  local -a commands
+  commands=(
+    'about:Show a more playful overview of the CLI'
+    'auth:Configure AppSignal authentication'
+    'apps:List, find, and inspect your AppSignal applications'
+    'project:Initialize a project-local AppSignal config'
+    'incidents:List and inspect incidents'
+    'logs:Stream, search, and inspect application logs'
+    'traces:Fetch and inspect performance samples/traces'
+    'dashboards:Create and update dashboards'
+    'triggers:List and manage anomaly detection triggers'
+    'feedback:Send feedback about appsignal-cli to AppSignal'
+    'skill:Install the bundled AppSignal LLM skill'
+    'help:Print the help of the given subcommands'
+  )
+
+  _arguments -C \
+    '(- *)'{-h,--help}'[Print help]' \
+    '(- *)'{-V,--version}'[Print version]' \
+    '(-o --output --format)'{-o,--output,--format}'=[Output format for command results]:format:(human json)' \
+    '1: :->cmd' \
+    '*:: :->args' && ret=0
+
+  case $state in
+    cmd)
+      _describe -t commands 'appsignal-cli command' commands && ret=0
+      ;;
+    args)
+      case $words[1] in
+        about) _appsignal_cli__about && ret=0 ;;
+        auth) _appsignal_cli__auth && ret=0 ;;
+        apps) _appsignal_cli__apps && ret=0 ;;
+        project) _appsignal_cli__project && ret=0 ;;
+        incidents) _appsignal_cli__incidents && ret=0 ;;
+        logs) _appsignal_cli__logs && ret=0 ;;
+        # `samples` and `sample` are aliases of `traces` in the CLI itself.
+        traces|samples|sample) _appsignal_cli__traces && ret=0 ;;
+        dashboards) _appsignal_cli__dashboards && ret=0 ;;
+        triggers) _appsignal_cli__triggers && ret=0 ;;
+        feedback) _appsignal_cli__feedback && ret=0 ;;
+        skill) _appsignal_cli__skill && ret=0 ;;
+        help) _describe -t commands 'appsignal-cli command' commands && ret=0 ;;
+        *) _files && ret=0 ;;
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_appsignal-cli "$@"

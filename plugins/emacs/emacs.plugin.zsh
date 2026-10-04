@@ -35,7 +35,8 @@ alias eeval="$EMACS_PLUGIN_LAUNCHER --eval"
 alias eframe='emacsclient --alternate-editor="" --create-frame'
 
 # Emacs ANSI Term tracking
-if [[ -n "$INSIDE_EMACS" ]]; then
+local excluded_terms=(vterm ghostel)
+if [[ -n "$INSIDE_EMACS" ]] && (( ! ${excluded_terms[(Ie)${INSIDE_EMACS%%,*}]} )); then
   chpwd_emacs() { print -P "\033AnSiTc %d"; }
   print -P "\033AnSiTc %d"    # Track current working directory
   print -P "\033AnSiTu %n"    # Track username
@@ -60,7 +61,7 @@ function efile {
 }
 
 # Write to standard output the directory of the file
-# opened in the the current buffer
+# opened in the current buffer
 function ecd {
   local file
   file="$(efile)" || return $?

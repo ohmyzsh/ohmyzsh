@@ -13,8 +13,17 @@
 # Author: Avneet Singh (kalsi-avneet)     #
 # Modified to add support for Android     #
 ###########################################
+# Author: Not Pua (im-notpua)             #
+# Modified to add support for OpenBSD     #
+###########################################
+
+: ${BATTERY_SHOW_WATTS:=false}
+
 
 if [[ "$OSTYPE" = darwin* ]]; then
+  function get_charger_power() {
+    echo "$(ioreg -rc AppleSmartBattery | grep -o '"Watts"=[0-9]\+' | head -1 | grep -o '[0-9]\+')W "
+  }
   function battery_is_charging() {
     ioreg -rc AppleSmartBattery | command grep -q '^.*"ExternalConnected"\ =\ Yes'
   }
@@ -54,7 +63,10 @@ if [[ "$OSTYPE" = darwin* ]]; then
       fi
       echo "%{$fg[$color]%}[${battery_pct}%%]%{$reset_color%}"
     else
-      echo "∞"
+      if [[ "${BATTERY_SHOW_WATTS}" = "true" ]] ; then
+        watts=$(get_charger_power)
+      fi
+      echo "${watts}${BATTERY_CHARGING-⚡️}"
     fi
   }
 
@@ -139,6 +151,46 @@ elif [[ "$OSTYPE" = linux-android ]] && (( ${+commands[termux-battery-status]} )
       echo "%{$fg[$color]%}${battery_pct}%%%{$reset_color%}"
     fi
   }
+elif [[ "$OSTYPE" = openbsd* ]]; then
+  function battery_is_charging() {
+    [[ $(apm -b) -eq 3 ]]
+  }
+  function battery_pct() {
+    apm -l
+  }
+  function battery_pct_remaining() {
+    if ! battery_is_charging; then
+      battery_pct
+    else
+      echo "External Power"
+    fi
+  }
+  function battery_time_remaining() {
+    local remaining_time
+    remaining_time=$(apm -m)
+    if [[ $remaining_time -ge 0 ]]; then
+      ((hour = $remaining_time / 60 ))
+      ((minute = $remaining_time % 60 ))
+      printf %02d:%02d $hour $minute
+    fi
+  }
+  function battery_pct_prompt() {
+    local battery_pct color
+    battery_pct=$(battery_pct_remaining)
+    if battery_is_charging; then
+      echo "∞"
+    else
+      if [[ $battery_pct -gt 50 ]]; then
+        color='green'
+      elif [[ $battery_pct -gt 20 ]]; then
+        color='yellow'
+      else
+        color='red'
+      fi
+      echo "%{$fg[$color]%}${battery_pct}%%%{$reset_color%}"
+    fi
+  }
+
 elif [[ "$OSTYPE" = linux*  ]]; then
   function battery_is_charging() {
     if (( $+commands[acpitool] )); then

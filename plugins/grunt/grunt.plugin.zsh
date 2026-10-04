@@ -23,7 +23,7 @@
 #
 # Enable caching:
 #
-#   If you want to use the cache, set the followings in your .zshrc:
+#   If you want to use the cache, set the following in your .zshrc:
 #
 #     zstyle ':completion:*' use-cache yes
 #

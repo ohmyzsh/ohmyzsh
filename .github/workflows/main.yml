@@ -20,19 +20,18 @@ permissions:
 jobs:
   tests:
     name: Run tests
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     if: github.repository == 'ohmyzsh/ohmyzsh'
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
       - name: Set up git repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install zsh
-        if: runner.os == 'Linux'
         run: sudo apt-get update; sudo apt-get install zsh
-      - name: Test installer
-        run: sh ./tools/install.sh
       - name: Check syntax
         run: |
           for file in ./oh-my-zsh.sh \

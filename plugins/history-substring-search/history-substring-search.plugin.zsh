@@ -3,6 +3,13 @@
 0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
 
+# Respect case sensitivity settings for globbing in history search
+if [[ "$CASE_SENSITIVE" = true ]]; then
+  : ${HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS=''}
+else
+  : ${HISTORY_SUBSTRING_SEARCH_GLOBBING_FLAGS='i'}
+fi
+
 source ${0:A:h}/history-substring-search.zsh
 
 
@@ -16,4 +23,3 @@ if [[ -n "$terminfo[kcud1]" ]]; then
   bindkey -M emacs "$terminfo[kcud1]" history-substring-search-down
   bindkey -M viins "$terminfo[kcud1]" history-substring-search-down
 fi
-

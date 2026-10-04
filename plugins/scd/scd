@@ -445,7 +445,7 @@ _scd_Y19oug_match() {
     # build a list of matching directories reverse-sorted by their probabilities
     dmatching=( ${(f)"$(
         builtin printf "%s %s\n" ${(Oakv)drank} |
-        /usr/bin/sort -grk1 )"}
+        command sort -grk1 )"}
     )
     dmatching=( ${dmatching#*[[:blank:]]} )
 

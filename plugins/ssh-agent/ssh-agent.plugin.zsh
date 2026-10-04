@@ -1,16 +1,33 @@
 # Get the filename to store/lookup the environment from
 ssh_env_cache="$HOME/.ssh/environment-$SHORT_HOST"
 
+# Test if $SSH_AUTH_SOCK points at a listening agent
+function _is_agent_running() {
+  local REPLY
+  [[ -n "$SSH_AUTH_SOCK" && -S "$SSH_AUTH_SOCK" ]] || return 1
+  zmodload zsh/net/socket 2>/dev/null || return 1
+  zsocket "$SSH_AUTH_SOCK" 2>/dev/null || return 1
+  exec {REPLY}>&- # close the probe connection
+  return 0
+}
+
 function _start_agent() {
+  # Reuse an agent the session already provides, if enabled
+  if zstyle -t :omz:plugins:ssh-agent honor-existing && _is_agent_running; then
+    return 0
+  fi
+
   # Check if ssh-agent is already running
   if [[ -f "$ssh_env_cache" ]]; then
     . "$ssh_env_cache" > /dev/null
 
     # Test if $SSH_AUTH_SOCK is visible
-    zmodload zsh/net/socket
-    if [[ -S "$SSH_AUTH_SOCK" ]] && zsocket "$SSH_AUTH_SOCK" 2>/dev/null; then
-      return 0
-    fi
+    _is_agent_running && return 0
+  fi
+
+  if [[ ! -d "$HOME/.ssh" ]]; then
+    echo "[oh-my-zsh] ssh-agent plugin requires ~/.ssh directory"
+    return 1
   fi
 
   # Set a maximum lifetime for identities added to ssh-agent
@@ -38,7 +55,7 @@ function _add_identities() {
   # this is to mimic the call to ssh-add with no identities
   if [[ ${#identities} -eq 0 ]]; then
     # key list found on `ssh-add` man page's DESCRIPTION section
-    for id in id_rsa id_dsa id_ecdsa id_ed25519 identity; do
+    for id in id_rsa id_dsa id_ecdsa id_ed25519 id_ed25519_sk identity; do
       # check if file exists
       [[ -f "$HOME/.ssh/$id" ]] && identities+=($id)
     done
@@ -57,7 +74,7 @@ function _add_identities() {
     # if id is an absolute path, make file equal to id
     [[ "$id" = /* ]] && file="$id" || file="$HOME/.ssh/$id"
     # check for filename match, otherwise try for signature match
-    if [[ ${loaded_ids[(I)$file]} -le 0 ]]; then
+    if [[ -f $file && ${loaded_ids[(I)$file]} -le 0 ]]; then
       sig="$(ssh-keygen -lf "$file" | awk '{print $2}')"
       [[ ${loaded_sigs[(I)$sig]} -le 0 ]] && not_loaded+=("$file")
     fi
@@ -93,8 +110,22 @@ function _add_identities() {
 
 # Add a nifty symlink for screen/tmux if agent forwarding is enabled
 if zstyle -t :omz:plugins:ssh-agent agent-forwarding \
-   && [[ -n "$SSH_AUTH_SOCK" && ! -L "$SSH_AUTH_SOCK" ]]; then
-  ln -sf "$SSH_AUTH_SOCK" /tmp/ssh-agent-$USERNAME-screen
+   && [[ -n "$SSH_AUTH_SOCK" ]]; then
+  if [[ ! -L "$SSH_AUTH_SOCK" ]]; then
+    if [[ -n "$TERMUX_VERSION" ]]; then
+      _omz_ssh_agent_link="$PREFIX"/tmp/ssh-agent-$USERNAME-screen
+    else
+      _omz_ssh_agent_link=/tmp/ssh-agent-$USERNAME-screen
+    fi
+    # `ln -sf` unlinks the old symlink and then creates the new one: two
+    # syscalls, no atomic swap. Shells starting concurrently (a tmux window
+    # opening several panes at once) interleave those steps and all but one
+    # fail with "ln: ...: File exists". Stage the link under a PID-unique
+    # name and move it into place, since rename(2) is atomic.
+    command ln -sf "$SSH_AUTH_SOCK" "$_omz_ssh_agent_link.$$" \
+      && command mv -f "$_omz_ssh_agent_link.$$" "$_omz_ssh_agent_link"
+    unset _omz_ssh_agent_link
+  fi
 else
   _start_agent
 fi
@@ -105,4 +136,4 @@ if ! zstyle -t :omz:plugins:ssh-agent lazy; then
 fi
 
 unset agent_forwarding ssh_env_cache
-unfunction _start_agent _add_identities
+unfunction _start_agent _add_identities _is_agent_running
