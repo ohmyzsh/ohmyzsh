@@ -46,7 +46,7 @@ dependencies:
   plugins/z:
     branch: master
     repo: agkozak/zsh-z
-    version: 102fb78036ed76feedf623907483691777a1d510
+    version: 7f8ff4df11b50a14e3666c7cd212baa399c9b92a
     precopy: |
       set -e
       rm -r tests
