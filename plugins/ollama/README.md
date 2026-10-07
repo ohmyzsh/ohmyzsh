@@ -17,8 +17,7 @@ plugins=(... ollama)
 - Installed and public models for `run` and `launch --model`.
 - Modelfile paths, quantization levels, thinking modes, output formats, and durations.
 - Launch integrations and their existing CLI synonyms from the installed CLI's
-  help. Arguments after `launch ... --`
-  are left to the integration.
+  help. Arguments after `launch ... --` are left to the integration.
 
 `curl` is required for model completion. Installed/running models also require
 `jq`. Neither dependency is installed by the plugin. Completion queries the daemon
@@ -46,9 +45,9 @@ tag menu. Explicit `model:latest` remains valid when typed manually.
 
 Requests have a one-second connection timeout and a three-second overall timeout
 (two seconds for daemon queries). An exact bare model name can make two requests:
-one for the library and one for that model's tags. The last successful public result is kept in
-shell memory and reused if a request fails. This cache lasts until the shell exits;
-it is never written as executable shell code. With no successful result yet,
+one for the library and one for that model's tags. The last successful public
+result is kept in shell memory and reused if a request fails. This cache lasts
+until the shell exits; it is never written as executable shell code. With no successful result yet,
 offline public completion offers no models. Shell matcher styles filter matches
 locally; the full catalogue is fetched rather than sending your typed prefix.
 
@@ -85,3 +84,6 @@ zsh -f plugins/ollama/tests/run.zsh
 
 Oh My Zsh's [contributing guidelines](../../CONTRIBUTING.md) require testers for
 new plugins and disclosure of meaningful AI assistance in any future PR.
+
+See [testing and contribution notes](TESTING.md) for verification evidence,
+source references, and remaining validation limits.
