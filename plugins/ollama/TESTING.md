@@ -26,7 +26,7 @@ zsh -n plugins/ollama/_ollama
 zsh -f plugins/ollama/tests/run.zsh
 ```
 
-The offline suite passed **42 checks** on system zsh `5.9`. It creates an isolated
+The offline suite passed **46 checks** on system zsh `5.9`. It creates an isolated
 PTY shell and presses Tab through real ZLE and `_arguments`, using synthetic
 HTTP/CLI fixtures. It never submits a model command or changes an Ollama server.
 
@@ -38,6 +38,11 @@ deduplicated latest tags, dynamic integrations and existing CLI synonyms,
 launch pass-through, refresh on the next Tab, warm and cold offline behavior,
 disabled public requests, and missing `jq`. Loading the plugin makes no CLI or
 network requests.
+
+A blank `ollama pull <Tab>` also verifies public models absent from the local
+inventory and makes no daemon or CLI model-list query. Session reload checks
+start with an existing completion function and prove that the documented
+`unfunction`/autoload sequence replaces it with the checkout's implementation.
 
 The repository's CI syntax loop also passed for **593 files**. The local sandbox
 emitted scheduler permission warnings while parsing existing background-command

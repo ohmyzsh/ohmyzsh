@@ -76,6 +76,22 @@ compinit -D
 Then type the examples above and press Tab. Use a correctly installed system zsh
 if another zsh executable on `PATH` lacks its completion modules.
 
+If your current shell already loaded another Ollama plugin, changing `fpath`
+alone does not replace its defined `_ollama` function. For a temporary test in
+that shell, run:
+
+```zsh
+fpath=(/path/to/ohmyzsh/plugins/ollama $fpath)
+unfunction _ollama 2>/dev/null
+autoload -Uz _ollama
+compdef _ollama ollama
+```
+
+This selects the checkout for the current shell session. A custom plugin at
+`${ZSH_CUSTOM:-$ZSH/custom}/plugins/ollama` takes precedence over the repository's
+plugin when Oh My Zsh loads, so check that path if a new shell still offers only
+downloaded models for `pull`.
+
 Run the offline behavioral checks from the repository root:
 
 ```zsh

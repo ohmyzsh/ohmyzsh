@@ -133,6 +133,22 @@ else
   (( failed++ ))
 fi
 
+expect_listing 'blank pull offers public models absent from local inventory' 'ollama pull ' 'embeddinggemma' 'qwen3.5'
+if [[ $(< "$scratch/requests") != *'/api/'* && ! -s "$scratch/calls" ]]; then
+  print 'ok - blank pull never queries installed models'
+  (( passed++ ))
+else
+  print -u2 'not ok - blank pull queried installed models'
+  (( failed++ ))
+fi
+
+# An older sourced plugin can retain a defined function even after fpath changes.
+# Verify the documented session reload replaces that function before testing.
+configure_child '_ollama() { compadd legacy-local-model; }; compdef _ollama ollama'
+expect_buffer 'existing completion function reproduces stale local behavior' 'ollama pull legacy-' 'ollama pull legacy-local-model '
+configure_child 'fpath=("$OLLAMA_TEST_PLUGIN" $fpath); unfunction _ollama 2>/dev/null; autoload -Uz _ollama; compdef _ollama ollama'
+expect_buffer 'session reload replaces existing completion function' 'ollama pull embed' 'ollama pull embeddinggemma '
+
 expect_buffer 'complete command' 'ollama ru' 'ollama run '
 expect_buffer 'global version flag' 'ollama --vers' 'ollama --version '
 expect_buffer 'serve does not inherit run flags' 'ollama serve --ve' 'ollama serve --ve'
