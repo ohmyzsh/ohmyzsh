@@ -169,7 +169,7 @@ _ollama_remote_models() {
     completion_tag=model-tags
   else
     _ollama_catalogue || return 1
-    models=("${(@)reply/%/:default tag (latest)}")
+    models=("${(@)reply/%/:}")
     # An exact model name also exposes its variants without requiring a colon.
     # Partial names only fetch the library, rather than every matching tag page.
     if [[ -n $PREFIX && ${reply[(Ie)$PREFIX]} -ne 0 ]]; then

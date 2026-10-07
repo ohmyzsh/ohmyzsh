@@ -39,9 +39,11 @@ lookup reads the model's tags page, including public `namespace/model` reference
 Arbitrary registries and Hugging Face references can be typed normally, but are
 not enumerated by the public catalogue.
 
-Bare names select the default `latest` tag. The concrete variant carrying that
-tag is described as `*latest (default)`; `model:latest` is not duplicated in the
-tag menu. Explicit `model:latest` remains valid when typed manually.
+Bare model names appear without a `latest` label. Ollama resolves an untagged
+reference through `:latest`; that tag may refer to another variant. Only concrete
+tags marked as latest on the public tags page are described as `*latest (default)`.
+`model:latest` is not duplicated in the tag menu, but remains valid when typed
+manually.
 
 Requests have a one-second connection timeout and a three-second overall timeout
 (two seconds for daemon queries). An exact bare model name can make two requests:
