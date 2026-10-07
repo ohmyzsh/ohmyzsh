@@ -1,0 +1,1 @@
+{"models":[{"name":"qwen3.5:4b","model":"qwen3.5:4b","size":2700000000,"digest":"abc","details":{"parameter_size":"4B","quantization_level":"Q4_K_M"}},{"name":"gemma3:1b","model":"gemma3:1b","size":800000000,"digest":"def","details":{"parameter_size":"1B","quantization_level":"Q4_K_M"}}]}

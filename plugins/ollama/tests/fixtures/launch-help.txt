@@ -1,0 +1,15 @@
+Launch an integration with Ollama
+
+Usage:
+  ollama launch [INTEGRATION] [flags] [-- EXTRA_ARGS...]
+
+Supported integrations:
+  claude      Claude Code (alias: claude-code)
+  codex       Codex
+  droid       Droid
+  opencode    OpenCode (aliases: opencode-cli, opencode-tool)
+
+Flags:
+      --config         Configure integration without launching
+  -h, --help           help for launch
+      --model string   Model to use

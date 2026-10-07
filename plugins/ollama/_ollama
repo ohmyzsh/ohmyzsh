@@ -1,0 +1,258 @@
+#compdef ollama
+
+_ollama_commands() {
+  local -a commands=(
+    'serve:Start Ollama' 'start:Start Ollama'
+    'create:Create a model' 'show:Show information for a model'
+    'run:Run a model' 'stop:Stop a running model'
+    'pull:Pull a model from a registry' 'push:Push a model to a registry'
+    'signin:Sign in to ollama.com' 'signout:Sign out from ollama.com'
+    'list:List models' 'ls:List models' 'ps:List running models'
+    'cp:Copy a model' 'rm:Remove models'
+    'launch:Launch the Ollama menu or an integration' 'help:Show command help'
+  )
+  _describe -t commands 'ollama command' commands "$@"
+}
+
+_ollama_local_models() {
+  (( $+commands[curl] && $+commands[jq] )) || return 1
+  local endpoint=tags kind=local host=${OLLAMA_HOST:-127.0.0.1:11434} output default_port=11434
+  if [[ $1 == running ]]; then
+    endpoint=ps
+    kind=running
+    shift
+  fi
+  # Match the CLI's default port and wildcard bind-address conventions.
+  if [[ $host == *://* ]]; then
+    [[ $host == https://* ]] && default_port=443 || default_port=80
+  elif [[ $host == ollama.com ]]; then
+    host=https://ollama.com
+    default_port=443
+  else
+    host="http://$host"
+  fi
+  local scheme=${host%%://*} address=${${host#*://}%%/*} basepath=${host#*://}
+  [[ $basepath == */* ]] && basepath="/${basepath#*/}" || basepath=''
+  [[ $scheme == (http|https) ]] || return 1
+  if [[ $address == \[*\]* ]]; then
+    [[ $address == *\]:* ]] || address+=:$default_port
+  elif [[ $address == *:*:* ]]; then
+    address="[$address]:$default_port"
+  elif [[ $address != *:* ]]; then
+    address+=:$default_port
+  fi
+  case $address in
+    :*) address="127.0.0.1$address" ;;
+    0.0.0.0:*) address="127.0.0.1:${address##*:}" ;;
+    \[::\]:*) address="[::1]:${address##*:}" ;;
+  esac
+  # Do not invoke `ollama list`: its heartbeat can start the macOS app.
+  output=$(command curl -q -fsS --connect-timeout 1 --max-time 2 --max-filesize 2097152 \
+    "$scheme://$address${basepath%/}/api/$endpoint" 2>/dev/null) || return 1
+  local -a models
+  models=("${(@f)$(print -r -- "$output" | command jq -r \
+    '.models[]? | .name | select(type == "string")' 2>/dev/null)}")
+  models=("${(@)models:#}")
+  (( $#models )) || return 1
+  # _describe uses colons as separators; model names contain literal colons.
+  models=("${(@)models//:/\\:}")
+  _describe -t models "$kind model" models "$@"
+}
+
+_ollama_running_models() {
+  _ollama_local_models running "$@"
+}
+
+_ollama_catalogue() {
+  local model=$1 url output parsed
+  reply=()
+  (( $+commands[curl] )) || return 1
+  if [[ -n $model ]]; then
+    # Only public Ollama namespaces. Never turn an arbitrary registry reference
+    # or shell metacharacters into a request URL.
+    [[ $model =~ '^[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)?$' ]] || return 1
+    [[ $model != . && $model != .. && ${model##*/} != (.|..) ]] || return 1
+    [[ $model == */* ]] && url="https://ollama.com/$model/tags" \
+      || url="https://ollama.com/library/$model/tags"
+  else
+    url=https://ollama.com/library
+  fi
+  typeset -gA _ollama_catalogue_cache
+  if output=$(command curl -q -fsS --connect-timeout 1 --max-time 3 --max-filesize 4194304 \
+    "$url" 2>/dev/null); then
+    if [[ -z $model ]]; then
+      parsed=$(print -r -- "$output" | command awk '
+        match($0, /href="\/library\/[A-Za-z0-9_.-]+"/) {
+          name = substr($0, RSTART + 15, RLENGTH - 16)
+          if (!seen[name]++) print name
+        }')
+    else
+      # Each tag appears twice (mobile and desktop). Read link contents so the
+      # latest badge is attached to the concrete variant, not a digest alias.
+      parsed=$(print -r -- "$output" | command awk -v model="${model#library/}" '
+        /<a[[:space:]]/ && /href="/ {
+          if (match($0, /href="\/[A-Za-z0-9_.\/-]+:[A-Za-z0-9_.-]+"/)) {
+            ref = substr($0, RSTART + 7, RLENGTH - 8)
+            sub(/^library\//, "", ref)
+            tag = ref
+            sub(/^[^:]*:/, "", tag)
+            if (ref != model ":" tag) tag = ""
+            latest = 0
+          }
+        }
+        tag != "" {
+          if ($0 ~ />latest<\//) latest = 1
+          if ($0 ~ /<\/a>/) {
+            if (tag != "latest") {
+              if (!seen[tag]++) order[++count] = tag
+              if (latest) islatest[tag] = 1
+            }
+            tag = ""
+          }
+        }
+        END {
+          for (i = 1; i <= count; i++) {
+            tag = order[i]
+            print tag ":" (islatest[tag] ? "*latest (default)" : "")
+          }
+        }')
+    fi
+    if [[ -n $parsed ]]; then
+      _ollama_catalogue_cache[$url]=$parsed
+    fi
+  fi
+  # Cache is data in memory, never sourced shell code. Refresh on every request;
+  # retain the last successful catalogue when offline or markup is unavailable.
+  reply=("${(@f)${_ollama_catalogue_cache[$url]}}")
+  reply=("${(@)reply:#}")
+  (( $#reply ))
+}
+
+_ollama_remote_models() {
+  zstyle -T ":completion:${curcontext}:" remote-models || return 1
+  local -a reply models
+  local model entry tag description label='pullable model' completion_tag=remote-models
+  if [[ $PREFIX == *:* ]]; then
+    model=${PREFIX%:*}
+    label='model tag'
+    completion_tag=model-tags
+  else
+    _ollama_catalogue || return 1
+    models=("${(@)reply/%/:default tag (latest)}")
+    # An exact model name also exposes its variants without requiring a colon.
+    # Partial names only fetch the library, rather than every matching tag page.
+    if [[ -n $PREFIX && ${reply[(Ie)$PREFIX]} -ne 0 ]]; then
+      model=$PREFIX
+    fi
+  fi
+  if [[ -n $model ]] && _ollama_catalogue "$model"; then
+    for entry in "$reply[@]"; do
+      tag=${entry%%:*}
+      description=${entry#*:}
+      models+=("${model}\\:${tag}:$description")
+    done
+  fi
+  (( $#models )) || return 1
+  # Keep complete references so local and remote candidates share the same
+  # completion prefix. Bare names are valid: never insert an explicit :latest.
+  _describe -t "$completion_tag" "$label" models "$@"
+}
+
+_ollama_models() {
+  local ret=1
+  _ollama_local_models "$@" && ret=0
+  _ollama_remote_models "$@" && ret=0
+  return ret
+}
+
+_ollama_integrations() {
+  local output
+  local -a integrations
+  output=$(ollama launch --help 2>/dev/null) || return 1
+  integrations=("${(@f)$(print -r -- "$output" | command awk '
+    /^Supported integrations:/ { reading = 1; next }
+    reading && /^$/ { exit }
+    reading && $1 ~ /^[a-z][a-z0-9-]*$/ {
+      name = $1; $1 = ""; sub(/^[[:space:]]+/, ""); print name ":" $0
+      if (match($0, /\(alias(es)?: [a-z0-9, -]+\)/)) {
+        aliases = substr($0, RSTART, RLENGTH)
+        sub(/^\(alias(es)?: /, "", aliases); sub(/\)$/, "", aliases)
+        count = split(aliases, names, /,[[:space:]]*/)
+        for (i = 1; i <= count; i++) print names[i] ":alias for " name
+      }
+    }')}")
+  _describe -t integrations 'integration' integrations "$@"
+}
+
+_ollama() {
+  local curcontext="$curcontext" state line ret=1
+  local -A opt_args
+  local -a help=('(- *)'{-h,--help}'[Show help]')
+  # Root options are not persistent; stop parsing them at the subcommand.
+  _arguments -C -s -S -A '-*' \
+    "$help[@]" \
+    '(- *)'{-v,--version}'[Show version information]' \
+    '--verbose[Show response timings]' \
+    '--nowordwrap[Disable word wrapping]' \
+    '1: :_ollama_commands' \
+    '*:: :->args' && return 0
+
+  [[ $state == args ]] || return ret
+  curcontext="${curcontext%:*:*}:ollama-$words[1]:"
+  case $words[1] in
+    serve|start|list|ls|ps|signin|signout)
+      _arguments -s -S "$help[@]" ;;
+    create)
+      _arguments -s -S "$help[@]" \
+        '(-f --file)'{-f,--file}'[Modelfile path]:Modelfile:_files' \
+        '(-q --quantize)'{-q,--quantize}'[Safetensors quantization]:level:(int4 int8 nvfp4 mxfp4 mxfp8 fp4 q4 fp8 q8)' \
+        '--draft-quantize[Draft model quantization]:level:(int4 int8 nvfp4 mxfp4 mxfp8 fp4 q4 fp8 q8)' \
+        '--force[Continue when MLX validation fails]' \
+        '1:new model name:' ;;
+    show)
+      _arguments -s -S "$help[@]" \
+        '(--license --modelfile --parameters --system --template)'{--license,--modelfile,--parameters,--system,--template}'[Show this model information]' \
+        '(-v --verbose)'{-v,--verbose}'[Show detailed model information]' \
+        '1:model:_ollama_local_models' ;;
+    run)
+      _arguments -s -S "$help[@]" \
+        '--format=[Response format]:format:(json)' \
+        '--keepalive=[Keep model loaded for this duration]:duration:(0 5m 1h -1)' \
+        '--think=-[Thinking mode (bare flag means true)]:mode:(true false high medium low)' \
+        '--hidethinking[Hide thinking output]' \
+        '--truncate=-[Truncate embedding input]:boolean:(true false)' \
+        '--dimensions=[Output embedding dimensions]:dimensions:' \
+        '--insecure[Use an insecure registry]' \
+        '--nowordwrap[Disable word wrapping]' \
+        '--verbose[Show response timings]' \
+        '1:model:_ollama_models' \
+        '*:prompt:_files' ;;
+    stop)
+      _arguments -s -S "$help[@]" '1:running model:_ollama_running_models' ;;
+    pull)
+      _arguments -s -S "$help[@]" '--insecure[Use an insecure registry]' \
+        '1:model:_ollama_remote_models' ;;
+    push)
+      _arguments -s -S "$help[@]" '--insecure[Use an insecure registry]' \
+        '1:model:_ollama_local_models' ;;
+    cp)
+      _arguments -s -S "$help[@]" '1:source model:_ollama_local_models' \
+        '2:destination model name:' ;;
+    rm)
+      _arguments -s -S "$help[@]" '*:model:_ollama_local_models' ;;
+    help)
+      _arguments -s -S "$help[@]" '1:command:_ollama_commands' ;;
+    launch)
+      # Everything following -- belongs to the integration, not Ollama.
+      local separator=${words[(i)--]}
+      (( separator < CURRENT )) && return 1
+      _arguments -s -S "$help[@]" \
+        '(--restore)--config[Configure without launching]' \
+        '(--model --config)--restore[Restore the default integration profile]' \
+        '(-y --yes)'{-y,--yes}'[Answer yes to confirmation prompts]' \
+        '(--restore)--model=[Model to use]:model:_ollama_models' \
+        '1:integration:_ollama_integrations' ;;
+  esac
+}
+
+_ollama "$@"
