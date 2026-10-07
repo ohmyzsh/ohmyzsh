@@ -45,6 +45,7 @@ compinit -D
 zstyle ':completion:*' menu no
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' verbose yes
+zstyle ':completion:*' metadata-url https://metadata.test
 unsetopt automenu menucomplete
 setopt autolist listambiguous
 _test_dump_buffer() {
@@ -155,7 +156,7 @@ else
 fi
 
 expect_listing 'blank pull offers public models absent from local inventory' 'ollama pull ' 'embeddinggemma' 'qwen3.5'
-if [[ $(< "$scratch/requests") != *'/api/'* && ! -s "$scratch/calls" ]]; then
+if [[ $(< "$scratch/requests") != *'/api/tags'* && $(< "$scratch/requests") != *'/api/ps'* && ! -s "$scratch/calls" ]]; then
   print 'ok - blank pull never queries installed models'
   (( passed++ ))
 else
@@ -199,33 +200,100 @@ expect_buffer 'remote model with namespace' 'ollama pull team/custom:sm' 'ollama
 expect_buffer 'explicit library namespace' 'ollama pull library/qwen3.5:4b-' 'ollama pull library/qwen3.5:4b-mlx '
 
 configure_child "zstyle ':completion:*' menu yes"
-expect_menu_order 'default natural tag order' 'ollama pull sort-model:' 0.8b 2b 9b 27b 122b
+expect_menu_order 'default natural tag order' 'ollama pull sort-model:' 0.8b 2b 9b 27b 122b missing
 configure_child "zstyle ':completion:*:ollama*:*' model-sort alphabetical"
-expect_menu_order 'alphabetical tag order' 'ollama pull sort-model:' 0.8b 122b 27b 2b 9b
+expect_menu_order 'alphabetical tag order' 'ollama pull sort-model:' 0.8b 122b 27b 2b 9b missing
 configure_child "zstyle ':completion:*:ollama*:*' model-sort reverse"
-expect_menu_order 'reverse natural tag order' 'ollama pull sort-model:' 122b 27b 9b 2b 0.8b
+expect_menu_order 'reverse natural tag order' 'ollama pull sort-model:' missing 122b 27b 9b 2b 0.8b
 configure_child "zstyle ':completion:*:ollama*:*' model-sort latest-first"
-expect_menu_order 'latest tag first with natural order for other tags' 'ollama pull sort-model:' 9b 0.8b 2b 27b 122b
+expect_menu_order 'latest tag first with natural order for other tags' 'ollama pull sort-model:' 9b 0.8b 2b 27b 122b missing
 configure_child "zstyle ':completion:*:ollama*:*' model-sort source"
-expect_menu_order 'source tag order' 'ollama pull sort-model:' 27b 2b 122b 9b 0.8b
+expect_menu_order 'source tag order' 'ollama pull sort-model:' 27b 2b 122b 9b 0.8b missing
 expect_menu_order 'source family order' 'ollama pull ' qwen3.5 gemma3 embeddinggemma
 expect_menu_order 'source local model order' 'ollama show ' qwen3.5:4b gemma3:1b
 configure_child "zstyle ':completion:*:ollama*:*' model-sort natural"
 expect_menu_order 'natural family order' 'ollama pull ' embeddinggemma gemma3 qwen3.5
 expect_menu_order 'natural local model order' 'ollama show ' gemma3:1b qwen3.5:4b
 configure_child "zstyle ':completion:*:ollama-pull:*:model-tags' model-sort source"
-expect_menu_order 'tag-specific style overrides general model order' 'ollama pull sort-model:' 27b 2b 122b 9b 0.8b
+expect_menu_order 'tag-specific style overrides general model order' 'ollama pull sort-model:' 27b 2b 122b 9b 0.8b missing
 configure_child "zstyle -d ':completion:*:ollama-pull:*:model-tags' model-sort; zstyle ':completion:*:ollama*:*' model-sort invalid"
-expect_menu_order 'invalid sorting falls back to natural order' 'ollama pull sort-model:' 0.8b 2b 9b 27b 122b
+expect_menu_order 'invalid sorting falls back to natural order' 'ollama pull sort-model:' 0.8b 2b 9b 27b 122b missing
+configure_child "zstyle ':completion:*:ollama*:*' model-sort size"
+expect_menu_order 'size order normalizes units and ranges with unknown sizes last' 'ollama pull sort-model:' 2b 0.8b 9b 27b 122b missing
+expect_menu_order 'family size order uses latest variant rather than smallest variant' 'ollama pull ' embeddinggemma qwen3.5 gemma3
+expect_menu_order 'installed model size order' 'ollama show ' gemma3:1b qwen3.5:4b
+configure_child "zstyle ':completion:*:ollama*:*' model-sort reverse-size"
+expect_menu_order 'reverse size order keeps natural ties and unknown sizes last' 'ollama pull sort-model:' 122b 27b 0.8b 9b 2b missing
+expect_menu_order 'reverse family size order uses latest variant' 'ollama pull ' gemma3 qwen3.5 embeddinggemma
+expect_menu_order 'reverse installed model size order' 'ollama show ' qwen3.5:4b gemma3:1b
+configure_child "zstyle -d ':completion:*:ollama*:*' model-sort; zstyle ':completion:*' menu no"
+expect_listing 'download sizes and latest marker stay attached to tag' 'ollama pull qwen3.5:' 'qwen3.5:4b -- 2.7GB, *latest (default)' 'qwen3.5:4b-mlx -- 2.8GB' 'qwen3.5:9b -- 6.6GB - 7.6GB'
+expect_listing 'missing size is explicit' 'ollama pull sort-model:' 'size unavailable'
+
+# The one-per-line layout is a user-visible requirement, independent of columns.
+complete_line 'ollama pull qwen3.5:' $'\t\t'
+terminal=${output//$'\e'\[[0-9\;\?]#[A-Za-z]/}
+integer rows_ok=1 count
+for row in "${(@f)terminal}"; do
+  count=0
+  for reference in qwen3.5:4b-mlx qwen3.5:9b 'qwen3.5:4b --'; do
+    [[ $row == *$reference* ]] && (( count++ ))
+  done
+  (( count > 1 )) && rows_ok=0
+done
+if (( rows_ok )) && [[ $terminal == *'qwen3.5:4b-mlx'* && $terminal == *'qwen3.5:9b'* ]]; then
+  print 'ok - tag list displays one variant per line'
+  (( passed++ ))
+else
+  print -u2 'not ok - tag list displays one variant per line'
+  (( failed++ ))
+fi
+
+configure_child "zstyle ':completion:*:ollama*:*' model-sort size"
+before_sizes=$(< "$scratch/requests")
+expect_buffer 'size lookup only fetches families matching the prefix' 'ollama pull embed' 'ollama pull embeddinggemma '
+after_sizes=$(< "$scratch/requests")
+new_sizes=${after_sizes#$before_sizes}
+if [[ $new_sizes == *'/api/v1/models?names=embeddinggemma'* && $new_sizes != *'?names=gemma3'* && $new_sizes != *'?names=qwen3.5'* ]]; then
+  print 'ok - unmatched families make no size metadata requests'
+  (( passed++ ))
+else
+  print -u2 'not ok - unmatched families make no size metadata requests'
+  print -u2 -r -- "  new requests ${(qqq)new_sizes}"
+  (( failed++ ))
+fi
+complete_line 'ollama pull ' $'\t\t'
+if [[ $output != *latest* ]]; then
+  print 'ok - sized bare model names remain unlabelled as latest'
+  (( passed++ ))
+else
+  print -u2 'not ok - sized bare model names were labelled latest'
+  (( failed++ ))
+fi
 configure_child "zstyle -d ':completion:*:ollama*:*' model-sort; zstyle ':completion:*' menu no"
 
-# Changing server responses must be visible on the next Tab, with no TTL wait.
+# Changing shared-service responses must be visible on the next Tab.
 command touch "$scratch/updated"
-expect_buffer 'remote catalogue refreshes on each Tab' 'ollama pull qwen3.5:9b-' 'ollama pull qwen3.5:9b-mlx '
+expect_buffer 'completion sees updated service metadata on the next Tab' 'ollama pull qwen3.5:9b-' 'ollama pull qwen3.5:9b-mlx '
+command touch "$scratch/invalid-response"
+expect_buffer 'invalid successful HTTP response retains validated metadata' 'ollama pull qwen3.5:9b-' 'ollama pull qwen3.5:9b-mlx '
+command rm "$scratch/invalid-response"
+configure_child "zstyle ':completion:*' metadata-url https://alternate.test"
+expect_buffer 'metadata endpoint override completes public tags' 'ollama pull qwen3.5:4b-m' 'ollama pull qwen3.5:4b-mlx '
+if [[ $(< "$scratch/requests") == *'https://alternate.test/api/v1/tags?model=qwen3.5'* ]]; then
+  print 'ok - metadata endpoint override sends request to configured service'
+  (( passed++ ))
+else
+  print -u2 'not ok - metadata endpoint override was ignored'
+  (( failed++ ))
+fi
+configure_child "zstyle ':completion:*' metadata-url https://metadata.test"
 command touch "$scratch/offline"
 expect_buffer 'offline completion retains successful catalogue' 'ollama pull qwen3.5:9b-' 'ollama pull qwen3.5:9b-mlx '
 configure_child "zstyle ':completion:*:ollama*:*' model-sort reverse; zstyle ':completion:*' menu yes"
-expect_menu_order 'sort changes also apply to cached offline tags' 'ollama pull sort-model:' 122b 27b 9b 2b 0.8b
+expect_menu_order 'sort changes also apply to cached offline tags' 'ollama pull sort-model:' missing 122b 27b 9b 2b 0.8b
+configure_child "zstyle ':completion:*:ollama*:*' model-sort reverse-size"
+expect_menu_order 'offline family sorting reuses latest sizes' 'ollama pull ' gemma3 qwen3.5 embeddinggemma
 configure_child "zstyle -d ':completion:*:ollama*:*' model-sort; zstyle ':completion:*' menu no"
 expect_buffer 'cold offline failure leaves input intact' 'ollama pull --insecure team/cold:sm' 'ollama pull --insecure team/cold:sm'
 command rm -- "$scratch/offline"

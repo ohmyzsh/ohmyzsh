@@ -26,7 +26,7 @@ zsh -n plugins/ollama/_ollama
 zsh -f plugins/ollama/tests/run.zsh
 ```
 
-The offline suite passed **58 checks** on system zsh `5.9`. It creates an isolated
+The offline suite passed **74 checks** on system zsh `5.9`. It creates an isolated
 PTY shell and presses Tab through real ZLE and `_arguments`, using synthetic
 HTTP/CLI fixtures. It never submits a model command or changes an Ollama server.
 
@@ -45,9 +45,14 @@ start with an existing completion function and prove that the documented
 `unfunction`/autoload sequence replaces it with the checkout's implementation.
 
 Model ordering checks cycle through the real completion menu and verify natural,
-alphabetical, reverse, latest-first, and source order. They cover public names,
+alphabetical, reverse, latest-first, source, size, and reverse-size order. They
+cover public names,
 numeric and fractional tags, installed models, a tag-specific style override,
 unrecognized-value fallback, and a style change against cached offline results.
+Size checks cover default-family sizes, SI units, range upper bounds, equal-size
+natural ties, unknown sizes last, and one variant per terminal line. The HTTP
+fixtures use the shared service's four-field TSV protocol. Requests for family
+sizes are restricted to candidates matching the shell's completion rules.
 
 The repository's CI syntax loop also passed for **593 files**. The local sandbox
 emitted scheduler permission warnings while parsing existing background-command
@@ -62,11 +67,27 @@ bare and explicit `library/` namespace paths were checked. Live interactive Tab
 completion displayed matching MLX/quantized variants and marked `qwen3.5:9b` as
 `*latest (default)`.
 
-Public enumeration parses Ollama's HTML pages, whose markup is not a documented
-API contract. Site changes can interrupt discovery; a previously successful
-in-memory result remains usable on failure, but may be stale. The catalogue
+Those initial checks exercised the direct parser before migration to the shared
+service. Public completion now uses the
+[shared metadata API](https://ollama-model-cache.amcox886.chatgpt.site/api/v1/models).
+HTML parsing lives in the service, whose durable cache has a ten-minute TTL,
+atomic refresh leases, bounded concurrency, and stale data retention. Ollama's
+markup is not a documented API contract; changes can interrupt refreshes.
+A previously successful service or shell result remains usable on failure,
+but may be stale. The catalogue
 covers Ollama's public library and explicitly named public namespace tag pages;
 private registries and Hugging Face repositories are not enumerated.
+
+The public Sites deployment was verified anonymously on 2026-10-07. Health
+reported storage ready, the catalogue returned 245 families, and Qwen 3.8 returned
+11 concrete tags with listed sizes. Repeat reads preserved the same fresh-cache
+timestamp. Invalid traversal input returned HTTP 400. Live ZLE completion using
+the default service URL displayed one Qwen 3.8 variant per line, size order,
+`18GB` on the concrete `27b` default, and `56GB` on `27b-mlx-bf16`.
+The separate service passed 21 SQLite-backed cache/API tests, TypeScript,
+ESLint, a portable Vinext build, and local D1 migration/HTTP checks. Cache expiry
+and lease races were tested with controlled clocks; hosted availability under
+sustained public load has not been tested.
 
 No live daemon was reachable during validation. Installed/running-model behavior
 was verified with API fixtures; a user's running server and custom `OLLAMA_HOST`
