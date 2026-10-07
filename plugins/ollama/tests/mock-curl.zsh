@@ -8,6 +8,7 @@ case $request in
   */api/tags) cat "$OLLAMA_TEST_FIXTURES/local-models.json" ;;
   */api/ps) cat "$OLLAMA_TEST_FIXTURES/running-models.json" ;;
   */library/gemma3/tags) print -r -- '<a href="/library/gemma3:1b"><span>1b</span></a>' ;;
+  */library/sort-model/tags) cat "$OLLAMA_TEST_FIXTURES/sort-tags.html" ;;
   */library/qwen3.5/tags)
     cat "$OLLAMA_TEST_FIXTURES/qwen-tags.html"
     [[ -f "$OLLAMA_TEST_SCRATCH/updated" ]] && print -r -- '<a href="/library/qwen3.5:9b-mlx"><span>9b-mlx</span></a>'

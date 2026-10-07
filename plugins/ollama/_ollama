@@ -1,5 +1,36 @@
 #compdef ollama
 
+_ollama_describe_models() {
+  local completion_tag=$1 label=$2 candidate_array=$3 order entry reference description
+  local -a candidates=("${(@P)candidate_array}")
+  local -a references descriptions expl
+  shift 3
+  zstyle -s ":completion:${curcontext}:$completion_tag" model-sort order
+  case $order in
+    alphabetical) candidates=("${(@o)candidates}") ;;
+    reverse) candidates=("${(@On)candidates}") ;;
+    source) ;;
+    latest-first)
+      candidates=("${(@on)candidates}")
+      candidates=("${(@M)candidates:#*':*latest (default)'}" "${(@)candidates:#*':*latest (default)'}")
+      ;;
+    *) candidates=("${(@on)candidates}") ;;
+  esac
+  for entry in "$candidates[@]"; do
+    reference=${entry%:*}
+    references+=("$reference")
+    description=${entry##*:}
+    if [[ -n $description ]] && zstyle -T ":completion:${curcontext}:$completion_tag" verbose; then
+      descriptions+=("$reference -- $description")
+    else
+      descriptions+=("$reference")
+    fi
+  done
+  # Add aligned descriptions directly: _describe groups identical descriptions,
+  # which can move the latest variant and reorder an otherwise sorted menu.
+  _wanted -V "$completion_tag" expl "$label" compadd "$@" -d descriptions -a references
+}
+
 _ollama_commands() {
   local -a commands=(
     'serve:Start Ollama' 'start:Start Ollama'
@@ -54,9 +85,9 @@ _ollama_local_models() {
     '.models[]? | .name | select(type == "string")' 2>/dev/null)}")
   models=("${(@)models:#}")
   (( $#models )) || return 1
-  # _describe uses colons as separators; model names contain literal colons.
-  models=("${(@)models//:/\\:}")
-  _describe -t models "$kind model" models "$@"
+  # The shared model menu separates the reference from its final description.
+  models=("${(@)models/%/:}")
+  _ollama_describe_models models "$kind model" models "$@"
 }
 
 _ollama_running_models() {
@@ -149,13 +180,13 @@ _ollama_remote_models() {
     for entry in "$reply[@]"; do
       tag=${entry%%:*}
       description=${entry#*:}
-      models+=("${model}\\:${tag}:$description")
+      models+=("${model}:${tag}:$description")
     done
   fi
   (( $#models )) || return 1
   # Keep complete references so local and remote candidates share the same
   # completion prefix. Bare names are valid: never insert an explicit :latest.
-  _describe -t "$completion_tag" "$label" models "$@"
+  _ollama_describe_models "$completion_tag" "$label" models "$@"
 }
 
 _ollama_models() {

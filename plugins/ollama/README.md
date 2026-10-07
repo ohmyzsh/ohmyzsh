@@ -57,6 +57,38 @@ Disable public network completion while retaining installed model completion:
 zstyle ':completion:*:ollama*:*' remote-models false
 ```
 
+### Model ordering
+
+Set `model-sort` in your `.zshrc` to control public model names, model tags, and
+installed/running model menus:
+
+```zsh
+zstyle ':completion:*:ollama*:*' model-sort natural
+```
+
+| Value | Ordering |
+| --- | --- |
+| `natural` (default) | Names with numeric parts in ascending order: `0.8b`, `2b`, `9b`, `27b`, `122b`. |
+| `alphabetical` | Lexicographic ascending order: `0.8b`, `122b`, `27b`, `2b`, `9b`. |
+| `reverse` | Reverse natural order. |
+| `latest-first` | The concrete `*latest` variant first, then natural order. Menus without that marker use natural order. |
+| `source` | Preserve the order returned by the public catalogue or daemon. |
+
+Override just the tag menu for `pull`, for example:
+
+```zsh
+zstyle ':completion:*:ollama-pull:*:model-tags' model-sort latest-first
+```
+
+The completion tags are `remote-models` for public names, `model-tags` for an
+explicit `model:` prefix, and `models` for installed/running models. An exact
+bare public model name uses `remote-models` for its combined name/variant menu.
+Sorting applies to each candidate list; installed candidates are added before
+public candidates when a command offers both. Numeric sorting follows the
+reference's text; it does not infer download size or model quality. Unset or
+unrecognized values use `natural`. Styles are read on each completion, including cached offline results,
+and the `*latest` label stays attached to its variant in every order.
+
 The CLI options were checked against Ollama `0.35.1` help and
 [CLI source](https://github.com/ollama/ollama/blob/v0.35.1/cmd/cmd.go).
 Hidden/internal flags are omitted. `--think` alone means `true`; explicit values

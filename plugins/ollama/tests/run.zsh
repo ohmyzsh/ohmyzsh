@@ -54,6 +54,7 @@ _test_dump_buffer() {
 }
 zle -N _test_dump_buffer
 bindkey '^I' complete-word
+bindkey '^X^N' menu-complete
 bindkey '^X^B' _test_dump_buffer
 print -r -- '<<<READY>>>'
 SETUP
@@ -125,6 +126,26 @@ configure_child() {
   read_until $'<<<CONFIGURED>>>\r\n'
 }
 
+# Check traversal order through the actual completion menu, independent of its
+# terminal column layout or description formatting.
+expect_menu_order() {
+  local description=$1 line=$2 expected output buffer keys=''
+  shift 2
+  for expected in "$@"; do
+    keys+=$'\030\016'
+    complete_line "$line" "$keys" || { (( failed++ )); return }
+    if [[ ${buffer% } != "$line$expected" ]]; then
+      print -u2 -r -- "not ok - $description"
+      print -u2 -r -- "  expected ${(qqq)line}${(qqq)expected}; received ${(qqq)buffer}"
+      print -u2 -r -- "  terminal ${(qqq)REPLY}"
+      (( failed++ ))
+      return
+    fi
+  done
+  print -r -- "ok - $description"
+  (( passed++ ))
+}
+
 if [[ ! -s "$scratch/calls" && ! -s "$scratch/requests" ]]; then
   print 'ok - plugin loading makes no CLI or network requests'
   (( passed++ ))
@@ -177,11 +198,35 @@ expect_listing 'bare exact model offers concrete tags' 'ollama pull qwen3.5' 'qw
 expect_buffer 'remote model with namespace' 'ollama pull team/custom:sm' 'ollama pull team/custom:small-v1 '
 expect_buffer 'explicit library namespace' 'ollama pull library/qwen3.5:4b-' 'ollama pull library/qwen3.5:4b-mlx '
 
+configure_child "zstyle ':completion:*' menu yes"
+expect_menu_order 'default natural tag order' 'ollama pull sort-model:' 0.8b 2b 9b 27b 122b
+configure_child "zstyle ':completion:*:ollama*:*' model-sort alphabetical"
+expect_menu_order 'alphabetical tag order' 'ollama pull sort-model:' 0.8b 122b 27b 2b 9b
+configure_child "zstyle ':completion:*:ollama*:*' model-sort reverse"
+expect_menu_order 'reverse natural tag order' 'ollama pull sort-model:' 122b 27b 9b 2b 0.8b
+configure_child "zstyle ':completion:*:ollama*:*' model-sort latest-first"
+expect_menu_order 'latest tag first with natural order for other tags' 'ollama pull sort-model:' 9b 0.8b 2b 27b 122b
+configure_child "zstyle ':completion:*:ollama*:*' model-sort source"
+expect_menu_order 'source tag order' 'ollama pull sort-model:' 27b 2b 122b 9b 0.8b
+expect_menu_order 'source family order' 'ollama pull ' qwen3.5 gemma3 embeddinggemma
+expect_menu_order 'source local model order' 'ollama show ' qwen3.5:4b gemma3:1b
+configure_child "zstyle ':completion:*:ollama*:*' model-sort natural"
+expect_menu_order 'natural family order' 'ollama pull ' embeddinggemma gemma3 qwen3.5
+expect_menu_order 'natural local model order' 'ollama show ' gemma3:1b qwen3.5:4b
+configure_child "zstyle ':completion:*:ollama-pull:*:model-tags' model-sort source"
+expect_menu_order 'tag-specific style overrides general model order' 'ollama pull sort-model:' 27b 2b 122b 9b 0.8b
+configure_child "zstyle -d ':completion:*:ollama-pull:*:model-tags' model-sort; zstyle ':completion:*:ollama*:*' model-sort invalid"
+expect_menu_order 'invalid sorting falls back to natural order' 'ollama pull sort-model:' 0.8b 2b 9b 27b 122b
+configure_child "zstyle -d ':completion:*:ollama*:*' model-sort; zstyle ':completion:*' menu no"
+
 # Changing server responses must be visible on the next Tab, with no TTL wait.
 command touch "$scratch/updated"
 expect_buffer 'remote catalogue refreshes on each Tab' 'ollama pull qwen3.5:9b-' 'ollama pull qwen3.5:9b-mlx '
 command touch "$scratch/offline"
 expect_buffer 'offline completion retains successful catalogue' 'ollama pull qwen3.5:9b-' 'ollama pull qwen3.5:9b-mlx '
+configure_child "zstyle ':completion:*:ollama*:*' model-sort reverse; zstyle ':completion:*' menu yes"
+expect_menu_order 'sort changes also apply to cached offline tags' 'ollama pull sort-model:' 122b 27b 9b 2b 0.8b
+configure_child "zstyle -d ':completion:*:ollama*:*' model-sort; zstyle ':completion:*' menu no"
 expect_buffer 'cold offline failure leaves input intact' 'ollama pull --insecure team/cold:sm' 'ollama pull --insecure team/cold:sm'
 command rm -- "$scratch/offline"
 
