@@ -28,7 +28,7 @@ if [[ "$OSTYPE" = darwin* ]]; then
     ioreg -rc AppleSmartBattery | command grep -q '^.*"ExternalConnected" = Yes'
   }
   function battery_pct() {
-    pmset -g batt | grep -Eo "\d+%" | cut -d% -f1
+    pmset -g batt | grep -Eo "[0-9]+%" | cut -d% -f1
   }
   function battery_pct_remaining() {
     if battery_is_charging; then
