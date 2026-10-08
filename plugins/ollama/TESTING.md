@@ -26,7 +26,7 @@ zsh -n plugins/ollama/_ollama
 zsh -f plugins/ollama/tests/run.zsh
 ```
 
-The offline suite passed **77 checks** on system zsh `5.9`. It creates an isolated
+The offline suite passed **84 checks** on system zsh `5.9`. It creates an isolated
 PTY shell and presses Tab through real ZLE and `_arguments`, using synthetic
 HTTP/CLI fixtures. It never submits a model command or changes an Ollama server.
 
@@ -52,7 +52,9 @@ unrecognized-value fallback, and a style change against cached offline results.
 Size checks cover default-family sizes, SI units, range upper bounds, equal-size
 natural ties, unknown sizes last, one variant per terminal line, and aligned
 download-size columns. Family completion inserts `:` and continues into tag
-selection; an interactive menu also verifies Enter acceptance. The HTTP
+selection. Family menus hide size metadata in every sorting mode, while size
+ordering still uses the default variant's size. Interactive menus verify Enter
+acceptance. The HTTP
 fixtures use the shared service's four-field TSV protocol. Requests for family
 sizes are restricted to candidates matching the shell's completion rules.
 

@@ -56,6 +56,8 @@ _ollama_describe_models() {
       [[ -n $description ]] && description+=', '
       description+='*latest (default)'
     fi
+    # Family metadata affects ordering, but only tag lists show download sizes.
+    [[ $completion_tag == remote-models ]] && description=''
     if [[ -n $description ]] &&
        zstyle -T ":completion:${curcontext}:$completion_tag" verbose; then
       printf -v display '%-*s -- %s' $reference_width "$reference" \
@@ -67,7 +69,9 @@ _ollama_describe_models() {
   done
   # Add aligned descriptions directly: _describe groups identical descriptions,
   # which can move the latest variant and reorder an otherwise sorted menu.
-  if [[ $completion_tag == model-tags || $order == (size|reverse-size) ]]; then
+  if [[ $completion_tag == model-tags ||
+        ( $completion_tag != remote-models &&
+          $order == (size|reverse-size) ) ]]; then
     layout=(-l)
   fi
   # Continue public family selection in the same argument, at its tag boundary.

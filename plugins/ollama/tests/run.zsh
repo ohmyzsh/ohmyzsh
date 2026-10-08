@@ -370,6 +370,24 @@ else
 fi
 configure_child "zstyle -d ':completion:*:ollama*:*' model-sort; zstyle ':completion:*' menu no"
 
+# Family sizes are sorting metadata, never displayed download information.
+for family_order in natural alphabetical reverse latest-first source size \
+                    reverse-size; do
+  configure_child \
+    "zstyle ':completion:*:ollama*:*' model-sort $family_order"
+  complete_line 'ollama pull ' $'\t\t'
+  if [[ $output == *embeddinggemma* && $output != *' -- '* &&
+        $output != *'size unavailable'* ]]; then
+    print -r -- "ok - family names hide size metadata in $family_order order"
+    (( passed++ ))
+  else
+    print -u2 -r -- "not ok - family names hide sizes in $family_order order"
+    print -u2 -r -- "  terminal ${(qqq)output}"
+    (( failed++ ))
+  fi
+done
+configure_child "zstyle -d ':completion:*:ollama*:*' model-sort"
+
 # Changing shared-service responses must be visible on the next Tab.
 command touch "$scratch/updated"
 expect_buffer 'completion sees updated service metadata on the next Tab' \

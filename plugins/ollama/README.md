@@ -113,7 +113,9 @@ For example:
 zstyle ':completion:*:ollama*:*' model-sort size
 ```
 
-Size menus use one candidate per line with its size. Equal sizes use natural
+Public family menus display names only, including when sorted by size. Download
+sizes appear in tag menus, and installed/running size menus also show their
+reported sizes. Equal sizes use natural
 name order, and unknown sizes stay last in either direction. Size ranges sort
 by their upper bound. Installed and running models use the daemon's reported
 model size. A cold service request hydrates at most 32 families within a short
