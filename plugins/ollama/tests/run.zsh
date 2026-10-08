@@ -263,9 +263,37 @@ expect_menu_order 'alphabetical tag order' 'ollama pull sort-model:' 0.8b \
 configure_child "zstyle ':completion:*:ollama*:*' model-sort reverse"
 expect_menu_order 'reverse natural tag order' 'ollama pull sort-model:' \
   missing 122b 27b 9b 2b 0.8b
+configure_child "zstyle ':completion:*:ollama*:*' model-sort newest"
+expect_menu_order 'newest families follow newest library additions' \
+  'ollama pull ' gemma3 embeddinggemma qwen3.5
+if [[ $(< "$scratch/requests") == *'/api/v1/models?sort=newest'* ]]; then
+  print 'ok - newest family ordering requests the shared newest feed'
+  (( passed++ ))
+else
+  print -u2 'not ok - newest ordering did not request the newest feed'
+  (( failed++ ))
+fi
 configure_child "zstyle ':completion:*:ollama*:*' model-sort latest-first"
 expect_menu_order 'latest tag first with natural order for other tags' \
   'ollama pull sort-model:' 9b 0.8b 2b 27b 122b missing
+configure_child "zstyle ':completion:*:ollama*:*' model-sort newest; zstyle ':completion:*:ollama-pull:*:model-tags' model-sort natural"
+expect_menu_order 'newest families can coexist with natural tag ordering' \
+  'ollama pull sort-model:' 0.8b 2b 9b 27b 122b missing
+configure_child "zstyle -d ':completion:*:ollama-pull:*:model-tags' model-sort"
+expect_menu_order 'newest tag ordering falls back to natural' \
+  'ollama pull sort-model:' 0.8b 2b 9b 27b 122b missing
+configure_child "zstyle ':completion:*:ollama*:*' model-sort popular"
+expect_menu_order 'popular families follow library popularity' \
+  'ollama pull ' qwen3.5 embeddinggemma gemma3
+if [[ $(< "$scratch/requests") == *'/api/v1/models?sort=popular'* ]]; then
+  print 'ok - popular family ordering requests the shared popularity feed'
+  (( passed++ ))
+else
+  print -u2 'not ok - popular ordering did not request the popularity feed'
+  (( failed++ ))
+fi
+expect_menu_order 'popular tag ordering falls back to natural' \
+  'ollama pull sort-model:' 0.8b 2b 9b 27b 122b missing
 configure_child "zstyle ':completion:*:ollama*:*' model-sort source"
 expect_menu_order 'source tag order' 'ollama pull sort-model:' 27b 2b 122b \
   9b 0.8b missing
@@ -371,8 +399,8 @@ fi
 configure_child "zstyle -d ':completion:*:ollama*:*' model-sort; zstyle ':completion:*' menu no"
 
 # Family sizes are sorting metadata, never displayed download information.
-for family_order in natural alphabetical reverse latest-first source size \
-                    reverse-size; do
+for family_order in natural alphabetical reverse latest-first newest popular \
+                    source size reverse-size; do
   configure_child \
     "zstyle ':completion:*:ollama*:*' model-sort $family_order"
   complete_line 'ollama pull ' $'\t\t'
@@ -409,6 +437,13 @@ else
 fi
 configure_child "zstyle ':completion:*' metadata-url https://metadata.test"
 command touch "$scratch/offline"
+configure_child "zstyle ':completion:*:ollama*:*' model-sort newest; zstyle ':completion:*' menu yes"
+expect_menu_order 'offline newest families retain their own cache order' \
+  'ollama pull ' gemma3 embeddinggemma qwen3.5
+configure_child "zstyle ':completion:*:ollama*:*' model-sort popular"
+expect_menu_order 'offline popular families retain their own cache order' \
+  'ollama pull ' qwen3.5 embeddinggemma gemma3
+configure_child "zstyle -d ':completion:*:ollama*:*' model-sort; zstyle ':completion:*' menu no"
 expect_buffer 'offline completion retains successful catalogue' \
   'ollama pull qwen3.5:9b-' 'ollama pull qwen3.5:9b-mlx '
 configure_child "zstyle ':completion:*:ollama*:*' model-sort reverse; zstyle ':completion:*' menu yes"

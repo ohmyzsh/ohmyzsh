@@ -26,7 +26,7 @@ zsh -n plugins/ollama/_ollama
 zsh -f plugins/ollama/tests/run.zsh
 ```
 
-The offline suite passed **84 checks** on system zsh `5.9`. It creates an isolated
+The offline suite passed **95 checks** on system zsh `5.9`. It creates an isolated
 PTY shell and presses Tab through real ZLE and `_arguments`, using synthetic
 HTTP/CLI fixtures. It never submits a model command or changes an Ollama server.
 
@@ -45,7 +45,10 @@ start with an existing completion function and prove that the documented
 `unfunction`/autoload sequence replaces it with the checkout's implementation.
 
 Model ordering checks cycle through the real completion menu and verify natural,
-alphabetical, reverse, latest-first, source, size, and reverse-size order. They
+alphabetical, reverse, latest-first, newest, popular, source, size, and
+reverse-size order. They verify newest-added and popularity family ordering
+independently of default-tag ordering, separate family/tag styles, and isolated
+offline ranking caches.
 cover public names,
 numeric and fractional tags, installed models, a tag-specific style override,
 unrecognized-value fallback, and a style change against cached offline results.

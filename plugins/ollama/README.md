@@ -103,6 +103,8 @@ zstyle ':completion:*:ollama*:*' model-sort natural
 | `alphabetical` | Lexicographic ascending order: `0.8b`, `122b`, `27b`, `2b`, `9b`. |
 | `reverse` | Reverse natural order. |
 | `latest-first` | The concrete `*latest` variant first, then natural order. Menus without that marker use natural order. |
+| `newest` | Public families in Ollama's newest-added library order. Tags and installed/running models use natural order. |
+| `popular` | Public families in Ollama's popularity order. Tags and installed/running models use natural order. |
 | `source` | Preserve the order returned by the public catalogue or daemon. |
 | `size` | Smallest listed download size first. Public families use the size of their default `latest` variant. |
 | `reverse-size` | Largest listed download size first, with the same default-variant rule. |
@@ -129,6 +131,17 @@ Override just the tag menu for `pull`, for example:
 ```zsh
 zstyle ':completion:*:ollama-pull:*:model-tags' model-sort latest-first
 ```
+
+Choose a separate family order, for example newest families and natural tags:
+
+```zsh
+zstyle ':completion:*:ollama-pull:*:remote-models' model-sort newest
+zstyle ':completion:*:ollama-pull:*:model-tags' model-sort natural
+```
+
+`newest` and `popular` follow the library's own rankings, retained by the shared
+service in separate ten-minute caches. `newest` means additions to the library,
+not recently updated model files. Family menus continue to display names only.
 
 The completion tags are `remote-models` for public names, `model-tags` for an
 explicit `model:` prefix, and `models` for installed/running models. An exact

@@ -14,6 +14,10 @@ _ollama_describe_models() {
     alphabetical) candidates=("${(@o)candidates}") ;;
     reverse) candidates=("${(@On)candidates}") ;;
     source) ;;
+    newest|popular)
+      [[ $completion_tag == remote-models ]] || \
+        candidates=("${(@on)candidates}")
+      ;;
     latest-first)
       candidates=("${(@on)candidates}")
       candidates=("${(@M)candidates:#*$'\t1'}" "${(@)candidates:#*$'\t1'}")
@@ -168,7 +172,7 @@ _ollama_running_models() {
 }
 
 _ollama_catalogue() {
-  local model=$1 names=$2 base endpoint key output parsed
+  local model=$1 names=$2 base endpoint key output parsed order
   local -a request
   reply=()
   (( $+commands[curl] )) || return 1
@@ -183,9 +187,12 @@ _ollama_catalogue() {
     request+=(--data-urlencode "model=$model")
   else
     endpoint=models
+    zstyle -s ":completion:${curcontext}:remote-models" model-sort order
+    [[ $order == (newest|popular) ]] && \
+      request+=(--data-urlencode "sort=$order")
     [[ -n $names ]] && request+=(--data-urlencode "names=$names")
   fi
-  key="${base%/}/api/v1/$endpoint|$model|$names"
+  key="${base%/}/api/v1/$endpoint|$model|$names|${request[(r)sort=*]}"
   typeset -gA _OLLAMA_CATALOGUE_CACHE
   if output=$(command curl -q -fsS --connect-timeout 1 --max-time 3 \
     --max-filesize 2097152 \
