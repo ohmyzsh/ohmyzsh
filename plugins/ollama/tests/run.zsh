@@ -596,6 +596,10 @@ else
 fi
 configure_child "zstyle ':completion:*' metadata-url https://metadata.test"
 command touch "$scratch/offline"
+configure_child "zstyle ':completion:*' metadata-url https://legacy-cache.test; _OLLAMA_CATALOGUE_CACHE['https://legacy-cache.test/api/v1/models|||']=\$'legacy-model\\t\\t\\t0'"
+expect_buffer 'four-field shell cache cannot populate enriched model tables' \
+  'ollama pull legacy-' 'ollama pull legacy-'
+configure_child "zstyle ':completion:*' metadata-url https://metadata.test"
 configure_child "zstyle ':completion:*:ollama*:*' model-sort newest; zstyle ':completion:*' menu yes"
 expect_menu_order 'offline newest families retain their own cache order' \
   'ollama pull ' gemma3 embeddinggemma qwen3.5

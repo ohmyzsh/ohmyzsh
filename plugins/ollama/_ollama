@@ -1,5 +1,40 @@
 #compdef ollama
 
+_ollama_restore_menu() {
+  local parameter
+  for parameter in ${(k)_OLLAMA_MENU_SET}; do
+    # Leave settings alone if another completion already replaced them.
+    [[ ${(P)parameter} == $_OLLAMA_MENU_SET[$parameter] ]] || continue
+    if [[ $_OLLAMA_MENU_SAVED[${parameter}_set] == 1 ]]; then
+      typeset -g "$parameter=${_OLLAMA_MENU_SAVED[$parameter]}"
+    else
+      unset "$parameter"
+    fi
+  done
+  unset _OLLAMA_MENU_SAVED _OLLAMA_MENU_SET
+}
+
+_ollama_setup_menu() {
+  # _main_complete reads prompts before the command context is known. Apply
+  # Ollama's scoped styles here, then restore them before the next completion.
+  local setting parameter value
+  for setting parameter in list-prompt LISTPROMPT select-prompt MENUPROMPT \
+                           select-scroll MENUSCROLL; do
+    zstyle -s ":completion:${curcontext}:default" "$setting" value || continue
+    typeset -gA _OLLAMA_MENU_SAVED _OLLAMA_MENU_SET
+    if (( ! ${+_OLLAMA_MENU_SET[$parameter]} )); then
+      _OLLAMA_MENU_SAVED[$parameter]=${(P)parameter}
+      _OLLAMA_MENU_SAVED[${parameter}_set]=${+parameters[$parameter]}
+    fi
+    typeset -g "$parameter=$value"
+    _OLLAMA_MENU_SET[$parameter]=$value
+  done
+  if (( ${+_OLLAMA_MENU_SET} )) && \
+     (( ! ${compprefuncs[(Ie)_ollama_restore_menu]} )); then
+    compprefuncs+=(_ollama_restore_menu)
+  fi
+}
+
 _ollama_add_model_matches() {
   # _wanted supplies a default group. Replace it so each table keeps its header
   # beside its own matches even when the user's group-name style is unset.
@@ -274,7 +309,8 @@ _ollama_catalogue() {
       request+=(--data-urlencode "sort=$order")
     [[ -n $names ]] && request+=(--data-urlencode "names=$names")
   fi
-  key="${base%/}/api/v1/$endpoint|$model|$names|${request[(r)sort=*]}"
+  # Keep enriched rows separate from four-field data in an already-open shell.
+  key="completion-tsv|${base%/}/api/v1/$endpoint|$model|$names|${request[(r)sort=*]}"
   typeset -gA _OLLAMA_CATALOGUE_CACHE
   if output=$(command curl -q -fsS --connect-timeout 1 --max-time 3 \
     --max-filesize 2097152 \
@@ -393,6 +429,7 @@ _ollama() {
   local curcontext="$curcontext" state line ret=1
   local -A opt_args
   local -a help=('(- *)'{-h,--help}'[Show help]')
+  _ollama_setup_menu
   # Root options are not persistent; stop parsing them at the subcommand.
   _arguments -C -s -S -A '-*' \
     "$help[@]" \
@@ -404,6 +441,7 @@ _ollama() {
 
   [[ $state == args ]] || return ret
   curcontext="${curcontext%:*:*}:ollama-$words[1]:"
+  _ollama_setup_menu
   case $words[1] in
     serve|start|list|ls|ps|signin|signout)
       _arguments -s -S "$help[@]" ;;

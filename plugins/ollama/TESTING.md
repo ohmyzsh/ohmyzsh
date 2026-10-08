@@ -24,9 +24,10 @@ From the repository root, using zsh with its standard completion modules:
 ```zsh
 zsh -n plugins/ollama/_ollama
 zsh -f plugins/ollama/tests/run.zsh
+zsh -f plugins/ollama/tests/windowed.zsh
 ```
 
-The offline suite passed **118 checks** on system zsh `5.9`. It creates an isolated
+The offline suite passed **119 checks** on system zsh `5.9`. It creates an isolated
 PTY shell and presses Tab through real ZLE and `_arguments`, using synthetic
 HTTP/CLI fixtures. It never submits a model command or changes an Ollama server.
 
@@ -38,6 +39,26 @@ deduplicated latest tags, dynamic integrations and existing CLI synonyms,
 launch pass-through, refresh on the next Tab, warm and cold offline behavior,
 disabled public requests, and missing `jq`. Loading the plugin makes no CLI or
 network requests.
+
+The separate windowed-menu suite passed **20 checks** with 60 synthetic model
+families in a 12-row terminal. It verifies bounded display, Tab/arrow navigation,
+middle/final candidate reachability, Enter/colon acceptance, resizing to 8 and
+24 rows, partial/unique completion, and restoration of unset and pre-existing
+prompt settings before unrelated command completion. It uses Oh My Zsh's normal
+global `menu select`; explicit `menu no` requests a pager instead of selection.
+The shell-cache regression prevents prior four-field rows from entering enriched
+tables in an already-open shell.
+
+Five additional live viewport checks on 2026-10-08 used the deployed version-5
+API's 245-family catalogue in a 12-row system-Zsh PTY. They verified bounded
+initial display, the navigation footer, populated cloud-only metadata, and
+selection of interior model 121 and final model 245. No model command executed.
+The cache was warmed through 41 sequential requests of up to six families using
+the existing bounded API. Final readback showed 245 update dates, 245 cloud
+statuses, 238 contexts and 127 families with published capability badges. Context
+can remain unknown for families without an unambiguous default or sole variant;
+missing capability badges are not inferred. This was functional testing, not a
+repeat of the prior version-3 volume test.
 
 A blank `ollama pull <Tab>` also verifies public models absent from the local
 inventory and makes no daemon or CLI model-list query. Session reload checks

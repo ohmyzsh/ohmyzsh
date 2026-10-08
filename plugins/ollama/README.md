@@ -65,7 +65,9 @@ locally cached layers. The example illustrates the layout; values change with
 the library. Missing metadata is shown as `-`.
 
 Public family menus show update date, default-tag context when already cached,
-family capabilities, and cloud availability. They omit download size in every
+family capabilities, and cloud availability. A family without a default can
+show its sole concrete variant's context; multiple variants without a default
+leave context unknown. Family menus omit download size in every
 sorting mode. A family's cloud availability does not mean every variant runs in
 the cloud. Tag menus show the selected variant's context and cloud status;
 their capability column is explicitly family-level, not a guarantee for every
@@ -78,6 +80,31 @@ and cloud references from the daemon. The inventory does not report the maximum
 supported context, so that value remains unknown. Running-model menus label
 their reported runtime value `Loaded context`; it is not the supported maximum.
 Completion does not issue a separate model-details request for each candidate.
+
+### Scrolling long menus
+
+Long Ollama completion tables use Zsh's scrolling selection menu and stay within
+the terminal height. Every match remains available; the list is not truncated.
+Tab or the arrow keys move the selection, the footer shows the current position,
+and Enter accepts the selected reference without running the command. Ambiguous
+lists enter selection when displayed; unique matches complete normally. If menu
+selection is explicitly disabled with `menu no`, long lists use a pager instead.
+
+These defaults apply only to Ollama. To change them, put more specific styles in
+`.zshrc` after Oh My Zsh loads, for example:
+
+```zsh
+zstyle ':completion:*:*:ollama*:*:default' select-scroll 1
+zstyle ':completion:*:*:ollama*:*:default' select-prompt '%S%p -- %m matches%s'
+```
+
+`select-scroll 1` scrolls one line at a time; the plugin default `0` scrolls by
+half a screen. See [Zsh's completion styles](https://zsh.sourceforge.io/Doc/Release/Completion-System.html)
+for other menu and scrolling settings.
+
+After updating the installed plugin, start a fresh shell to reload all completion
+helpers and styles together. An existing shell can retain an older feed reader
+even if a newer table renderer was loaded separately.
 Commands and launch integrations also display one name/description per line.
 
 Requests have a one-second connection timeout and a three-second overall timeout
