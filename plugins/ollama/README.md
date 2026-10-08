@@ -26,11 +26,16 @@ specified by `OLLAMA_HOST` (default `http://127.0.0.1:11434`) without starting i
 ### Pullable models and tags
 
 ```text
-ollama pull qw<Tab>          # Matching public model names
-ollama pull qwen3.5<Tab>     # Default name and concrete variants
+ollama pull qw<Tab>          # Matching public model names, followed by :
+ollama pull qwen3.5<Tab>     # Concrete variants for an exact model name
 ollama pull qwen3.5:<Tab>    # Concrete variants, including MLX and quantized tags
 ollama pull qwen3.5:4<Tab>   # Matching tags such as 4b and 4b-mlx
 ```
+
+Selecting a public model family inserts a trailing `:` instead of a space.
+Press Tab again to select its tag in the same argument. This also applies when
+Enter accepts a family from zsh's interactive selection menu. An untagged model
+can still be typed normally to pull its default variant.
 
 Public completion queries the shared
 [Ollama Model Metadata Cache](https://ollama-model-cache.amcox886.chatgpt.site).
@@ -46,10 +51,11 @@ Bare model names appear without a `latest` label. Ollama resolves an untagged
 reference through `:latest`; that tag may refer to another variant. Only concrete
 tags marked as latest on the public tags page are described as `*latest (default)`.
 `model:latest` is not duplicated in the tag menu, but remains valid when typed
-manually. Tag menus list one variant per line with its listed download size:
+manually. Tag menus list one variant per line, with download sizes aligned in
+a column:
 
 ```text
-qwen3.8:27b -- 18GB, *latest (default)
+qwen3.8:27b          -- 18GB, *latest (default)
 qwen3.8:27b-mlx-bf16 -- 56GB
 ```
 

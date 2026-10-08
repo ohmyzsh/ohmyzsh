@@ -26,7 +26,7 @@ zsh -n plugins/ollama/_ollama
 zsh -f plugins/ollama/tests/run.zsh
 ```
 
-The offline suite passed **74 checks** on system zsh `5.9`. It creates an isolated
+The offline suite passed **77 checks** on system zsh `5.9`. It creates an isolated
 PTY shell and presses Tab through real ZLE and `_arguments`, using synthetic
 HTTP/CLI fixtures. It never submits a model command or changes an Ollama server.
 
@@ -50,13 +50,16 @@ cover public names,
 numeric and fractional tags, installed models, a tag-specific style override,
 unrecognized-value fallback, and a style change against cached offline results.
 Size checks cover default-family sizes, SI units, range upper bounds, equal-size
-natural ties, unknown sizes last, and one variant per terminal line. The HTTP
+natural ties, unknown sizes last, one variant per terminal line, and aligned
+download-size columns. Family completion inserts `:` and continues into tag
+selection; an interactive menu also verifies Enter acceptance. The HTTP
 fixtures use the shared service's four-field TSV protocol. Requests for family
 sizes are restricted to candidates matching the shell's completion rules.
 
 The repository's CI syntax loop also passed for **593 files**. The local sandbox
 emitted scheduler permission warnings while parsing existing background-command
-syntax; no syntax failures occurred. CI has not run remotely for this branch.
+syntax; no syntax failures occurred. These are local results; the upstream pull
+request reports remote CI separately.
 
 ## Live checks and limits
 
@@ -99,7 +102,8 @@ created, run, stopped, copied, or removed.
 The branch was based on upstream master
 `60c9a7a839b790cd905d0fd4419435124fd1bdc0`, following the
 [contributing guidelines](../../CONTRIBUTING.md). Existing feature request
-[#12336](https://github.com/ohmyzsh/ohmyzsh/issues/12336) should be referenced in a
-future PR. Human tester endorsements and meaningful AI-assistance disclosure are
-required for that submission. This implementation and its tests were AI-assisted.
-No upstream PR has been submitted.
+[#12336](https://github.com/ohmyzsh/ohmyzsh/issues/12336) describes the requested
+feature. Upstream submission requires the repository's pull request template,
+comparison with existing proposals, human tester endorsements, and meaningful
+AI-assistance disclosure. This implementation and its tests were AI-assisted.
+Local automated checks do not replace human tester endorsements.

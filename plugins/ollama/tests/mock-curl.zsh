@@ -17,7 +17,8 @@ local logged=$request
 [[ -n $names ]] && logged+="?names=$names"
 print -r -- "$logged" >> "$OLLAMA_TEST_REQUESTS"
 [[ -f "$OLLAMA_TEST_SCRATCH/offline" && $request == */api/v1/* ]] && exit 7
-if [[ -f "$OLLAMA_TEST_SCRATCH/invalid-response" && $request == */api/v1/* ]]; then
+if [[ -f "$OLLAMA_TEST_SCRATCH/invalid-response" &&
+      $request == */api/v1/* ]]; then
   print '<html>service temporarily unavailable</html>'
   exit 0
 fi
@@ -26,7 +27,9 @@ case $request in
   */api/ps) cat "$OLLAMA_TEST_FIXTURES/running-models.json" ;;
   */api/v1/models)
     if [[ -n $names ]]; then
-      awk -F '\t' -v names=",$names," 'index(names, "," $1 ",") { print }' "$OLLAMA_TEST_FIXTURES/model-names.tsv"
+      awk -F '\t' -v names=",$names," \
+        'index(names, "," $1 ",") { print }' \
+        "$OLLAMA_TEST_FIXTURES/model-names.tsv"
     else
       cat "$OLLAMA_TEST_FIXTURES/model-names.tsv"
     fi
@@ -41,11 +44,15 @@ case $request in
         else
           cat "$OLLAMA_TEST_FIXTURES/qwen-tags.tsv"
         fi
-        [[ -f "$OLLAMA_TEST_SCRATCH/updated" ]] && print -r -- "$model:9b-mlx"$'\t7800000000\t7.8GB\t0'
+        [[ -f "$OLLAMA_TEST_SCRATCH/updated" ]] && \
+          print -r -- "$model:9b-mlx"$'\t7800000000\t7.8GB\t0'
         ;;
       team/custom) print -r -- $'team/custom:small-v1\t122000000\t122MB\t0' ;;
       team/cold) exit 22 ;;
-      *) print -r -- "UNEXPECTED: $logged" >> "$OLLAMA_TEST_REQUESTS"; exit 22 ;;
+      *)
+        print -r -- "UNEXPECTED: $logged" >> "$OLLAMA_TEST_REQUESTS"
+        exit 22
+        ;;
     esac
     ;;
   *) print -r -- "UNEXPECTED: $logged" >> "$OLLAMA_TEST_REQUESTS"; exit 22 ;;

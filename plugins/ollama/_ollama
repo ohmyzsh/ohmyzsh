@@ -2,7 +2,9 @@
 
 _ollama_describe_models() {
   # Records contain reference, sortable bytes, displayed size, and latest badge.
-  local completion_tag=$1 label=$2 candidate_array=$3 order entry reference description size_key
+  local completion_tag=$1 label=$2 candidate_array=$3 order entry reference
+  local description size_key display
+  local -i reference_width=0
   local -a candidates=("${(@P)candidate_array}")
   local -a references descriptions expl fields layout unknown group size_keys
   local -A size_groups
@@ -37,25 +39,41 @@ _ollama_describe_models() {
     *) candidates=("${(@on)candidates}") ;;
   esac
   for entry in "$candidates[@]"; do
+    reference=${entry%%$'\t'*}
+    (( ${#reference} > reference_width )) && reference_width=${#reference}
+  done
+  for entry in "$candidates[@]"; do
     fields=("${(@ps:\t:)entry}")
     reference=$fields[1]
     references+=("$reference")
     description=$fields[3]
-    [[ -z $description && ( $completion_tag == model-tags || $order == (size|reverse-size) ) ]] && description='size unavailable'
+    if [[ -z $description &&
+          ( $completion_tag == model-tags ||
+            $order == (size|reverse-size) ) ]]; then
+      description='size unavailable'
+    fi
     if [[ $fields[4] == 1 ]]; then
       [[ -n $description ]] && description+=', '
       description+='*latest (default)'
     fi
-    if [[ -n $description ]] && zstyle -T ":completion:${curcontext}:$completion_tag" verbose; then
-      descriptions+=("$reference -- $description")
+    if [[ -n $description ]] &&
+       zstyle -T ":completion:${curcontext}:$completion_tag" verbose; then
+      printf -v display '%-*s -- %s' $reference_width "$reference" \
+        "$description"
+      descriptions+=("$display")
     else
       descriptions+=("$reference")
     fi
   done
   # Add aligned descriptions directly: _describe groups identical descriptions,
   # which can move the latest variant and reorder an otherwise sorted menu.
-  [[ $completion_tag == model-tags || $order == (size|reverse-size) ]] && layout=(-l)
-  _wanted -V "$completion_tag" expl "$label" compadd "$@" "$layout[@]" -d descriptions -a references
+  if [[ $completion_tag == model-tags || $order == (size|reverse-size) ]]; then
+    layout=(-l)
+  fi
+  # Continue public family selection in the same argument, at its tag boundary.
+  [[ $completion_tag == remote-models ]] && layout+=(-S ':')
+  _wanted -V "$completion_tag" expl "$label" compadd "$@" "$layout[@]" \
+    -d descriptions -a references
 }
 
 _ollama_commands() {
@@ -74,7 +92,8 @@ _ollama_commands() {
 
 _ollama_local_models() {
   (( $+commands[curl] && $+commands[jq] )) || return 1
-  local endpoint=tags kind=local host=${OLLAMA_HOST:-127.0.0.1:11434} output default_port=11434
+  local endpoint=tags kind=local host=${OLLAMA_HOST:-127.0.0.1:11434}
+  local output default_port=11434
   if [[ $1 == running ]]; then
     endpoint=ps
     kind=running
@@ -105,12 +124,16 @@ _ollama_local_models() {
     \[::\]:*) address="[::1]:${address##*:}" ;;
   esac
   # Do not invoke `ollama list`: its heartbeat can start the macOS app.
-  output=$(command curl -q -fsS --connect-timeout 1 --max-time 2 --max-filesize 2097152 \
+  output=$(command curl -q -fsS --connect-timeout 1 --max-time 2 \
+    --max-filesize 2097152 \
     "$scheme://$address${basepath%/}/api/$endpoint" 2>/dev/null) || return 1
   local -a models
   models=("${(@f)$(print -r -- "$output" | command jq -r \
     '.models[]? | select(.name | type == "string") |
-     [.name, (if (.size | type) == "number" and .size >= 0 then (.size | floor | tostring) else "" end), "", "0"] | @tsv' 2>/dev/null)}")
+     [.name,
+      (if (.size | type) == "number" and .size >= 0
+       then (.size | floor | tostring) else "" end), "", "0"] | @tsv' \
+    2>/dev/null)}")
   models=("${(@)models:#}")
   (( $#models )) || return 1
   local entry bytes display
@@ -159,11 +182,13 @@ _ollama_catalogue() {
     [[ -n $names ]] && request+=(--data-urlencode "names=$names")
   fi
   key="${base%/}/api/v1/$endpoint|$model|$names"
-  typeset -gA _ollama_catalogue_cache
-  if output=$(command curl -q -fsS --connect-timeout 1 --max-time 3 --max-filesize 2097152 \
+  typeset -gA _OLLAMA_CATALOGUE_CACHE
+  if output=$(command curl -q -fsS --connect-timeout 1 --max-time 3 \
+    --max-filesize 2097152 \
     "$request[@]" "${base%/}/api/v1/$endpoint" 2>/dev/null); then
     # Validate data before displaying it. Responses are never sourced or evaled.
-    parsed=$(print -r -- "$output" | LC_ALL=C command awk -F '\t' -v model="$model" '
+    parsed=$(print -r -- "$output" |
+      LC_ALL=C command awk -F '\t' -v model="$model" '
       NF != 4 { invalid = 1; next }
       $1 !~ /^[A-Za-z0-9_.\/-]+(:[A-Za-z0-9_.-]+)?$/ { invalid = 1; next }
       $2 != "" && ($2 !~ /^[0-9]+$/ || length($2) > 16) { invalid = 1; next }
@@ -176,11 +201,11 @@ _ollama_catalogue() {
         if (invalid) exit 1
         for (i = 1; i <= count; i++) print records[i]
       }')
-    [[ -n $parsed ]] && _ollama_catalogue_cache[$key]=$parsed
+    [[ -n $parsed ]] && _OLLAMA_CATALOGUE_CACHE[$key]=$parsed
   fi
   # The shared service refreshes expired entries. Retain the last successful
   # response in this shell as an offline fallback, without querying Ollama.com.
-  reply=("${(@f)${_ollama_catalogue_cache[$key]}}")
+  reply=("${(@f)${_OLLAMA_CATALOGUE_CACHE[$key]}}")
   reply=("${(@)reply:#}")
   (( $#reply ))
 }
@@ -216,6 +241,9 @@ _ollama_remote_models() {
     fi
   fi
   if [[ -n $model ]] && _ollama_catalogue "$model"; then
+    models=()
+    completion_tag=model-tags
+    label='model tag'
     for entry in "$reply[@]"; do
       fields=("${(@ps:\t:)entry}")
       [[ $fields[1] == "$model:latest" ]] && continue
