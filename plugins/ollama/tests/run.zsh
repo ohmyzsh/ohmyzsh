@@ -477,6 +477,19 @@ expect_menu_order 'reverse family size order uses latest variant' \
   'ollama pull ' gemma3 qwen3.5 embeddinggemma
 expect_menu_order 'reverse installed model size order' 'ollama show ' \
   qwen3.5:4b gemma3:1b
+configure_child "zstyle ':completion:*:ollama*:*' model-sort context"
+expect_menu_order 'context order compares token counts and units with natural ties and unknown last' \
+  'ollama pull sort-model:' 2b 9b 122b 0.8b 27b missing
+expect_menu_order 'public family context order differs from download size order' \
+  'ollama pull ' embeddinggemma gemma3 qwen3.5
+expect_menu_order 'running models sort by loaded context' \
+  'ollama stop ' qwen3.5:4b qwen3.5:9b
+expect_menu_order 'unknown installed contexts retain natural order' \
+  'ollama show ' gemma3:1b qwen3.5:4b
+configure_child "zstyle ':completion:*:ollama-pull:*:model-tags' model-sort natural"
+expect_menu_order 'context families can coexist with natural tag order' \
+  'ollama pull sort-model:' 0.8b 2b 9b 27b 122b missing
+configure_child "zstyle -d ':completion:*:ollama-pull:*:model-tags' model-sort"
 configure_child "zstyle -d ':completion:*:ollama*:*' model-sort; zstyle ':completion:*' menu no"
 expect_model_fields 'download size and latest marker stay attached to tag' \
   'ollama pull qwen3.5:' qwen3.5:4b '2.7GB' '*latest (default)'
@@ -558,7 +571,7 @@ configure_child "zstyle -d ':completion:*:ollama*:*' model-sort; zstyle ':comple
 
 # Family sizes are sorting metadata, never displayed download information.
 for family_order in natural alphabetical reverse latest-first newest popular \
-                    source size reverse-size; do
+                    source size reverse-size context; do
   configure_child \
     "zstyle ':completion:*:ollama*:*' model-sort $family_order"
   complete_line 'ollama pull ' $'\t\t'
@@ -600,6 +613,11 @@ configure_child "zstyle ':completion:*' metadata-url https://legacy-cache.test; 
 expect_buffer 'four-field shell cache cannot populate enriched model tables' \
   'ollama pull legacy-' 'ollama pull legacy-'
 configure_child "zstyle ':completion:*' metadata-url https://metadata.test"
+configure_child "zstyle ':completion:*:ollama*:*' model-sort context; zstyle ':completion:*' menu yes"
+expect_menu_order 'offline context sorting reuses enriched tag metadata' \
+  'ollama pull sort-model:' 2b 9b 122b 0.8b 27b missing
+expect_menu_order 'offline context sorting reuses family metadata' \
+  'ollama pull ' embeddinggemma gemma3 qwen3.5
 configure_child "zstyle ':completion:*:ollama*:*' model-sort newest; zstyle ':completion:*' menu yes"
 expect_menu_order 'offline newest families retain their own cache order' \
   'ollama pull ' gemma3 embeddinggemma qwen3.5

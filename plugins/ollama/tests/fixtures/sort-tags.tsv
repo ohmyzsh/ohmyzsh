@@ -1,6 +1,6 @@
-sort-model:27b	2000000000	2GB	0	1 week ago	256K	tools,vision,thinking	no
-sort-model:2b	900000000	900MB	0	1 week ago	256K	tools,vision,thinking	no
+sort-model:27b	2000000000	2GB	0	1 week ago	1M	tools,vision,thinking	no
+sort-model:2b	900000000	900MB	0	1 week ago	4K	tools,vision,thinking	no
 sort-model:122b	1000000000000	1TB	0	1 week ago	256K	tools,vision,thinking	no
-sort-model:9b	1200000000	1GB - 1.2GB	1	1 week ago	256K	tools,vision,thinking	no
-sort-model:0.8b	1200000000	1200MB	0	1 week ago	256K	tools,vision,thinking	no
-sort-model:missing			0	1 week ago	256K	tools,vision,thinking	no
+sort-model:9b	1200000000	1GB - 1.2GB	1	1 week ago	4096	tools,vision,thinking	no
+sort-model:0.8b	1200000000	1200MB	0	1 week ago	0.5M	tools,vision,thinking	no
+sort-model:missing			0	1 week ago		tools,vision,thinking	no

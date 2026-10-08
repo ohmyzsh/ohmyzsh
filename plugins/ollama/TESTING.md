@@ -27,7 +27,7 @@ zsh -f plugins/ollama/tests/run.zsh
 zsh -f plugins/ollama/tests/windowed.zsh
 ```
 
-The offline suite passed **119 checks** on system zsh `5.9`. It creates an isolated
+The offline suite passed **127 checks** on system zsh `5.9`. It creates an isolated
 PTY shell and presses Tab through real ZLE and `_arguments`, using synthetic
 HTTP/CLI fixtures. It never submits a model command or changes an Ollama server.
 
@@ -66,8 +66,11 @@ start with an existing completion function and prove that the documented
 `unfunction`/autoload sequence replaces it with the checkout's implementation.
 
 Model ordering checks cycle through the real completion menu and verify natural,
-alphabetical, reverse, latest-first, newest, popular, source, size, and
-reverse-size order. They verify newest-added and popularity family ordering
+alphabetical, reverse, latest-first, newest, popular, source, size,
+reverse-size, and context order. Context checks compare raw token counts with
+K/M units and fractional values, verify natural ties and unknowns last, use
+running-model loaded context, preserve independent family/tag styles, and
+reuse enriched offline metadata. They verify newest-added and popularity family ordering
 independently of default-tag ordering, separate family/tag styles, and isolated
 offline ranking caches. They cover public names,
 numeric and fractional tags, installed models, a tag-specific style override,

@@ -153,6 +153,7 @@ zstyle ':completion:*:ollama*:*' model-sort natural
 | `source` | Preserve the order returned by the public catalogue or daemon. |
 | `size` | Smallest listed download size first. Public families use the size of their default `latest` variant. |
 | `reverse-size` | Largest listed download size first, with the same default-variant rule. |
+| `context` | Smallest reported context window first; equal values use natural name order and unknown values stay last. |
 
 For example:
 
@@ -170,6 +171,19 @@ time budget; large selections may initially have unknown sizes. Further
 requests fill the shared cache, prioritizing missing metadata. Fresh entries
 are reused without another upstream fetch; failed refreshes retain successful
 stale metadata.
+
+Context sorting compares numeric token counts, including abbreviated values:
+`K`, `M`, `G`, and `T` multiply by powers of 1024 (`4K` equals `4096`). Public
+families use their cached default or sole-variant context, tags use the selected
+variant's context, and running models use their loaded context. Installed models
+without a reported context use natural name order among the unknown entries.
+Public family context sorting uses the same bounded matching-family cache
+refresh as size sorting. Configure it independently from tag order, for example:
+
+```zsh
+zstyle ':completion:*:ollama-pull:*:remote-models' model-sort context
+zstyle ':completion:*:ollama-pull:*:model-tags' model-sort natural
+```
 
 Override just the tag menu for `pull`, for example:
 

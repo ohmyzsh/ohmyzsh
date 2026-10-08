@@ -48,6 +48,7 @@ _ollama_describe_models() {
   # capabilities, and cloud status.
   local completion_tag=$1 label=$2 candidate_array=$3 order entry reference
   local description size_key display heading updated context capabilities cloud
+  local -F context_value
   local date_heading=Updated context_heading=Context
   local capability_heading=Capabilities
   local -i reference_width=5 size_width=4 updated_width=7 context_width=7
@@ -79,11 +80,27 @@ _ollama_describe_models() {
       done
       candidates=("$defaults[@]" "$group[@]")
       ;;
-    size|reverse-size)
+    size|reverse-size|context)
       for entry in "$candidates[@]"; do
         fields=("${(@ps:\t:)entry}")
-        if [[ $fields[2] == <-> ]]; then
-          size_groups[$fields[2]]+="$entry"$'\n'
+        size_key=$fields[2]
+        if [[ $order == context ]]; then
+          size_key=''
+          if [[ $fields[6] =~ '^[0-9]+([.][0-9]+)?[KMGT]?$' &&
+                ${#fields[6]} -le 16 ]]; then
+            context_value=${fields[6]%[KMGT]}
+            case $fields[6] in
+              *K) (( context_value *= 1024 )) ;;
+              *M) (( context_value *= 1048576 )) ;;
+              *G) (( context_value *= 1073741824 )) ;;
+              *T) (( context_value *= 1099511627776 )) ;;
+            esac
+            (( context_value > 0 )) && \
+              printf -v size_key '%.0f' $context_value
+          fi
+        fi
+        if [[ $size_key == <-> ]]; then
+          size_groups[$size_key]+="$entry"$'\n'
         else
           unknown+=("$entry")
         fi
@@ -371,8 +388,8 @@ _ollama_remote_models() {
       names+=("$fields[1]")
     done
     zstyle -s ":completion:${curcontext}:remote-models" model-sort order
-    if [[ $order == (size|reverse-size) ]]; then
-      # Ask the service to hydrate only families that match zsh's own rules.
+    if [[ $order == (size|reverse-size|context) ]]; then
+      # Hydrate default-variant metadata only for families matching zsh's rules.
       matching=("$names[@]")
       _description -V remote-models expl "$label"
       compadd "$expl[@]" "$@" -D matching -a names
