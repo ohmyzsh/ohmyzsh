@@ -130,7 +130,8 @@ zstyle ':completion:*:ollama-pull:*:model-tags' model-sort latest-first
 
 The completion tags are `remote-models` for public names, `model-tags` for an
 explicit `model:` prefix, and `models` for installed/running models. An exact
-bare public model name uses `remote-models` for its combined name/variant menu.
+bare public model name also uses `model-tags` when its tag lookup succeeds.
+If that lookup fails, available family candidates remain under `remote-models`.
 Sorting applies to each candidate list; installed candidates are added before
 public candidates when a command offers both. Numeric sorting follows the
 reference's text; it does not infer model quality. Unset or
