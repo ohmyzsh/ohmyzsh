@@ -1,12 +1,25 @@
 #compdef ollama
 
+_ollama_add_model_matches() {
+  # _wanted supplies a default group. Replace it so each table keeps its header
+  # beside its own matches even when the user's group-name style is unset.
+  local -a groups
+  zparseopts -D -E -a groups J: V:
+  compadd "$@" -V "$completion_tag" -l -d descriptions -a references
+}
+
 _ollama_describe_models() {
-  # Records contain reference, sortable bytes, displayed size, and latest badge.
+  # Records contain reference, bytes, size, default, updated, context,
+  # capabilities, and cloud status.
   local completion_tag=$1 label=$2 candidate_array=$3 order entry reference
-  local description size_key display
-  local -i reference_width=0
+  local description size_key display heading updated context capabilities cloud
+  local date_heading=Updated context_heading=Context
+  local capability_heading=Capabilities
+  local -i reference_width=5 size_width=4 updated_width=7 context_width=7
+  local -i capabilities_width=12 show_size=1
   local -a candidates=("${(@P)candidate_array}")
   local -a references descriptions expl fields layout unknown group size_keys
+  local -a defaults
   local -A size_groups
   shift 3
   zstyle -s ":completion:${curcontext}:$completion_tag" model-sort order
@@ -20,7 +33,16 @@ _ollama_describe_models() {
       ;;
     latest-first)
       candidates=("${(@on)candidates}")
-      candidates=("${(@M)candidates:#*$'\t1'}" "${(@)candidates:#*$'\t1'}")
+      group=()
+      for entry in "$candidates[@]"; do
+        fields=("${(@ps:\t:)entry}")
+        if [[ $fields[4] == 1 ]]; then
+          defaults+=("$entry")
+        else
+          group+=("$entry")
+        fi
+      done
+      candidates=("$defaults[@]" "$group[@]")
       ;;
     size|reverse-size)
       for entry in "$candidates[@]"; do
@@ -42,30 +64,47 @@ _ollama_describe_models() {
       ;;
     *) candidates=("${(@on)candidates}") ;;
   esac
+  [[ $completion_tag == remote-models ]] && show_size=0
+  [[ $completion_tag == (remote-models|model-tags) ]] && \
+    capability_heading='Family capabilities'
+  [[ $label == 'local model' ]] && date_heading=Modified
+  [[ $label == 'running model' ]] && context_heading='Loaded context'
+  updated_width=${#date_heading}
+  context_width=${#context_heading}
+  capabilities_width=${#capability_heading}
   for entry in "$candidates[@]"; do
+    fields=("${(@ps:\t:)entry}")
     reference=${entry%%$'\t'*}
     (( ${#reference} > reference_width )) && reference_width=${#reference}
+    (( ${#fields[3]} > size_width )) && size_width=${#fields[3]}
+    (( ${#fields[5]} > updated_width )) && updated_width=${#fields[5]}
+    (( ${#fields[6]} > context_width )) && context_width=${#fields[6]}
+    (( ${#fields[7]} > capabilities_width )) && \
+      capabilities_width=${#fields[7]}
   done
   for entry in "$candidates[@]"; do
     fields=("${(@ps:\t:)entry}")
     reference=$fields[1]
     references+=("$reference")
-    description=$fields[3]
-    if [[ -z $description &&
-          ( $completion_tag == model-tags ||
-            $order == (size|reverse-size) ) ]]; then
-      description='size unavailable'
+    description=${fields[3]:--}
+    updated=${fields[5]:--}
+    context=${fields[6]:--}
+    capabilities=${fields[7]:--}
+    cloud=${fields[8]:--}
+    # Each column has the same width across this menu, including unknown values.
+    printf -v display '%-*s -- ' $reference_width "$reference"
+    if (( show_size )); then
+      printf -v heading '%-*s  ' $size_width "$description"
+      display+=$heading
     fi
+    printf -v heading '%-*s  %-*s  %-*s  %-5s' \
+      $updated_width "$updated" $context_width "$context" \
+      $capabilities_width "$capabilities" "$cloud"
+    display+=$heading
     if [[ $fields[4] == 1 ]]; then
-      [[ -n $description ]] && description+=', '
-      description+='*latest (default)'
+      display+='  *latest (default)'
     fi
-    # Family metadata affects ordering, but only tag lists show download sizes.
-    [[ $completion_tag == remote-models ]] && description=''
-    if [[ -n $description ]] &&
-       zstyle -T ":completion:${curcontext}:$completion_tag" verbose; then
-      printf -v display '%-*s -- %s' $reference_width "$reference" \
-        "$description"
+    if zstyle -T ":completion:${curcontext}:$completion_tag" verbose; then
       descriptions+=("$display")
     else
       descriptions+=("$reference")
@@ -73,15 +112,46 @@ _ollama_describe_models() {
   done
   # Add aligned descriptions directly: _describe groups identical descriptions,
   # which can move the latest variant and reorder an otherwise sorted menu.
-  if [[ $completion_tag == model-tags ||
-        ( $completion_tag != remote-models &&
-          $order == (size|reverse-size) ) ]]; then
-    layout=(-l)
+  layout=(-l -V "$completion_tag")
+  if zstyle -T ":completion:${curcontext}:$completion_tag" verbose; then
+    printf -v heading '%-*s -- ' $reference_width Model
+    if (( show_size )); then
+      printf -v display '%-*s  ' $size_width Size
+      heading+=$display
+    fi
+    printf -v display '%-*s  %-*s  %-*s  %-5s' \
+      $updated_width "$date_heading" $context_width "$context_heading" \
+      $capabilities_width "$capability_heading" Cloud
+    label+=$'\n'"$heading$display"
+    layout+=(-X "$label")
   fi
   # Continue public family selection in the same argument, at its tag boundary.
   [[ $completion_tag == remote-models ]] && layout+=(-S ':')
-  _wanted -V "$completion_tag" expl "$label" compadd "$@" "$layout[@]" \
-    -d descriptions -a references
+  _wanted -V "$completion_tag" expl "$label" _ollama_add_model_matches \
+    "$@" "$layout[@]"
+}
+
+_ollama_describe_values() {
+  local completion_tag=$1 label=$2 candidate_array=$3 entry reference display
+  local -i width=0
+  local -a candidates=("${(@P)candidate_array}") references descriptions expl
+  shift 3
+  for entry in "$candidates[@]"; do
+    reference=${entry%%:*}
+    (( ${#reference} > width )) && width=${#reference}
+  done
+  for entry in "$candidates[@]"; do
+    reference=${entry%%:*}
+    references+=("$reference")
+    if zstyle -T ":completion:${curcontext}:$completion_tag" verbose; then
+      printf -v display '%-*s -- %s' $width "$reference" "${entry#*:}"
+      descriptions+=("$display")
+    else
+      descriptions+=("$reference")
+    fi
+  done
+  _wanted "$completion_tag" expl "$label" compadd "$@" \
+    -l -d descriptions -a references
 }
 
 _ollama_commands() {
@@ -95,7 +165,7 @@ _ollama_commands() {
     'cp:Copy a model' 'rm:Remove models'
     'launch:Launch the Ollama menu or an integration' 'help:Show command help'
   )
-  _describe -t commands 'ollama command' commands "$@"
+  _ollama_describe_values commands 'ollama command' commands "$@"
 }
 
 _ollama_local_models() {
@@ -140,7 +210,17 @@ _ollama_local_models() {
     '.models[]? | select(.name | type == "string") |
      [.name,
       (if (.size | type) == "number" and .size >= 0
-       then (.size | floor | tostring) else "" end), "", "0"] | @tsv' \
+       then (.size | floor | tostring) else "" end), "", "0",
+      (if (.modified_at | type) == "string" and
+          (.modified_at | test("^[0-9]{4}-[0-9]{2}-[0-9]{2}T"))
+       then .modified_at[0:10] else "" end),
+      (if (.context_length | type) == "number" and .context_length > 0
+       then (.context_length | floor | tostring) else "" end),
+      ([.capabilities[]? | select(type == "string") |
+        select(test("^(completion|tools|insert|vision|embedding|thinking|image|audio|decision)$"))]
+       | unique | join(",")),
+      (if ((.remote_host // "") != "" or (.remote_model // "") != "")
+       then "yes" else "no" end)] | @tsv' \
     2>/dev/null)}")
   models=("${(@)models:#}")
   (( $#models )) || return 1
@@ -161,7 +241,9 @@ _ollama_local_models() {
         display="${bytes}B"
       fi
     fi
-    records+=("$fields[1]"$'\t'"$bytes"$'\t'"$display"$'\t0')
+    entry="$fields[1]"$'\t'"$bytes"$'\t'"$display"$'\t0\t'
+    entry+="$fields[5]"$'\t'"$fields[6]"$'\t'"$fields[7]"$'\t'"$fields[8]"
+    records+=("$entry")
   done
   models=("$records[@]")
   _ollama_describe_models models "$kind model" models "$@"
@@ -179,7 +261,7 @@ _ollama_catalogue() {
   zstyle -s ":completion:${curcontext}:" metadata-url base || \
     base=https://ollama-model-cache.amcox886.chatgpt.site
   [[ $base == http://* || $base == https://* ]] || return 1
-  request=(--get --data-urlencode format=tsv)
+  request=(--get --data-urlencode format=completion-tsv)
   if [[ -n $model ]]; then
     [[ $model =~ '^[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)?$' ]] || return 1
     [[ $model != . && $model != .. && ${model##*/} != (.|..) ]] || return 1
@@ -200,11 +282,27 @@ _ollama_catalogue() {
     # Validate data before displaying it. Responses are never sourced or evaled.
     parsed=$(print -r -- "$output" |
       LC_ALL=C command awk -F '\t' -v model="$model" '
-      NF != 4 { invalid = 1; next }
+      NF != 8 { invalid = 1; next }
       $1 !~ /^[A-Za-z0-9_.\/-]+(:[A-Za-z0-9_.-]+)?$/ { invalid = 1; next }
       $2 != "" && ($2 !~ /^[0-9]+$/ || length($2) > 16) { invalid = 1; next }
       $3 != "" && $3 !~ /^[0-9.[:space:]KMGTiB-]+$/ { invalid = 1; next }
       $4 !~ /^[01]$/ { invalid = 1; next }
+      $5 != "" && ($5 !~ /^[A-Za-z0-9 -]+$/ || length($5) > 32) {
+        invalid = 1; next
+      }
+      $6 != "" && ($6 !~ /^[0-9]+([.][0-9]+)?[KMGT]?$/ || length($6) > 16) {
+        invalid = 1; next
+      }
+      $7 != "" && ($7 !~ /^[a-z,]+$/ || length($7) > 128) {
+        invalid = 1; next
+      }
+      $8 != "" && $8 !~ /^(yes|no|-)$/ { invalid = 1; next }
+      $7 != "" {
+        n = split($7, capabilities, ",")
+        for (j = 1; j <= n; j++)
+          if (capabilities[j] !~ /^(completion|tools|insert|vision|embedding|thinking|image|audio|decision)$/)
+            invalid = 1
+      }
       model != "" && index($1, model ":") != 1 { invalid = 1; next }
       model == "" && ($1 ~ /:/ || $4 != "0") { invalid = 1; next }
       { records[++count] = $0 }
@@ -288,7 +386,7 @@ _ollama_integrations() {
         for (i = 1; i <= count; i++) print names[i] ":alias for " name
       }
     }')}")
-  _describe -t integrations 'integration' integrations "$@"
+  _ollama_describe_values integrations 'integration' integrations "$@"
 }
 
 _ollama() {

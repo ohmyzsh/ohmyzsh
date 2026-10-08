@@ -62,7 +62,8 @@ bindkey '^X^B' _test_dump_buffer
 print -r -- '<<<READY>>>'
 SETUP
 
-zpty -b ollama-test /bin/zsh -dfi
+# A user's exported FPATH may point at another Zsh installation's functions.
+zpty -b ollama-test env -u FPATH /bin/zsh -dfi
 zpty -w ollama-test "source ${(q)scratch}/setup.zsh"
 
 # Nonblocking reads keep a failed child or completion from hanging the suite.
@@ -125,6 +126,102 @@ expect_listing() {
   done
   print -r -- "ok - $description"
   (( passed++ ))
+}
+
+# A described completion must occupy its own terminal row. Check rendered ZLE
+# output, including aligned description boundaries, without pinning metadata.
+expect_described_rows() {
+  local description=$1 line=$2 output buffer terminal row reference prefix group
+  local -a references=("${(@)argv[3,-1]}")
+  local -A seen columns
+  integer count rows_ok=1 aligned=1 first_column=0 column
+  # Consume the preceding menu's asynchronous redisplay before measuring rows.
+  configure_child ':' || { (( failed++ )); return }
+  complete_line "$line" $'\t\t' || { (( failed++ )); return }
+  terminal=${output//$'\e'\[[0-9\;\?]#[A-Za-z]/}
+  for row in "${(@f)terminal}"; do
+    count=0
+    for reference in "$references[@]"; do
+      if [[ $row == *${reference}[[:space:]]* ]]; then
+        (( count++ ))
+        seen[$reference]=1
+        # Mixed run menus contain differently shaped installed/public tables.
+        group=bare
+        [[ $reference == *:* ]] && group=tagged
+      fi
+    done
+    (( count > 1 )) && rows_ok=0
+    if (( count )) && [[ $row == *' -- '* ]]; then
+      prefix=${row%% -- *}
+      column=${#prefix}
+      (( columns[$group] && column != columns[$group] )) && aligned=0
+      columns[$group]=$column
+      first_column=$column
+    fi
+  done
+  if (( rows_ok && aligned && first_column &&
+        ${#seen} == ${#references} )); then
+    print -r -- "ok - $description"
+    (( passed++ ))
+  else
+    print -u2 -r -- "not ok - $description"
+    print -u2 -r -- "  terminal ${(qqq)terminal}"
+    (( failed++ ))
+  fi
+}
+
+expect_model_fields() {
+  local description=$1 line=$2 reference=$3 output buffer terminal row expected
+  shift 3
+  configure_child ':' || { (( failed++ )); return }
+  complete_line "$line" $'\t\t' || { (( failed++ )); return }
+  terminal=${output//$'\e'\[[0-9\;\?]#[A-Za-z]/}
+  for row in "${(@f)terminal}"; do
+    [[ $row == ${reference}[[:space:]]* ]] || continue
+    row=${row//[ ]##/ }
+    for expected in "$@"; do
+      [[ $row == *$expected* ]] || break
+    done
+    if [[ $row == *$expected* ]]; then
+      print -r -- "ok - $description"
+      (( passed++ ))
+      return
+    fi
+  done
+  print -u2 -r -- "not ok - $description"
+  print -u2 -r -- "  terminal ${(qqq)terminal}"
+  (( failed++ ))
+}
+
+expect_metadata_alignment() {
+  local description=$1 line=$2 prefix=$3 output buffer terminal row value
+  local -A columns
+  integer aligned=1 rows=0 column
+  shift 3
+  configure_child ':' || { (( failed++ )); return }
+  complete_line "$line" $'\t\t' || { (( failed++ )); return }
+  terminal=${output//$'\e'\[[0-9\;\?]#[A-Za-z]/}
+  for row in "${(@f)terminal}"; do
+    [[ $row == ${prefix}*' -- '* ]] || continue
+    (( rows++ ))
+    for value in "$@"; do
+      if [[ $row != *$value* ]]; then
+        aligned=0
+        continue
+      fi
+      column=${#${row%%${value}*}}
+      (( columns[$value] && column != columns[$value] )) && aligned=0
+      columns[$value]=$column
+    done
+  done
+  if (( aligned && rows >= 2 )); then
+    print -r -- "ok - $description"
+    (( passed++ ))
+  else
+    print -u2 -r -- "not ok - $description"
+    print -u2 -r -- "  terminal ${(qqq)terminal}"
+    (( failed++ ))
+  fi
 }
 
 configure_child() {
@@ -254,6 +351,58 @@ expect_buffer 'remote model with namespace' 'ollama pull team/custom:sm' \
 expect_buffer 'explicit library namespace' 'ollama pull library/qwen3.5:4b-' \
   'ollama pull library/qwen3.5:4b-mlx '
 
+# Every local-model entry carries size information, regardless of sort mode or
+# which subcommand requested it. Menus must remain one row per candidate.
+expect_described_rows 'run mixed local and public model menu uses rows' \
+  'ollama run ' gemma3:1b qwen3.5:4b embeddinggemma gemma3 qwen3.5
+for model_command in show push cp rm; do
+  expect_described_rows "$model_command model sizes use aligned rows" \
+    "ollama $model_command " gemma3:1b qwen3.5:4b
+done
+expect_described_rows 'stop running model sizes use aligned rows' \
+  'ollama stop ' qwen3.5:4b qwen3.5:9b
+expect_described_rows 'launch model sizes use aligned rows' \
+  'ollama launch codex --model ' gemma3:1b qwen3.5:4b
+expect_described_rows 'command descriptions use aligned rows' \
+  'ollama ' serve create run stop
+expect_described_rows 'help command descriptions use aligned rows' \
+  'ollama help ' serve create run stop
+expect_described_rows 'integration descriptions use aligned rows' \
+  'ollama launch ' claude codex droid opencode
+expect_described_rows 'root option descriptions use aligned rows' \
+  'ollama --' --help --version
+expect_described_rows 'run option descriptions use aligned rows' \
+  'ollama run --' --format --keepalive --think
+configure_child ':'
+complete_line 'ollama run ' $'\t\t'
+terminal=${output//$'\e'\[[0-9\;\?]#[A-Za-z]/}
+# Inspect the first public header, so later menu redisplays cannot hide a header
+# incorrectly printed before the installed rows it should follow.
+if [[ $terminal == *'Family capabilities'* &&
+      ${terminal%%'Family capabilities'*} == *gemma3:1b* &&
+      ${terminal#*'Family capabilities'} == *embeddinggemma* ]]; then
+  print 'ok - mixed model headers precede their own candidate rows'
+  (( passed++ ))
+else
+  print -u2 'not ok - mixed model headers precede their own candidate rows'
+  print -u2 -r -- "  terminal ${(qqq)terminal}"
+  (( failed++ ))
+fi
+expect_listing 'installed model table exposes available metadata columns' \
+  'ollama show ' Model Size Modified Context Capabilities Cloud
+expect_model_fields 'installed model row shows modification and unknown context' \
+  'ollama show ' qwen3.5:4b '2.7GB' '2026-10-01 - ' \
+  'completion' 'tools' 'thinking'
+expect_listing 'running table identifies loaded rather than supported context' \
+  'ollama stop ' Model Size 'Loaded context'
+expect_model_fields 'running model row shows actual loaded context' \
+  'ollama stop ' qwen3.5:4b '2.7GB' '4096'
+expect_listing 'public family table exposes library metadata columns' \
+  'ollama pull ' Model Updated Context 'Family capabilities' Cloud
+expect_model_fields 'public family row shows date context capabilities and cloud' \
+  'ollama pull ' qwen3.5 '2026-10-01' '256K' \
+  'tools,vision,thinking' 'yes'
+
 configure_child "zstyle ':completion:*' menu yes"
 expect_menu_order 'default natural tag order' 'ollama pull sort-model:' 0.8b \
   2b 9b 27b 122b missing
@@ -329,11 +478,20 @@ expect_menu_order 'reverse family size order uses latest variant' \
 expect_menu_order 'reverse installed model size order' 'ollama show ' \
   qwen3.5:4b gemma3:1b
 configure_child "zstyle -d ':completion:*:ollama*:*' model-sort; zstyle ':completion:*' menu no"
-expect_listing 'download sizes and latest marker stay attached to tag' \
-  'ollama pull qwen3.5:' 'qwen3.5:4b -- 2.7GB, *latest (default)' \
-  'qwen3.5:4b-mlx -- 2.8GB' 'qwen3.5:9b -- 6.6GB - 7.6GB'
-expect_listing 'missing size is explicit' 'ollama pull sort-model:' \
-  'size unavailable'
+expect_model_fields 'download size and latest marker stay attached to tag' \
+  'ollama pull qwen3.5:' qwen3.5:4b '2.7GB' '*latest (default)'
+expect_model_fields 'alternate tag preserves its download size' \
+  'ollama pull qwen3.5:' qwen3.5:4b-mlx '2.8GB'
+expect_model_fields 'tag preserves download size range' \
+  'ollama pull qwen3.5:' qwen3.5:9b '6.6GB - 7.6GB'
+expect_model_fields 'missing tag size is explicit in the size column' \
+  'ollama pull sort-model:' sort-model:missing ' -- - '
+expect_model_fields 'tag metadata shows relative update context and capabilities' \
+  'ollama pull qwen3.5:' qwen3.5:4b '1 week ago' '256K' \
+  'tools,vision,thinking' 'no'
+expect_metadata_alignment 'tag metadata columns align across different sizes' \
+  'ollama pull qwen3.5:' qwen3.5: '1 week ago' '256K' \
+  'tools,vision,thinking' 'no'
 
 # The one-per-line layout is a user-visible requirement, independent of columns.
 complete_line 'ollama pull qwen3.5:' $'\t\t'
@@ -404,7 +562,8 @@ for family_order in natural alphabetical reverse latest-first newest popular \
   configure_child \
     "zstyle ':completion:*:ollama*:*' model-sort $family_order"
   complete_line 'ollama pull ' $'\t\t'
-  if [[ $output == *embeddinggemma* && $output != *' -- '* &&
+  if [[ $output == *embeddinggemma* && $output != *Size* &&
+        $output != *[0-9](GB|MB|TB)* &&
         $output != *'size unavailable'* ]]; then
     print -r -- "ok - family names hide size metadata in $family_order order"
     (( passed++ ))

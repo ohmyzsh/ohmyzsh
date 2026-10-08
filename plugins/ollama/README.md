@@ -51,16 +51,34 @@ Bare model names appear without a `latest` label. Ollama resolves an untagged
 reference through `:latest`; that tag may refer to another variant. Only concrete
 tags marked as latest on the public tags page are described as `*latest (default)`.
 `model:latest` is not duplicated in the tag menu, but remains valid when typed
-manually. Tag menus list one variant per line, with download sizes aligned in
-a column:
+manually. Every model menu lists one candidate per line with aligned metadata
+columns. Tag menus include download size and the concrete default marker:
 
 ```text
-qwen3.8:27b          -- 18GB, *latest (default)
-qwen3.8:27b-mlx-bf16 -- 56GB
+Model               -- Size  Updated     Context  Family capabilities   Cloud
+qwen3.8:27b          -- 18GB  1 week ago  256K     vision,tools,thinking  no     *latest (default)
+qwen3.8:27b-mlx-bf16 -- 56GB  1 week ago  256K     vision,tools,thinking  no
 ```
 
 These are rounded sizes published by Ollama, not remaining download bytes after
-locally cached layers. Missing metadata is shown as `size unavailable`.
+locally cached layers. The example illustrates the layout; values change with
+the library. Missing metadata is shown as `-`.
+
+Public family menus show update date, default-tag context when already cached,
+family capabilities, and cloud availability. They omit download size in every
+sorting mode. A family's cloud availability does not mean every variant runs in
+the cloud. Tag menus show the selected variant's context and cloud status;
+their capability column is explicitly family-level, not a guarantee for every
+variant. Public tag updates use Ollama's relative age because the tag list does
+not expose exact dates. Capabilities can include completion, tools, insert,
+vision, embedding, thinking, image, audio, and decision when reported by Ollama.
+
+Installed-model menus show reported size, local `Modified` date, capabilities,
+and cloud references from the daemon. The inventory does not report the maximum
+supported context, so that value remains unknown. Running-model menus label
+their reported runtime value `Loaded context`; it is not the supported maximum.
+Completion does not issue a separate model-details request for each candidate.
+Commands and launch integrations also display one name/description per line.
 
 Requests have a one-second connection timeout and a three-second overall timeout
 (two seconds for daemon queries). An exact bare model name can make two requests:
@@ -80,7 +98,7 @@ zstyle ':completion:*:ollama*:*' metadata-url 'https://your-metadata-service.exa
 ```
 
 This URL is the service origin, without `/api/v1`. Responses are validated as
-four-field TSV data and are never executed as shell code.
+eight-field `format=completion-tsv` data and are never executed as shell code.
 
 Disable public network completion while retaining installed model completion:
 
@@ -115,9 +133,9 @@ For example:
 zstyle ':completion:*:ollama*:*' model-sort size
 ```
 
-Public family menus display names only, including when sorted by size. Download
-sizes appear in tag menus, and installed/running size menus also show their
-reported sizes. Equal sizes use natural
+Public family menus omit download size, including when sorted by size. Download
+sizes appear in tag menus, and installed/running menus show their reported
+sizes regardless of sorting mode. Equal sizes use natural
 name order, and unknown sizes stay last in either direction. Size ranges sort
 by their upper bound. Installed and running models use the daemon's reported
 model size. A cold service request hydrates at most 32 families within a short
@@ -141,7 +159,7 @@ zstyle ':completion:*:ollama-pull:*:model-tags' model-sort natural
 
 `newest` and `popular` follow the library's own rankings, retained by the shared
 service in separate ten-minute caches. `newest` means additions to the library,
-not recently updated model files. Family menus continue to display names only.
+not recently updated model files. Family menus show metadata without sizes.
 
 The completion tags are `remote-models` for public names, `model-tags` for an
 explicit `model:` prefix, and `models` for installed/running models. An exact

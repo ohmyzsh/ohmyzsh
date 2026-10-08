@@ -26,7 +26,7 @@ zsh -n plugins/ollama/_ollama
 zsh -f plugins/ollama/tests/run.zsh
 ```
 
-The offline suite passed **95 checks** on system zsh `5.9`. It creates an isolated
+The offline suite passed **118 checks** on system zsh `5.9`. It creates an isolated
 PTY shell and presses Tab through real ZLE and `_arguments`, using synthetic
 HTTP/CLI fixtures. It never submits a model command or changes an Ollama server.
 
@@ -57,8 +57,16 @@ download-size columns. Family completion inserts `:` and continues into tag
 selection. Family menus hide size metadata in every sorting mode, while size
 ordering still uses the default variant's size. Interactive menus verify Enter
 acceptance. The HTTP
-fixtures use the shared service's four-field TSV protocol. Requests for family
-sizes are restricted to candidates matching the shell's completion rules.
+fixtures use the shared service's eight-field completion TSV protocol. Requests
+for family sizes are restricted to candidates matching the shell's rules.
+
+Metadata checks verify one row per candidate in `run`, `show`, `push`, `cp`,
+`rm`, `stop`, and `launch --model`, regardless of sorting mode. They cover
+separate local/public table headers, aligned size/date/context/capability/cloud
+columns, missing values, the concrete default badge, and metadata retained
+during sorting. Commands, integrations, root flags, and run flags also have
+one described entry per row. The test child clears inherited `FPATH` so that a
+different Zsh installation cannot replace the system completion functions.
 
 The repository's CI syntax loop also passed for **593 files**. The local sandbox
 emitted scheduler permission warnings while parsing existing background-command
@@ -142,6 +150,22 @@ Three JSON probes confirmed fresh catalogue indexes, while the overall stale
 header reflected expired family-size entries retained in the lazy cache.
 This bounded single-client run does not establish global capacity or long-term
 availability, and no production outage or forced cache expiry was introduced.
+
+The subsequent metadata-table change passed 118 controlled ZLE checks and
+29 service tests, with independent verification. The service's enriched feed
+was published as Sites version 4. A live catalogue read returned 245 eight-field
+records with exact family update dates and capability/cloud metadata. The
+published four-field feed remains available for its existing API consumers.
+The enriched implementation then passed 36 live checks: 33 interaction checks
+plus three targeted checks comparing metadata cells with their header columns.
+These used actual daemon inventories and the deployed API in a wide isolated
+system-Zsh pseudo-terminal. No model operations ran, and the daemon still had
+no loaded models. An initial post-deployment diagnostic returned HTTP 400;
+subsequent enriched reads worked. The cause of that first response was not
+established. Original receipts and corrected harness expectations were retained.
+The volume measurements above describe version 3; version 4 has not repeated
+that load run. Richer metadata reuses existing fetch budgets and cache leases,
+and family context is read only from already cached default-tag metadata.
 
 ## Upstream contribution
 

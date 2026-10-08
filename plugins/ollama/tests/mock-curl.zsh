@@ -51,9 +51,9 @@ case $request in
           cat "$OLLAMA_TEST_FIXTURES/qwen-tags.tsv"
         fi
         [[ -f "$OLLAMA_TEST_SCRATCH/updated" ]] && \
-          print -r -- "$model:9b-mlx"$'\t7800000000\t7.8GB\t0'
+          print -r -- "$model:9b-mlx"$'\t7800000000\t7.8GB\t0\t1 week ago\t256K\ttools,vision,thinking\tno'
         ;;
-      team/custom) print -r -- $'team/custom:small-v1\t122000000\t122MB\t0' ;;
+      team/custom) print -r -- $'team/custom:small-v1\t122000000\t122MB\t0\t\t\t\t-' ;;
       team/cold) exit 22 ;;
       *)
         print -r -- "UNEXPECTED: $logged" >> "$OLLAMA_TEST_REQUESTS"
