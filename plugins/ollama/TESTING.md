@@ -48,8 +48,7 @@ Model ordering checks cycle through the real completion menu and verify natural,
 alphabetical, reverse, latest-first, newest, popular, source, size, and
 reverse-size order. They verify newest-added and popularity family ordering
 independently of default-tag ordering, separate family/tag styles, and isolated
-offline ranking caches.
-cover public names,
+offline ranking caches. They cover public names,
 numeric and fractional tags, installed models, a tag-specific style override,
 unrecognized-value fallback, and a style change against cached offline results.
 Size checks cover default-family sizes, SI units, range upper bounds, equal-size
@@ -94,13 +93,55 @@ the default service URL displayed one Qwen 3.8 variant per line, size order,
 `18GB` on the concrete `27b` default, and `56GB` on `27b-mlx-bf16`.
 The separate service passed 21 SQLite-backed cache/API tests, TypeScript,
 ESLint, a portable Vinext build, and local D1 migration/HTTP checks. Cache expiry
-and lease races were tested with controlled clocks; hosted availability under
-sustained public load has not been tested.
+and lease races were tested with controlled clocks. These initial checks did
+not include hosted load testing.
 
-No live daemon was reachable during validation. Installed/running-model behavior
-was verified with API fixtures; a user's running server and custom `OLLAMA_HOST`
-configuration still need hands-on testing. No models were pulled, pushed,
-created, run, stopped, copied, or removed.
+No live daemon was reachable during that initial validation. Installed-model
+and running-model behavior was verified with API fixtures. No models were
+pulled, pushed, created, run, stopped, copied, or removed.
+
+On 2026-10-08, the 95 isolated ZLE checks passed again. The service passed all
+24 cache/API tests. Additional controlled SQLite stress scenarios exercised
+800 concurrent reader calls in groups of 100: cold refresh coalescing, warm
+reuse, expiry, stale fallback during an upstream outage, retry backoff,
+recovery, and independent newest/popular caches. Each shared-key refresh made
+one upstream call. These are controlled tests, not distributed D1 load tests.
+
+All 53 live ZLE checks passed in a corrected end-to-end run using the deployed
+metadata API, installed Ollama 0.35.1 help, and a reachable local daemon.
+They verified all nine family/tag sorting modes,
+independent styles (including newest families with natural tags), colon
+insertion and Enter acceptance, tag transitions, aligned sizes, family names
+without sizes, local model candidates, free copy destinations, CLI integrations,
+file arguments, and flags. Ordering checks traversed the first three matching
+families and first five tags per mode using live metadata snapshots.
+No model operation was executed. The daemon had no loaded models, so actual
+running-model candidates remain untested; its empty running inventory was
+checked. The controlled suite covers populated running-model responses.
+
+The first live run had three incorrect harness expectations, involving combined
+local/public run candidates, an empty running inventory, and Zsh's confirmation
+prompt for 119 Dolphin tags. Corrected assertions retained the original results.
+Large-list confirmation was disabled only in the test shell to check the menu.
+The current user sorting styles were reproduced in an isolated shell; other
+user configuration was excluded. Computer-use access to macOS Terminal was
+denied, so these checks used actual Tab/menu/Enter keystrokes in a system-Zsh
+pseudo-terminal. They do not constitute a human tester endorsement.
+
+The deployed service received 320 bounded requests over roughly two
+minutes, including 300 metadata reads in three stages. Actual peak concurrency
+was 1, 5, and 7; request starts were capped at eight per second. All responses
+passed their expected status and body contracts. Stage p95 response times were
+1.13, 1.30, and 1.00 seconds. Two metadata responses exceeded the completion
+client's three-second timeout, at 3.10 and 5.09 seconds. HTTP success therefore
+does not establish that every completion request meets its deadline. Warm
+shell metadata can fall back after a timeout; a cold shell has no such result.
+Twenty follow-up reads using the client's actual curl timeouts succeeded in
+0.47–1.04 seconds; they do not erase the two slower original observations.
+Three JSON probes confirmed fresh catalogue indexes, while the overall stale
+header reflected expired family-size entries retained in the lazy cache.
+This bounded single-client run does not establish global capacity or long-term
+availability, and no production outage or forced cache expiry was introduced.
 
 ## Upstream contribution
 
