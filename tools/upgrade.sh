@@ -202,6 +202,54 @@ if is_tty; then
   RESET=$(printf '\033[0m')
 fi
 
+# Logo lines, split by `|` into one segment per rainbow color
+BANNER=(
+  '         |__      |           |        |       |     |__   '
+  '  ____  |/ /_    | ____ ___  |__  __  | ____  |_____|/ /_  '
+  ' / __ \|/ __ \  | / __ `__ \|/ / / / | /_  / |/ ___/| __ \ '
+  '/ /_/ /| / / / | / / / / / /| /_/ / |   / /_|(__  )| / / / '
+  '\____/|_/ /_/ | /_/ /_/ /_/|\__, / |   /___/|____/|_/ /_/  '
+  '    |        |           | /____/ |       |     |          '
+)
+
+# Print the first $1 columns of the logo
+print_banner_frame() {
+  local line i
+  local -i remaining
+  local -a segments
+  for line in $BANNER; do
+    remaining=$1
+    segments=("${(@s:|:)line}")
+    for (( i = 1; i <= $#segments && remaining > 0; i++ )); do
+      printf '%s%s' "${RAINBOW[i]}" "${segments[i][1,remaining]}"
+      (( remaining -= ${#segments[i]} ))
+    done
+    printf '%s\n' "$RESET"
+  done
+}
+
+# Draw the logo left to right on a terminal, all at once otherwise
+print_banner() {
+  local -i width=${#${BANNER[2]//|}} step=4 col
+
+  if ! is_tty || ! zmodload zsh/zselect 2>/dev/null; then
+    print_banner_frame $width
+    return
+  fi
+
+  setopt localtraps
+  trap 'printf "\033[?25h"; exit 130' INT
+  printf '\033[?25l'
+  for (( col = step; ; col += step )); do
+    (( col > width )) && col=width
+    print_banner_frame $col
+    (( col == width )) && break
+    printf '\033[%dA' $#BANNER
+    zselect -t 2
+  done
+  printf '\033[?25h'
+}
+
 # Update upstream remote to ohmyzsh org
 git remote -v | while read remote url extra; do
   case "$url" in
@@ -303,12 +351,7 @@ if perform_update; then
   fi
 
   if [[ $verbose_mode == default ]]; then
-    printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
-    printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
-    printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
-    printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n'      $RAINBOW $RESET
-    printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $RAINBOW $RESET
-    printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
+    print_banner
     printf '\n'
     printf "${BLUE}%s${RESET}\n\n" "$message"
     printf "${BLUE}${BOLD}%s %s %s %s${RESET}\n" \
