@@ -1,0 +1,170 @@
+#compdef terragrunt
+
+_terragrunt_parse_help() {
+  local line names description name
+
+  while IFS= read -r line; do
+    if [[ $line =~ '^   ([[:alnum:]][[:alnum:]_-]*(, [[:alnum:]][[:alnum:]_-]*)*)  +(.*)$' ]]; then
+      names=${match[1]}
+      description=${match[3]}
+      for name in ${(s:, :)names}; do
+        reply_commands+=("${name}:${description}")
+        reply_command_names+=("$name")
+      done
+    elif [[ $line =~ '^   (--[[:alnum:]][[:alnum:]-]*)( value)?(, -[[:alnum:]])?  +(.*)$' ]]; then
+      description=${match[4]}
+      reply_options+=("${match[1]}:${description}")
+      [[ -n ${match[3]} ]] && reply_options+=("${match[3]#*, }:${description}")
+    fi
+  done
+}
+
+_terragrunt_state_resources() {
+  local resource
+  local -a command_args resources
+  local cache_file="$PWD/.terragrunt-cache/.zsh-completion/resources"
+
+  command_args=(state list --experiment optional-dependency-outputs --no-dependency-outputs)
+  [[ -n ${opt_args[-state]} ]] && command_args+=("-state=${opt_args[-state]}")
+
+  if [[ -z ${opt_args[-state]} && ! -f $cache_file ]] && (( $+functions[_terragrunt_refresh_completion_cache] )); then
+    _terragrunt_refresh_completion_cache "$PWD" 2>/dev/null
+  fi
+
+  if [[ -z ${opt_args[-state]} && -f $cache_file ]]; then
+    resources=("${(@f)$(< "$cache_file")}")
+  else
+    while read -r resource; do
+      resources+=("$resource")
+    done < <(command terragrunt "${command_args[@]}" 2>/dev/null)
+  fi
+
+  compadd "${@}" - "${resources[@]}"
+}
+
+_terragrunt_outputs() {
+  local output
+  local -a outputs
+  local cache_file="$PWD/.terragrunt-cache/.zsh-completion/outputs"
+
+  if [[ ! -f $cache_file ]] && (( $+functions[_terragrunt_refresh_completion_cache] )); then
+    _terragrunt_refresh_completion_cache "$PWD" 2>/dev/null
+  fi
+
+  if [[ -f $cache_file ]]; then
+    outputs=("${(@f)$(< "$cache_file")}")
+  elif (( $+commands[jq] )); then
+    while read -r output; do
+        outputs+=("$output")
+    done < <(
+      command terragrunt output -json --log-disable \
+        --experiment optional-dependency-outputs --no-dependency-outputs 2>/dev/null |
+        command jq -r 'keys[]' 2>/dev/null
+    )
+  else
+    while read -r output; do
+      [[ ${output%% = *} =~ '^[[:alnum:]_-]+$' ]] && outputs+=("${output%% = *}")
+    done < <(
+      command terragrunt output --log-disable \
+        --experiment optional-dependency-outputs --no-dependency-outputs 2>/dev/null
+    )
+  fi
+
+  compadd "${@}" - "${outputs[@]}"
+}
+
+_terragrunt_terraform() {
+  local start=$1
+  local -a saved_words forwarded_words
+  local saved_current=$CURRENT ret=1
+  local -i index has_output_name=0
+
+  saved_words=("${words[@]}")
+  if [[ ${saved_words[saved_current]} == (-target|-replace)=* ]]; then
+    compset -P '*='
+    _terragrunt_state_resources
+    return
+  elif [[ ${saved_words[saved_current - 1]} == (-target|-replace) ]]; then
+    _terragrunt_state_resources
+    return
+  fi
+
+  if [[ ${saved_words[start]} == output && ${saved_words[saved_current]} != -* ]]; then
+    for ((index = start + 1; index < saved_current; index++)); do
+      [[ ${saved_words[index]} != -* ]] && has_output_name=1
+    done
+    if ((! has_output_name)); then
+      _terragrunt_outputs
+      return
+    fi
+  fi
+
+  for ((index = start; index <= ${#saved_words}; index++)); do
+    if ((start == 2 && index < saved_current)) && [[ ${saved_words[index]} == --* ]]; then
+      continue
+    fi
+    forwarded_words+=("${saved_words[index]}")
+  done
+  words=(terraform "${forwarded_words[@]}")
+  CURRENT=${#words}
+
+  if ! _call_function ret _terraform; then
+    _normal
+  fi
+
+  words=("${saved_words[@]}")
+  CURRENT=$saved_current
+}
+
+_terragrunt() {
+  local -a command_path reply_commands reply_command_names reply_options
+  local help_text word
+  local -i index=2 delimiter=0 ret=1 terraform_shortcut=0
+
+  for ((index = 2; index < CURRENT; index++)); do
+    [[ ${words[index]} == -- ]] && {
+      delimiter=$index
+      break
+    }
+  done
+
+  if ((delimiter)) && [[ ${words[2]} == run ]]; then
+    _terragrunt_terraform "$((delimiter + 1))"
+    return
+  fi
+
+  help_text=$(command terragrunt --help 2>/dev/null)
+  _terragrunt_parse_help <<< "$help_text"
+
+  for ((index = 2; index < CURRENT; index++)); do
+    word=${words[index]}
+    [[ $word == -* || ${reply_command_names[(Ie)$word]} -eq 0 ]] && break
+
+    command_path+=("$word")
+    reply_commands=()
+    reply_command_names=()
+    reply_options=()
+    help_text=$(command terragrunt "${command_path[@]}" --help 2>/dev/null)
+    _terragrunt_parse_help <<< "$help_text"
+    [[ $help_text == *'This is a shortcut for the command'* ]] && terraform_shortcut=1
+  done
+
+  if ((terraform_shortcut)); then
+    _terragrunt_terraform 2
+    return
+  fi
+
+  if [[ ${words[CURRENT]} == -* ]]; then
+    _describe -t options 'Terragrunt option' reply_options
+    return
+  fi
+
+  ((${#reply_commands})) && _describe -t commands 'Terragrunt command' reply_commands && ret=0
+  ((${#reply_options})) && _describe -t options 'Terragrunt option' reply_options && ret=0
+  if ((! ${#reply_commands})); then
+    _files && ret=0
+  fi
+  return ret
+}
+
+_terragrunt "$@"
