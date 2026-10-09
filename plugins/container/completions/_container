@@ -1,0 +1,699 @@
+#compdef container
+#
+# zsh completion for Apple container (https://github.com/apple/container)
+#
+# version: 1.0.0
+# 
+
+__container_arguments() {
+    if zstyle -t ":completion:${curcontext}:" option-stacking; then
+        print -- -s
+    fi
+}
+
+# Helper function to get running containers
+__container_get_containers() {
+    local state=$1
+    local -a containers
+    case $state in
+        running)
+            containers=(${(f)"$(container list --quiet 2>/dev/null)"})
+            ;;
+        all)
+            containers=(${(f)"$(container list --all --quiet 2>/dev/null)"})
+            ;;
+        *)
+            containers=(${(f)"$(container list --all --quiet 2>/dev/null)"})
+            ;;
+    esac
+    _describe 'containers' containers
+}
+
+# Helper function to get images
+__container_get_images() {
+    local -a images
+    images=(${(f)"$(container image list --quiet 2>/dev/null)"})
+    _describe 'images' images
+}
+
+# Helper function to get networks
+__container_get_networks() {
+    local -a networks
+    networks=(${(f)"$(container network list --quiet 2>/dev/null)"})
+    _describe 'networks' networks
+}
+
+# Helper function to get volumes
+__container_get_volumes() {
+    local -a volumes
+    volumes=(${(f)"$(container volume list --quiet 2>/dev/null)"})
+    _describe 'volumes' volumes
+}
+
+# Main command structure
+_container() {
+    local curcontext="$curcontext" state line
+    local -A opt_args
+
+    _arguments $(__container_arguments) \
+        '--debug[Enable debug output]' \
+        '--version[Show the version]' \
+        '--help[Show help information]' \
+        '1: :->command' \
+        '*:: :->args' && return 0
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'run:Run a container from an image'
+                'build:Build an OCI image from a local build context'
+                'create:Create a container from an image without starting it'
+                'start:Start a stopped container'
+                'stop:Stop running containers gracefully'
+                'kill:Immediately kill running containers'
+                'delete:Remove one or more containers'
+                'rm:Remove one or more containers'
+                'list:List containers'
+                'ls:List containers'
+                'exec:Execute a command inside a running container'
+                'logs:Fetch logs from a container'
+                'inspect:Display detailed container information'
+                'image:Manage images'
+                'builder:Manage BuildKit builder'
+                'network:Manage networks'
+                'volume:Manage volumes'
+                'registry:Manage registry authentication'
+                'system:Manage container system'
+            )
+            _describe 'commands' commands
+            ;;
+        args)
+            case $words[1] in
+                run)
+                    _container_run
+                    ;;
+                build)
+                    _container_build
+                    ;;
+                create)
+                    _container_create
+                    ;;
+                start)
+                    _container_start
+                    ;;
+                stop)
+                    _container_stop
+                    ;;
+                kill)
+                    _container_kill
+                    ;;
+                delete|rm)
+                    _container_delete
+                    ;;
+                list|ls)
+                    _container_list
+                    ;;
+                exec)
+                    _container_exec
+                    ;;
+                logs)
+                    _container_logs
+                    ;;
+                inspect)
+                    _container_inspect
+                    ;;
+                image)
+                    _container_image
+                    ;;
+                builder)
+                    _container_builder
+                    ;;
+                network)
+                    _container_network
+                    ;;
+                volume)
+                    _container_volume
+                    ;;
+                registry)
+                    _container_registry
+                    ;;
+                system)
+                    _container_system
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_container_run() {
+    _arguments $(__container_arguments) \
+        '(-e --env)'{-e,--env}'[Set environment variables (format: key=value)]:env var:' \
+        '--env-file[Read environment variables from file]:env file:_files' \
+        '--gid[Set the group ID for the process]:gid:' \
+        '(-i --interactive)'{-i,--interactive}'[Keep standard input open]' \
+        '(-t --tty)'{-t,--tty}'[Open a TTY with the process]' \
+        '(-u --user)'{-u,--user}'[Set the user for the process]:user:' \
+        '--uid[Set the user ID for the process]:uid:' \
+        '(-w --workdir --cwd)'{-w,--workdir,--cwd}'[Set the initial working directory]:workdir:_directories' \
+        '(-c --cpus)'{-c,--cpus}'[Number of CPUs to allocate]:cpus:' \
+        '(-m --memory)'{-m,--memory}'[Amount of memory]:memory:' \
+        '(-a --arch)'{-a,--arch}'[Set arch if image can target multiple architectures]:arch:(arm64 x86_64)' \
+        '--cidfile[Write the container ID to the path provided]:cidfile:_files' \
+        '(-d --detach)'{-d,--detach}'[Run the container and detach from the process]' \
+        '--dns[DNS nameserver IP address]:dns ip:' \
+        '--dns-domain[Default DNS domain]:dns domain:' \
+        '--dns-option[DNS options]:dns option:' \
+        '--dns-search[DNS search domains]:dns search:' \
+        '--entrypoint[Override the entrypoint of the image]:entrypoint:' \
+        '(-k --kernel)'{-k,--kernel}'[Set a custom kernel path]:kernel path:_files' \
+        '(-l --label)'{-l,--label}'[Add a key=value label to the container]:label:' \
+        '--mount[Add a mount to the container]:mount:' \
+        '--name[Use the specified name as the container ID]:name:' \
+        '--network[Attach the container to a network]:network:__container_get_networks' \
+        '--no-dns[Do not configure DNS in the container]' \
+        '--os[Set OS if image can target multiple operating systems]:os:(linux)' \
+        '(-p --publish)'{-p,--publish}'[Publish a port]:port spec:' \
+        '--platform[Platform for the image]:platform:' \
+        '--publish-socket[Publish a socket]:socket spec:' \
+        '--rm[Remove the container after it stops]' \
+        '--ssh[Forward SSH agent socket to container]' \
+        '--tmpfs[Add a tmpfs mount]:tmpfs path:' \
+        '(-v --volume)'{-v,--volume}'[Bind mount a volume]:volume:' \
+        '--virtualization[Expose virtualization capabilities]' \
+        '--scheme[Scheme to use when connecting to registry]:scheme:(http https auto)' \
+        '--disable-progress-updates[Disable progress bar updates]' \
+        '1:image:__container_get_images' \
+        '*:command and args:'
+}
+
+_container_build() {
+    _arguments $(__container_arguments) \
+        '(-a --arch)'{-a,--arch}'[Add the architecture type to the build]:arch:(arm64 x86_64)' \
+        '--build-arg[Set build-time variables]:build arg:' \
+        '(-c --cpus)'{-c,--cpus}'[Number of CPUs to allocate to the builder]:cpus:' \
+        '(-f --file)'{-f,--file}'[Path to Dockerfile]:dockerfile:_files' \
+        '(-l --label)'{-l,--label}'[Set a label]:label:' \
+        '(-m --memory)'{-m,--memory}'[Amount of builder container memory]:memory:' \
+        '--no-cache[Do not use cache]' \
+        '(-o --output)'{-o,--output}'[Output configuration for the build]:output:' \
+        '--os[Add the OS type to the build]:os:(linux)' \
+        '--platform[Add the platform to the build]:platform:' \
+        '--progress[Progress type]:progress type:(auto plain tty)' \
+        '(-q --quiet)'{-q,--quiet}'[Suppress build output]' \
+        '(-t --tag)'{-t,--tag}'[Name for the built image]:tag:' \
+        '--target[Set the target build stage]:stage:' \
+        '--vsock-port[Builder shim vsock port]:port:' \
+        '1:context directory:_directories'
+}
+
+_container_create() {
+    # Same options as run, but without execution
+    _container_run
+}
+
+_container_start() {
+    _arguments $(__container_arguments) \
+        '(-a --attach)'{-a,--attach}'[Attach STDOUT/STDERR]' \
+        '(-i --interactive)'{-i,--interactive}'[Attach STDIN]' \
+        '1:container:__container_get_containers stopped'
+}
+
+_container_stop() {
+    _arguments $(__container_arguments) \
+        '(-a --all)'{-a,--all}'[Stop all running containers]' \
+        '(-s --signal)'{-s,--signal}'[Signal to send the containers]:signal:' \
+        '(-t --time)'{-t,--time}'[Seconds to wait before killing]:time:' \
+        '*:containers:__container_get_containers running'
+}
+
+_container_kill() {
+    _arguments $(__container_arguments) \
+        '(-a --all)'{-a,--all}'[Kill all running containers]' \
+        '(-s --signal)'{-s,--signal}'[Signal to send]:signal:' \
+        '*:containers:__container_get_containers running'
+}
+
+_container_delete() {
+    _arguments $(__container_arguments) \
+        '(-a --all)'{-a,--all}'[Remove all containers]' \
+        '(-f --force)'{-f,--force}'[Force the removal of running containers]' \
+        '*:containers:__container_get_containers all'
+}
+
+_container_list() {
+    _arguments $(__container_arguments) \
+        '(-a --all)'{-a,--all}'[Show stopped containers as well]' \
+        '--format[Format of the output]:format:(json table)' \
+        '(-q --quiet)'{-q,--quiet}'[Only output the container ID]'
+}
+
+_container_exec() {
+    _arguments $(__container_arguments) \
+        '(-e --env)'{-e,--env}'[Set environment variables]:env var:' \
+        '--env-file[Read environment variables from file]:env file:_files' \
+        '--gid[Set the group ID for the process]:gid:' \
+        '(-i --interactive)'{-i,--interactive}'[Keep standard input open]' \
+        '(-t --tty)'{-t,--tty}'[Open a TTY with the process]' \
+        '(-u --user)'{-u,--user}'[Set the user for the process]:user:' \
+        '--uid[Set the user ID for the process]:uid:' \
+        '(-w --workdir --cwd)'{-w,--workdir,--cwd}'[Set the initial working directory]:workdir:_directories' \
+        '1:container:__container_get_containers running' \
+        '*:command and args:'
+}
+
+_container_logs() {
+    _arguments $(__container_arguments) \
+        '--boot[Display the boot log for the container]' \
+        '(-f --follow)'{-f,--follow}'[Follow log output]' \
+        '-n[Number of lines to show from the end]:lines:' \
+        '1:container:__container_get_containers all'
+}
+
+_container_inspect() {
+    _arguments $(__container_arguments) \
+        '*:containers:__container_get_containers all'
+}
+
+_container_image() {
+    local curcontext="$curcontext" state line
+    local -A opt_args
+
+    _arguments $(__container_arguments) \
+        '1: :->command' \
+        '*:: :->args' && return 0
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'list:List local images'
+                'ls:List local images'
+                'pull:Pull an image from a registry'
+                'push:Push an image to a registry'
+                'save:Save an image to a tar archive'
+                'load:Load images from a tar archive'
+                'tag:Apply a new tag to an existing image'
+                'delete:Remove one or more images'
+                'rm:Remove one or more images'
+                'prune:Remove unused images'
+                'inspect:Show detailed information for images'
+            )
+            _describe 'image commands' commands
+            ;;
+        args)
+            case $words[1] in
+                list|ls)
+                    _arguments $(__container_arguments) \
+                        '(-q --quiet)'{-q,--quiet}'[Only output the image name]' \
+                        '(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+                        '--format[Format of the output]:format:(json table)'
+                    ;;
+                pull)
+                    _arguments $(__container_arguments) \
+                        '--platform[Platform string]:platform:' \
+                        '--scheme[Scheme to use]:scheme:(http https auto)' \
+                        '--disable-progress-updates[Disable progress bar updates]' \
+                        '1:image reference:'
+                    ;;
+                push)
+                    _arguments $(__container_arguments) \
+                        '--platform[Platform string]:platform:' \
+                        '--scheme[Scheme to use]:scheme:(http https auto)' \
+                        '--disable-progress-updates[Disable progress bar updates]' \
+                        '1:image reference:__container_get_images'
+                    ;;
+                save)
+                    _arguments $(__container_arguments) \
+                        '--platform[Platform string]:platform:' \
+                        '(-o --output)'{-o,--output}'[Path to save the image tar archive]:output file:_files' \
+                        '1:image reference:__container_get_images'
+                    ;;
+                load)
+                    _arguments $(__container_arguments) \
+                        '(-i --input)'{-i,--input}'[Path to the tar archive]:input file:_files'
+                    ;;
+                tag)
+                    _arguments $(__container_arguments) \
+                        '1:source image:__container_get_images' \
+                        '2:target image:'
+                    ;;
+                delete|rm)
+                    _arguments $(__container_arguments) \
+                        '(-a --all)'{-a,--all}'[Remove all images]' \
+                        '*:images:__container_get_images'
+                    ;;
+                prune)
+                    _arguments $(__container_arguments)
+                    ;;
+                inspect)
+                    _arguments $(__container_arguments) \
+                        '*:images:__container_get_images'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_container_builder() {
+    local curcontext="$curcontext" state line
+    local -A opt_args
+
+    _arguments $(__container_arguments) \
+        '1: :->command' \
+        '*:: :->args' && return 0
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'start:Start the BuildKit builder container'
+                'stop:Stop the BuildKit builder'
+                'status:Show the current status of the BuildKit builder'
+                'delete:Remove the BuildKit builder container'
+                'rm:Remove the BuildKit builder container'
+            )
+            _describe 'builder commands' commands
+            ;;
+        args)
+            case $words[1] in
+                start)
+                    _arguments $(__container_arguments) \
+                        '(-c --cpus)'{-c,--cpus}'[Number of CPUs to allocate]:cpus:' \
+                        '(-m --memory)'{-m,--memory}'[Amount of memory]:memory:'
+                    ;;
+                status)
+                    _arguments $(__container_arguments) \
+                        '--json[Output status as JSON]'
+                    ;;
+                delete|rm)
+                    _arguments $(__container_arguments) \
+                        '(-f --force)'{-f,--force}'[Force deletion even if the builder is running]'
+                    ;;
+                stop)
+                    _arguments $(__container_arguments)
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_container_network() {
+    local curcontext="$curcontext" state line
+    local -A opt_args
+
+    _arguments $(__container_arguments) \
+        '1: :->command' \
+        '*:: :->args' && return 0
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'create:Create a new network'
+                'delete:Delete one or more networks'
+                'rm:Delete one or more networks'
+                'list:List user-defined networks'
+                'ls:List user-defined networks'
+                'inspect:Show detailed information about networks'
+            )
+            _describe 'network commands' commands
+            ;;
+        args)
+            case $words[1] in
+                create)
+                    _arguments $(__container_arguments) \
+                        '--label[Set metadata labels on the network]:label:' \
+                        '1:network name:'
+                    ;;
+                delete|rm)
+                    _arguments $(__container_arguments) \
+                        '(-a --all)'{-a,--all}'[Delete all defined networks]' \
+                        '*:networks:__container_get_networks'
+                    ;;
+                list|ls)
+                    _arguments $(__container_arguments) \
+                        '(-q --quiet)'{-q,--quiet}'[Only output the network name]' \
+                        '--format[Format of the output]:format:(json table)'
+                    ;;
+                inspect)
+                    _arguments $(__container_arguments) \
+                        '*:networks:__container_get_networks'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_container_volume() {
+    local curcontext="$curcontext" state line
+    local -A opt_args
+
+    _arguments $(__container_arguments) \
+        '1: :->command' \
+        '*:: :->args' && return 0
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'create:Create a new volume'
+                'delete:Remove one or more volumes'
+                'rm:Remove one or more volumes'
+                'list:List volumes'
+                'ls:List volumes'
+                'inspect:Display detailed information for volumes'
+            )
+            _describe 'volume commands' commands
+            ;;
+        args)
+            case $words[1] in
+                create)
+                    _arguments $(__container_arguments) \
+                        '-s[Size of the volume]:size:' \
+                        '--opt[Set driver-specific options]:option:' \
+                        '--label[Set metadata labels on the volume]:label:' \
+                        '1:volume name:'
+                    ;;
+                delete|rm)
+                    _arguments $(__container_arguments) \
+                        '*:volumes:__container_get_volumes'
+                    ;;
+                list|ls)
+                    _arguments $(__container_arguments) \
+                        '(-q --quiet)'{-q,--quiet}'[Only display volume names]' \
+                        '--format[Format of the output]:format:(json table)'
+                    ;;
+                inspect)
+                    _arguments $(__container_arguments) \
+                        '*:volumes:__container_get_volumes'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_container_registry() {
+    local curcontext="$curcontext" state line
+    local -A opt_args
+
+    _arguments $(__container_arguments) \
+        '1: :->command' \
+        '*:: :->args' && return 0
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'login:Authenticate with a registry'
+                'logout:Log out of a registry'
+            )
+            _describe 'registry commands' commands
+            ;;
+        args)
+            case $words[1] in
+                login)
+                    _arguments $(__container_arguments) \
+                        '(-u --username)'{-u,--username}'[Username for the registry]:username:' \
+                        '--password-stdin[Read the password from STDIN]' \
+                        '--scheme[Registry scheme]:scheme:(http https auto)' \
+                        '1:server:'
+                    ;;
+                logout)
+                    _arguments $(__container_arguments) \
+                        '1:server:'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_container_system() {
+    local curcontext="$curcontext" state line
+    local -A opt_args
+
+    _arguments $(__container_arguments) \
+        '1: :->command' \
+        '*:: :->args' && return 0
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'start:Start the container services'
+                'stop:Stop the container services'
+                'status:Check whether the container services are running'
+                'logs:Display logs from the container services'
+                'dns:Manage local DNS domains'
+                'kernel:Manage the Linux kernel'
+                'property:Manage system properties'
+            )
+            _describe 'system commands' commands
+            ;;
+        args)
+            case $words[1] in
+                start)
+                    _arguments $(__container_arguments) \
+                        '(-a --app-root)'{-a,--app-root}'[Application data directory]:app root:_directories' \
+                        '--install-root[Path to the installation root directory]:install root:_directories' \
+                        '--debug[Enable debug logging for the runtime daemon]' \
+                        '--enable-kernel-install[Install the recommended default kernel]' \
+                        '--disable-kernel-install[Skip installing the default kernel]'
+                    ;;
+                stop)
+                    _arguments $(__container_arguments) \
+                        '(-p --prefix)'{-p,--prefix}'[Launchd prefix]:prefix:'
+                    ;;
+                status)
+                    _arguments $(__container_arguments) \
+                        '(-p --prefix)'{-p,--prefix}'[Launchd prefix to query]:prefix:'
+                    ;;
+                logs)
+                    _arguments $(__container_arguments) \
+                        '--last[Fetch logs starting from the specified time period]:duration:' \
+                        '(-f --follow)'{-f,--follow}'[Follow log output]'
+                    ;;
+                dns)
+                    _container_system_dns
+                    ;;
+                kernel)
+                    _container_system_kernel
+                    ;;
+                property)
+                    _container_system_property
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_container_system_dns() {
+    local curcontext="$curcontext" state line
+    local -A opt_args
+
+    _arguments $(__container_arguments) \
+        '1: :->command' \
+        '*:: :->args' && return 0
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'create:Create a local DNS domain'
+                'delete:Delete a local DNS domain'
+                'rm:Delete a local DNS domain'
+                'list:List configured local DNS domains'
+                'ls:List configured local DNS domains'
+            )
+            _describe 'dns commands' commands
+            ;;
+        args)
+            case $words[1] in
+                create|delete|rm)
+                    _arguments $(__container_arguments) \
+                        '1:domain name:'
+                    ;;
+                list|ls)
+                    _arguments $(__container_arguments)
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_container_system_kernel() {
+    local curcontext="$curcontext" state line
+    local -A opt_args
+
+    _arguments $(__container_arguments) \
+        '1: :->command' \
+        '*:: :->args' && return 0
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'set:Install or update the Linux kernel'
+            )
+            _describe 'kernel commands' commands
+            ;;
+        args)
+            case $words[1] in
+                set)
+                    _arguments $(__container_arguments) \
+                        '--binary[Path to a kernel binary]:kernel binary:_files' \
+                        '--tar[Path or URL to a tarball containing kernel images]:tar file:_files' \
+                        '--arch[Target architecture]:arch:(arm64 x86_64)' \
+                        '--recommended[Download and install the recommended default kernel]'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_container_system_property() {
+    local curcontext="$curcontext" state line
+    local -A opt_args
+
+    _arguments $(__container_arguments) \
+        '1: :->command' \
+        '*:: :->args' && return 0
+
+    case $state in
+        command)
+            local -a commands
+            commands=(
+                'list:List all available system properties'
+                'ls:List all available system properties'
+                'get:Retrieve the current value of a system property'
+                'set:Set the value of a system property'
+                'clear:Clear a system property'
+            )
+            _describe 'property commands' commands
+            ;;
+        args)
+            case $words[1] in
+                list|ls)
+                    _arguments $(__container_arguments) \
+                        '(-q --quiet)'{-q,--quiet}'[Only output the property IDs]' \
+                        '--format[Format of the output]:format:(json table)'
+                    ;;
+                get)
+                    _arguments $(__container_arguments) \
+                        '1:property id:'
+                    ;;
+                set)
+                    _arguments $(__container_arguments) \
+                        '1:property id:' \
+                        '2:value:'
+                    ;;
+                clear)
+                    _arguments $(__container_arguments) \
+                        '1:property id:'
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_container "$@"
