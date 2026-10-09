@@ -1,0 +1,7 @@
+
+## Cache
+
+This plugin caches the completion script and automatically updates it when the
+plugin is loaded, which is usually when you start a new terminal emulator.
+
+The cache is stored at `$ZSH_CACHE_DIR/completions/_%command%`.
