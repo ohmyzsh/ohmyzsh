@@ -135,7 +135,7 @@ class AquariumTests(unittest.TestCase):
         boundary = len(terminal.output)
         terminal.resize(40, 140)
         terminal.collect(0.7)
-        self.assertTrue(b"O H  M Y  Z S H" in terminal.output[boundary:])
+        self.assertIn(b"O H  M Y  Z S H", terminal.output[boundary:])
         os.write(terminal.master, b"q")
         self.assertEqual(terminal.finish(), 0)
         self.assert_restored(terminal)
