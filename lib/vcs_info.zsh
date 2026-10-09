@@ -38,16 +38,47 @@
 # due to malicious input as a consequence of CVE-2021-45444, which affects
 # zsh versions from 5.0.3 to 5.8.
 #
-autoload -Uz +X regexp-replace VCS_INFO_formats 2>/dev/null || return 0
+# The patch is applied when VCS_INFO_formats is first called, since loading
+# and patching it on every startup costs time in shells that never use
+# vcs_info. `autoload` doesn't replace an already defined function, so this
+# wrapper survives a later `autoload -Uz vcs_info` in a theme or .zshrc, and
+# vcs_info's own `autoload -Uz VCS_INFO_formats`.
+if (( $+functions[VCS_INFO_formats] )); then
+  () {
+    autoload -Uz +X regexp-replace 2>/dev/null || return 1
 
-# We use $tmp here because it's already a local variable in VCS_INFO_formats
-typeset PATCH='for tmp (base base-name branch misc revision subdir) hook_com[$tmp]="${hook_com[$tmp]//\%/%%}"'
-# Unique string to avoid reapplying the patch if this code gets called twice
-typeset PATCH_ID=vcs_info-patch-9b9840f2-91e5-4471-af84-9e9a0dc68c1b
-# Only patch the VCS_INFO_formats function if not already patched
-if [[ "$functions[VCS_INFO_formats]" != *$PATCH_ID* ]]; then
-  regexp-replace 'functions[VCS_INFO_formats]' \
-    "VCS_INFO_hook 'post-backend'" \
-    ': ${PATCH_ID}; ${PATCH}; ${MATCH}'
+    # We use $tmp here because it's already a local variable in VCS_INFO_formats
+    local PATCH='for tmp (base base-name branch misc revision subdir) hook_com[$tmp]="${hook_com[$tmp]//\%/%%}"'
+    # Unique string to avoid reapplying the patch if this code gets called twice
+    local PATCH_ID=vcs_info-patch-9b9840f2-91e5-4471-af84-9e9a0dc68c1b
+    # Only patch the VCS_INFO_formats function if not already patched
+    if [[ "$functions[VCS_INFO_formats]" != *$PATCH_ID* ]]; then
+      regexp-replace 'functions[VCS_INFO_formats]' \
+        "VCS_INFO_hook 'post-backend'" \
+        ': ${PATCH_ID}; ${PATCH}; ${MATCH}'
+    fi
+  }
+else
+  function VCS_INFO_formats {
+    local loaded_function="$(
+      unfunction VCS_INFO_formats 2>/dev/null
+      autoload -Uz +X VCS_INFO_formats 2>/dev/null || return 1
+      print -r -- "$functions[VCS_INFO_formats]"
+    )" || return 1
+    functions[VCS_INFO_formats]="$loaded_function"
+    autoload -Uz +X regexp-replace 2>/dev/null || return 1
+
+    # We use $tmp here because it's already a local variable in VCS_INFO_formats
+    local PATCH='for tmp (base base-name branch misc revision subdir) hook_com[$tmp]="${hook_com[$tmp]//\%/%%}"'
+    # Unique string to avoid reapplying the patch if this code gets called twice
+    local PATCH_ID=vcs_info-patch-9b9840f2-91e5-4471-af84-9e9a0dc68c1b
+    # Only patch the VCS_INFO_formats function if not already patched
+    if [[ "$functions[VCS_INFO_formats]" != *$PATCH_ID* ]]; then
+      regexp-replace 'functions[VCS_INFO_formats]' \
+        "VCS_INFO_hook 'post-backend'" \
+        ': ${PATCH_ID}; ${PATCH}; ${MATCH}'
+    fi
+
+    VCS_INFO_formats "$@"
+  }
 fi
-unset PATCH PATCH_ID
