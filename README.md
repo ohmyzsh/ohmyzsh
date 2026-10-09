@@ -45,6 +45,7 @@ Twitter), and join us on [Discord](https://discord.gg/ohmyzsh).
     - [Using Plugins](#using-plugins)
   - [Themes](#themes)
     - [Selecting A Theme](#selecting-a-theme)
+  - [Shellsavers](#shellsavers)
   - [FAQ](#faq)
 - [Advanced Topics](#advanced-topics)
   - [Advanced Installation](#advanced-installation)
@@ -240,6 +241,32 @@ If you only know which themes you don't like, you can add them similarly to an i
 ```sh
 ZSH_THEME_RANDOM_IGNORED=(pygmalion tjkirch_mod)
 ```
+
+### Shellsavers
+
+Give your terminal a little downtime with `omz shellsaver`, a playful alias for
+`omz screensaver`. The aquarium is the default; choose another scene to change the mood:
+
+```zsh
+omz screensaver                 # A quiet aquarium full of sea shells
+omz screensaver logo            # The updater's rainbow logo, bouncing around
+omz screensaver hermit          # A slightly lost hermit crab
+omz shellsaver party            # A rainbow stage and a dancing crowd
+```
+
+Press any key or Ctrl-C to return to your shell. Screensavers run only when invoked
+and restore the terminal when they exit. No plugin or configuration change is needed.
+Use `omz help` to discover the commands, and Tab to complete scene names and options.
+
+```zsh
+omz screensaver aquarium --seconds 30  # Stop automatically after 30 seconds
+omz screensaver logo --mono            # Use the terminal's foreground color
+omz screensaver --help                 # Show all scenes and options
+```
+
+Requires Zsh 5.8 or newer, `stty`, and an xterm-compatible terminal with alternate-screen
+support. No additional animation package is required. `NO_COLOR` is respected.
+A window of at least 49 columns by 18 rows is recommended.
 
 ### FAQ
 

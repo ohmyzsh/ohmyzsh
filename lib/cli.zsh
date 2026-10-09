@@ -28,11 +28,24 @@ function _omz {
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
     'reload:Reload the current zsh session'
+    'screensaver:Launch a whimsical terminal screensaver'
+    'shellsaver:Alias for screensaver'
     'shop:Open the Oh My Zsh shop'
     'theme:Manage themes'
     'update:Update Oh My Zsh'
     'version:Show the version'
   )
+
+  if [[ "$words[2]" == (screensaver|shellsaver) ]] && (( CURRENT > 2 )); then
+    _arguments \
+      '1:command:(screensaver shellsaver)' \
+      '2::scene:(aquarium logo hermit party)' \
+      '--mono[Use the default foreground color]' \
+      '--seconds[Exit after a number of seconds]:seconds:' \
+      '--snapshot[Print a plain-text still]::frame:' \
+      '--help[Show screensaver help]'
+    return
+  fi
 
   if (( CURRENT == 2 )); then
     _describe 'command' cmds
@@ -174,12 +187,22 @@ Available commands:
   plugin <command>    Manage plugins
   pr     <command>    Manage Oh My Zsh Pull Requests
   reload              Reload the current zsh session
+  screensaver [scene] Launch a screensaver (aquarium by default)
+  shellsaver [scene]  Alias for screensaver
   shop                Open the Oh My Zsh shop
   theme  <command>    Manage themes
   update              Update Oh My Zsh
   version             Show the version
 
 EOF
+}
+
+function _omz::screensaver {
+  command zsh -f "$ZSH/tools/screensaver.zsh" "$@"
+}
+
+function _omz::shellsaver {
+  _omz::screensaver "$@"
 }
 
 function _omz::changelog {
