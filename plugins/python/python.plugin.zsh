@@ -113,8 +113,21 @@ if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
         # make sure we're not in a venv already
         (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
         source $file > /dev/null 2>&1
-        break
+        return
       done
+
+      # Search parent directories if recursive mode is enabled
+      if [[ "$PYTHON_AUTO_VRUN_RECURSIVE" == "true" ]]; then
+        local search_dir="$PWD:h"
+        while [[ "$search_dir" != "/" && "$search_dir" != "." ]]; do
+          for file in "${search_dir}/"${^PYTHON_VENV_NAMES[@]}"/bin/activate"(N.); do
+            (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
+            source $file > /dev/null 2>&1
+            return
+          done
+          search_dir="${search_dir:h}"
+        done
+      fi
     fi
   }
   add-zsh-hook chpwd auto_vrun
