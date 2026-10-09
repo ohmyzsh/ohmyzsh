@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-# Shared on-demand renderer for `omz screensaver <scene>`.
+# Shared on-demand renderer for `omz shellsaver <scene>`.
 # The CLI launches a separate Zsh process, keeping all state out of the caller.
 {
   emulate -L zsh
@@ -12,12 +12,10 @@
   local -a canvas inks palette
 
   _zshell_usage() {
-    print -r -- 'Oh My Zsh / experimental screensavers
+    print -r -- 'Oh My Zsh / experimental Shellsavers
 
-Usage: omz screensaver [aquarium|logo|hermit|party] [--mono] [--seconds N]
-       omz screensaver [aquarium|logo|hermit|party] --snapshot [FRAME]
-
-Alias: omz shellsaver [scene] [options]
+Usage: omz shellsaver [aquarium|logo|hermit|party] [--mono] [--seconds N]
+       omz shellsaver [aquarium|logo|hermit|party] --snapshot [FRAME]
 
 aquarium        Sea shells, a ~ hermit crab, and a quiet current (default).
 logo            The Oh My Zsh wordmark takes a bouncing coffee break.
@@ -36,7 +34,7 @@ Nothing is installed or enabled automatically.'
     --help|-h) _zshell_usage; exit 0 ;;
     ''|--*) scene=aquarium ;;
     aquarium|logo|hermit|party) scene=$1; shift ;;
-    *) print -u2 -r -- "omz screensaver: unknown scene: $1 (choose aquarium, logo, hermit, or party)"; exit 2 ;;
+    *) print -u2 -r -- "omz shellsaver: unknown scene: $1 (choose aquarium, logo, hermit, or party)"; exit 2 ;;
   esac
 
   while (( $# )); do
@@ -46,14 +44,14 @@ Nothing is installed or enabled automatically.'
       --seconds)
         shift
         if [[ $1 != <1-3600> ]]; then
-          print -u2 -r -- 'omz screensaver: --seconds requires an integer from 1 to 3600'
+          print -u2 -r -- 'omz shellsaver: --seconds requires an integer from 1 to 3600'
           exit 2
         fi
         seconds_limit=$1 ;;
       --snapshot)
         snapshot=1
         if [[ ${2-} == <0-100000> ]]; then tick=$2; shift; fi ;;
-      *) print -u2 -r -- "omz screensaver: unknown argument: $1 (try --help)"; exit 2 ;;
+      *) print -u2 -r -- "omz shellsaver: unknown argument: $1 (try --help)"; exit 2 ;;
     esac
     shift
   done
@@ -534,7 +532,7 @@ Nothing is installed or enabled automatically.'
     exit 0
   fi
   if [[ ! -t 0 || ! -t 1 || -z $TERM || $TERM == dumb ]]; then
-    print -u2 -r -- 'omz screensaver: run in an interactive terminal (or use --snapshot)'
+    print -u2 -r -- 'omz shellsaver: run in an interactive terminal (or use --snapshot)'
     exit 1
   fi
   zmodload zsh/terminfo || exit 1
@@ -542,7 +540,7 @@ Nothing is installed or enabled automatically.'
   local capability
   for capability in smcup rmcup home clear civis cnorm sgr0 el; do
     if [[ -z ${terminfo[$capability]} ]]; then
-      print -u2 -r -- "omz screensaver: terminal lacks $capability; try --snapshot"
+      print -u2 -r -- "omz shellsaver: terminal lacks $capability; try --snapshot"
       exit 1
     fi
   done

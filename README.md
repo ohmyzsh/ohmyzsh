@@ -244,24 +244,24 @@ ZSH_THEME_RANDOM_IGNORED=(pygmalion tjkirch_mod)
 
 ### Shellsavers
 
-Give your terminal a little downtime with `omz shellsaver`, a playful alias for
-`omz screensaver`. The aquarium is the default; choose another scene to change the mood:
+Give your terminal a little downtime with `omz shellsaver`—our playful name for
+terminal screensavers. The aquarium is the default; choose another scene to change the mood:
 
 ```zsh
-omz screensaver                 # A quiet aquarium full of sea shells
-omz screensaver logo            # The updater's rainbow logo, bouncing around
-omz screensaver hermit          # A slightly lost hermit crab
+omz shellsaver                 # A quiet aquarium full of sea shells
+omz shellsaver logo            # The updater's rainbow logo, bouncing around
+omz shellsaver hermit          # A slightly lost hermit crab
 omz shellsaver party            # A rainbow stage and a dancing crowd
 ```
 
 Press any key or Ctrl-C to return to your shell. Screensavers run only when invoked
 and restore the terminal when they exit. No plugin or configuration change is needed.
-Use `omz help` to discover the commands, and Tab to complete scene names and options.
+Use `omz help` to discover the command, and Tab to complete scene names and options.
 
 ```zsh
-omz screensaver aquarium --seconds 30  # Stop automatically after 30 seconds
-omz screensaver logo --mono            # Use the terminal's foreground color
-omz screensaver --help                 # Show all scenes and options
+omz shellsaver aquarium --seconds 30  # Stop automatically after 30 seconds
+omz shellsaver logo --mono            # Use the terminal's foreground color
+omz shellsaver --help                 # Show all scenes and options
 ```
 
 Requires Zsh 5.8 or newer, `stty`, and an xterm-compatible terminal with alternate-screen
