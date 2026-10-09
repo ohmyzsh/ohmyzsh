@@ -17,7 +17,7 @@ function title {
   : ${2=$1}
 
   case "$TERM" in
-    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty*|st*|foot*|contour*|wezterm*)
+    cygwin|xterm*|putty*|rxvt*|konsole*|ansi|mlterm*|alacritty*|st*|foot*|contour*|wezterm*|nsterm*)
       print -Pn "\e]2;${2:q}\a" # set window name
       print -Pn "\e]1;${1:q}\a" # set tab name
       ;;
@@ -26,10 +26,12 @@ function title {
       print -Pn "\ek${1:q}\e\\" # set screen hardstatus/tmux window name if `allow-rename` is on
       ;;
     *)
-      if [[ "$TERM_PROGRAM" == "iTerm.app" ]]; then
+      case "$TERM_PROGRAM" in
+      "iTerm.app"|"Apple_Terminal")
         print -Pn "\e]2;${2:q}\a" # set window name
         print -Pn "\e]1;${1:q}\a" # set tab name
-      else
+        ;;
+      *)
         # Try to use terminfo to set the title if the feature is available
         if (( ${+terminfo[fsl]} && ${+terminfo[tsl]} )); then
           # Emit the capabilities with echoti so terminfo does its own parameter
@@ -39,7 +41,8 @@ function title {
           print -Pn "$1"
           echoti fsl
         fi
-      fi
+        ;;
+      esac
       ;;
   esac
 }
