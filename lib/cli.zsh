@@ -197,7 +197,7 @@ EOF
 }
 
 function _omz::shellsaver {
-  command zsh -f "$ZSH/tools/screensaver.zsh" "$@"
+  command zsh -f "$ZSH/tools/shellsaver.zsh" "$@"
 }
 
 # Hidden alias; only shellsaver is advertised in help and command completion.
