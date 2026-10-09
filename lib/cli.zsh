@@ -39,6 +39,7 @@ function _omz {
     _arguments \
       '1:command:' \
       '2::scene:(aquarium logo hermit party)' \
+      '--list[List available scenes]' \
       '--mono[Use the default foreground color]' \
       '--seconds[Exit after a number of seconds]:seconds:' \
       '--snapshot[Print a plain-text still]::frame:' \

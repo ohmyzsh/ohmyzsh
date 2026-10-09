@@ -251,7 +251,7 @@ terminal screensavers. The aquarium is the default; choose another scene to chan
 omz shellsaver                 # A quiet aquarium full of sea shells
 omz shellsaver logo            # The updater's rainbow logo, bouncing around
 omz shellsaver hermit          # A slightly lost hermit crab
-omz shellsaver party            # A rainbow stage and a dancing crowd
+omz shellsaver party           # A rainbow stage and a dancing crowd
 ```
 
 Press any key or Ctrl-C to return to your shell. Screensavers run only when invoked
@@ -261,6 +261,7 @@ Use `omz help` to discover the command, and Tab to complete scene names and opti
 ```zsh
 omz shellsaver aquarium --seconds 30  # Stop automatically after 30 seconds
 omz shellsaver logo --mono            # Use the terminal's foreground color
+omz shellsaver --list                 # List scenes (aquarium is the default)
 omz shellsaver --help                 # Show all scenes and options
 ```
 

@@ -11,18 +11,24 @@
   local saved_tty='' key='' blank='' result='' scene=''
   local -a canvas inks palette
 
+  _zshell_list() {
+    print -r -- 'aquarium        Sea shells, a ~ hermit crab, and a quiet current (default).
+logo            The Oh My Zsh wordmark takes a bouncing coffee break.
+hermit          A bewildered hermit crab tries to find its working directory.
+party           A rainbow terminal stage and a crowd of dancing shell fans.'
+  }
+
   _zshell_usage() {
     print -r -- 'Oh My Zsh / experimental Shellsavers
 
 Usage: omz shellsaver [aquarium|logo|hermit|party] [--mono] [--seconds N]
        omz shellsaver [aquarium|logo|hermit|party] --snapshot [FRAME]
-
-aquarium        Sea shells, a ~ hermit crab, and a quiet current (default).
-logo            The Oh My Zsh wordmark takes a bouncing coffee break.
-hermit          A bewildered hermit crab tries to find its working directory.
-party           A rainbow terminal stage and a crowd of dancing shell fans.
-
+       omz shellsaver --list
+'
+    _zshell_list
+    print -r -- '
 Any key returns to the shell. Ctrl-C also exits safely.
+--list          List available scenes and the default.
 --mono          Use the terminal default foreground color.
 --seconds N     Exit automatically after 1-3600 seconds.
 --snapshot      Print a still at 96 columns x 28 rows (no terminal needed).
@@ -40,6 +46,7 @@ Nothing is installed or enabled automatically.'
   while (( $# )); do
     case "$1" in
       --help|-h) _zshell_usage; exit 0 ;;
+      --list) _zshell_list; exit 0 ;;
       --mono) mono=1 ;;
       --seconds)
         shift
