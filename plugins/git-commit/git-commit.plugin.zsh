@@ -30,7 +30,7 @@ for _type in "${_git_commit_aliases[@]}"; do
   esac
 
   local _func='!a() {
-local _scope _attention _message
+local _scope _attention _message _body
 while [ $# -ne 0 ]; do
 case $1 in
   -s | --scope )
@@ -46,12 +46,27 @@ case $1 in
     shift 1
     ;;
   * )
-    _message="${_message} $1"
+    if [ -z "$_message" ]; then
+      _message="$1"
+    elif [ -z "$_body" ]; then
+      _body="$1"
+    else
+      echo "Too many arguments!"
+      return 1
+    fi
     shift 1
     ;;
 esac
 done
-git commit -m "'$_type'${_scope:+(${_scope})}${_attention}:${_message}"
+if [ -z "$_message" ]; then
+  echo "Missing message!"
+  return 1
+fi
+if [ -n "$_body" ]; then
+  git commit -m "'$_type'${_scope:+(${_scope})}${_attention}: ${_message}" -m "$_body"
+else
+  git commit -m "'$_type'${_scope:+(${_scope})}${_attention}: ${_message}"
+fi
 }; a'
 
   git config --global alias.$_alias "$_func"
