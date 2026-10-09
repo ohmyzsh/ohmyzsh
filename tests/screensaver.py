@@ -47,6 +47,7 @@ class Terminal:
                 try:
                     self.output.extend(os.read(self.master, 65536))
                 except BlockingIOError:
+                    # The nonblocking PTY may have no bytes ready after select.
                     pass
         return bytes(self.output)
 
@@ -130,7 +131,7 @@ class AquariumTests(unittest.TestCase):
         terminal = self.terminal()
         terminal.collect()
         terminal.resize(8, 25)
-        self.assertTrue(b"A little more" in terminal.collect(0.7))
+        self.assertIn(b"A little more", terminal.collect(0.7))
         boundary = len(terminal.output)
         terminal.resize(40, 140)
         terminal.collect(0.7)
