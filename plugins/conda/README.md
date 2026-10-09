@@ -1,6 +1,6 @@
 # conda plugin
 
-The conda plugin provides [aliases](#aliases) for `conda`, usually installed via [anaconda](https://www.anaconda.com/) or [miniconda](https://docs.conda.io/en/latest/miniconda.html).
+The conda plugin provides [aliases](#aliases) and [completion](#completion) for `conda`, usually installed via [anaconda](https://www.anaconda.com/) or [miniconda](https://docs.conda.io/en/latest/miniconda.html).
 
 To use it, add `conda` to the plugins array in your zshrc file:
 
@@ -35,3 +35,10 @@ plugins=(... conda)
 | `cnu`    | `conda update`                          | Update conda package manager                                                    |
 | `cnua`   | `conda update --all`                    | Update all installed packages                                                   |
 | `cnuc`   | `conda update conda`                    | Update conda package manager                                                    |
+
+## Completion
+
+Tab completion is available for the following commands by fetching the list of conda environments:
+
+- `cna`: completes environment names for `conda activate`
+- `cnrn`: completes environment names for `conda remove -y --all -n`
