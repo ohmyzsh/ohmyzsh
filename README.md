@@ -522,6 +522,20 @@ omz update
 >
 > **USE OF `omz update --unattended` HAS BEEN REMOVED, AS IT HAS SIDE EFFECTS**.
 
+### Diagnostics
+
+If something looks off (glitched characters, completions misbehaving), run:
+
+```sh
+omz diagnose
+```
+
+It runs a few quick checks and tells you what to fix — for example, it will warn you when
+your locale is not UTF-8, which is a common cause of duplicated characters at the prompt
+(see the [FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#i-see-duplicate-typed-characters-after-i-complete-a-command)).
+
+For a full report suitable for attaching to a bug report, use `omz_diagnostic_dump`.
+
 Magic! 🎉
 
 ## Uninstalling Oh My Zsh
