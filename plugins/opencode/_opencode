@@ -1,0 +1,12 @@
+#compdef opencode
+
+# Adapted from `opencode completion`, using the CLI's live Yargs completions.
+local -a reply
+reply=("${(@f)$(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" \
+  command opencode --get-yargs-completions "${words[@]}" < /dev/null 2> /dev/null)}")
+
+if [[ -n "${reply[1]}" ]]; then
+  _describe 'values' reply
+else
+  _default
+fi
