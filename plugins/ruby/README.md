@@ -14,7 +14,7 @@ plugins=(... ruby)
 | ------- | -------------------------------------- | ---------------------------------------------------- |
 | rb      | `ruby`                                 | The Ruby command                                     |
 | sgem    | `sudo gem`                             | Run sudo gem on the system ruby, not the active ruby |
-| rfind   | `find . -name "*.rb" \| xargs grep -n` | Find ruby file                                       |
+| rfind   | `find . -name "*.rb" -print0 \| xargs -0 grep -n` | Find ruby file                                       |
 | rrun    | `ruby -e`                              | Execute some code: E.g: `rrun "puts 'Hello world!'"` |
 | rserver | `ruby -e httpd . -p 8080`              | Start HTTP Webrick serving local directory/files     |
 | gein    | `gem install`                          | Install a gem into the local repository              |
