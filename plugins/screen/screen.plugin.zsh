@@ -1,10 +1,6 @@
 # if using GNU screen, let the zsh tell screen what the title and hardstatus
 # of the tab window should be.
 if [[ "$TERM" == screen* ]]; then
-  # Unset title() function defined in lib/termsupport.zsh to prevent
-  # overwriting our screen titles
-  title(){}
-
   if [[ $_GET_PATH == '' ]]; then
     _GET_PATH='echo $PWD | sed "s/^\/Users\//~/;s/^\/home\//~/;s/^~$USERNAME/~/"'
   fi
@@ -31,30 +27,19 @@ if [[ "$TERM" == screen* ]]; then
   # the title
   TAB_HARDSTATUS_EXEC='$cmd'
 
-  # tell GNU screen what the tab window title ($1) and the hardstatus($2) should be
-  function screen_set()
-  {
-    [[ "${DISABLE_AUTO_TITLE:-}" != true ]] || return 0
-
-    # set the tab window title (%t) for screen
-    print -nR $'\033k'$1$'\033'\\\
-
-    # set hardstatus of tab window (%h) for screen
-    print -nR $'\033]0;'$2$'\a'
-  }
   # called by zsh before executing a command
-  function preexec()
+  function omz_termsupport_preexec()
   {
     local -a cmd; cmd=(${(z)1}) # the command string
     eval "tab_title=$TAB_TITLE_PREFIX:$TAB_TITLE_EXEC"
     eval "tab_hardstatus=$TAB_HARDSTATUS_PREFIX:$TAB_HARDSTATUS_EXEC"
-    screen_set $tab_title $tab_hardstatus
+    title $tab_title $tab_hardstatus
   }
   # called by zsh before showing the prompt
-  function precmd()
+  function omz_termsupport_precmd()
   {
     eval "tab_title=$TAB_TITLE_PREFIX:$TAB_TITLE_PROMPT"
     eval "tab_hardstatus=$TAB_HARDSTATUS_PREFIX:$TAB_HARDSTATUS_PROMPT"
-    screen_set $tab_title $tab_hardstatus
+    title $tab_title $tab_hardstatus
   }
 fi
