@@ -77,7 +77,7 @@ function _build_tmux_alias {
 
 alias tksv='tmux kill-server'
 alias tl='tmux list-sessions'
-alias tmuxconf='$EDITOR $ZSH_TMUX_CONFIG'
+alias tmuxconf='${(z)EDITOR:-vim} "$ZSH_TMUX_CONFIG"'
 
 _build_tmux_alias "ta" "attach" "-t"
 _build_tmux_alias "tad" "attach -d" "-t"
