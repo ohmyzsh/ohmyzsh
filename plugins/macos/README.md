@@ -9,6 +9,7 @@ plugins=(... macos)
 ```
 
 ## Supported Terminals
+
 - [iTerm](https://iterm.sourceforge.net/)
 - [iTerm2](https://iterm2.com/)
 - [Hyper](https://hyper.is/)
@@ -17,28 +18,33 @@ plugins=(... macos)
 
 ## Commands
 
-| Command       | Description                                              |
-| :------------ | :------------------------------------------------------- |
-| `tab`         | Open the current directory in a new tab                  |
-| `split_tab`   | Split the current terminal tab horizontally              |
-| `vsplit_tab`  | Split the current terminal tab vertically                |
-| `ofd`         | Open passed directories (or $PWD by default) in Finder   |
-| `pfd`         | Return the path of the frontmost Finder window           |
-| `pfs`         | Return the current Finder selection                      |
-| `cdf`         | `cd` to the current Finder directory                     |
-| `pushdf`      | `pushd` to the current Finder directory                  |
-| `pxd`         | Return the current Xcode project directory               |
-| `cdx`         | `cd` to the current Xcode project directory              |
-| `quick-look`  | Quick-Look a specified file                              |
-| `man-preview` | Open man pages in Preview app                            |
-| `showfiles`   | Show hidden files in Finder                              |
-| `hidefiles`   | Hide the hidden files in Finder                          |
-| `itunes`      | _DEPRECATED_. Use `music` from macOS Catalina on         |
-| `music`       | Control Apple Music. Use `music -h` for usage details    |
-| `spotify`     | Control Spotify and search by artist, album, track…      |
-| `rmdsstore`   | Remove .DS_Store files recursively in a directory        |
-| `btrestart`   | Restart the Bluetooth daemon                             |
-| `freespace`   | Erases purgeable disk space with 0s on the selected disk |
+| Command       | Description                                                    |
+| :------------ | :------------------------------------------------------------- |
+| `tab`         | Open the current directory in a new tab                        |
+| `split_tab`   | Split the current terminal tab horizontally                    |
+| `vsplit_tab`  | Split the current terminal tab vertically                      |
+| `ofd`         | Open passed directories (or $PWD by default) in Finder         |
+| `pfd`         | Return the path of the frontmost Finder window                 |
+| `pfs`         | Return the current Finder selection                            |
+| `cdf`         | `cd` to the current Finder directory                           |
+| `pushdf`      | `pushd` to the current Finder directory                        |
+| `pxd`         | Return the current Xcode project directory                     |
+| `cdx`         | `cd` to the current Xcode project directory                    |
+| `quick-look`  | Quick-Look a specified file                                    |
+| `man-preview` | Open man pages in Preview app                                  |
+| `showfiles`   | Show hidden files in Finder                                    |
+| `hidefiles`   | Hide the hidden files in Finder                                |
+| `itunes`      | _DEPRECATED_. Use `music` from macOS Catalina on               |
+| `music`       | Control Apple Music. Use `music -h` for usage details          |
+| `spotify`     | Control Spotify and search by artist, album, track…            |
+| `lpm`         | Toggle Low Power Mode. Use `lpm on\|off\|status` (macOS 12.0+) |
+| `lpm-on`      | Enable Low Power Mode (macOS 12.0+)                            |
+| `lpm-off`     | Disable Low Power Mode (macOS 12.0+)                           |
+| `lpm-status`  | Check the current Low Power Mode status (macOS 12.0+)          |
+| `lpm-toggle`  | Toggle the current Low Power Mode status (macOS 12.0+)         |
+| `rmdsstore`   | Remove .DS_Store files recursively in a directory              |
+| `btrestart`   | Restart the Bluetooth daemon                                   |
+| `freespace`   | Erases purgeable disk space with 0s on the selected disk       |
 
 ## Acknowledgements
 
