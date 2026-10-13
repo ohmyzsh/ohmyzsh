@@ -1,0 +1,22 @@
+#
+# Completion
+#
+# %command% generates its own zsh completion, so we cache it instead of
+# maintaining a `_%command%` file by hand.
+#
+# On the first shell after installing this plugin the cache file doesn't exist
+# yet, so compinit hasn't bound it. Do that manually here.
+if [[ ! -f "$ZSH_CACHE_DIR/completions/_%command%" ]]; then
+  typeset -g -A _comps
+  autoload -Uz _%command%
+  _comps[%command%]=_%command%
+fi
+
+# Regenerate the cache in the background so it never blocks shell startup.
+# TMPPREFIX puts the temp file next to the destination, which keeps the move
+# atomic.
+zmodload -F zsh/files b:zf_mv
+() {
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_%command%"
+  zf_mv -f -- =( %compgen% ) "$TMPPREFIX"
+} &|
