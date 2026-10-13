@@ -97,7 +97,7 @@ EOF
         && tar --zstd -xvf "$full_path" \
         || zstdcat "$full_path" | tar xvf - ;;
       (*.tar) tar xvf "$full_path" ;;
-      (*.tar.lz) (( $+commands[lzip] )) && tar xvf "$full_path" ;;
+      (*.tar.lz) (( $+commands[lzip] )) && lzip -cd "$full_path" | tar xvf - ;;
       (*.tar.lz4) lz4 -c -d "$full_path" | tar xvf - ;;
       (*.tar.lrz) (( $+commands[lrzuntar] )) && lrzuntar "$full_path" ;;
       (*.gz) (( $+commands[pigz] )) && pigz -cdk "$full_path" > "${file:t:r}" || gunzip -ck "$full_path" > "${file:t:r}" ;;
