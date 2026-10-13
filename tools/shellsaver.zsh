@@ -7,7 +7,7 @@
   unsetopt multibyte
 
   integer tick=0 width=96 height=28 resized=1 active=0 seconds_limit=0
-  integer mono=0 snapshot=0
+  integer mono=0 snapshot=0 scene_selected=0
   local saved_tty='' key='' blank='' result='' scene=''
   local -a canvas inks palette
 
@@ -39,12 +39,18 @@ Nothing is installed or enabled automatically.'
   case "${1-}" in
     --help|-h) _zshell_usage; exit 0 ;;
     ''|--*) scene=aquarium ;;
-    aquarium|logo|hermit|party) scene=$1; shift ;;
+    aquarium|logo|hermit|party) scene=$1; scene_selected=1; shift ;;
     *) print -u2 -r -- "omz shellsaver: unknown scene: $1 (choose aquarium, logo, hermit, or party)"; exit 2 ;;
   esac
 
   while (( $# )); do
     case "$1" in
+      aquarium|logo|hermit|party)
+        if (( scene_selected )); then
+          print -u2 -r -- 'omz shellsaver: choose only one scene (try --help)'
+          exit 2
+        fi
+        scene=$1; scene_selected=1 ;;
       --help|-h) _zshell_usage; exit 0 ;;
       --list) _zshell_list; exit 0 ;;
       --mono) mono=1 ;;
@@ -584,10 +590,13 @@ Nothing is installed or enabled automatically.'
   fi
 
   _zshell_cleanup() {
+    # Ignore handled signals throughout restoration, including in child stty.
+    # Keep active set until both the screen and terminal modes are restored.
+    trap '' INT TERM HUP QUIT TSTP WINCH
     (( active )) || return 0
-    active=0
     print -rn -- "${terminfo[sgr0]}${terminfo[cnorm]}${terminfo[rmcup]}"
     command stty "$saved_tty" 2>/dev/null
+    active=0
   }
   _zshell_size() {
     local dimensions
@@ -635,9 +644,9 @@ Nothing is installed or enabled automatically.'
       wait_for=$(( deadline-EPOCHREALTIME ))
       (( wait_for < 0.005 )) && wait_for=0.005
       if read -r -k 1 -u 0 -t $wait_for key; then
-        # Drain an arrow/function-key sequence so it cannot leak into the prompt.
-        integer drained=0
-        while (( drained++ < 64 )) && read -r -k 1 -u 0 -t 0.01 key; do :; done
+        # Drain the entire key sequence or paste until input goes quiet, so no
+        # queued suffix (including pasted commands) reaches the parent prompt.
+        while read -r -k 1 -u 0 -t 0.01 key; do :; done
         break
       fi
     done
