@@ -42,7 +42,7 @@ function asp() {
   export AWS_PROFILE=$1
   export AWS_EB_PROFILE=$1
 
-  export AWS_PROFILE_REGION=$(aws configure get region)
+  export AWS_PROFILE_REGION=$(_aws_profile_region "$1")
 
   _aws_update_state
 
@@ -239,9 +239,47 @@ function aws_regions() {
 }
 
 function aws_profiles() {
-  aws --no-cli-pager configure list-profiles 2> /dev/null && return
-  [[ -r "${AWS_CONFIG_FILE:-$HOME/.aws/config}" ]] || return 1
-  command grep -Eo '^[[:space:]]*\[[[:space:]]*(profile[[:space:]]+)?[^][:space:]]+[[:space:]]*\]' "${AWS_CONFIG_FILE:-$HOME/.aws/config}" | command sed -E 's/^[[:space:]]*\[[[:space:]]*(profile[[:space:]]+)?([^][:space:]]+)[[:space:]]*\]$/\2/'
+  emulate -L zsh
+  local config="${AWS_CONFIG_FILE:-$HOME/.aws/config}"
+  local creds="${AWS_SHARED_CREDENTIALS_FILE:-$HOME/.aws/credentials}"
+  # Read the files directly; the AWS CLI is slow to start
+  if [[ ! -r "$config" && ! -r "$creds" ]]; then
+    aws --no-cli-pager configure list-profiles 2> /dev/null
+    return
+  fi
+  local line words
+  # Only read the section headers, so the credentials never enter the shell
+  for line in "${(@f)$(command grep -h '^[[:space:]]*\[' -- "$config" "$creds" 2> /dev/null)}"; do
+    line=${line#*\[}  # drop up to the first [
+    line=${line%\]*}  # drop from the last ] (comments, CR)
+    words=(${=line})
+    if (( $#words == 1 )); then
+      print -r -- $words[1]  # [default], or [foo] in the credentials file
+    elif (( $#words == 2 )) && [[ $words[1] == profile ]]; then
+      print -r -- $words[2]
+    fi
+  done | command sort -u
+}
+
+# Read a profile's region from the config file, falling back to the AWS CLI
+function _aws_profile_region() {
+  emulate -L zsh
+  local config="${AWS_CONFIG_FILE:-$HOME/.aws/config}" line words in_profile
+  if [[ -r "$config" ]]; then
+    # Only read headers and region lines, so any credentials never enter the shell
+    for line in "${(@f)$(command grep -e '\[' -e region -- "$config" 2> /dev/null)}"; do
+      line=${line%$'\r'}
+      words=(${=line//[\[\]=]/ })  # "[profile foo]" -> (profile foo), "region = x" -> (region x)
+      if [[ ${${=line}[1]} == \[* ]]; then  # header, possibly indented
+        in_profile=
+        [[ "$words" == "profile $1" || ( $1 == default && "$words" == default ) ]] && in_profile=1
+      elif [[ -n $in_profile && $words[1] == region ]]; then
+        print -r -- $words[2]
+        return
+      fi
+    done
+  fi
+  aws configure get region
 }
 
 function _aws_regions() {
@@ -285,7 +323,7 @@ if [[ "$AWS_PROFILE_STATE_ENABLED" == true ]]; then
   export AWS_PROFILE="$AWS_DEFAULT_PROFILE"
   export AWS_EB_PROFILE="$AWS_DEFAULT_PROFILE"
 
-  test -z "${aws_state[2]}" && AWS_REGION=$(aws configure get region)
+  test -z "${aws_state[2]}" && AWS_REGION=$(_aws_profile_region "$AWS_PROFILE")
 
   export AWS_REGION=${AWS_REGION:-$aws_state[2]}
   export AWS_DEFAULT_REGION="$AWS_REGION"
