@@ -54,30 +54,23 @@ alias mv='mv -i'
 # depends on the SUFFIX :)
 autoload -Uz is-at-least
 if is-at-least 4.2.0; then
-  # open browser on urls
+  # open browser on HTML files
   if [[ -n "$BROWSER" ]]; then
     _browser_fts=(htm html xhtml)
-    for ft in $_browser_fts; do alias -s $ft='$BROWSER'; done
+    for ft in $_browser_fts; do alias -s $ft='${BROWSER:-open_command}'; done
   fi
 
   # open editable text files in text editor
-  if [[ -n "$VISUAL" ]] || [[ -n "$EDITOR" ]]; then
+  if [[ -n "${VISUAL:-${EDITOR:-${ALTERNATE_EDITOR:-}}}" ]]; then
     _aliases_launch_editor() {
-      # directly launch matched files with executable bit and shebang present
+      # directly launch matched files with executable bit set
       if [[ -x "${1}" ]]; then
-        read -r <"${1}"
-        if [[ ${#REPLY} -ge 3 ]] && [[ ${REPLY:0:2} = '#!' ]]; then
           "$@"
-          return $?
-        fi
-      fi
-
-      if [[ -n "$VISUAL" ]]; then
-        $VISUAL "$@"
       else
-        $EDITOR "$@"
+        ${VISUAL:-${EDITOR:-${ALTERNATE_EDITOR:-nano}}} "$@"
       fi
     }
+
     # Taken from the /language/metadata/property[name="globs"] sections of the
     # gtksourceview language definition files in
     # /usr/share/gtksourceview-3.0/language-specs/*.lang
@@ -100,43 +93,36 @@ if is-at-least 4.2.0; then
     for ft in $_editor_fts; do alias -s $ft=_aliases_launch_editor; done
   fi
 
-  # open image files in image viewer
-  if [[ -n "$XIVIEWER" ]]; then
-    # List inspired by https://en.wikipedia.org/wiki/Image_file_formats
-    _image_fts=(
-      #: Raster formats
-      # JPEG, JPEG2000, HEIF/HEVC, JBIG
-      jpg jpeg jpe jif jfif jfi jp2 j2k jpf jpx jpm mj2 heif heic jbg jbig
-      # BMP, BPG, GIF, ICO/ANI, PCX, PNG+MNG, TGA, TIFF, WebP (Web)
-      bmp bpg gif dib ico cur ani pcx png mng tga tiff tif webp
-      # NetPBM, XBM/XPM/XWD (ASCII)
-      pbm bgm ppm pnm xbm xpm xwd
-      # CIFF, DNG, DPX, ECW, FITS, ICS, RGBE (HDR & Raw)
-      crw dng dpx ecw fits ics ids fit fts hdr
-      # DDS ICNS OpenRaster SunRaster (Other)
-      dds icns ora ras sun
-      #: Vector formats
-      # CGM WMF Gerber IGES SVG
-      cgm wmf emf wmz emz gbr iges svg svgz
-    )
-    for ft in $_image_fts; do alias -s $ft='$XIVIEWER'; done
-  fi
+  # List inspired by https://en.wikipedia.org/wiki/Image_file_formats
+  _image_fts=(
+    #: Raster formats
+    # JPEG, JPEG2000, HEIF/HEVC, JBIG
+    jpg jpeg jpe jif jfif jfi jp2 j2k jpf jpx jpm mj2 heif heic jbg jbig
+    # BMP, BPG, GIF, ICO/ANI, PCX, PNG+MNG, TGA, TIFF, WebP (Web)
+    bmp bpg gif dib ico cur ani pcx png mng tga tiff tif webp
+    # NetPBM, XBM/XPM/XWD (ASCII)
+    pbm bgm ppm pnm xbm xpm xwd
+    # CIFF, DNG, DPX, ECW, FITS, ICS, RGBE (HDR & Raw)
+    crw dng dpx ecw fits ics ids fit fts hdr
+    # DDS ICNS OpenRaster SunRaster (Other)
+    dds icns ora ras sun
+    #: Vector formats
+    # CGM WMF Gerber IGES SVG
+    cgm wmf emf wmz emz gbr iges svg svgz
+  )
 
-  if [[ -n "$XMVIEWER" ]]; then
-    _media_fts=(
-      #: Audio (container) formats
-      # https://en.wikipedia.org/wiki/Audio_file_format#List_of_formats
-      aac act aiff ape au awb dct dss flac gsm m4a m4b mp3 mpc oga opus ra sln
-      tta vox wav wma wv
-      #: Video (container) formats
-      # https://en.wikipedia.org/wiki/Video_file_format#List_of_video_file_formats
-      mkv flv f4v f4p f4a f4b vob ogv drc gifv avi mov qt wmv yuv rmvb asf amv
-      m4v mpg mp2 m2v mpeg mpe mpv svi 3g2 mxf nsv
-      #: Container formats that may store both
-      3gp ogg mogg mp4 m4p rm webm
-    )
-    for ft in $_media_fts; do alias -s $ft=$XMVIEWER; done
-  fi
+  _media_fts=(
+    #: Audio (container) formats
+    # https://en.wikipedia.org/wiki/Audio_file_format#List_of_formats
+    aac act aiff ape au awb dct dss flac gsm m4a m4b mp3 mpc oga opus ra sln
+    tta vox wav wma wv
+    #: Video (container) formats
+    # https://en.wikipedia.org/wiki/Video_file_format#List_of_video_file_formats
+    mkv flv f4v f4p f4a f4b vob ogv drc gifv avi mov qt wmv yuv rmvb asf amv
+    m4v mpg mp2 m2v mpeg mpe mpv svi 3g2 mxf nsv
+    #: Container formats that may store both
+    3gp ogg mogg mp4 m4p rm webm
+  )
 
   #open complex document formats using the system viewer
   _document_fts=(
@@ -155,11 +141,8 @@ if is-at-least 4.2.0; then
     # Others
     abw gnm gnumeric pages hwp
   )
-  if type xdg-open >/dev/null; then
-    for ft in $_document_fts; do alias -s $ft=xdg-open; done
-  elif type open >/dev/null; then
-    for ft in $_document_fts; do alias -s $ft=open; done
-  fi
+
+  for ft in $_image_fts $_media_fts $_document_fts; do alias -s $ft=open_command; done
 
   #list what's inside packed file
   alias -s zip="unzip -l"
