@@ -137,7 +137,7 @@ fi
 # Don't define the function if we're in an unsupported terminal
 case "$TERM" in
   # all of these either process OSC 7 correctly or ignore entirely
-  xterm*|putty*|rxvt*|konsole*|mlterm*|alacritty*|screen*|tmux*) ;;
+  xterm*|putty*|rxvt*|konsole*|mlterm*|alacritty*|screen*|tmux*|nsterm*) ;;
   contour*|foot*) ;;
   *)
     # Terminal.app and iTerm2 process OSC 7 correctly
