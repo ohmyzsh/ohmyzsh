@@ -23,8 +23,8 @@ deathstar       X-wing, TIEs and the Falcon battle beside the Death Star.'
   _zshell_usage() {
     print -r -- 'Oh My Zsh / experimental Shellsavers
 
-Usage: omz shellsaver [SCENE] [--mono] [--seconds N]
-       omz shellsaver [SCENE] --snapshot [FRAME]
+Usage: omz shellsaver [aquarium|logo|hermit|party|deathstar] [--mono] [--seconds N]
+       omz shellsaver [aquarium|logo|hermit|party|deathstar] --snapshot [FRAME]
        omz shellsaver --list
 '
     _zshell_list
