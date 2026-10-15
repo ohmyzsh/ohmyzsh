@@ -252,6 +252,7 @@ omz shellsaver                 # A quiet aquarium full of sea shells
 omz shellsaver logo            # The updater's rainbow logo, bouncing around
 omz shellsaver hermit          # A slightly lost hermit crab
 omz shellsaver party           # A rainbow stage and a dancing crowd
+omz shellsaver deathstar       # A space battle by the Death Star
 ```
 
 Press any key or Ctrl-C to return to your shell. Screensavers run only when invoked

@@ -9,20 +9,22 @@
   integer tick=0 width=96 height=28 resized=1 active=0 seconds_limit=0
   integer mono=0 snapshot=0 scene_selected=0
   local saved_tty='' key='' blank='' result='' scene=''
-  local -a canvas inks palette
+  local -a canvas inks palette ds_rows ds_offs ds_widths
+  integer ds_radius=0
 
   _zshell_list() {
     print -r -- 'aquarium        Sea shells, a ~ hermit crab, and a quiet current (default).
 logo            The Oh My Zsh wordmark takes a bouncing coffee break.
 hermit          A bewildered hermit crab tries to find its working directory.
-party           A rainbow terminal stage and a crowd of dancing shell fans.'
+party           A rainbow terminal stage and a crowd of dancing shell fans.
+deathstar       X-wing, TIEs and the Falcon battle beside the Death Star.'
   }
 
   _zshell_usage() {
     print -r -- 'Oh My Zsh / experimental Shellsavers
 
-Usage: omz shellsaver [aquarium|logo|hermit|party] [--mono] [--seconds N]
-       omz shellsaver [aquarium|logo|hermit|party] --snapshot [FRAME]
+Usage: omz shellsaver [aquarium|logo|hermit|party|deathstar] [--mono] [--seconds N]
+       omz shellsaver [aquarium|logo|hermit|party|deathstar] --snapshot [FRAME]
        omz shellsaver --list
 '
     _zshell_list
@@ -39,13 +41,13 @@ Nothing is installed or enabled automatically.'
   case "${1-}" in
     --help|-h) _zshell_usage; exit 0 ;;
     ''|--*) scene=aquarium ;;
-    aquarium|logo|hermit|party) scene=$1; scene_selected=1; shift ;;
-    *) print -u2 -r -- "omz shellsaver: unknown scene: $1 (choose aquarium, logo, hermit, or party)"; exit 2 ;;
+    aquarium|logo|hermit|party|deathstar) scene=$1; scene_selected=1; shift ;;
+    *) print -u2 -r -- "omz shellsaver: unknown scene: $1 (choose aquarium, logo, hermit, party, or deathstar)"; exit 2 ;;
   esac
 
   while (( $# )); do
     case "$1" in
-      aquarium|logo|hermit|party)
+      aquarium|logo|hermit|party|deathstar)
         if (( scene_selected )); then
           print -u2 -r -- 'omz shellsaver: choose only one scene (try --help)'
           exit 2
@@ -103,6 +105,19 @@ Nothing is installed or enabled automatically.'
     local line
     for line in "$@"; do
       _zshell_put $sx $sy $color "$line"
+      (( sy++ ))
+    done
+  }
+
+  # Like _zshell_sprite, but leading spaces stay transparent so ships drawn
+  # over a starfield do not punch rectangular holes in the sky.
+  _zshell_shape() {
+    integer sx=$1 sy=$2 color=$3
+    shift 3
+    local line text
+    for line in "$@"; do
+      text=${line##[ ]#}
+      _zshell_put $((sx+${#line}-${#text})) $sy $color "$text"
       (( sy++ ))
     done
   }
@@ -422,6 +437,196 @@ Nothing is installed or enabled automatically.'
     _zshell_put $((width-21)) $height 0 'any key: after-party'
   }
 
+  # Build the Death Star's rows for a radius: an ellipse twice as wide as it
+  # is tall, edged with ASCII strokes that follow its slope and filled with
+  # sparse surface detail, so the sphere hides the stars drifting behind it.
+  _zshell_death_star_build() {
+    integer r=$1 rows=$((2*$1)) i x w n inner ax
+    local line c
+    ds_radius=$r ds_rows=() ds_offs=() ds_widths=()
+    for (( i=0; i<rows; i++ )); do
+      n=$(( 4*r*r - (2*i-2*r+1)**2 )) w=0
+      while (( (w+1)*(w+1) <= n )); do (( w++ )); done
+      ds_widths+=( $w )
+    done
+    for (( i=1; i<=rows; i++ )); do
+      w=${ds_widths[$i]}
+      # Strokes join each row to its neighbour toward the nearer pole.
+      if (( i <= r )); then
+        inner=$(( i > 1 ? ds_widths[i-1] : -1 ))
+      else
+        inner=$(( i < rows ? ds_widths[i+1] : -1 ))
+      fi
+      line=''
+      for (( x=-w; x<=w; x++ )); do
+        ax=$(( x < 0 ? -x : x ))
+        if (( inner < 0 )); then
+          c='_'
+          (( i > r )) && { c='-'; (( ax == w )) && c="'"; }
+        elif (( ax == w && w-inner <= 1 && (i-r)*(i-r-1) <= r*r/9 )); then
+          c='|'
+        elif (( ax == w && w-inner <= 1 )); then
+          c='/'; (( (x < 0) == (i > r) )) && c='\'
+        elif (( ax > inner )); then
+          c='-'
+          if (( ax == w )); then
+            c='.'; (( i > r )) && c="'"
+          elif (( ax == inner+1 )); then
+            c="'"; (( i > r )) && c='.'
+          fi
+        else
+          n=$(( (i*7919 + (x+w)*104729 + x*x*31) % 89 ))
+          c=' '; (( n < 4 )) && c='.'; (( n == 4 )) && c=':'
+        fi
+        line+=$c
+      done
+      ds_rows+=( "$line" ) ds_offs+=( $((-w)) )
+    done
+  }
+
+  _zshell_deathstar() {
+    integer i x y seed count phase ink speed
+    local glyph
+    # A deep-space starfield drifting past in parallax: nearer, brighter stars
+    # move faster than the distant dust. A fixed seed keeps the sky stable.
+    seed=1977
+    count=$(( width*height/18 ))
+    for (( i=0; i<count; i++ )); do
+      seed=$(( (seed*1103515245+12345) % 2147483648 ))
+      y=$(( 1 + seed/13 % (height-1) ))
+      phase=$(( seed/101 % 100 ))
+      glyph='.' ink=0 speed=20
+      if (( phase < 4 )); then
+        glyph='*' ink=5 speed=2
+      elif (( phase < 12 )); then
+        glyph='+' ink=7 speed=4
+      elif (( phase < 45 )); then
+        ink=5 speed=9
+      fi
+      x=$(( 1 + (seed/7 + width*1000 - tick/speed) % width ))
+      # Each twinkling star flares briefly on its own slow cycle.
+      if (( phase % 9 == 0 && (tick+phase*7) % 60 < 3 )); then
+        glyph='*' ink=5
+      elif (( phase % 9 == 1 && (tick+phase*5) % 45 < 4 )); then
+        glyph=' '
+      fi
+      _zshell_put $x $y $ink "$glyph"
+    done
+
+    # The Death Star looms in the top-right corner, sized to the window and
+    # cropped by the screen edges. Its outline is built once per size.
+    integer radius=$(( height/3 )) cx cy row n
+    (( radius > width/6 )) && radius=$(( width/6 ))
+    (( radius != ds_radius )) && _zshell_death_star_build $radius
+    cx=$(( width-radius )) cy=$(( 1-radius/4 ))
+    for (( row=1; row<=${#ds_rows}; row++ )); do
+      _zshell_put $((cx+ds_offs[row])) $((cy+row-1)) 0 "${ds_rows[$row]}"
+    done
+    # The equatorial trench and the superlaser dish, in the upper hemisphere.
+    row=$(( radius ))
+    n=$(( 2*ds_widths[row]-1 ))
+    _zshell_put $((cx-ds_widths[row]+1)) $((cy+row-1)) 7 "${(pl:$n::=:)}"
+    row=$(( radius/2+1 ))
+    x=$(( cx-ds_widths[row]/2 ))
+    if (( radius >= 14 )); then
+      _zshell_sprite $((x-5)) $((cy+row-4)) 7 \
+        '   .---.   ' " .'     '. " '/         \' '|   (o)   |' \
+        '\         /' " '.     .' " "   '---'   "
+    elif (( radius >= 8 )); then
+      _zshell_sprite $((x-3)) $((cy+row-3)) 7 \
+        ' .--. ' '/    \' '| () |' '\    /' " '--' "
+    else
+      _zshell_sprite $((x-2)) $((cy+row-2)) 7 ' .-. ' '( o )' " '-' "
+    fi
+
+    integer lane=$(( height-8 )) shot loop tx ty px py
+    # Far below, a Star Destroyer creeps leftward past everything else.
+    x=$(( width+2 - tick/4 % (width+60) ))
+    y=$(( height-11 ))
+    _zshell_shape $x $y 0 \
+      '                                  _[#]_' \
+      "                          ___.---'  |  '---.____" \
+      "                ___.---''' ::  ::  ::  ::      |" \
+      "      ___.---'''_______________________________|" \
+      '<______________________________________________|' \
+      "      '''---...____                    ____...-'" \
+      "                   '''---...____...---'"
+    _zshell_put $((x+35)) $y 7 '[#]'
+    glyph='=-'; (( tick % 3 )) && glyph='-='
+    _zshell_put $((x+48)) $((y+3)) 4 "$glyph"
+    _zshell_put $((x+48)) $((y+4)) 4 "$glyph"
+
+    # A pair of TIE fighters patrols in the opposite direction.
+    px=$(( width+20 - (tick*2 + width/2) % (width+90) ))
+    py=$(( height/2 - 3 ))
+    for (( i=0; i<2; i++ )); do
+      _zshell_shape $((px+i*13)) $((py+i*4)) 7 \
+        ' _     _' '| \   / |' '|==(O)==|' '| /   \ |' " '     '"
+      _zshell_put $((px+i*13+3)) $((py+i*4+2)) 5 '(O)'
+    done
+    shot=$(( tick % 16 ))
+    if (( shot < 5 )); then
+      _zshell_put $((px-3-shot*5)) $((py+1+shot%2*2)) 6 '--'
+    fi
+
+    # Every other lap, the Millennium Falcon streaks across at full throttle.
+    x=$(( (tick*3 + width) % (2*width+60) - 30 ))
+    phase=$(( tick/6 % (2*lane) ))
+    y=$(( 2 + (phase <= lane ? phase : 2*lane-phase)/2 ))
+    _zshell_shape $x $y 5 \
+      '   _.------._' \
+      " .'  .----.  '._______" \
+      '/   ( (@) )   _______]=' \
+      '\   (_____)   _______]=' \
+      " '.         .'   [o]" \
+      "   '-.____.-'"
+    _zshell_put $((x+17)) $((y+4)) 1 '[o]'
+    glyph='=~'; (( tick % 2 )) && glyph='~='
+    _zshell_put $((x-2)) $((y+2)) 1 "$glyph"
+    _zshell_put $((x-2)) $((y+3)) 1 "$glyph"
+
+    # An X-wing seen from above, S-foils open, crosses left to right while
+    # gently weaving. A faster TIE fighter laps it every so often: it slips in
+    # from behind, fires green bolts that never connect, and overtakes.
+    loop=$(( width+70 ))
+    x=$(( tick*3/2 % loop - 35 ))
+    phase=$(( tick/5 % (2*lane) ))
+    y=$(( 2 + (phase <= lane ? phase : 2*lane-phase) ))
+
+    tx=$(( (tick*5/2 + loop - 30) % loop - 35 ))
+    phase=$(( (tick/4 + lane) % (2*lane) ))
+    ty=$(( 2 + (phase <= lane ? phase : 2*lane-phase) ))
+    _zshell_put $((tx+1)) $ty 7 '_     _'
+    _zshell_put $tx $((ty+1)) 7 '| \   / |'
+    _zshell_put $tx $((ty+2)) 7 '|==(O)==|'
+    _zshell_put $((tx+3)) $((ty+2)) 5 '(O)'
+    _zshell_put $tx $((ty+3)) 7 '| /   \ |'
+    _zshell_put $((tx+1)) $((ty+4)) 7 "'     '"
+    shot=$(( tick % 12 ))
+    if (( tx < x && x-tx < 70 && shot < 6 )); then
+      _zshell_put $((tx+10+shot*5)) $((ty+1+shot%2*2)) 6 '--'
+    fi
+
+    _zshell_put $x $y 5 '[===]=========-'
+    _zshell_put $((x+3)) $((y+1)) 5 '\ \__'
+    _zshell_put $x $((y+2)) 5 '[#]=[_(o)\________>'
+    _zshell_put $((x+6)) $((y+2)) 1 '(o)'
+    _zshell_put $((x+3)) $((y+3)) 5 '/ /'
+    _zshell_put $x $((y+4)) 5 '[===]=========-'
+    glyph='~-'; (( tick % 2 )) && glyph='-~'
+    _zshell_put $((x-2)) $y 4 "$glyph"
+    _zshell_put $((x-2)) $((y+2)) 4 "$glyph"
+    _zshell_put $((x-2)) $((y+4)) 4 "$glyph"
+    shot=$(( tick % 30 ))
+    if (( shot < 12 )); then
+      _zshell_put $((x+16+shot*4)) $y 4 '==='
+      _zshell_put $((x+16+shot*4)) $((y+4)) 4 '==='
+    fi
+
+    _zshell_put 3 $height 0 'SCREENSAVER / DEATHSTAR'
+    _zshell_put $((width-21)) $height 0 'any key: back to base'
+  }
+
   _zshell_scene() {
     integer y x i j base phase sway drift bob floor=$(( height - 5 ))
     local leaf bubble
@@ -449,6 +654,9 @@ Nothing is installed or enabled automatically.'
       return
     elif [[ $scene == party ]]; then
       _zshell_party
+      return
+    elif [[ $scene == deathstar ]]; then
+      _zshell_deathstar
       return
     fi
 
