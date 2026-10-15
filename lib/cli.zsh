@@ -38,7 +38,7 @@ function _omz {
   if [[ "$words[2]" == (screensaver|shellsaver) ]] && (( CURRENT > 2 )); then
     _arguments \
       '1:command:' \
-      '2::scene:(aquarium logo hermit party)' \
+      '2::scene:(aquarium logo hermit party deathstar)' \
       '--list[List available scenes]' \
       '--mono[Use the default foreground color]' \
       '--seconds[Exit after a number of seconds]:seconds:' \
