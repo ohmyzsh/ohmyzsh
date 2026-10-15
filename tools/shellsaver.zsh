@@ -17,14 +17,14 @@
 logo            The Oh My Zsh wordmark takes a bouncing coffee break.
 hermit          A bewildered hermit crab tries to find its working directory.
 party           A rainbow terminal stage and a crowd of dancing shell fans.
-deathstar       X-wing, TIEs, the Falcon and a Star Destroyer by the Death Star.'
+deathstar       X-wing, TIEs and the Falcon battle beside the Death Star.'
   }
 
   _zshell_usage() {
     print -r -- 'Oh My Zsh / experimental Shellsavers
 
-Usage: omz shellsaver [aquarium|logo|hermit|party|deathstar] [--mono] [--seconds N]
-       omz shellsaver [aquarium|logo|hermit|party|deathstar] --snapshot [FRAME]
+Usage: omz shellsaver [SCENE] [--mono] [--seconds N]
+       omz shellsaver [SCENE] --snapshot [FRAME]
        omz shellsaver --list
 '
     _zshell_list
@@ -515,7 +515,7 @@ Nothing is installed or enabled automatically.'
 
     # The Death Star looms in the top-right corner, sized to the window and
     # cropped by the screen edges. Its outline is built once per size.
-    integer radius=$(( height/3 )) cx cy row
+    integer radius=$(( height/3 )) cx cy row n
     (( radius > width/6 )) && radius=$(( width/6 ))
     (( radius != ds_radius )) && _zshell_death_star_build $radius
     cx=$(( width-radius )) cy=$(( 1-radius/4 ))
@@ -524,14 +524,17 @@ Nothing is installed or enabled automatically.'
     done
     # The equatorial trench and the superlaser dish, in the upper hemisphere.
     row=$(( radius ))
-    _zshell_put $((cx-ds_widths[row]+1)) $((cy+row-1)) 7 "${(pl:$((2*ds_widths[row]-1))::=:)}"
+    n=$(( 2*ds_widths[row]-1 ))
+    _zshell_put $((cx-ds_widths[row]+1)) $((cy+row-1)) 7 "${(pl:$n::=:)}"
     row=$(( radius/2+1 ))
     x=$(( cx-ds_widths[row]/2 ))
     if (( radius >= 14 )); then
-      _zshell_sprite $((x-5)) $((cy+row-4)) 7 '   .---.   ' " .'     '. " '/         \' \
-        '|   (o)   |' '\         /' " '.     .' " "   '---'   "
+      _zshell_sprite $((x-5)) $((cy+row-4)) 7 \
+        '   .---.   ' " .'     '. " '/         \' '|   (o)   |' \
+        '\         /' " '.     .' " "   '---'   "
     elif (( radius >= 8 )); then
-      _zshell_sprite $((x-3)) $((cy+row-3)) 7 ' .--. ' '/    \' '| () |' '\    /' " '--' "
+      _zshell_sprite $((x-3)) $((cy+row-3)) 7 \
+        ' .--. ' '/    \' '| () |' '\    /' " '--' "
     else
       _zshell_sprite $((x-2)) $((cy+row-2)) 7 ' .-. ' '( o )' " '-' "
     fi
@@ -557,7 +560,8 @@ Nothing is installed or enabled automatically.'
     px=$(( width+20 - (tick*2 + width/2) % (width+90) ))
     py=$(( height/2 - 3 ))
     for (( i=0; i<2; i++ )); do
-      _zshell_shape $((px+i*13)) $((py+i*4)) 7 ' _     _' '| \   / |' '|==(O)==|' '| /   \ |' " '     '"
+      _zshell_shape $((px+i*13)) $((py+i*4)) 7 \
+        ' _     _' '| \   / |' '|==(O)==|' '| /   \ |' " '     '"
       _zshell_put $((px+i*13+3)) $((py+i*4+2)) 5 '(O)'
     done
     shot=$(( tick % 16 ))
