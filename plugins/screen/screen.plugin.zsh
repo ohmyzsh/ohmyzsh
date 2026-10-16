@@ -1,5 +1,4 @@
-# if using GNU screen, let the zsh tell screen what the title and hardstatus
-# of the tab window should be.
+# if using GNU screen, adjust the default hard status (window title) and window name (tab title)
 if [[ "$TERM" == screen* ]]; then
   # use the current user as the prefix of the current tab title
   TAB_TITLE_PREFIX='"%m:%~$PROMPT_CHAR"'
