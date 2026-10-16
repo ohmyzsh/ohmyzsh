@@ -85,18 +85,6 @@ is_plugin() {
     || builtin test -f $base_dir/plugins/$name/_$name
 }
 
-# Add all defined plugins to fpath. This must be done
-# before running compinit.
-for plugin ($plugins); do
-  if is_plugin "$ZSH_CUSTOM" "$plugin"; then
-    fpath=("$ZSH_CUSTOM/plugins/$plugin" $fpath)
-  elif is_plugin "$ZSH" "$plugin"; then
-    fpath=("$ZSH/plugins/$plugin" $fpath)
-  else
-    echo "[oh-my-zsh] plugin '$plugin' not found"
-  fi
-done
-
 # Figure out the SHORT hostname
 if [[ "$OSTYPE" = darwin* ]]; then
   # macOS's $HOST changes with dhcp, etc. Use LocalHostName if possible.
@@ -124,11 +112,6 @@ if [[ "$OSTYPE" = darwin* ]]; then
   unset __omz_host_cache __omz_host_cached __omz_host_key
 else
   SHORT_HOST="${HOST/.*/}"
-fi
-
-# Save the location of the current completion dump file.
-if [[ -z "$ZSH_COMPDUMP" ]]; then
-  ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
 fi
 
 # Resolve the commit $ZSH is checked out at into $REPLY by reading the git
@@ -212,7 +195,6 @@ _omz_git_head() {
   _omz_git_head || REPLY="$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
   typeset -g zcompdump_revision="#omz revision: $REPLY"
 }
-zcompdump_fpath="#omz fpath: $fpath"
 unset -f _omz_git_head
 
 # Check whether the zcompdump file carries the current OMZ metadata lines
@@ -220,8 +202,18 @@ _omz_compdump_has_metadata() {
   local -a lines
   [[ -r "$ZSH_COMPDUMP" ]] || return 1
   lines=("${(@f)$(<"$ZSH_COMPDUMP")}")
-  (( ${lines[(Ie)$zcompdump_revision]} && ${lines[(Ie)$zcompdump_fpath]} ))
+  if (( ${lines[(Ie)$zcompdump_revision]} )); then
+    if (( -n "${zcompdump_fpath-}" )); then
+      (( ${lines[(Ie)$zcompdump_fpath]} ))
+    fi
+  fi
 }
+
+
+# Save the location of the current completion dump file.
+if [[ -z "$ZSH_COMPDUMP" ]]; then
+  ZSH_COMPDUMP="${ZDOTDIR:-$HOME}/.zcompdump-${SHORT_HOST}-${ZSH_VERSION}"
+fi
 
 # Delete the zcompdump file if OMZ zcompdump metadata changed
 zcompdump_refresh=0
@@ -230,39 +222,21 @@ if ! _omz_compdump_has_metadata; then
   zcompdump_refresh=1
 fi
 
-if [[ "$ZSH_DISABLE_COMPFIX" != true ]]; then
-  source "$ZSH/lib/compfix.zsh"
-  # Load only from secure directories
-  # Reset the flag compinit sets when -i excludes insecure entries
-  unset _comp_secure
-  compinit -i -d "$ZSH_COMPDUMP"
-  # If completion insecurities exist, warn the user
-  [[ "$_comp_secure" == yes ]] && handle_completion_insecurities &|
-else
-  # If the user wants it, load from all found directories
-  compinit -u -d "$ZSH_COMPDUMP"
-fi
+# Add all defined plugins to fpath. This must be done
+# before running compinit.
+for plugin ($plugins); do
+  if is_plugin "$ZSH_CUSTOM" "$plugin"; then
+    fpath=("$ZSH_CUSTOM/plugins/$plugin" $fpath)
+  elif is_plugin "$ZSH" "$plugin"; then
+    fpath=("$ZSH/plugins/$plugin" $fpath)
+  else
+    echo "[oh-my-zsh] plugin '$plugin' not found"
+  fi
+done
 
-# Append zcompdump metadata if missing (compinit may have regenerated the file)
-if (( zcompdump_refresh )) || ! _omz_compdump_has_metadata; then
-  # Use `tee` in case the $ZSH_COMPDUMP filename is invalid, to silence the error
-  # See https://github.com/ohmyzsh/ohmyzsh/commit/dd1a7269#commitcomment-39003489
-  tee -a "$ZSH_COMPDUMP" &>/dev/null <<EOF
-
-$zcompdump_revision
-$zcompdump_fpath
-EOF
-fi
-unset zcompdump_revision zcompdump_fpath zcompdump_refresh
-unset -f _omz_compdump_has_metadata
-
-# zcompile the completion dump file if the .zwc is older or missing.
-# Test that first so the lock directory and zrecompile are skipped when it's fresh.
-if [[ ! "${ZSH_COMPDUMP}.zwc" -nt "$ZSH_COMPDUMP" ]] \
-   && command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
-  zrecompile -q -p "$ZSH_COMPDUMP"
-  command rm -rf "$ZSH_COMPDUMP.zwc.old" "${ZSH_COMPDUMP}.lock"
-fi
+# Load the cached completion dump file as-is, even if it's stale
+# (It gets regenerated at the end after all the plugins load.)
+compinit -C -d "$ZSH_COMPDUMP"
 
 _omz_source() {
   local context filepath="$1"
@@ -323,6 +297,48 @@ for config_file ("$ZSH_CUSTOM"/*.zsh(N)); do
   source "$config_file"
 done
 unset config_file
+
+# Update zcompdump OMZ metadata now that all plugins and customs have loaded.
+zcompdump_fpath="#omz fpath: $fpath"
+
+# Delete the zcompdump file if OMZ zcompdump metadata doesn't match
+if (( zcompdump_refresh )) || ! _omz_compdump_has_metadata; then
+  command rm -f "$ZSH_COMPDUMP"
+  zcompdump_refresh=1
+fi
+
+if [[ "$ZSH_DISABLE_COMPFIX" != true ]]; then
+  # Load only from secure directories
+  # Reset the flag compinit sets when -i excludes insecure entries
+  unset _comp_secure
+  compinit -i -d "$ZSH_COMPDUMP"
+  # If completion insecurities exist, warn the user
+  [[ "$_comp_secure" == yes ]] && handle_completion_insecurities &|
+else
+  # If the user wants it, load from all found directories
+  compinit -u -d "$ZSH_COMPDUMP"
+fi
+
+# Append zcompdump metadata if missing (compinit may have regenerated the file)
+if (( zcompdump_refresh )) || ! _omz_compdump_has_metadata; then
+  # Use `tee` in case the $ZSH_COMPDUMP filename is invalid, to silence the error
+  # See https://github.com/ohmyzsh/ohmyzsh/commit/dd1a7269#commitcomment-39003489
+  tee -a "$ZSH_COMPDUMP" &>/dev/null <<EOF
+
+$zcompdump_revision
+$zcompdump_fpath
+EOF
+fi
+unset zcompdump_revision zcompdump_fpath zcompdump_refresh
+unset -f _omz_compdump_has_metadata
+
+# zcompile the completion dump file if the .zwc is older or missing.
+# Test that first so the lock directory and zrecompile are skipped when it's fresh.
+if [[ ! "${ZSH_COMPDUMP}.zwc" -nt "$ZSH_COMPDUMP" ]] \
+   && command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
+  zrecompile -q -p "$ZSH_COMPDUMP"
+  command rm -rf "$ZSH_COMPDUMP.zwc.old" "${ZSH_COMPDUMP}.lock"
+fi
 
 # Load the theme
 is_theme() {
