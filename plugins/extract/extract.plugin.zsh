@@ -107,8 +107,8 @@ EOF
       (*.xz) xzcat "$full_path" > "${file:t:r}" ;;
       (*.lrz) (( $+commands[lrunzip] )) && lrunzip "$full_path" ;;
       (*.lz4) lz4 -d "$full_path" ;;
-      (*.lzma) unlzma "$full_path" ;;
-      (*.z) uncompress "$full_path" ;;
+      (*.lzma) unlzma -c "$full_path" > "${file:t:r}" ;;
+      (*.z) uncompress -c "$full_path" > "${file:t:r}" ;;
       (*.zip|*.war|*.jar|*.ear|*.sublime-package|*.ipa|*.ipsw|*.xpi|*.apk|*.aar|*.whl|*.vsix|*.crx|*.pk3|*.pk4) unzip "$full_path" ;;
       (*.rar)
         if (( $+commands[unrar] )); then
