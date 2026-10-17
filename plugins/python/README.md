@@ -18,6 +18,7 @@ plugins=(... python)
 | `pygrep <text>`  | Looks for `text` in `*.py` files in the current directory, recursively                 |
 | `pyuserpaths`    | Add user site-packages folders to `PYTHONPATH`, for Python 2 and 3                     |
 | `pyserver`       | Starts an HTTP server on the current directory (use `--directory` for a different one) |
+| `pyver`          | Shows the current Python version, pip version, and active virtual environment (if any) |
 
 ## Virtual environments
 
