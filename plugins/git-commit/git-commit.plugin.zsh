@@ -17,7 +17,7 @@ path=("${0:a:h}/git-commands" $path)
     fix:'Commit with a message indicating a fix' \
     perf:'Commit with a message indicating a performance enhancement' \
     refactor:'Commit with a message indicating a refactor' \
-    revert:'Commit with a message indicating a revert' \
+    rev:'Commit with a message indicating a revert' \
     style:'Commit with a message indicating a style change' \
     test:'Commit with a message indicating updates to tests' \
     wip:'Commit with a message indicating a work in progress'
@@ -25,11 +25,8 @@ path=("${0:a:h}/git-commands" $path)
   zstyle ':completion:*:*:git:*' user-commands "${git_user_commands[@]}"
 }
 
-########################################################################################
-### Remove below after Jan 2025:
-########################################################################################
-# Clean up aliases from the prior implementation of git-commit. Can be safely removed
-# once everyone's .gitconfig has been restored.
+# Clean up aliases from the prior implementation of git-commit. Keep this migration
+# for users upgrading from versions that still wrote aliases to .gitconfig.
 () {
   git config --global --get oh-my-zsh.git-commit-alias &> /dev/null || return 0
   local -a old_git_aliases=(
