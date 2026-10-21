@@ -238,7 +238,7 @@ print_banner() {
   fi
 
   setopt localtraps
-  trap 'printf "\033[?25h"; exit 130' INT
+  trap '_omz_upgrade_cleanup; printf "\033[?25h"; exit 130' INT
   printf '\033[?25l'
   for (( col = step; ; col += step )); do
     (( col > width )) && col=width
@@ -319,6 +319,17 @@ git checkout -q "$branch" -- || exit 1
 # branch commit before update (used in changelog)
 last_commit=$(git rev-parse "$branch")
 
+_omz_upgrade_cleanup() {
+  # go back to HEAD previous to update
+  git checkout -q "$last_head" --
+
+  # Unset git-config values set just for the upgrade
+  case "$resetAutoStash" in
+    "") git config --unset rebase.autoStash ;;
+    *) git config rebase.autoStash "$resetAutoStash" ;;
+  esac
+}
+
 # Update Oh My Zsh
 if [[ $verbose_mode != silent ]]; then
   printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
@@ -374,14 +385,7 @@ else
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
 fi
 
-# go back to HEAD previous to update
-git checkout -q "$last_head" --
-
-# Unset git-config values set just for the upgrade
-case "$resetAutoStash" in
-  "") git config --unset rebase.autoStash ;;
-  *) git config rebase.autoStash "$resetAutoStash" ;;
-esac
+_omz_upgrade_cleanup
 
 # Exit with `1` if the update failed
 exit $ret
