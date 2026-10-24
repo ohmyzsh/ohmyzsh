@@ -237,8 +237,6 @@ print_banner() {
     return
   fi
 
-  setopt localtraps
-  trap '_omz_upgrade_cleanup; printf "\033[?25h"; exit 130' INT
   printf '\033[?25l'
   for (( col = step; ; col += step )); do
     (( col > width )) && col=width
@@ -280,15 +278,36 @@ git config core.autocrlf false
 git config fsck.zeroPaddedFilemode ignore
 git config fetch.fsck.zeroPaddedFilemode ignore
 git config receive.fsck.zeroPaddedFilemode ignore
-# autostash on rebase (#7172)
-resetAutoStash=$(git config --bool rebase.autoStash 2>/dev/null)
-git config rebase.autoStash true
 
 local ret=0
 
 # repository settings
 remote=${"$(git config --local oh-my-zsh.remote)":-origin}
 branch=${"$(git config --local oh-my-zsh.branch)":-master}
+
+# repository state
+last_head=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
+
+# autostash on rebase (#7172)
+resetAutoStash=$(git config --bool rebase.autoStash 2>/dev/null)
+
+_omz_upgrade_cleanup() {
+  trap '' INT
+
+  # go back to HEAD previous to update
+  git checkout -q "$last_head" --
+
+  # Unset git-config values set just for the upgrade
+  case "$resetAutoStash" in
+    "") git config --unset rebase.autoStash ;;
+    *) git config rebase.autoStash "$resetAutoStash" ;;
+  esac
+
+  trap - INT
+}
+
+trap '_omz_upgrade_cleanup; printf "\033[?25h"; exit 130' INT
+git config rebase.autoStash true
 
 update_with_cooldown() {
   local cutoff_epoch cooldown_ref
@@ -312,23 +331,13 @@ perform_update() {
   fi
 }
 
-# repository state
-last_head=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
 # checkout update branch
-git checkout -q "$branch" -- || exit 1
+if ! git checkout -q "$branch" --; then
+  _omz_upgrade_cleanup
+  exit 1
+fi
 # branch commit before update (used in changelog)
 last_commit=$(git rev-parse "$branch")
-
-_omz_upgrade_cleanup() {
-  # go back to HEAD previous to update
-  git checkout -q "$last_head" --
-
-  # Unset git-config values set just for the upgrade
-  case "$resetAutoStash" in
-    "") git config --unset rebase.autoStash ;;
-    *) git config rebase.autoStash "$resetAutoStash" ;;
-  esac
-}
 
 # Update Oh My Zsh
 if [[ $verbose_mode != silent ]]; then
