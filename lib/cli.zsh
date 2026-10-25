@@ -28,11 +28,24 @@ function _omz {
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
     'reload:Reload the current zsh session'
+    'shellsaver:Launch a whimsical terminal screensaver'
     'shop:Open the Oh My Zsh shop'
     'theme:Manage themes'
     'update:Update Oh My Zsh'
     'version:Show the version'
   )
+
+  if [[ "$words[2]" == (screensaver|shellsaver) ]] && (( CURRENT > 2 )); then
+    _arguments \
+      '1:command:' \
+      '2::scene:(aquarium logo hermit party)' \
+      '--list[List available scenes]' \
+      '--mono[Use the default foreground color]' \
+      '--seconds[Exit after a number of seconds]:seconds:' \
+      '--snapshot[Print a plain-text still]::frame:' \
+      '--help[Show Shellsaver help]'
+    return
+  fi
 
   if (( CURRENT == 2 )); then
     _describe 'command' cmds
@@ -174,12 +187,22 @@ Available commands:
   plugin <command>    Manage plugins
   pr     <command>    Manage Oh My Zsh Pull Requests
   reload              Reload the current zsh session
+  shellsaver [scene]  Launch a Shellsaver (aquarium by default)
   shop                Open the Oh My Zsh shop
   theme  <command>    Manage themes
   update              Update Oh My Zsh
   version             Show the version
 
 EOF
+}
+
+function _omz::shellsaver {
+  command zsh -f "$ZSH/tools/shellsaver.zsh" "$@"
+}
+
+# Hidden alias; only shellsaver is advertised in help and command completion.
+function _omz::screensaver {
+  _omz::shellsaver "$@"
 }
 
 function _omz::changelog {
@@ -371,7 +394,7 @@ multi == 1 && /^[^#]*\)/ {
   next
 }
 
-# if multi flag is enabled and we didnt find a closing parenthesis,
+# if multi flag is enabled and we didn't find a closing parenthesis,
 # get the indentation level to match when adding plugins
 multi == 1 && /^[^#]*/ {
   indent=\"\"
@@ -519,7 +542,7 @@ function _omz::plugin::load {
     # Check if it has completion to reload compinit
     local -a comp_files
     comp_files=($base/_*(N))
-    has_completion=$(( $#comp_files > 0 ))
+    (( has_completion )) || has_completion=$(( $#comp_files > 0 ))
 
     # Load the plugin
     if [[ -f "$base/$plugin.plugin.zsh" ]]; then
@@ -738,6 +761,9 @@ function _omz::reload {
 
   # Old zsh versions don't have ZSH_ARGZERO
   local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+  # ZSH_ARGZERO is how zsh was invoked, not the path to it, so re-resolve
+  # anything that is not absolute via $PATH at exec time (see #13919)
+  [[ "${zsh#-}" != /* ]] && (( $+commands[zsh] )) && zsh="zsh"
   # Check whether to run a login shell
   [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
 }
@@ -903,8 +929,11 @@ function _omz::update {
   }
 
   # Run update script
+  local verbose_mode cooldown_days
   zstyle -s ':omz:update' verbose verbose_mode || verbose_mode=default
-  ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode || return $?
+  zstyle -s ':omz:update' cooldown cooldown_days || cooldown_days=0
+  [[ $cooldown_days == <-> ]] || cooldown_days=0
+  ZSH="$ZSH" command zsh -f "$ZSH/tools/upgrade.sh" -i -v $verbose_mode -c $cooldown_days || return $?
 
   # Update last updated file
   zmodload zsh/datetime
@@ -916,6 +945,9 @@ function _omz::update {
   if [[ "$(builtin cd -q "$ZSH"; git rev-parse HEAD)" != "$last_commit" ]]; then
     # Old zsh versions don't have ZSH_ARGZERO
     local zsh="${ZSH_ARGZERO:-${functrace[-1]%:*}}"
+    # ZSH_ARGZERO is how zsh was invoked, not the path to it, so re-resolve
+    # anything that is not absolute via $PATH at exec time (see #13919)
+    [[ "${zsh#-}" != /* ]] && (( $+commands[zsh] )) && zsh="zsh"
     # Check whether to run a login shell
     [[ "$zsh" = -* || -o login ]] && exec -l "${zsh#-}" || exec "$zsh"
   fi

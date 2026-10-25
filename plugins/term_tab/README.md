@@ -1,6 +1,6 @@
 # term_tab plugin
 
-This plugin only works for Solaris and linux.
+This plugin works on Linux, macOS and Solaris.
 
 term_tab - `cwd` for all open zsh sessions
 

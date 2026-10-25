@@ -14,6 +14,6 @@ function copyfile {
     return 1
   fi
 
-  clipcopy $1
+  clipcopy $1 || return 1
   echo ${(%):-"%B$1%b copied to clipboard."}
 }

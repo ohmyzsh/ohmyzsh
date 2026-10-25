@@ -1,4 +1,10 @@
-export OTP_HOME=~/.otp
+if [[ -z "$OTP_HOME" ]]; then
+  if [[ ! -d "$HOME/.otp" ]] && [[ -n "$XDG_DATA_HOME" ]]; then
+    export OTP_HOME="$XDG_DATA_HOME/otp"
+  else
+    export OTP_HOME=~/.otp
+  fi
+fi
 mkdir -p $OTP_HOME
 
 function ot () {

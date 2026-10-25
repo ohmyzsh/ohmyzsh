@@ -67,6 +67,9 @@ function bgnotify_appid {
   elif [[ -n $WAYLAND_DISPLAY ]] && ([[ -n $SWAYSOCK ]] || [[ -n $I3SOCK ]]) && (( ${+commands[swaymsg]} )); then # wayland+sway
     local app_id=$(bgnotify_find_sway_appid)
     [[ -n "$app_id" ]] && echo "$app_id" || echo $EPOCHSECONDS
+  elif [[ -n $NIRI_SOCKET ]]; then # niri
+    local app_id=$(bgnotify_find_niri_appid)
+    [[ -n "$app_id" ]] && echo "$app_id" || echo $EPOCHSECONDS
   elif [[ -z $WAYLAND_DISPLAY ]] && [[ -n $DISPLAY ]] && (( ${+commands[xprop]} )); then
     xprop -root _NET_ACTIVE_WINDOW 2>/dev/null | cut -d' ' -f5
   else
@@ -103,6 +106,12 @@ function bgnotify_find_sway_appid {
         if (Appid != "" && Id != "" && FocusNesting != -1) print Appid "," Id
         else print ""
       }'
+  fi
+}
+
+function bgnotify_find_niri_appid {
+  if (( ${+commands[jq]} )); then
+    niri msg -j windows | jq '.[] | select(.is_focused) | {app_id, id} | join(",")'
   fi
 }
 

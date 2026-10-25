@@ -178,7 +178,8 @@ function omz_urlencode() {
   setopt norematchpcre
 
   local -a opts
-  zparseopts -D -E -a opts r m P
+  # Quote the specs so global aliases (e.g. common-aliases' P) don't expand here
+  zparseopts -D -E -a opts 'r' 'm' 'P'
 
   local in_str="$@"
   local url_str=""

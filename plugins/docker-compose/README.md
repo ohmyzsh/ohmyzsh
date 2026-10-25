@@ -2,7 +2,7 @@
 
 This plugin provides completion for [docker-compose](https://docs.docker.com/compose/) as well as some
 aliases for frequent docker-compose commands.
-This plugin chooses automatically between the legacy `docker-compose` command and the modern 
+This plugin chooses automatically between the legacy `docker-compose` command and the modern
 `docker compose` subcommand, preferring `docker-compose` when both are available.
 
 To use it, add docker-compose to the plugins array of your zshrc file:
@@ -13,24 +13,32 @@ plugins=(... docker-compose)
 
 ## Aliases
 
-| Alias     | Command                          | Description                                                                      |
-|-----------|----------------------------------|----------------------------------------------------------------------------------|
-| dco       | `docker-compose`                 | Docker-compose main command                                                      |
-| dcb       | `docker-compose build`           | Build containers                                                                 |
-| dce       | `docker-compose exec`            | Execute command inside a container                                               |
-| dcps      | `docker-compose ps`              | List containers                                                                  |
-| dcrestart | `docker-compose restart`         | Restart container                                                                |
-| dcrm      | `docker-compose rm`              | Remove container                                                                 |
-| dcr       | `docker-compose run`             | Run a command in container                                                       |
-| dcstop    | `docker-compose stop`            | Stop a container                                                                 |
-| dcup      | `docker-compose up`              | Build, (re)create, start, and attach to containers for a service                 |
-| dcupb     | `docker-compose up --build`      | Same as `dcup`, but build images before starting containers                      |
-| dcupd     | `docker-compose up -d`           | Same as `dcup`, but starts as daemon                                             |
-| dcupdb    | `docker-compose up -d --build`   | Same as `dcup`, but build images before starting containers and starts as daemon |
-| dcdn      | `docker-compose down`            | Stop and remove containers                                                       |
-| dcl       | `docker-compose logs`            | Show logs of container                                                           |
-| dclf      | `docker-compose logs -f`         | Show logs and follow output                                                      |
-| dclF      | `docker-compose logs -f --tail0` | Just follow recent logs                                                          |
-| dcpull    | `docker-compose pull`            | Pull image of a service                                                          |
-| dcstart   | `docker-compose start`           | Start a container                                                                |
-| dck       | `docker-compose kill`            | Kills containers                                                                 |
+| Alias     | Command                             | Description                                                                                  |
+|-----------|-------------------------------------|----------------------------------------------------------------------------------------------|
+| dco       | `docker-compose`                    | Docker-compose main command                                                                  |
+| dcb       | `docker-compose build`              | Build containers                                                                             |
+| dcc       | `docker-compose config`             | Parse, resolve and render compose file in canonical format                                   |
+| dce       | `docker-compose exec`               | Execute command inside a container                                                           |
+| dcps      | `docker-compose ps`                 | List containers                                                                              |
+| dcrestart | `docker-compose restart`            | Restart container                                                                            |
+| dcrm      | `docker-compose rm`                 | Remove container                                                                             |
+| dcr       | `docker-compose run`                | Run a command in container                                                                   |
+| dcstop    | `docker-compose stop`               | Stop a container                                                                             |
+| dcup      | `docker-compose up`                 | Build, (re)create, start, and attach to containers for a service                             |
+| dcupb     | `docker-compose up --build`         | Same as `dcup`, but build images before starting containers                                  |
+| dcupd     | `docker-compose up -d`              | Same as `dcup`, but starts as daemon                                                         |
+| dcupdb    | `docker-compose up -d --build`      | Same as `dcup`, but build images before starting containers and starts as daemon             |
+| dcupw     | `docker-compose up --watch`         | Watch changes in service and rebuild/restart accordingly (see [Use Compose Watch] for usage) |
+| dcupwb    | `docker-compose up --watch --build` | Same as `dcupw`, but build images before starting containers                                 |
+| dcdn      | `docker-compose down`               | Stop and remove containers                                                                   |
+| dcl       | `docker-compose logs`               | Show logs of container                                                                       |
+| dclf      | `docker-compose logs -f`            | Show logs and follow output                                                                  |
+| dclF      | `docker-compose logs -f --tail0`    | Just follow recent logs                                                                      |
+| dcpull    | `docker-compose pull`               | Pull image of a service                                                                      |
+| dcstart   | `docker-compose start`              | Start a container                                                                            |
+| dck       | `docker-compose kill`               | Kills containers                                                                             |
+| dcv       | `docker-compose version`            | Show version information                                                                     |
+| dcsts     | `docker-compose stats`              | Show stats of containers                                                                     |
+| dci       | `docker-compose images`             | List images                                                                                  |
+
+[Use Compose Watch]: https://docs.docker.com/compose/how-tos/file-watch/

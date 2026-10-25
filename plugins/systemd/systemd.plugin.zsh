@@ -97,6 +97,10 @@ alias scu-mask-now="scu-mask --now"
 alias scu-failed='systemctl --user --failed'
 alias sc-failed='systemctl --failed'
 
+# --full commands
+alias sc-edit-full="sc-edit --full"
+alias scu-edit-full="scu-edit --full"
+
 function systemd_prompt_info {
   local unit
   for unit in "$@"; do

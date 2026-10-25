@@ -41,4 +41,4 @@ USER_COLOR=$GREEN_BOLD
 PROMPT='
 %{$USER_COLOR%}%n@%m%{$WHITE%}:%{$YELLOW%}%~%u$(parse_git_dirty)$(git_prompt_ahead)%{$RESET_COLOR%}
 %{$BLUE%}>%{$RESET_COLOR%} '
-RPROMPT='%{$GREEN_BOLD%}$(git_current_branch)$(git_prompt_short_sha)$(git_prompt_status)%{$RESET_COLOR%}'
+RPROMPT='%{$GREEN_BOLD%}${$(git_current_branch)//\%/%%}$(git_prompt_short_sha)$(git_prompt_status)%{$RESET_COLOR%}'

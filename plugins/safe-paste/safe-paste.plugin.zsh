@@ -11,7 +11,6 @@
 # Load bracketed-paste-magic if zsh version is >= 5.1
 autoload -Uz is-at-least
 if is-at-least 5.1; then
-  set zle_bracketed_paste  # Explicitly restore this zsh default
   autoload -Uz bracketed-paste-magic
   zle -N bracketed-paste bracketed-paste-magic
   return  ### The rest of this file is NOT executed on zsh version >= 5.1 ###

@@ -48,6 +48,11 @@ fi
 0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
 
+# Make sure the cache directory exists; when the plugin is loaded by a
+# standalone plugin manager (e.g. antigen) the core is not sourced, so
+# $ZSH_CACHE_DIR/completions may not have been created yet (#13679).
+[[ -d "$ZSH_CACHE_DIR/completions" ]] || mkdir -p "$ZSH_CACHE_DIR/completions"
+
 # If the completion file doesn't exist yet, we need to autoload it and
 # bind it to `docker`. Otherwise, compinit will have already done that.
 if [[ ! -f "$ZSH_CACHE_DIR/completions/_docker" ]]; then
@@ -56,14 +61,19 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_docker" ]]; then
   _comps[docker]=_docker
 fi
 
-{
+zmodload -F zsh/files b:zf_mv
+() {
+
+  local plugin_dir="$1"
+
   # `docker completion` is only available from 23.0.0 on
   # docker version returns `Docker version 24.0.2, build cb74dfcd85`
   # with `s:,:` remove the comma after the version, and select third word of it
   if zstyle -t ':omz:plugins:docker' legacy-completion || \
     ! is-at-least 23.0.0 ${${(s:,:z)"$(command docker --version)"}[3]}; then
-        command cp "${0:h}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
+        command cp "${plugin_dir}/completions/_docker" "$ZSH_CACHE_DIR/completions/_docker"
       else
-        command docker completion zsh | tee "$ZSH_CACHE_DIR/completions/_docker" > /dev/null
+        local TMPPREFIX="$ZSH_CACHE_DIR/completions/._docker"
+        zf_mv -f -- =( command docker completion zsh ) "$ZSH_CACHE_DIR/completions/_docker"
   fi
-} &|
+} "${0:A:h}" &|

@@ -21,6 +21,7 @@ function chruby_prompt_info \
   azure_prompt_info \
   tf_prompt_info \
   conda_prompt_info \
+  go_prompt_info \
 {
   return 1
 }

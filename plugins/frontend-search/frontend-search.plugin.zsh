@@ -57,7 +57,7 @@ function frontend() {
     codepen        'https://codepen.io/search/pens?q='
     compassdoc     'http://compass-style.org/search?q='
     cssflow        'http://www.cssflow.com/search?q='
-    dartlang       'https://api.dartlang.org/apidocs/channels/stable/dartdoc-viewer/dart:'
+    dartlang       $(_frontend_fallback 'dart.dev')
     emberjs        $(_frontend_fallback 'emberjs.com/')
     flowtype       $(_frontend_fallback 'flow.org/en/docs/')
     fontello       'http://fontello.com/#search='

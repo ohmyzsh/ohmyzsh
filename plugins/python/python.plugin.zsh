@@ -29,7 +29,7 @@ function pyuserpaths() {
 
     # Get minor release version.
     # The patch version is variable length, truncate it.
-    version=${(M)${"$($python -V 2>&1)":7}#[^.]##.[^.]##}
+    version=${(M)${"$($python -V 2>&1)":7}##[^.]##.[^.]##}
 
     # Add version specific path, if:
     # - it exists in the filesystem

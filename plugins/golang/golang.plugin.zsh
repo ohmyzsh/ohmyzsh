@@ -36,3 +36,12 @@ alias gotofx='go tool fix'
 alias gov='go vet'
 alias gove='go version'
 alias gow='go work'
+
+## prompt
+function go_prompt_info() {
+  (( $+commands[go] )) || return
+  local go_prompt
+  go_prompt=$(go version | awk '{ print substr($3, 3) }')
+  [[ -z "${go_prompt}" ]] && return
+  echo "${ZSH_THEME_GO_PROMPT_PREFIX}${go_prompt:gs/%/%%}${ZSH_THEME_GO_PROMPT_SUFFIX}"
+}

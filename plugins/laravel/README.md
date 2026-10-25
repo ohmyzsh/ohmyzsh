@@ -6,10 +6,26 @@ This plugin adds aliases and autocompletion for Laravel [Artisan](https://larave
 plugins=(... laravel)
 ```
 
+## Settings
+
+By default the aliases run `php artisan`. To use a different PHP command, such as
+`herd php` (which runs the PHP version the [Laravel Herd](https://herd.laravel.com) site
+is isolated to, instead of Herd's global version) or a specific version like `php8.4`,
+set this before Oh My Zsh is sourced:
+
+```zsh
+zstyle ':omz:plugins:laravel' php 'herd php'
+```
+
+`php` in the aliases below is then replaced with that command.
+
+## Aliases
+
 | Alias | Description |
 |:-:|:-:|
 | `artisan`  | `php artisan`  |
 | `pas`  | `php artisan serve` |
+| `pad`  | `php artisan dev` |
 | `pats`  | `php artisan test` |
 
 ## Database
@@ -41,6 +57,8 @@ plugins=(... laravel)
 | `pamen` | `php artisan make:enum` |
 | `pami`  | `php artisan make:interface` |
 | `pamtr` | `php artisan make:trait` |
+| `pamv` | `php artisan make:view` |
+| `pammig` | `php artisan make:migration` |
 
 ## Clears
 

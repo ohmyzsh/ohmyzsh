@@ -157,13 +157,13 @@ case $state in
           '*::file:_files'
           ;;
       (test)
-         _files
+         _path_files -X "All tests" -g "test/**/*_test.exs" -g "apps/*/test/**/*_test.exs"
          ;;
       (test.watch)
          _files
          ;;
       (run)
-         _files
+         _files -g "*.(exs|ex)"
          ;;
     esac
   ;;

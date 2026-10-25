@@ -32,5 +32,6 @@ It works out of the box with the command-not-found packages for:
 - [SUSE](https://www.unix.com/man-page/suse/1/command-not-found/)
 - [Gentoo](https://github.com/AndrewAmmerlaan/command-not-found-gentoo/tree/main)
 - [Void Linux](https://codeberg.org/classabbyamp/xbps-command-not-found)
+- [Alpine Linux](https://pkgs.alpinelinux.org/package/edge/main/x86_64/command-not-found)
 
 You can add support for other platforms by submitting a Pull Request.

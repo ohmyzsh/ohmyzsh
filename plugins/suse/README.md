@@ -71,7 +71,6 @@ Related: [#9798](https://github.com/ohmyzsh/ohmyzsh/pull/9798).
 | Alias | Commands            | Description                              |
 | ----- | ------------------- | ---------------------------------------- |
 | zar   | `sudo zypper ar`    | add a repository                         |
-| zcl   | `sudo zypper clean` | clean cache                              |
 | zlr   | `zypper lr`         | list repositories                        |
 | zmr   | `sudo zypper mr`    | modify repositories                      |
 | znr   | `sudo zypper nr`    | rename repositories (for the alias only) |
