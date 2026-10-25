@@ -105,26 +105,9 @@ source ~/.zshrc
 
 Review the installation script before executing a remotely downloaded script through a shell.
 
-You can download the installer for inspection:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/nahid-mahmud555/term-undo/main/install.sh -o /tmp/term-undo-install.sh
-```
-
-Inspect the script:
-
-```bash
-less /tmp/term-undo-install.sh
-```
-
-After verifying its contents, execute it if you trust the source:
-
-```bash
-bash /tmp/term-undo-install.sh
-```
-
 ---
 
-<p align="center">
-  <b>Term-Undo — Clean Terminal. Quick Recovery.</b>
-</p>
+## 🔗 Project Links
+
+* **Main Repository:** [nahid-mahmud555/term-undo](https://github.com/nahid-mahmud555/term-undo)
+* **Report Issues:** [GitHub Issues](https://github.com/nahid-mahmud555/term-undo/issues)
