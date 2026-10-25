@@ -74,10 +74,3 @@ source ~/.zshrc
 🔒 Security Note
 
 Review the installation script before executing a remotely downloaded script through a shell.
-
----
-
-## 🔗 Project Links
-
-* **Main Repository:** [nahid-mahmud555/term-undo](https://github.com/nahid-mahmud555/term-undo)
-* **Report Issues:** [GitHub Issues](https://github.com/nahid-mahmud555/term-undo/issues)
