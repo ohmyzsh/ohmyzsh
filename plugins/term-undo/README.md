@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://github.com/nahid-mahmud555/term-undo/raw/main/test00.gif" alt="Term-Undo Demo" width="650px">
+  <img src="https://raw.githubusercontent.com/nahid-mahmud555/term-undo/main/test00.gif" alt="Term-Undo Demo" width="650px">
 </p>
 
 ---
