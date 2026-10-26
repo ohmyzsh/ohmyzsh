@@ -2,7 +2,7 @@
 
 Terragrunt is a thin wrapper for opentofu/terraform that provides extra tools
 and features to enhance the management of Infrastructure as Code (IaC) using
-opentofu/terraform. Ths plugin adds completion for `terragrunt` command, as well
+opentofu/terraform. This plugin adds completion for `terragrunt` command, as well
 as aliases and a prompt function.
 
 To use it, add `terragrunt` to the plugins array of your `~/.zshrc` file:
@@ -13,50 +13,41 @@ plugins=(... terragrunt)
 
 ## Requirements
 
-- [Terragrunt](https://terragrunt.gruntwork.io//)
+- [Terragrunt](https://docs.terragrunt.com/) v0.77.22 or later
 
 ## Aliases
 
-| Alias  | Command                              |
-|--------|--------------------------------------|
-| `tg`   | `terragrunt`                               |
-| `tga`  | `terragrunt -- apply`                 |
-| `tgaa` | `terragrunt -- apply -auto-approve`   |
-| `tgc`  | `terragrunt -- console`               |
-| `tgd`  | `terragrunt -- destroy`               |
-| `tgd!` | `terragrunt -- destroy -auto-approve` |
-| `tgf`  | `terragrunt -- fmt`                   |
-| `tgfr` | `terragrunt -- fmt -recursive`        |
-| `tgi`  | `terragrunt -- init`                  |
-| `tgo`  | `terragrunt -- output`                |
-| `tgp`  | `terragrunt -- plan`                  |
-| `tgv`  | `terragrunt -- validate`              |
-| `tgs`  | `terragrunt -- state`                 |
-| `tgsh` | `terragrunt -- show`                  |
-| `tgr`  | `terragrunt -- refresh`               |
-| `tgt`  | `terragrunt -- test`                  |
-| `tgws` | `terragrunt -- workspace`             |
+| Alias  | Command                                   |
+| ------ | ----------------------------------------- |
+| `tg`   | `terragrunt`                              |
+| `tga`  | `terragrunt run -- apply`                 |
+| `tgaa` | `terragrunt run -- apply -auto-approve`   |
+| `tgc`  | `terragrunt run -- console`               |
+| `tgd`  | `terragrunt run -- destroy`               |
+| `tgd!` | `terragrunt run -- destroy -auto-approve` |
+| `tgi`  | `terragrunt run -- init`                  |
+| `tgo`  | `terragrunt run -- output`                |
+| `tgp`  | `terragrunt run -- plan`                  |
+| `tgv`  | `terragrunt run -- validate`              |
+| `tgs`  | `terragrunt run -- state`                 |
+| `tgsh` | `terragrunt run -- show`                  |
+| `tgr`  | `terragrunt run -- refresh`               |
+| `tgt`  | `terragrunt run -- test`                  |
+| `tgws` | `terragrunt run -- workspace`             |
 
-## Prompt functions
+## Prompt function
 
-- `terragrunt_prompt_info`: shows the current workspace when in a Terragrunt project directory.
+- `terragrunt_version_prompt_info` shows the current version of the `terragrunt` command.
 
-- `terragrunt_version_prompt_info`: shows the current version of the `terragrunt` command.
-
-To use them, add them to a `PROMPT` variable in your theme or `.zshrc` file:
+To use it, add it to a `PROMPT` or `RPROMPT` variable in your theme or `.zshrc` file.
 
 ```sh
-PROMPT='$(terragrunt_prompt_info)'
 RPROMPT='$(terragrunt_version_prompt_info)'
 ```
 
-You can also specify the PREFIX and SUFFIX strings for both functions, with the following variables:
+You can also specify the PREFIX and SUFFIX strings with the following variables.
 
 ```sh
-# for terragrunt_prompt_info
-ZSH_THEME_TERRAGRUNT_PROMPT_PREFIX="%{$fg[white]%}"
-ZSH_THEME_TERRAGRUNT_PROMPT_SUFFIX="%{$reset_color%}"
-# for terragrunt_version_prompt_info
 ZSH_THEME_TERRAGRUNT_VERSION_PROMPT_PREFIX="%{$fg[white]%}"
 ZSH_THEME_TERRAGRUNT_VERSION_PROMPT_SUFFIX="%{$reset_color%}"
 ```
