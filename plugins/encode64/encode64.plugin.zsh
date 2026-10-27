@@ -18,7 +18,13 @@ encodefile64() {
   # operand but not `-o`, while BSD/macOS base64 accepts neither the operand
   # (it needs `-i`, which on GNU means `--ignore-garbage`) nor `-o`.
   if ! base64 < "$1" > "$out"; then
-    command rm -f -- "$out"
+    # Only remove a writable regular file: that can only be the partial output
+    # our redirection just created. A failed `>` can also mean `$out` already
+    # existed and was never touched (not writable, or a directory), and removing
+    # that would delete data this plugin did not write.
+    if [[ -f "$out" && -w "$out" ]]; then
+      command rm -f -- "$out"
+    fi
     return 1
   fi
 

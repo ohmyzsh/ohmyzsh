@@ -33,9 +33,9 @@ plugins=(... encode64)
 
   ```console
   $ echo "oh-my-zsh" | encode64
-  b2gtbXktenNo==
+  b2gtbXktenNoCg==
   $ echo "oh-my-zsh" | e64
-  b2gtbXktenNo==
+  b2gtbXktenNoCg==
   ```
 
 ### Encoding a file

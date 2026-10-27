@@ -9,7 +9,7 @@ trap 'command rm -rf -- "$test_dir"' EXIT
 cd "$test_dir" || exit 1
 
 typeset -i failures=0 tests=0
-typeset output expected
+typeset output expected call_status
 
 for alias_name in e64 ef64 d64; do
   (( tests++ ))
@@ -35,12 +35,15 @@ check_encodefile64() {
   if [[ $actual_status != $expected_status ]]; then
     print -u2 -r -- "FAIL: $description"
     print -u2 -r -- "  status: $actual_status (expected $expected_status)"
+    (( failures++ ))
   elif [[ $output != "$expected_stdout" ]]; then
     print -u2 -r -- "FAIL: $description"
     print -u2 -r -- "  stdout: ${(qqq)output} (expected ${(qqq)expected_stdout})"
+    (( failures++ ))
   elif [[ $(< "$test_dir/stderr") != "$expected_stderr" ]]; then
     print -u2 -r -- "FAIL: $description"
     print -u2 -r -- "  stderr: ${(qqq)$(< "$test_dir/stderr")} (expected ${(qqq)expected_stderr})"
+    (( failures++ ))
   else
     print -r -- "PASS: $description"
   fi
@@ -99,6 +102,56 @@ if [[ $EUID -ne 0 ]]; then
   check_absent 'unreadable file created no output file' 'unreadable.dat.txt'
   chmod 600 "$test_dir/unreadable.dat"
   command rm -f -- "$test_dir/unreadable.dat"
+fi
+
+# An encoder that dies half way must not claim success nor leave the partial
+# file the output redirection created. `base64` is stubbed through PATH for
+# these calls only: it writes bytes to stdout (the output file) and fails.
+mkdir -p "$test_dir/failbin"
+print -r -- '#!/bin/sh
+printf partial
+exit 1' >| "$test_dir/failbin/base64"
+chmod +x "$test_dir/failbin/base64"
+saved_path=$PATH
+PATH="$test_dir/failbin:$PATH"
+rehash
+check_encodefile64 'failing encoder returns non-zero' 1 '' '' valid.dat
+PATH=$saved_path
+rehash
+check_absent 'failing encoder left no partial output file' 'valid.dat.txt'
+
+# A failed output redirection must not remove a pre-existing output file the
+# plugin never wrote. Root ignores file permissions, so skip it there.
+if [[ $EUID -ne 0 ]]; then
+  print -rn -- 'contents' >| "$test_dir/guard.dat"
+  print -rn -- 'PRECIOUS' >| "$test_dir/guard.dat.txt"
+  chmod 444 "$test_dir/guard.dat.txt"
+  encodefile64 guard.dat < /dev/null >| "$test_dir/guard.log" 2>&1
+  call_status=$?
+  (( tests++ ))
+  if (( call_status == 0 )) || [[ $(< "$test_dir/guard.dat.txt") != 'PRECIOUS' ]]; then
+    print -u2 -r -- 'FAIL: unwritable existing output was overwritten or deleted'
+    (( failures++ ))
+  else
+    print -r -- 'PASS: unwritable existing output was left intact'
+  fi
+  chmod 644 "$test_dir/guard.dat.txt"
+  command rm -f -- "$test_dir/guard.dat" "$test_dir/guard.dat.txt"
+
+  # A directory sitting in the output slot is refused, and not deleted.
+  print -rn -- 'contents' >| "$test_dir/dirout.dat"
+  mkdir "$test_dir/dirout.dat.txt"
+  encodefile64 dirout.dat < /dev/null >| "$test_dir/dirout.log" 2>&1
+  call_status=$?
+  (( tests++ ))
+  if (( call_status == 0 )) || [[ ! -d "$test_dir/dirout.dat.txt" ]]; then
+    print -u2 -r -- 'FAIL: directory output slot was accepted or removed'
+    (( failures++ ))
+  else
+    print -r -- 'PASS: directory output slot refused and left alone'
+  fi
+  command rmdir -- "$test_dir/dirout.dat.txt"
+  command rm -f -- "$test_dir/dirout.dat" "$test_dir/guard.log" "$test_dir/dirout.log"
 fi
 
 # Valid encodes: output must match the platform's own `base64 < file` byte for
