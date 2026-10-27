@@ -41,3 +41,5 @@ jobs:
                       ./themes/*.zsh-theme; do
             zsh -n "$file" || return 1
           done
+      - name: Check nounset startup
+        run: zsh -df lib/tests/nounset.test.zsh

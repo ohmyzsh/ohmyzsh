@@ -141,7 +141,7 @@ function default() {
 #    0 if the env variable exists, 3 if it was set
 #
 function env_default() {
-    [[ ${parameters[$1]} = *-export* ]] && return 0
+    [[ ${parameters[$1]-} = *-export* ]] && return 0
     export "$1=$2" && return 3
 }
 
