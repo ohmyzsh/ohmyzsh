@@ -1,0 +1,7 @@
+# Keep allproxy opt-in; do not let inherited PATH shadow default python3.
+_allproxy_venv="$HOME/Workspace/misc-tools/allproxy/venv"
+if [[ "$VIRTUAL_ENV" != "$_allproxy_venv" ]]; then
+  path=("${path[@]:#$_allproxy_venv/bin}")
+  export PATH
+fi
+unset _allproxy_venv
