@@ -32,6 +32,7 @@
 #
 # You can also pass some arguments to the install script to set some these options:
 #   --skip-chsh: has the same behavior as setting CHSH to 'no'
+#   --skip-runzsh: has the same behavior as setting RUNZSH to 'no'
 #   --unattended: sets both CHSH and RUNZSH to 'no'
 #   --keep-zshrc: sets KEEP_ZSHRC to 'yes'
 # For example:
@@ -547,6 +548,7 @@ main() {
   while [ $# -gt 0 ]; do
     case $1 in
       --unattended) RUNZSH=no; CHSH=no; OVERWRITE_CONFIRMATION=no ;;
+      --skip-runzsh) RUNZSH=no ;;
       --skip-chsh) CHSH=no ;;
       --keep-zshrc) KEEP_ZSHRC=yes ;;
     esac
