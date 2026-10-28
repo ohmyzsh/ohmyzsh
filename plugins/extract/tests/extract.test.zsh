@@ -4,7 +4,7 @@
 emulate -L zsh
 setopt err_return
 
-for tool in lzma unlzma uncompress; do
+for tool in lzma unlzma uncompress lz4; do
   (( $+commands[$tool] )) || {
     print -u2 -r -- "These tests require $tool."
     exit 1
@@ -49,11 +49,12 @@ check_extract() {
 {
   print -r -- hello > "$test_dir/plain"
   lzma -c "$test_dir/plain" > "$test_dir/fixture.lzma"
+  lz4 -q -c "$test_dir/plain" > "$test_dir/fixture.lz4"
   # "hello\n" as a .Z stream, since many systems only ship uncompress.
   printf '\037\235\220\150\312\260\141\363\106\001' \
     > "$test_dir/fixture.Z"
 
-  for extension in lzma Z; do
+  for extension in lzma Z lz4; do
     for mode in default target remove; do
       check_extract "$extension" "$mode"
     done
