@@ -256,10 +256,10 @@ __juju_remote_files()
 
     local ret=1
     if (( ${#remdispf} )); then
-        compadd -d remdispf -- ${(q)remdispf%[*=@|>]} && ret=0
+        compadd -d remdispf -- "${remdispf[@]%[*=@|>]}" && ret=0
     fi
     if (( ${#remdispd} )); then
-        compadd -q -S / -d remdispd -- ${(q)remdispd%/} && ret=0
+        compadd -q -S / -d remdispd -- "${remdispd[@]%/}" && ret=0
     fi
     return $ret
 }
