@@ -1,0 +1,67 @@
+#compdef zs
+# Autocompletion for zsh-sessions (zs)
+
+_zs() {
+  local curcontext="$curcontext" state line
+  typeset -A opt_args
+
+  local -a subcommands
+  subcommands=(
+    'ui:Open interactive session threads TUI (fzf)'
+    'list:List saved terminal sessions'
+    'status:Show active session metadata (UUIDv7, category, command count)'
+    'show:Display full session timeline (commands, outputs, and file diffs)'
+    'resume:Resume a previous session (restore directory and thread)'
+    'rename:Rename a session title'
+    'cat:Manage or assign session categories'
+    'ai:Auto-categorize and title session via LLM or local heuristics'
+    'rm:Delete a saved session'
+    'help:Display help information'
+  )
+
+  _arguments -C \
+    '(-h --help)'{-h,--help}'[Display complete help guide with examples]' \
+    '1: :->subcmd' \
+    '*:: :->args'
+
+  case "$state" in
+    subcmd)
+      _describe -t subcommands 'zs subcommand' subcommands
+      ;;
+    args)
+      case "${line[1]}" in
+        cat|category)
+          if (( CURRENT == 2 )); then
+            local -a cat_actions
+            cat_actions=(
+              'choose:Interactively select or create a category'
+              'add:Create a new category'
+              'list:List all categories and session counts'
+              'set:Assign a category to a session'
+            )
+            _describe -t cat_actions 'category action' cat_actions
+          elif [[ "${line[2]}" == "set" ]] && (( CURRENT == 3 )); then
+            local data_dir="${ZS_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/zsh-sessions}"
+            if [[ -f "$data_dir/categories.txt" ]]; then
+              local -a cats
+              cats=("${(@f)$(< "$data_dir/categories.txt")}")
+              _describe -t categories 'category' cats
+            fi
+          fi
+          ;;
+        show|view|resume|continue|ai|auto|rm|delete)
+          local data_dir="${ZS_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/zsh-sessions}"
+          if [[ -f "$data_dir/index.tsv" ]]; then
+            local -a sessions
+            while IFS=$'\t' read -r sid created updated cat proj dir cnt diff title; do
+              [[ -n "$sid" ]] && sessions+=("${sid}:[${cat}] ${proj} - ${title} (${cnt} cmds)")
+            done < "$data_dir/index.tsv"
+            _describe -t sessions 'session ID' sessions
+          fi
+          ;;
+      esac
+      ;;
+  esac
+}
+
+_zs "$@"
