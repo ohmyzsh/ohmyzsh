@@ -99,10 +99,6 @@ function _per-directory-history-change-directory() {
   if [[ $_per_directory_history_is_global == false ]]; then
     #save to the global history
     fc -AI "$_per_directory_history_global"
-    #save history to previous file
-    local prev="$HISTORY_BASE${OLDPWD:A}/history"
-    mkdir -p ${prev:h}
-    fc -AI $prev
 
     #discard previous directory's history
     local original_histsize=$HISTSIZE
@@ -121,15 +117,20 @@ function _per-directory-history-addhistory() {
   if [[ -o hist_ignore_space ]] && [[ "$1" == \ * ]]; then
       true
   else
-      print -Sr -- "${1%%$'\n'}"
-      # instantly write history if set options require it.
-      if [[ -o share_history ]] || \
-         [[ -o inc_append_history ]] || \
-         [[ -o inc_append_history_time ]]; then
-          fc -AI "$_per_directory_history_global"
-          fc -AI $_per_directory_history_directory
-      fi
+      # zsh saves the line to the global $HISTFILE itself; queue it for the directory history.
+      # It can't be written here: entries added during zshaddhistory only show up after it returns.
+      _per_directory_history_pending="${1%%$'\n'}"
   fi
+}
+
+function _per-directory-history-preexec() {
+  [[ -n $_per_directory_history_pending ]] || return
+  # Append via a temporary history list (-a pops it on return) so zsh formats the file and the
+  # main history list is untouched.
+  fc -ap "$_per_directory_history_directory"
+  print -Sr -- "$_per_directory_history_pending"
+  _per_directory_history_pending=
+  fc -AI
 }
 
 function _per-directory-history-precmd() {
@@ -153,18 +154,16 @@ function _per-directory-history-set-directory-history() {
   HISTSIZE=$original_histsize
   if [[ -e "$_per_directory_history_directory" ]]; then
     fc -R "$_per_directory_history_directory"
-    fc -p "$_per_directory_history_directory"
   fi
 }
 
 function _per-directory-history-set-global-history() {
-  fc -AI $_per_directory_history_directory
+  fc -AI "$_per_directory_history_global"
   local original_histsize=$HISTSIZE
   HISTSIZE=0
   HISTSIZE=$original_histsize
   if [[ -e "$_per_directory_history_global" ]]; then
     fc -R "$_per_directory_history_global"
-    fc -p "$_per_directory_history_global"
   fi
 }
 
@@ -174,6 +173,7 @@ mkdir -p ${_per_directory_history_directory:h}
 autoload -U add-zsh-hook
 add-zsh-hook chpwd _per-directory-history-change-directory
 add-zsh-hook zshaddhistory _per-directory-history-addhistory
+add-zsh-hook preexec _per-directory-history-preexec
 add-zsh-hook precmd _per-directory-history-precmd
 
 # set initialized flag to false
