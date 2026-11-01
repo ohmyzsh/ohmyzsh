@@ -135,8 +135,11 @@ EOF
       (*.deb)
         command mkdir -p "control" "data"
         ar vx "$full_path" > /dev/null
-        builtin cd -q control; extract ../control.tar.*
-        builtin cd -q ../data; extract ../data.tar.*
+        # Extract each member directly into its target directory. `extract`
+        # would re-derive the output folder from the member's basename and
+        # nest it one level too deep (e.g. control/control/...).
+        ( builtin cd -q control && command tar -xf ../control.tar.* ) 2>/dev/null
+        ( builtin cd -q data && command tar -xf ../data.tar.* ) 2>/dev/null
         builtin cd -q ..; command rm *.tar.* debian-binary ;;
       (*.zst) unzstd --stdout "$full_path" > "${file:t:r}" ;;
       (*.cab|*.exe) cabextract "$full_path" ;;
