@@ -4,7 +4,8 @@
 emulate -LR zsh
 
 zstyle ':omz:alpha:lib:git' async-prompt false
-source "${1:-${0:A:h:h}/git.zsh}"
+source "${1:-${0:A:h:h}/git.zsh}" || exit 1
+unset -m 'ZSH_THEME_GIT_PROMPT_*'
 ZSH_THEME_GIT_PROMPT_UNMERGED='CONFLICT'
 
 # Keep user configuration from changing the fixture's status output.
@@ -66,6 +67,29 @@ check_status 'staged addition with worktree changes' 'AM file' ''
 command rm file || exit 1
 # AD is not a conflict, even though both letters occur in conflict codes.
 check_status 'staged addition deleted from the worktree' 'AD file' ''
+
+# A conflict on a later line must coexist with the normal status symbols.
+command git read-tree --empty || exit 1
+print -r -- content > a-added
+{
+  print -r -- "100644 $blob 0"$'\t'a-added
+  print -r -- "100644 $blob 2"$'\t'z-conflict
+  print -r -- "100644 $blob 3"$'\t'z-conflict
+} | command git update-index --index-info || exit 1
+ZSH_THEME_GIT_PROMPT_ADDED='ADDED'
+check_status 'conflict alongside a staged addition' \
+  $'A  a-added\nAA z-conflict' 'CONFLICTADDED'
+command rm a-added || exit 1
+
+# Show the marker only once, even when multiple files are unmerged.
+command git read-tree --empty || exit 1
+{
+  print -r -- "100644 $blob 1"$'\t'a-conflict
+  print -r -- "100644 $blob 2"$'\t'z-conflict
+  print -r -- "100644 $blob 3"$'\t'z-conflict
+} | command git update-index --index-info || exit 1
+check_status 'multiple conflicts produce one marker' \
+  $'DD a-conflict\nAA z-conflict' 'CONFLICT'
 
 print -r -- "$tests tests, $failures failures"
 (( failures == 0 ))
