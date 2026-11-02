@@ -347,6 +347,11 @@ function listMavenCompletions {
   )
 }
 
-compctl -K listMavenCompletions mvn mvnw
-compctl -K listMavenCompletions mvn-color
-compctl -K listMavenCompletions mvn-or-mvnw
+# Completion, via compsys so that tools built on it (fzf-tab, etc.) can take over.
+_mvn() {
+  listMavenCompletions
+  # _describe splits entries on `:`, so escape it to keep goals like `dependency:tree`.
+  _describe -t mvn-commands 'mvn command' "${(@)reply//:/\\:}"
+}
+
+compdef _mvn mvn mvnw mvn-color mvn-or-mvnw
