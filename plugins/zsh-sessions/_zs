@@ -11,6 +11,8 @@ _zs() {
     'list:List saved terminal sessions'
     'status:Show active session metadata (UUIDv7, category, command count)'
     'show:Display full session timeline (commands, outputs, and file diffs)'
+    'search:Search across all session commands, outputs, and file diffs'
+    'export:Export a session thread as a Markdown runbook'
     'cap:Execute a command and explicitly capture its full stdout/stderr and file diffs'
     'resume:Resume a previous session (restore directory and thread)'
     'rename:Rename a session title'
@@ -50,7 +52,7 @@ _zs() {
             fi
           fi
           ;;
-        show|view|resume|continue|ai|auto|rm|delete)
+        show|view|resume|continue|ai|auto|rm|delete|export|md|runbook|rename|title)
           local data_dir="${ZS_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/zsh-sessions}"
           if [[ -f "$data_dir/index.tsv" ]]; then
             local -a sessions

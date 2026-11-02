@@ -16,19 +16,24 @@ Every interactive shell session automatically receives a chronological **UUIDv7*
 
 1. **Command metadata:** Timestamp, working directory (`PWD`), Git branch, duration, and exit status.
 2. **Safe Output Capture (`stdout`/`stderr`):** By default (`ZS_CAPTURE_MODE="safe"`), preserves `isatty(1) == true` (100% native TTY) for all interactive TUIs, REPLs, and AI CLIs (`agy`, `gemini`, `claude`, `codex`, `vim`, `nvim`, `git`, `docker`, `python`, `node`, `flutter`, `ssh`, `tmux`, `fzf`), while automatically capturing output for safe inspection commands (`cat`, `df`, `uname`, `ip`, `curl`, etc.) or on demand via `zs cap <command>`.
-3. **Edited file diffs (`Snapshot & Diff`):** When a command or editor modifies a configuration/source file (e.g., `vim docker-compose.yml`), records a clean `diff -u` block showing added (`+`) and removed (`-`) lines.
-4. **Zero-Junk Filtering:** Sessions containing only trivial navigation commands (`ls`, `cd`, `pwd`, `clear`, `exit`) with no file modifications are automatically discarded on exit.
-5. **Category Prompt on Exit:** When closing a meaningful session via `exit` that has not yet been categorized, `zs` prompts you to assign it to an existing category or create a new one on the spot. If the terminal window is closed abruptly (`SIGHUP` / <kbd>Cmd</kbd> + <kbd>W</kbd>), the session is preserved as `[Sem Categoria]` and a one-line notice is shown on the next shell startup.
+3. **Edited file diffs (`Snapshot & Diff`):** When a command, script, or bare editor (`vim`/`nvim`) modifies or creates a configuration/source file (`.yml`, `.yaml`, `.json`, `.conf`, `.toml`, `.ini`, `.xml`, `.properties`), records a clean `diff -u` block showing added (`+`) and removed (`-`) lines using zero-fork `zstat` tracking.
+4. **Short UUIDv7 Resolution & Up-Arrow History Recall:** Subcommands accept full 36-character UUIDv7 strings or unique short prefixes/suffixes (e.g., `zs show 01a188`). Resuming a session (`zs resume`) automatically injects that session's commands into Zsh's Up-Arrow (`↑`) history (`print -S`).
+5. **Zero-Junk Filtering:** Sessions containing only trivial navigation commands (`ls`, `cd`, `pwd`, `clear`, `exit`) with no file modifications are automatically discarded on exit.
+6. **Category Prompt on Exit & Auto-Localization (`EN` / `PT-BR`):** Defaults to English (`en`) and automatically switches to Portuguese (`pt`) on `pt_*` locales (or via `ZS_LANG`). When closing a meaningful uncategorized session via `exit`, `zs` prompts you to assign or create a category. If closed abruptly (`SIGHUP` / <kbd>Cmd</kbd> + <kbd>W</kbd>), the session is preserved as `[Uncategorized]` / `[Sem Categoria]` with a one-line notice on the next shell startup.
 
 ## Commands
+
+All session-targeted commands accept either a full UUIDv7 or a unique short prefix/suffix:
 
 | Command | Description |
 | :--- | :--- |
 | `zs` | Open the interactive session threads TUI (`fzf` split view or numbered menu) |
 | `zs status` | Display current session metadata (UUIDv7, project, category, command count) |
 | `zs show [id]` | Display the full colorized timeline (commands, outputs, and file diffs) of a session |
+| `zs search [query]` | Full-text search across all session logs, outputs, and file diffs |
+| `zs export [id] [file.md]` | Export a session thread as a formatted, redacted Markdown (`.md`) runbook |
 | `zs cap <cmd...>` | Execute any command and explicitly capture its full `stdout`/`stderr` and file diffs |
-| `zs resume <id>` | Resume a previous session (`cd` into its last directory and continue appending to that thread) |
+| `zs resume <id>` | Resume a previous session (`cd` into its last directory, inject `↑` history, and continue thread) |
 | `zs rename "<title>" [id]` | Set a custom title for the current or specified session |
 | `zs cat` | Interactively assign the session to an existing category or create a new one |
 | `zs cat add "<name>"` | Create a new category |
@@ -44,8 +49,9 @@ All shortcuts use portable POSIX/ASCII control codes that work identically acros
 
 | Shortcut | Description |
 | :--- | :--- |
-| <kbd>Enter</kbd> | Resume the selected session (`cd` + continue thread) |
-| <kbd>Tab</kbd> | Open the arrow-navigable **Action Menu** (`View`, `Resume`, `Category`, `Rename`, `AI`, `Delete`) |
+| <kbd>Enter</kbd> | Resume the selected session (`cd` + inject `↑` history + continue thread) |
+| <kbd>Tab</kbd> | Open the arrow-navigable **Action Menu** (`View`, `Resume`, `Category`, `Rename`, `AI`, `Export`, `Delete`) |
+| <kbd>Ctrl</kbd> + <kbd>S</kbd> | Launch interactive **Full-Text Search** across all session logs and file diffs |
 | <kbd>Ctrl</kbd> + <kbd>T</kbd> | Assign or create a Category for the selected session |
 | <kbd>Ctrl</kbd> + <kbd>R</kbd> | Rename the selected session |
 | <kbd>Ctrl</kbd> + <kbd>F</kbd> | Cycle session filters (`ALL` → `Current Project` → `By Category`) |
@@ -76,9 +82,11 @@ zs cat set "Networks & Routers"
 # Example 5: Set a clear, memorable title for the current session
 zs rename "Backup S6730 switches and M4 router"
 
-# Example 6: Inspect current session metadata or view the full conversation & file diffs
+# Example 6: Inspect current session, search across all logs, or export a Markdown runbook
 zs status
 zs show
+zs search "6380"
+zs export network-runbook.md
 
 # Example 7: Auto-categorize and title the current session using AI / heuristics
 zs ai
@@ -229,9 +237,11 @@ USO:
 You can customize the plugin behavior by setting these variables in your `~/.zshrc` before Oh My Zsh loads:
 
 * `ZS_DATA_DIR`: Directory where session indexes and logs are stored (default: `${XDG_DATA_HOME:-$HOME/.local/share}/zsh-sessions`).
+* `ZS_LANG`: Interface language override (`"en"` for English or `"pt"` for Portuguese; auto-detected from `$LC_ALL` / `$LANG` by default).
 * `ZS_CAPTURE_OUTPUT`: Set to `0` to disable `stdout`/`stderr` capture while keeping command and file diff tracking (default: `1`).
 * `ZS_CAPTURE_MODE`: Output capture strategy (`"safe"` allowlist by default so `isatty(1)` is never broken for interactive TUIs like `agy`, `git`, `python`, `node`, `docker`; `"off"` to disable automatic output capture).
 * `ZS_SAFE_CAPTURE_CMDS`: Space-separated list of additional non-interactive commands whose `stdout` should be captured automatically in `"safe"` mode.
+* `ZS_MAX_DIR_SNAP_FILES`: Maximum number of level-1 `$PWD` configuration files (`< 512 KB`) snapshotted automatically per command to detect in-editor modifications (default: `15`).
 * `ZS_MAX_OUTPUT_LINES`: Maximum number of output lines stored per command before truncating the middle section (default: `60`).
 * `ZS_MIN_MEANINGFUL_CMDS`: Minimum number of non-trivial commands required to persist a session without diffs or manual metadata (default: `2`).
 * `ZS_BINDKEY`: Optional ZLE keyboard shortcut to launch `zs` directly from the prompt (e.g., `export ZS_BINDKEY="^G"`).
