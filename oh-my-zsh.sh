@@ -212,6 +212,11 @@ _omz_git_head() {
   _omz_git_head || REPLY="$(builtin cd -q "$ZSH"; git rev-parse HEAD 2>/dev/null)"
   typeset -g zcompdump_revision="#omz revision: $REPLY"
 }
+# A nested shell can inherit an exported $FPATH that already holds the
+# directories added above. Remove the duplicates, because the metadata stores
+# $fpath and a different value forces a rebuild. This keeps the first occurrence
+# of each directory, so it does not change which completion file is found.
+fpath=(${(u)fpath})
 zcompdump_fpath="#omz fpath: $fpath"
 unset -f _omz_git_head
 
