@@ -43,7 +43,6 @@ Available search contexts are:
 | `wolframalpha`        | `https://wolframalpha.com/input?i=`             |
 | `archive`             | `https://web.archive.org/web/*/`                |
 | `scholar`             | `https://scholar.google.com/scholar?q=`         |
-| `ask`                 | `https://www.ask.com/web?q=`                    |
 | `youtube`             | `https://www.youtube.com/results?search_query=` |
 | `deepl`               | `https://www.deepl.com/translator#auto/auto/`   |
 | `dockerhub`           | `https://hub.docker.com/search?q=`              |
