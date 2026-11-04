@@ -258,10 +258,14 @@ unset -f _omz_compdump_has_metadata
 
 # zcompile the completion dump file if the .zwc is older or missing.
 # Test that first so the lock directory and zrecompile are skipped when it's fresh.
-if [[ ! "${ZSH_COMPDUMP}.zwc" -nt "$ZSH_COMPDUMP" ]] \
-   && command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
-  zrecompile -q -p "$ZSH_COMPDUMP"
-  command rm -rf "$ZSH_COMPDUMP.zwc.old" "${ZSH_COMPDUMP}.lock"
+if [[ ! "${ZSH_COMPDUMP}.zwc" -nt "$ZSH_COMPDUMP" ]]; then
+  # A shell killed during zrecompile leaves its lock, and then no shell compiles the dump again.
+  # zrecompile takes seconds, so a lock that is older than 2 minutes has no owner.
+  () { (( ! $# )) || command rm -rf -- "$@" } "${ZSH_COMPDUMP}.lock"(N/mm+2)
+  if command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
+    zrecompile -q -p "$ZSH_COMPDUMP"
+    command rm -rf "$ZSH_COMPDUMP.zwc.old" "${ZSH_COMPDUMP}.lock"
+  fi
 fi
 
 _omz_source() {
