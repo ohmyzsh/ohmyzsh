@@ -1,4 +1,7 @@
-if (( ! $+commands[brew] )); then
+if (( $+commands[brew] )); then
+  # Brew is already on PATH; still evaluate shellenv to ensure env vars are current
+  eval "$(brew shellenv)"
+else
   if [[ -n "$BREW_LOCATION" ]]; then
     if [[ ! -x "$BREW_LOCATION" ]]; then
       echo "[oh-my-zsh] $BREW_LOCATION is not executable"
@@ -16,9 +19,7 @@ if (( ! $+commands[brew] )); then
     return
   fi
 
-  # Only add Homebrew installation to PATH, MANPATH, and INFOPATH if brew is
-  # not already on the path, to prevent duplicate entries. This aligns with
-  # the behavior of the brew installer.sh post-install steps.
+  # Evaluate Homebrew shell environment from discovered brew binary
   eval "$("$BREW_LOCATION" shellenv)"
   unset BREW_LOCATION
 fi
