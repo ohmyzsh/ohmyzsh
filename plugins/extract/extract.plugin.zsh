@@ -135,7 +135,7 @@ EOF
       (*.deb)
         command mkdir -p "control" "data"
         ar vx "$full_path" > /dev/null
-        local member dest
+        local member dest failed=0
         for member in control.tar.* data.tar.*; do
           dest="${member%%.*}"
           case "${member:l}" in
@@ -146,6 +146,8 @@ EOF
               (( $+commands[pbzip2] )) && { tar -I pbzip2 -xvf "$member" -C "$dest" } \
               || tar xvjf "$member" -C "$dest" ;;
             (*.tar.xz)
+              # .deb members are small, so skip extract()'s pixz fast path and
+              # let tar use its built-in xz support (or a plain pipe).
               tar --xz --help &> /dev/null \
               && tar --xz -xvf "$member" -C "$dest" \
               || xzcat "$member" | tar xvf - -C "$dest" ;;
@@ -156,10 +158,16 @@ EOF
             (*.tar)
               tar xvf "$member" -C "$dest" ;;
             (*)
-              echo "extract: cannot extract unexpected .deb member '$member'" >&2 ;;
+              echo "extract: cannot extract unexpected .deb member '$member'" >&2
+              failed=1 ;;
           esac
         done
-        command rm *.tar.* debian-binary ;;
+        if (( failed )); then
+          # Keep the archive members so the unexpected one can be inspected.
+          echo "extract: leaving .deb members in place" >&2
+        else
+          command rm *.tar.* debian-binary
+        fi ;;
       (*.zst) unzstd --stdout "$full_path" > "${file:t:r}" ;;
       (*.cab|*.exe) cabextract "$full_path" ;;
       (*.cpio|*.obscpio) cpio -idmvF "$full_path" ;;

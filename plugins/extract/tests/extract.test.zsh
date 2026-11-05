@@ -98,6 +98,36 @@ check_deb_extract() {
   print -r -- "PASS: deb ($mode)"
 }
 
+# An unexpected member must be reported and left on disk for inspection, and
+# the cleanup must not delete the other members around it either.
+check_deb_unexpected_member() {
+  local case_dir="$test_dir/deb-unexpected"
+  mkdir -p "$case_dir/src/ctl" "$case_dir/src/data/usr/bin"
+  print -r -- "postinst script" > "$case_dir/src/ctl/postinst"
+  print -r -- "app main" > "$case_dir/src/data/usr/bin/app"
+  tar czf "$case_dir/src/control.tar.gz" -C "$case_dir/src/ctl" postinst
+  print -r -- "unknown compression" > "$case_dir/src/control.tar.weird"
+  tar czf "$case_dir/src/data.tar.gz" -C "$case_dir/src/data" usr
+  print -r -- "2.0" > "$case_dir/src/debian-binary"
+  (
+    builtin cd "$case_dir/src"
+    ar r "$case_dir/pkg.deb" debian-binary control.tar.weird data.tar.gz
+  )
+
+  builtin cd "$case_dir"
+  () {
+    emulate -L zsh
+    extract "$case_dir/pkg.deb"
+  } || return 1
+
+  [[ -f "$case_dir/pkg/data/usr/bin/app" ]] ||
+    { print -u2 -r -- "deb-unexpected: known members were not extracted"; return 1 }
+  [[ -f "$case_dir/pkg/control.tar.weird" && -f "$case_dir/pkg/data.tar.gz" &&
+     -f "$case_dir/pkg/debian-binary" ]] ||
+    { print -u2 -r -- "deb-unexpected: archive members were deleted"; return 1 }
+  print -r -- "PASS: deb (unexpected member)"
+}
+
 {
   print -r -- hello > "$test_dir/plain"
   lzma -c "$test_dir/plain" > "$test_dir/fixture.lzma"
@@ -113,6 +143,7 @@ check_deb_extract() {
   check_deb_extract default
   check_deb_extract target
   check_deb_extract remove
+  check_deb_unexpected_member
   print 'All extract compressed-file tests passed.'
 } always {
   builtin cd "$original_dir"
