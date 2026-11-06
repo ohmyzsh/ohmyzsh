@@ -44,6 +44,7 @@ You can set these variables in your `.zshrc` file, before Oh My Zsh is sourced.
 For example:
 
 ```sh
+PYTHON_AUTO_VRUN=true
 PYTHON_VENV_NAME=".venv"
 PYTHON_VENV_NAMES=($PYTHON_VENV_NAME venv)
 ...
@@ -51,6 +52,14 @@ plugins=(... python)
 source "$ZSH/oh-my-zsh.sh"
 ```
 
+
+## `$PYTHON_AUTO_VRUN`
+
+**Default**: `false`.
+
+Enable automatic activation of virtual environments when entering a directory containing
+`<venv-name>/bin/activate`, and automatically deactivate it when navigating out of it.
+Set to `true` to enable this feature.
 
 ## `$PYTHON_VENV_NAME`
 
