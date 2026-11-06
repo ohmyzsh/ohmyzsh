@@ -33,14 +33,15 @@ plugins=(... encode64)
 
   ```console
   $ echo "oh-my-zsh" | encode64
-  b2gtbXktenNo==
+  b2gtbXktenNoCg==
   $ echo "oh-my-zsh" | e64
-  b2gtbXktenNo==
+  b2gtbXktenNoCg==
   ```
 
 ### Encoding a file
 
-Encode a file's contents to base64 and save output to text file.
+Encode a file's contents to base64 and save output to a text file.
+
 **NOTE:** Takes provided file and saves encoded content as new file with `.txt` extension
 
 - From parameter
@@ -48,9 +49,19 @@ Encode a file's contents to base64 and save output to text file.
   ```console
   $ encodefile64 ohmyzsh.icn
   ohmyzsh.icn's content encoded in base64 and saved as ohmyzsh.icn.txt
-  $ ef64 "oh-my-zsh"
+  $ ef64 ohmyzsh.icn
   ohmyzsh.icn's content encoded in base64 and saved as ohmyzsh.icn.txt
   ```
+
+  The file is validated first: `encodefile64 <file>` prints
+  `Usage: encodefile64 <file>` to stderr and returns a non-zero exit status
+  when the argument is missing, is not a readable regular file, or more than
+  one argument is given.
+
+  **NOTE:** the encoded output is written as produced by the system `base64`
+  command: GNU coreutils (Linux) wraps it at 76 columns per line, while
+  BSD/macOS `base64` does not wrap. Both flavours decode either form, so
+  round trips work on all supported platforms.
 
 ### Decoding
 
