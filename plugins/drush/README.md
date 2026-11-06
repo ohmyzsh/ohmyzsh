@@ -25,7 +25,7 @@ plugins=(... drush)
 | `drcr`  | `drush core-cron`                                           | Run all cron hooks in all active modules for specified site          |
 | `drct`  | `drush cc theme-registry`                                   | Clear theme-registry cache                                           |
 | `drcv`  | `drush cc views`                                            | Clear views cache _(make sure that the views module is enabled)_     |
-| `drdmp` | `drush drush sql-dump --ordered-dump --result-file=dumpsql` | Backup database in a new dump.sql file                               |
+| `drdmp` | `drush sql-dump --ordered-dump --result-file=dump.sql`      | Backup database in a new dump.sql file                               |
 | `drf`   | `drush features`                                            | Display features status                                              |
 | `drfr`  | `drush features-revert -y`                                  | Revert a feature module on your site                                 |
 | `drfra` | `drush features-revert-all`                                 | Revert all enabled feature module on your site                       |
