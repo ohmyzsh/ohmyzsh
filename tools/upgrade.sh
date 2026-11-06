@@ -202,6 +202,52 @@ if is_tty; then
   RESET=$(printf '\033[0m')
 fi
 
+# Logo lines, split by `|` into one segment per rainbow color
+BANNER=(
+  '         |__      |           |        |       |     |__   '
+  '  ____  |/ /_    | ____ ___  |__  __  | ____  |_____|/ /_  '
+  ' / __ \|/ __ \  | / __ `__ \|/ / / / | /_  / |/ ___/| __ \ '
+  '/ /_/ /| / / / | / / / / / /| /_/ / |   / /_|(__  )| / / / '
+  '\____/|_/ /_/ | /_/ /_/ /_/|\__, / |   /___/|____/|_/ /_/  '
+  '    |        |           | /____/ |       |     |          '
+)
+
+# Print the first $1 columns of the logo
+print_banner_frame() {
+  local line i
+  local -i remaining
+  local -a segments
+  for line in $BANNER; do
+    remaining=$1
+    segments=("${(@s:|:)line}")
+    for (( i = 1; i <= $#segments && remaining > 0; i++ )); do
+      printf '%s%s' "${RAINBOW[i]}" "${segments[i][1,remaining]}"
+      (( remaining -= ${#segments[i]} ))
+    done
+    printf '%s\n' "$RESET"
+  done
+}
+
+# Draw the logo left to right on a terminal, all at once otherwise
+print_banner() {
+  local -i width=${#${BANNER[2]//|}} step=4 col
+
+  if ! is_tty || ! zmodload zsh/zselect 2>/dev/null; then
+    print_banner_frame $width
+    return
+  fi
+
+  printf '\033[?25l'
+  for (( col = step; ; col += step )); do
+    (( col > width )) && col=width
+    print_banner_frame $col
+    (( col == width )) && break
+    printf '\033[%dA' $#BANNER
+    zselect -t 2
+  done
+  printf '\033[?25h'
+}
+
 # Update upstream remote to ohmyzsh org
 git remote -v | while read remote url extra; do
   case "$url" in
@@ -232,15 +278,36 @@ git config core.autocrlf false
 git config fsck.zeroPaddedFilemode ignore
 git config fetch.fsck.zeroPaddedFilemode ignore
 git config receive.fsck.zeroPaddedFilemode ignore
-# autostash on rebase (#7172)
-resetAutoStash=$(git config --bool rebase.autoStash 2>/dev/null)
-git config rebase.autoStash true
 
 local ret=0
 
 # repository settings
 remote=${"$(git config --local oh-my-zsh.remote)":-origin}
 branch=${"$(git config --local oh-my-zsh.branch)":-master}
+
+# repository state
+last_head=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
+
+# autostash on rebase (#7172)
+resetAutoStash=$(git config --bool rebase.autoStash 2>/dev/null)
+
+_omz_upgrade_cleanup() {
+  trap '' INT
+
+  # go back to HEAD previous to update
+  git checkout -q "$last_head" --
+
+  # Unset git-config values set just for the upgrade
+  case "$resetAutoStash" in
+    "") git config --unset rebase.autoStash ;;
+    *) git config rebase.autoStash "$resetAutoStash" ;;
+  esac
+
+  trap - INT
+}
+
+trap '_omz_upgrade_cleanup; printf "\033[?25h"; exit 130' INT
+git config rebase.autoStash true
 
 update_with_cooldown() {
   local cutoff_epoch cooldown_ref
@@ -264,10 +331,11 @@ perform_update() {
   fi
 }
 
-# repository state
-last_head=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
 # checkout update branch
-git checkout -q "$branch" -- || exit 1
+if ! git checkout -q "$branch" --; then
+  _omz_upgrade_cleanup
+  exit 1
+fi
 # branch commit before update (used in changelog)
 last_commit=$(git rev-parse "$branch")
 
@@ -303,12 +371,7 @@ if perform_update; then
   fi
 
   if [[ $verbose_mode == default ]]; then
-    printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
-    printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
-    printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
-    printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n'      $RAINBOW $RESET
-    printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $RAINBOW $RESET
-    printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
+    print_banner
     printf '\n'
     printf "${BLUE}%s${RESET}\n\n" "$message"
     printf "${BLUE}${BOLD}%s %s %s %s${RESET}\n" \
@@ -331,14 +394,7 @@ else
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
 fi
 
-# go back to HEAD previous to update
-git checkout -q "$last_head" --
-
-# Unset git-config values set just for the upgrade
-case "$resetAutoStash" in
-  "") git config --unset rebase.autoStash ;;
-  *) git config rebase.autoStash "$resetAutoStash" ;;
-esac
+_omz_upgrade_cleanup
 
 # Exit with `1` if the update failed
 exit $ret
