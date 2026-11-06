@@ -41,3 +41,9 @@ jobs:
                       ./themes/*.zsh-theme; do
             zsh -n "$file" || return 1
           done
+      - name: Run plugin tests
+        run: |
+          for test in ./plugins/*/tests/*.zsh; do
+            [[ -e "$test" ]] || continue
+            zsh -f "$test" || exit 1
+          done

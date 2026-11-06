@@ -37,18 +37,37 @@ function _vi-mode-set-cursor-shape-for-keymap() {
     command) _shape=$VI_MODE_CURSOR_INSERT ;; # read a command name
     vicmd)   _shape=$VI_MODE_CURSOR_NORMAL ;; # vi cmd: block
     visual)  _shape=$VI_MODE_CURSOR_VISUAL ;; # vi visual mode: block
+    visual-line) _shape=$VI_MODE_CURSOR_VISUAL ;; # vi visual line mode: block
     viopp)   _shape=$VI_MODE_CURSOR_OPPEND ;; # vi operation pending: blinking block
     *)       _shape=0 ;;
   esac
   printf $'\e[%d q' "${_shape}"
 }
 
-function _visual-mode {
-  typeset -g VI_KEYMAP=visual
-  _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
-  zle .visual-mode
+# zle-keymap-select is not triggered when entering or leaving visual mode
+# because zsh has no dedicated keymap for it. Derive the visual selection
+# modes from the REGION_ACTIVE parameter before each redraw so the cursor
+# shape (and mode indicator) is updated both when entering visual mode and
+# when leaving it, e.g. with escape or after an operator consumes the
+# selection. Wrapping the visual-mode widgets instead would only detect
+# entering visual mode, leaving the cursor stuck (#11705), and would miss
+# other selection widgets such as visual-line-mode.
+function zle-line-pre-redraw() {
+  if [[ "$KEYMAP" == vicmd ]]; then
+    local _mode=vicmd
+    case "$REGION_ACTIVE" in
+      1) _mode=visual ;;      # character-wise selection
+      2) _mode=visual-line ;; # line-wise selection
+    esac
+    # Only transition between command mode and the visual modes; real keymap
+    # changes are owned by zle-keymap-select.
+    if [[ "$_mode" != "$VI_KEYMAP" && ( "$_mode" == visual(-line|) || "$VI_KEYMAP" == visual(-line|) ) ]]; then
+      typeset -g VI_KEYMAP="$_mode"
+      _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
+    fi
+  fi
 }
-zle -N visual-mode _visual-mode
+zle -N zle-line-pre-redraw
 
 function _vi-mode-should-reset-prompt() {
   # If $VI_MODE_RESET_PROMPT_ON_MODE_CHANGE is unset (default), dynamically
