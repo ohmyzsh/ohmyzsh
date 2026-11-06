@@ -24,7 +24,6 @@ function web_search() {
     wolframalpha    "https://www.wolframalpha.com/input/?i="
     archive         "https://web.archive.org/web/*/"
     scholar         "https://scholar.google.com/scholar?q="
-    ask             "https://www.ask.com/web?q="
     youtube         "https://www.youtube.com/results?search_query="
     deepl           "https://www.deepl.com/translator#auto/auto/"
     dockerhub       "https://hub.docker.com/search?q="
@@ -89,7 +88,6 @@ alias stackoverflow='web_search stackoverflow'
 alias wolframalpha='web_search wolframalpha'
 alias archive='web_search archive'
 alias scholar='web_search scholar'
-alias ask='web_search ask'
 alias youtube='web_search youtube'
 alias deepl='web_search deepl'
 alias dockerhub='web_search dockerhub'
