@@ -30,8 +30,10 @@ jobs:
 
       - name: Set up git repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Install zsh
-        run: sudo apt-get update; sudo apt-get install zsh
+      - name: Install test dependencies
+        run: sudo apt-get update && sudo apt-get install -y zsh python3-venv
+      - name: Test Python virtual environment activation
+        run: zsh -df plugins/python/tests/auto_vrun.test.zsh
       - name: Check syntax
         run: |
           for file in ./oh-my-zsh.sh \
