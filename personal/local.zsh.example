@@ -1,0 +1,56 @@
+# Optional local tooling from the original shell configuration.
+# Copy to ~/.zshrc.local and enable only commands installed on your machine.
+# Never commit credentials or the files in ~/.zshrc.d.
+
+export PATH="$HOME/.rd/bin:$PATH"
+
+[[ ! -x /usr/libexec/java_home ]] || export JAVA_HOME="$(/usr/libexec/java_home -v 17 2>/dev/null)"
+
+# Homebrew Maven is already available through Homebrew's bin directory.
+
+# Claude OCI environment
+if [ -f "$HOME/.zshrc.d/claude-oci.zsh" ]; then
+  source "$HOME/.zshrc.d/claude-oci.zsh"
+fi
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.codex/bin:$PATH"
+
+export PATH="$HOME/tools/kiab-cli/bin:$PATH"
+
+if [ -f "$HOME/.zshrc.d/postman-auth.zsh" ]; then
+  source "$HOME/.zshrc.d/postman-auth.zsh"
+fi
+
+# Codex mode shortcuts
+alias codex-default='~/.codex/bin/oracle-activate-codex-mode.sh --config-mode default'
+alias codex-design='~/.codex/bin/oracle-activate-codex-mode.sh --config-mode design'
+alias codex-ops='~/.codex/bin/oracle-activate-codex-mode.sh --config-mode ops'
+alias codex-full='~/.codex/bin/oracle-activate-codex-mode.sh --config-mode full'
+
+# Claude Code MCP shortcuts
+alias claude-default='python3 ~/Workspace/codex-global-config/scripts/merge-claude-mcp.py --mapping ~/Workspace/codex-global-config/home/.codex/config/fragments/claude-mcp-mapping.json --config-mode default'
+alias claude-design='python3 ~/Workspace/codex-global-config/scripts/merge-claude-mcp.py --mapping ~/Workspace/codex-global-config/home/.codex/config/fragments/claude-mcp-mapping.json --config-mode design'
+alias claude-ops='python3 ~/Workspace/codex-global-config/scripts/merge-claude-mcp.py --mapping ~/Workspace/codex-global-config/home/.codex/config/fragments/claude-mcp-mapping.json --config-mode ops'
+alias claude-full='python3 ~/Workspace/codex-global-config/scripts/merge-claude-mcp.py --mapping ~/Workspace/codex-global-config/home/.codex/config/fragments/claude-mcp-mapping.json --config-mode full'
+
+# allproxy
+# Disabled by Codex on 2026-05-20: this made python3 resolve to allproxy venv globally.
+_allproxy_venv="$HOME/Workspace/misc-tools/allproxy/venv"
+if [[ "$VIRTUAL_ENV" != "$_allproxy_venv" ]]; then
+  path=("${path[@]:#$_allproxy_venv/bin}")
+  export PATH
+fi
+unset _allproxy_venv
+# export PATH="$HOME/Workspace/misc-tools/allproxy/venv/bin:$PATH"
+
+
+# lf-oke shortcut
+alias lf-oke-activate="source $HOME/Workspace/genai-langfuse-ops-tools/lf-oke/.venv/bin/activate"
+
+# coding-agent-flow
+alias wf-start="bash ~/Workspace/coding-agent-flow/scripts/start.sh"
+alias wf-stop="bash ~/Workspace/coding-agent-flow/scripts/stop.sh"
+
+
+alias scm-ssh='$HOME/.ssh/scm-script.sh'
+# Start the SCM SSH agent manually when needed: scm-ssh start_agent
