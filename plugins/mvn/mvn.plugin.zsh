@@ -349,9 +349,11 @@ function listMavenCompletions {
 
 # Completion, via compsys so that tools built on it (fzf-tab, etc.) can take over.
 _mvn() {
+  local -a commands
   listMavenCompletions
   # _describe splits entries on `:`, so escape it to keep goals like `dependency:tree`.
-  _describe -t mvn-commands 'mvn command' "${(@)reply//:/\\:}"
+  commands=("${(@)reply//:/\\:}")
+  _describe -t mvn-commands 'mvn command' commands
 }
 
 compdef _mvn mvn mvnw mvn-color mvn-or-mvnw
