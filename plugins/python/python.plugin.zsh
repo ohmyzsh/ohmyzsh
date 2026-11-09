@@ -101,13 +101,14 @@ function mkv() {
 if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
   # Automatically activate venv when changing dir
   function auto_vrun() {
-    # deactivate if we're on a different dir than VIRTUAL_ENV states
-    # we don't deactivate subdirectories!
-    if (( $+functions[deactivate] )) && [[ $PWD != ${VIRTUAL_ENV:h}* ]]; then
+    # Resolve symlinks as vrun does, and keep directory boundaries intact.
+    local venv_parent="${VIRTUAL_ENV:h:P}"
+    if (( $+functions[deactivate] )) \
+      && [[ "${PWD:P}/" != "${venv_parent%/}/"* ]]; then
       deactivate > /dev/null 2>&1
     fi
 
-    if [[ $PWD != ${VIRTUAL_ENV:h} ]]; then
+    if [[ -z "$VIRTUAL_ENV" || "${PWD:P}" != "$venv_parent" ]]; then
       local file
       for file in "${^PYTHON_VENV_NAMES[@]}"/bin/activate(N.); do
         # make sure we're not in a venv already
