@@ -21,17 +21,18 @@ if [ -d ~/.oh-my-zsh ]; then
   rm -rf ~/.oh-my-zsh
 fi
 
-if [ -e ~/.zshrc ]; then
-  ZSHRC_SAVE=~/.zshrc.omz-uninstalled-$(date +%Y-%m-%d_%H-%M-%S)
-  echo "Found ~/.zshrc -- Renaming to ${ZSHRC_SAVE}"
-  mv ~/.zshrc "${ZSHRC_SAVE}"
+ZSHRC="${ZDOTDIR:-$HOME}/.zshrc"
+if [ -e "$ZSHRC" ]; then
+  ZSHRC_SAVE="${ZSHRC}.omz-uninstalled-$(date +%Y-%m-%d_%H-%M-%S)"
+  echo "Found $ZSHRC -- Renaming to ${ZSHRC_SAVE}"
+  mv "$ZSHRC" "${ZSHRC_SAVE}"
 fi
 
 echo "Looking for original zsh config..."
-ZSHRC_ORIG=~/.zshrc.pre-oh-my-zsh
+ZSHRC_ORIG="${ZDOTDIR:-$HOME}/.zshrc.pre-oh-my-zsh"
 if [ -e "$ZSHRC_ORIG" ]; then
-  echo "Found $ZSHRC_ORIG -- Restoring to ~/.zshrc"
-  mv "$ZSHRC_ORIG" ~/.zshrc
+  echo "Found $ZSHRC_ORIG -- Restoring to $ZSHRC"
+  mv "$ZSHRC_ORIG" "$ZSHRC"
   echo "Your original zsh config was restored."
 else
   echo "No original zsh config found"
