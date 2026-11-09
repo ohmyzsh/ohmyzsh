@@ -9,6 +9,10 @@ ZSH_THEME_GIT_PROMPT_PREFIX="git:("   # Beginning of the git prompt, before the 
 ZSH_THEME_GIT_PROMPT_SUFFIX=")"       # End of the git prompt
 ZSH_THEME_GIT_PROMPT_DIRTY="*"        # Text to display if the branch is dirty
 ZSH_THEME_GIT_PROMPT_CLEAN=""         # Text to display if the branch is clean
+# ZSH_THEME_GIT_SHOW_DEFAULT_BRANCH=1 # Set to 1 to show the default branch when different from current
+# ZSH_THEME_GIT_SHOW_DEFAULT_BRANCH=always # Set to "always" to show it even when equal to current
+# ZSH_THEME_GIT_PROMPT_DEFAULT_BRANCH_PREFIX=" | default: " # Text before the default branch
+# ZSH_THEME_GIT_PROMPT_DEFAULT_BRANCH_SUFFIX=""     # Text after the default branch
 ZSH_THEME_RUBY_PROMPT_PREFIX="("
 ZSH_THEME_RUBY_PROMPT_SUFFIX=")"
 
