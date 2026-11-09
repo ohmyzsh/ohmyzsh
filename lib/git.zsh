@@ -86,7 +86,7 @@ function _omz_git_prompt_status() {
     'R  '       'RENAMED'
     ' D '       'DELETED'
     'D  '       'DELETED'
-    'UU '       'UNMERGED'
+    '(DD|AU|UD|UA|DU|AA|UU) ' 'UNMERGED'
     'ahead'     'AHEAD'
     'behind'    'BEHIND'
     'diverged'  'DIVERGED'
