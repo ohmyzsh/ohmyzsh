@@ -35,6 +35,7 @@ The plugin also supports the following:
 | `ZSH_TMUX_AUTOREFRESH`              | Automatically refresh global environments (default: `false`)                                                                   |
 | `ZSH_TMUX_AUTOSTART`                | Automatically starts tmux (default: `false`)                                                                                   |
 | `ZSH_TMUX_AUTOSTART_ONCE`           | Autostart only if tmux hasn't been started previously (default: `true`)                                                        |
+| `ZSH_TMUX_AUTOSTART_EXCLUDE`        | Space-separated list of POSIX ERE regex patterns for sessions to skip when autostarting (default: `""`)                        |
 | `ZSH_TMUX_AUTOCONNECT`              | Automatically connect to a previous session if it exits (default: `true`)                                                      |
 | `ZSH_TMUX_AUTOQUIT`                 | Automatically closes terminal once tmux exits (default: `ZSH_TMUX_AUTOSTART`)                                                  |
 | `ZSH_TMUX_CONFIG`                   | Set the configuration path (default: `$HOME/.tmux.conf`, `$XDG_CONFIG_HOME/tmux/tmux.conf`)                                    |
