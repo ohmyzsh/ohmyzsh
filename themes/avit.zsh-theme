@@ -5,8 +5,7 @@ typeset +H _current_dir="%{$fg_bold[blue]%}%3~%{$reset_color%} "
 typeset +H _return_status="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"
 typeset +H _hist_no="%{$fg[grey]%}%h%{$reset_color%}"
 
-PROMPT='
-$(_user_host)${_current_dir} $(git_prompt_info) $(ruby_prompt_info)
+PROMPT='$(_user_host)${_current_dir} $(git_prompt_info) $(ruby_prompt_info)
 %{%(!.${fg[red]}.${fg[white]})%}▶%{$reset_color%} '
 
 PROMPT2='%{%(!.${fg[red]}.${fg[white]})%}◀%{$reset_color%} '
