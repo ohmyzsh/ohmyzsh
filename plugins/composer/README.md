@@ -4,6 +4,18 @@ This plugin provides completion for [composer](https://getcomposer.org/), as wel
 for frequent composer commands. It also adds Composer's global binaries to the PATH, using
 Composer if available.
 
+Completion asks composer itself, so it reports the commands of the installed version,
+including those added by composer plugins, the scripts declared in `composer.json`, and
+the options and arguments of each command. Composer 2.2, which cannot describe itself,
+falls back to the previous completion of this plugin.
+
+To opt out of the native completion and use zsh's builtin `_composer` instead (faster for
+package names thanks to its disk cache), add this to your zshrc before `compinit`:
+
+```zsh
+zstyle ':completion:*:composer:*' native-completion no
+```
+
 To use it add `composer` to the plugins array in your zshrc file.
 
 ```zsh
