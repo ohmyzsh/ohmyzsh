@@ -12,6 +12,14 @@ plugins=(... terraform)
 ## Requirements
 
 - [Terraform](https://terraform.io/)
+- [terraform-docs](https://terraform-docs.io/) (optional, for completion)
+
+## terraform-docs completion
+
+If `terraform-docs` is installed, this plugin also enables its completion.
+The completion script is generated from the installed version and cached in
+`$ZSH_CACHE_DIR/completions/_terraform-docs`. It is refreshed in the background
+each time the plugin loads, so completion stays in sync with the installed CLI.
 
 ## Aliases
 

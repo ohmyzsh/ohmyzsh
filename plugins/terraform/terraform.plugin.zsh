@@ -39,3 +39,23 @@ alias tfsh='terraform show'
 alias tfw='terraform workspace'
 alias tfwl='terraform workspace list'
 alias tfws='terraform workspace select'
+
+if (( $+commands[terraform-docs] )); then
+  # If the completion file doesn't exist yet, compinit hasn't registered it.
+  if [[ ! -f "$ZSH_CACHE_DIR/completions/_terraform-docs" ]]; then
+    typeset -g -A _comps
+    autoload -Uz _terraform-docs
+    _comps[terraform-docs]=_terraform-docs
+  fi
+
+  zmodload -F zsh/files b:zf_mv
+  () {
+    local completions
+    completions=$(command terraform-docs completion zsh) || return
+    [[ -n "$completions" ]] || return
+
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/._terraform-docs"
+    zf_mv -f -- =(print -r -- "$completions") \
+      "$ZSH_CACHE_DIR/completions/_terraform-docs"
+  } &|
+fi
