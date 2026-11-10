@@ -16,6 +16,10 @@
 # - doitclient (for SSH) http://www.chiark.greenend.org.uk/~sgtatham/doit/
 # - win32yank (Windows)
 # - tmux (if $TMUX is set)
+# - OSC 52 (when no clipboard tool is available, e.g. over SSH or in a container)
+#
+# Set ZSH_CLIPBOARD_OSC52 to "always" to copy through OSC 52 even if a
+# clipboard tool is available, or to "never" to disable the fallback.
 #
 # Defines two functions, clipcopy and clippaste, based on the detected platform.
 ##
@@ -48,6 +52,22 @@
 #   # Paste to a file
 #   clippaste > file.txt
 #
+function _has_osc52_clipboard() {
+  [[ -n "${TTY:-}" ]] && [[ -w "${TTY}" ]] && (( ${+commands[base64]} ))
+}
+
+function _clipcopy_osc52() {
+  emulate -L zsh
+  local content
+  content=$(cat "${1:-/dev/stdin}" | base64 | tr -d '\n') || return 1
+  print -rn -- $'\e]52;c;'"${content}"$'\e\\' > /dev/tty
+}
+
+function _clippaste_osc52() {
+  print 'clippaste: OSC 52 is write-only and no other clipboard tool was found' >&2
+  return 1
+}
+
 function detect-clipboard() {
   emulate -L zsh
 
@@ -87,6 +107,9 @@ function detect-clipboard() {
   elif [ -n "${TMUX:-}" ] && (( ${+commands[tmux]} )); then
     function clipcopy() { tmux load-buffer -w "${1:--}"; }
     function clippaste() { tmux save-buffer -; }
+  elif [[ "${ZSH_CLIPBOARD_OSC52:-}" != never ]] && _has_osc52_clipboard; then
+    function clipcopy() { _clipcopy_osc52 "$@"; }
+    function clippaste() { _clippaste_osc52; }
   else
     function _retry_clipboard_detection_or_fail() {
       local clipcmd="${1}"; shift
@@ -100,6 +123,10 @@ function detect-clipboard() {
     function clipcopy() { _retry_clipboard_detection_or_fail clipcopy "$@"; }
     function clippaste() { _retry_clipboard_detection_or_fail clippaste "$@"; }
     return 1
+  fi
+
+  if [[ "${ZSH_CLIPBOARD_OSC52:-}" == always ]] && _has_osc52_clipboard; then
+    function clipcopy() { _clipcopy_osc52 "$@"; }
   fi
 }
 
