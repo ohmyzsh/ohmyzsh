@@ -20,7 +20,7 @@ unset _ssh_configfile
 ############################################################
 # Remove host key from known hosts based on a host section
 # name from .ssh/config
-function ssh_rmhkey {
+function ssh_rmhkey() {
   local ssh_configfile="$HOME/.ssh/config"
   local ssh_host="$1"
   if [[ -z "$ssh_host" ]]; then return; fi
@@ -42,7 +42,7 @@ function ssh_load_key() {
 
 ############################################################
 # Remove SSH key from agent
-function ssh_unload_key {
+function ssh_unload_key() {
   local key="$1"
   if [[ -z "$key" ]]; then return; fi
   local keyfile="$HOME/.ssh/$key"
@@ -51,3 +51,36 @@ function ssh_unload_key {
     ssh-add -d "$keyfile"
   fi
 }
+
+############################################################
+# Calculate SSH key fingerprint
+function ssh_fingerprint() {
+  local fptype
+  local quiet
+  local ansi
+
+  zmodload zsh/zutil
+  zparseopts -D -- md5=fptype q=quiet n=ansi
+  fptype="${fptype[*]}"
+  if [[ -z $fptype ]]; then
+    fptype="sha256"
+  else
+    fptype="${fptype:1}"
+  fi
+  if [[ -z ${ansi[*]} ]]; then
+    ansi=("\e[1;30m" "\e[0m")
+  else
+    ansi=("" "")
+  fi
+
+  local keyfiles=( "$@" )
+  if [[ ${#keyfiles[@]} == 0 ]]; then keyfiles=( "$HOME/.ssh/authorized_keys" ); fi
+  local f
+  for f in "${keyfiles[@]}"; do
+    if [[ $quiet != "-q" ]]; then printf "${ansi[1]}$f:${ansi[2]}\n"; fi
+    if ! ssh-keygen -l -E "$fptype" -f "$f"; then return $?; fi
+  done
+  return 0
+}
+alias ssh_fp='ssh_fingerprint'
+
