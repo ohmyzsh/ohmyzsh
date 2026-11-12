@@ -159,7 +159,8 @@ EOF
               tar xvf "$member" -C "$dest" ;;
             (*)
               echo "extract: cannot extract unexpected .deb member '$member'" >&2
-              failed=1 ;;
+              failed=1
+              success=1 ;;
           esac
         done
         if (( failed )); then

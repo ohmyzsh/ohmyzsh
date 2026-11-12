@@ -62,7 +62,7 @@ check_deb_extract() {
   (
     builtin cd "$case_dir/src"
     rm -f "$case_dir/source files/pkg.deb"
-    ar r "$case_dir/source files/pkg.deb" debian-binary control.tar.gz data.tar.gz
+    ar rS "$case_dir/source files/pkg.deb" debian-binary control.tar.gz data.tar.gz
   )
   local archive="$case_dir/source files/pkg.deb"
 
@@ -111,7 +111,7 @@ check_deb_unexpected_member() {
   print -r -- "2.0" > "$case_dir/src/debian-binary"
   (
     builtin cd "$case_dir/src"
-    ar r "$case_dir/pkg.deb" debian-binary control.tar.weird data.tar.gz
+    ar rS "$case_dir/pkg.deb" debian-binary control.tar.weird data.tar.gz
   )
 
   builtin cd "$case_dir"
