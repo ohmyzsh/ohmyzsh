@@ -135,7 +135,7 @@ EOF
       (*.deb)
         command mkdir -p "control" "data"
         ar vx "$full_path" > /dev/null
-        local member dest failed=0
+        local member= dest= failed=0
         for member in control.tar.* data.tar.*; do
           dest="${member%%.*}"
           case "${member:l}" in

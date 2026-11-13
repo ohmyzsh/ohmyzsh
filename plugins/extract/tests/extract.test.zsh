@@ -128,6 +128,38 @@ check_deb_unexpected_member() {
   print -r -- "PASS: deb (unexpected member)"
 }
 
+# Passing more than one .deb in a single call must not leak the loop variables
+# between archives; the stale `member`/`dest` locals used to be printed by the
+# second archive.
+check_deb_multiple() {
+  local case_dir="$test_dir/deb-multiple"
+  mkdir -p "$case_dir/src/ctl" "$case_dir/src/data/usr/bin"
+  print -r -- "postinst script" > "$case_dir/src/ctl/postinst"
+  print -r -- "app main" > "$case_dir/src/data/usr/bin/app"
+  tar czf "$case_dir/src/control.tar.gz" -C "$case_dir/src/ctl" postinst
+  tar czf "$case_dir/src/data.tar.gz" -C "$case_dir/src/data" usr
+  print -r -- "2.0" > "$case_dir/src/debian-binary"
+  (
+    builtin cd "$case_dir/src"
+    ar rS "$case_dir/one.deb" debian-binary control.tar.gz data.tar.gz
+    ar rS "$case_dir/two.deb" debian-binary control.tar.gz data.tar.gz
+  )
+
+  builtin cd "$case_dir"
+  local output
+  output=$( () {
+    emulate -L zsh
+    extract one.deb two.deb
+  } 2>&1 ) || return 1
+
+  [[ $output != *member=* && $output != *dest=* ]] ||
+    { print -u2 -r -- "deb-multiple: stale loop variables were printed"; return 1 }
+  [[ -f one/control/postinst && -f one/data/usr/bin/app &&
+     -f two/control/postinst && -f two/data/usr/bin/app ]] ||
+    { print -u2 -r -- "deb-multiple: both archives were not extracted"; return 1 }
+  print -r -- "PASS: deb (multiple archives)"
+}
+
 {
   print -r -- hello > "$test_dir/plain"
   lzma -c "$test_dir/plain" > "$test_dir/fixture.lzma"
@@ -144,6 +176,7 @@ check_deb_unexpected_member() {
   check_deb_extract target
   check_deb_extract remove
   check_deb_unexpected_member
+  check_deb_multiple
   print 'All extract compressed-file tests passed.'
 } always {
   builtin cd "$original_dir"
