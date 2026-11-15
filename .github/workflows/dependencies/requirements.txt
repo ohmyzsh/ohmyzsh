@@ -3,5 +3,5 @@ charset-normalizer==3.5.2
 idna==3.20
 PyYAML==6.0.3
 requests==2.34.2
-semver==3.1.0
+semver==3.1.1
 urllib3==2.8.0
