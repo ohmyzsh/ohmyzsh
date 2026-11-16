@@ -2,7 +2,7 @@
 # Description
 # -----------
 #
-# sudo or sudo -e (replacement for sudoedit) will be inserted before the command
+# [prefix](by default: sudo) or [prefix](by default: sudo) -e (replacement for sudoedit) will be inserted before the command
 #
 # ------------------------------------------------------------------------------
 # Authors
@@ -12,10 +12,11 @@
 # * Subhaditya Nath <github.com/subnut>
 # * Marc Cornellà <github.com/mcornella>
 # * Carlo Sala <carlosalag@protonmail.com>
+# * Xlebp Rjanoi <github.com/xlebpushek>
 #
 # ------------------------------------------------------------------------------
 
-__sudo-replace-buffer() {
+__prefix-replace-buffer() {
   local old=$1 new=$2 space=${2:+ }
 
   # if the cursor is positioned in the $old part of the text, make
@@ -29,8 +30,8 @@ __sudo-replace-buffer() {
   fi
 }
 
-sudo-command-line() {
-  # If line is empty, get the last run command from history
+prefix-command-line() {
+  # If buffer is empty, use last history entry
   [[ -z $BUFFER ]] && LBUFFER="$(fc -ln -1)"
 
   # Save beginning space
@@ -44,13 +45,13 @@ sudo-command-line() {
     # If $SUDO_EDITOR or $VISUAL are defined, then use that as $EDITOR
     # Else use the default $EDITOR
     local EDITOR=${SUDO_EDITOR:-${VISUAL:-$EDITOR}}
+    local PREFIX=${ZSH_SUDO_PLUGIN_PREFIX:-sudo}
 
-    # If $EDITOR is not set, just toggle the sudo prefix on and off
     if [[ -z "$EDITOR" ]]; then
       case "$BUFFER" in
-        sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "" ;;
-        sudo\ *) __sudo-replace-buffer "sudo" "" ;;
-        *) LBUFFER="sudo $LBUFFER" ;;
+        $PREFIX\ -e\ *) __prefix-replace-buffer "$PREFIX -e" "" ;;
+        $PREFIX\ *) __prefix-replace-buffer "$PREFIX" "" ;;
+        *) LBUFFER="$PREFIX $LBUFFER" ;;
       esac
       return
     fi
@@ -79,30 +80,31 @@ sudo-command-line() {
     if [[ "$realcmd" = (\$EDITOR|$editorcmd|${editorcmd:c}) \
       || "${realcmd:c}" = ($editorcmd|${editorcmd:c}) ]] \
       || builtin which -a "$realcmd" | command grep -Fx -q "$editorcmd"; then
-      __sudo-replace-buffer "$cmd" "sudo -e"
+      __prefix-replace-buffer "$cmd" "$PREFIX -e"
       return
     fi
 
     # Check for editor commands in the typed command and replace accordingly
     case "$BUFFER" in
-      $editorcmd\ *) __sudo-replace-buffer "$editorcmd" "sudo -e" ;;
-      \$EDITOR\ *) __sudo-replace-buffer '$EDITOR' "sudo -e" ;;
-      sudo\ -e\ *) __sudo-replace-buffer "sudo -e" "$EDITOR" ;;
-      sudo\ *) __sudo-replace-buffer "sudo" "" ;;
-      *) LBUFFER="sudo $LBUFFER" ;;
+      $editorcmd\ *) __prefix-replace-buffer "$editorcmd" "$PREFIX -e" ;;
+      \$EDITOR\ *) __prefix-replace-buffer '$EDITOR' "$PREFIX -e" ;;
+      $PREFIX\ -e\ *) __prefix-replace-buffer "$PREFIX -e" "$EDITOR" ;;
+      $PREFIX\ *) __prefix-replace-buffer "$PREFIX" "" ;;
+      *) LBUFFER="$PREFIX $LBUFFER" ;;
     esac
   } always {
     # Preserve beginning space
     LBUFFER="${WHITESPACE}${LBUFFER}"
 
     # Redisplay edit buffer (compatibility with zsh-syntax-highlighting)
-    zle && zle redisplay # only run redisplay if zle is enabled
+    zle && zle redisplay  # only run redisplay if zle is enabled
   }
 }
 
-zle -N sudo-command-line
+zle -N prefix-command-line
 
 # Defined shortcut keys: [Esc] [Esc]
-bindkey -M emacs '\e\e' sudo-command-line
-bindkey -M vicmd '\e\e' sudo-command-line
-bindkey -M viins '\e\e' sudo-command-line
+bindkey -M emacs '\e\e' prefix-command-line
+bindkey -M vicmd '\e\e' prefix-command-line
+bindkey -M viins '\e\e' prefix-command-line
+
