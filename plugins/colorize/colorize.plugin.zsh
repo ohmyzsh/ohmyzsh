@@ -90,6 +90,7 @@ colorize_less() {
         # (e.g. when not scrolled to the bottom) while already the next file will be displayed.
         local LESSOPEN="| zsh -c 'source \"$ZSH_COLORIZE_PLUGIN_PATH\"; \
         ZSH_COLORIZE_TOOL=$ZSH_COLORIZE_TOOL ZSH_COLORIZE_STYLE=$ZSH_COLORIZE_STYLE \
+        ZSH_COLORIZE_CHROMA_FORMATTER=$ZSH_COLORIZE_CHROMA_FORMATTER \
         colorize_cat %s 2> /dev/null'"
 
         # LESSCLOSE will be set to prevent any errors by executing a user script
