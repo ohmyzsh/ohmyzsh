@@ -52,7 +52,7 @@ function push_future() {
   if [[ $#dirhistory_future -ge $DIRHISTORY_SIZE ]]; then
     shift dirhistory_future
   fi
-  if [[ $#dirhistory_future -eq 0 || $dirhistory_futuret[$#dirhistory_future] != "$1" ]]; then
+  if [[ $#dirhistory_future -eq 0 || $dirhistory_future[$#dirhistory_future] != "$1" ]]; then
     dirhistory_future+=($1)
   fi
 }
