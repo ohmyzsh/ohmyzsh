@@ -237,7 +237,7 @@ case "$words[1]" in
  '(-c|--noancestors)'{-c,--noancestors}'[do not include second-generation package ancestors in the scratch org]' \
  '(-i|--clientid)'{-i,--clientid}'[connected app consumer key]' \
  '(-s|--setdefaultusername)'{-s,--setdefaultusername}'[set the created org as the default username]' \
- '(-a|--setalias)'{-a,--setalias}'[set an alias for for the created scratch org]' \
+ '(-a|--setalias)'{-a,--setalias}'[set an alias for the created scratch org]' \
  '(-e|--env)'{-e,--env}'[environment where the scratch org is created: \[sandbox*,virtual,prototype\] (sandbox*,virtual,prototype)]' \
  '(-w|--wait)'{-w,--wait}'[the streaming client socket timeout (in minutes) (default:6, min:2)]' \
  '(-d|--durationdays)'{-d,--durationdays}'[duration of the scratch org (in days) (default:7, min:1, max:30)]' \

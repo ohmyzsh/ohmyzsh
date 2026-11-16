@@ -28,11 +28,24 @@ function _omz {
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
     'reload:Reload the current zsh session'
+    'shellsaver:Launch a whimsical terminal screensaver'
     'shop:Open the Oh My Zsh shop'
     'theme:Manage themes'
     'update:Update Oh My Zsh'
     'version:Show the version'
   )
+
+  if [[ "$words[2]" == (screensaver|shellsaver) ]] && (( CURRENT > 2 )); then
+    _arguments \
+      '1:command:' \
+      '2::scene:(aquarium logo hermit party)' \
+      '--list[List available scenes]' \
+      '--mono[Use the default foreground color]' \
+      '--seconds[Exit after a number of seconds]:seconds:' \
+      '--snapshot[Print a plain-text still]::frame:' \
+      '--help[Show Shellsaver help]'
+    return
+  fi
 
   if (( CURRENT == 2 )); then
     _describe 'command' cmds
@@ -174,12 +187,22 @@ Available commands:
   plugin <command>    Manage plugins
   pr     <command>    Manage Oh My Zsh Pull Requests
   reload              Reload the current zsh session
+  shellsaver [scene]  Launch a Shellsaver (aquarium by default)
   shop                Open the Oh My Zsh shop
   theme  <command>    Manage themes
   update              Update Oh My Zsh
   version             Show the version
 
 EOF
+}
+
+function _omz::shellsaver {
+  command zsh -f "$ZSH/tools/shellsaver.zsh" "$@"
+}
+
+# Hidden alias; only shellsaver is advertised in help and command completion.
+function _omz::screensaver {
+  _omz::shellsaver "$@"
 }
 
 function _omz::changelog {

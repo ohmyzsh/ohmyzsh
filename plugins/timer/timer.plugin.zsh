@@ -6,8 +6,14 @@ __timer_current_time() {
 }
 
 __timer_format_duration() {
-  local mins=$(printf '%.0f' $(($(IFS='.' read int dec <<< "$1"; echo $int) / 60)))
-  local secs=$(printf "%.${TIMER_PRECISION:-1}f" $(($1 - 60 * mins)))
+  local -i precision=${TIMER_PRECISION:-1}
+  local -i scale=$(( 10 ** precision ))
+  # Round to the displayed precision before splitting off the minutes,
+  # so that e.g. 59.97s is shown as 1m0.0s instead of 60.0s
+  local -i units
+  (( units = $1 * scale + 0.5 ))
+  local -i mins=$(( units / (60 * scale) ))
+  local secs=$(printf "%.${precision}f" $(( (units - 60 * scale * mins) / (scale * 1.0) )))
   local duration_str=$(echo "${mins}m${secs}s")
   local format="${TIMER_FORMAT:-/%d}"
   echo "${format//\%d/${duration_str#0m}}"

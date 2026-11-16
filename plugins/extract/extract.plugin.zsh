@@ -101,12 +101,14 @@ EOF
       (*.tar.lz4) lz4 -c -d "$full_path" | tar xvf - ;;
       (*.tar.lrz) (( $+commands[lrzuntar] )) && lrzuntar "$full_path" ;;
       (*.gz) (( $+commands[pigz] )) && pigz -cdk "$full_path" > "${file:t:r}" || gunzip -ck "$full_path" > "${file:t:r}" ;;
-      (*.bz2) (( $+commands[pbzip2] )) && pbzip2 -d "$full_path" || bunzip2 "$full_path" ;;
+      (*.bz2)
+        (( $+commands[pbzip2] )) && pbzip2 -cd "$full_path" > "${file:t:r}" \
+        || bunzip2 -c "$full_path" > "${file:t:r}" ;;
       (*.xz) xzcat "$full_path" > "${file:t:r}" ;;
       (*.lrz) (( $+commands[lrunzip] )) && lrunzip "$full_path" ;;
       (*.lz4) lz4 -d "$full_path" ;;
-      (*.lzma) unlzma "$full_path" ;;
-      (*.z) uncompress "$full_path" ;;
+      (*.lzma) unlzma -c "$full_path" > "${file:t:r}" ;;
+      (*.z) uncompress -c "$full_path" > "${file:t:r}" ;;
       (*.zip|*.war|*.jar|*.ear|*.sublime-package|*.ipa|*.ipsw|*.xpi|*.apk|*.aar|*.whl|*.vsix|*.crx|*.pk3|*.pk4) unzip "$full_path" ;;
       (*.rar)
         if (( $+commands[unrar] )); then

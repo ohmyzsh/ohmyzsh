@@ -371,16 +371,17 @@ zshz() {
   # before the lock is taken, and on Cygwin/MSYS2 a concurrent writer's rename
   # passes through a window in which the datafile is unlinked or delete-
   # pending, so any second syscall on the path (chmod) -- or even the creating
-  # open itself -- can fail spuriously. Append mode (>>) creates the file
-  # without truncating one that a concurrent writer has just renamed into
-  # place. The first attempt is silent; if the file still does not exist
+  # open itself -- can fail spuriously. Forced append redirection (>>|) creates
+  # the file even under NO_CLOBBER with APPEND_CREATE disabled, without
+  # truncating one that a concurrent writer has just renamed into place.
+  # The first attempt is silent; if the file still does not exist
   # afterward (so no concurrent writer supplied it), retry loudly so that real
   # failures (directory permissions, read-only filesystem) reach the user.
   [[ -f $datafile ]] || {
     mkdir -p "${datafile:h}" &&
-      ( umask 077; : >> "$datafile" ) 2> /dev/null ||
+      ( umask 077; : >>| "$datafile" ) 2> /dev/null ||
       [[ -f $datafile ]] ||
-      ( umask 077; : >> "$datafile" )
+      ( umask 077; : >>| "$datafile" )
     # When $ZSHZ_OWNER is set (e.g. under `sudo -s'), hand the freshly created
     # file off to that user immediately, so a query-only invocation can't leave
     # behind a root-owned .z that the normal-user shell can't read. `-h' so a
@@ -525,14 +526,14 @@ zshz() {
         # two-inodes race the stable lockfile exists to prevent.
         # Under $ZSHZ_OWNER all of this runs with root's authority on a path the
         # unprivileged owner controls, and every step follows a symlink: `-f'
-        # tests the target, `>>' creates a dangling one, and flock opens it.
+        # tests the target, `>>|' creates a dangling one, and flock opens it.
         # $datafile survives a planted link only because the `mv' below replaces
         # it outright; the lockfile is deliberately never removed, so a symlink
         # here would persist and be acted on at every subsequent write. Refuse.
         local _lock_owner=${ZSHZ_OWNER:-${_Z_OWNER}}
         [[ -n $_lock_owner && -L $lockfile ]] && return 1
         if [[ ! -f $lockfile ]]; then
-          ( umask 077; : >> "$lockfile" ) 2> /dev/null
+          ( umask 077; : >>| "$lockfile" ) 2> /dev/null
           [[ -n $_lock_owner ]] &&
             ${ZSHZ[CHOWN]} -h "${_lock_owner}:$(id -ng "${_lock_owner}")" "$lockfile"
         fi
@@ -585,13 +586,13 @@ zshz() {
       # Discard entries that are incomplete or incorrectly formatted
       lines=( ${(M)lines:#/*\|[[:digit:]]##[.,]#[[:digit:]]#\|[[:digit:]]##} )
 
-      # Hold the fd in an *unset* scalar, not `integer tmpfd' (which seeds it
-      # with 0). On some Zsh builds, `exec {tmpfd}>|...' refuses to clobber a
-      # parameter already holding a number that names an open fd -- and 0 is
-      # stdin, always open -- yielding "can't clobber parameter tmpfd
-      # containing file descriptor 0". An empty scalar isn't a valid fd, so
-      # the guard never fires. See https://github.com/agkozak/zsh-z/issues/81
+      # Explicitly unset the local scalar before allocating a file descriptor.
+      # Under NO_CLOBBER, even an empty scalar can be treated as fd 0 (stdin),
+      # causing `exec {tmpfd}>|...' to refuse to overwrite it. The `>|' only
+      # overrides file clobber protection, not the descriptor parameter check.
+      # See https://github.com/agkozak/zsh-z/issues/81
       local tmpfd
+      unset tmpfd
       case $action in
         --add)
           # When zf_chmod isn't available (Zsh 4.3.11), avoid the

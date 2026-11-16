@@ -38,6 +38,17 @@ Zsh-z is a drop-in replacement for `rupa/z` and will, by default, use the same d
 
 ## News
 
+### v2.0.1 (October 1, 2026)
+
+- **Database writes now work with `setopt NO_CLOBBER`.** Under `NO_CLOBBER`,
+every database write could fail with `can't clobber parameter tmpfd containing
+file descriptor 0`, even when the database already existed. That error no longer
+occurs ([#81](https://github.com/agkozak/zsh-z/issues/81)).
+- **Database and lockfile creation now works with `setopt NO_CLOBBER`.** With
+`NO_CLOBBER` set and `APPEND_CREATE` unset, Zsh-z could not create a missing
+database or lockfile. It now creates them without changing your shell options or
+losing existing directory history ([#105](https://github.com/agkozak/zsh-z/issues/105)).
+
 ### v2.0 (August 14, 2026)
 
 Version **2.0** is a major step forward, and these are the changes most worth knowing about:
@@ -47,7 +58,7 @@ Version **2.0** is a major step forward, and these are the changes most worth kn
 - **Safer, crash-resistant concurrent writes.** Writes are now guarded by a dedicated, stable lockfile using `zsh/system` file locking, with a bounded wait for lock acquisition (the new [`ZSHZ_LOCK_TIMEOUT`](#settings), default `1` second). Write errors are handled gracefully, and locks are always released even if a write is interrupted. On Cygwin and MSYS2 a write is also retried briefly if Windows refuses it: a virus scanner or the search indexer that opens the database in the instant between its being written and its being moved into place makes the move fail, which used to lose that one directory silently. Zsh-z now retries the move briefly.
 - **Your database file now has `600` permissions** -- readable and writable only by you -- so that other users on a shared system cannot read your directory history ([#92](https://github.com/agkozak/zsh-z/issues/92)). On Zsh 5+ this uses the in-process `zf_chmod` builtin; on Zsh 4.3.11 it uses a `umask`-in-a-subshell technique that avoids the fork-and-exec of an external `chmod`.
 - **`COMPLETE_ALIASES` works automatically in normal setups.** Tab completion no longer breaks when you have `setopt COMPLETE_ALIASES` enabled. Zsh-z registers the alias automatically on the first Tab press, so the manual `compdef` line that earlier versions required is no longer necessary. [See below](#complete_aliases).
-- **Fixed a `can't clobber parameter tmpfd` error on some Zsh builds.** On certain Zsh builds, every database write could fail with `can't clobber parameter tmpfd containing file descriptor 0`, leaving an error at each new prompt. The file descriptor used for the temporary database file is now held in an unset scalar rather than one seeded with `0`, so the write never trips Zsh's file-descriptor-clobber guard ([#81](https://github.com/agkozak/zsh-z/issues/81)).
+- **Fixed a `can't clobber parameter tmpfd` error on some Zsh builds.** On certain Zsh builds, every database write could fail with `can't clobber parameter tmpfd containing file descriptor 0`, leaving an error at each new prompt ([#81](https://github.com/agkozak/zsh-z/issues/81)). *Correction:* the error occurs under `setopt NO_CLOBBER`, and the v2.0 change did not fix it there; v2.0.1 does.
 - **A misconfigured database file no longer closes your shell -- or nags you at every prompt.** When `ZSHZ_DATA` points at a directory, or names a file without a directory, Zsh-z now reports the problem and returns instead of calling `exit`. The per-prompt `--add` stays quiet about it, so you are told once, when you actually run `z`, rather than at every prompt ([#103](https://github.com/agkozak/zsh-z/issues/103); props @ahjota).
 - **`z -x` can now remove the entry for a directory that no longer exists -- and can no longer crash Zsh 4.3.11.** The removal target used to have to exist on disk, so a database entry whose directory had been deleted -- exactly the entry you most want gone -- could not be removed. `z -x /deleted/dir` (and `z -xR`) now canonicalizes the argument without requiring it to exist, resolving symlinks in as much of the path as is still present. The same change fixes a crash on Zsh 4.3.11, where an upstream bug makes `${x:A}` segfault when the top-level component of the path is missing: `z -x /gone/sub` -- or a `ZSHZ_DATA` pointing into a missing top-level directory -- could kill the shell there.
 - **More robust startup and operation.** A version check on an unsupported Zsh no longer risks exiting your interactive shell.

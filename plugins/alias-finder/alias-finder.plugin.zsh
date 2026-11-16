@@ -1,5 +1,5 @@
 alias-finder() {
-  local cmd=" " exact="" longer="" cheaper="" wordEnd="'?$" finder="" filter=""
+  local c="" cmd=" " exact="" longer="" cheaper="" wordEnd="'?$" finder="" filter="" cmdLen=""
 
   # build command and options
   for c in "$@"; do

@@ -36,7 +36,8 @@ alias eframe='emacsclient --alternate-editor="" --create-frame'
 
 # Emacs ANSI Term tracking
 local excluded_terms=(vterm ghostel)
-if [[ -n "$INSIDE_EMACS" ]] && (( ! ${excluded_terms[(Ie)${INSIDE_EMACS%%,*}]} )); then
+local current_term="${INSIDE_EMACS%%,*}"
+if [[ -n "$INSIDE_EMACS" ]] && (( ! ${excluded_terms[(Ie)$current_term]} )); then
   chpwd_emacs() { print -P "\033AnSiTc %d"; }
   print -P "\033AnSiTc %d"    # Track current working directory
   print -P "\033AnSiTu %n"    # Track username

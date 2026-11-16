@@ -15,8 +15,8 @@ plugins=(... uv)
 | :---- | ---------------------------------------------------------------------------------------- | :-------------------------------------------------------------------- |
 | uva   | `uv add`                                                                                 | Add packages to the project                                           |
 | uvexp | `uv export --format requirements-txt --no-hashes --output-file requirements.txt --quiet` | Export the lock file to `requirements.txt`                            |
-| uvi   | `uv init`                                                                                | Initialize a new project in current workspace and environment.        |
-| uvinw | `uv init --no-workspace`                                                                 | Initialize a new project in a new workspace and environment           |
+| uvi   | `uv init`                                                                                | Initialize a new project                                               |
+| uvinw | `uv init --no-workspace`                                                                 | Initialize a standalone project without joining a parent workspace   |
 | uvl   | `uv lock`                                                                                | Lock the dependencies                                                 |
 | uvlr  | `uv lock --refresh`                                                                      | Rebuild the lock file without upgrading dependencies                  |
 | uvlu  | `uv lock --upgrade`                                                                      | Lock the dependencies to the newest compatible versions               |

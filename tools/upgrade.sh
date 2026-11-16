@@ -311,6 +311,9 @@ if perform_update; then
     printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
     printf '\n'
     printf "${BLUE}%s${RESET}\n\n" "$message"
+    printf "${YELLOW}${BOLD}★${RESET} ${BLUE}${BOLD}%s %s${RESET}\n" \
+      "Enjoying Oh My Zsh? Star us on" \
+      "$(fmt_link GitHub https://github.com/ohmyzsh/ohmyzsh)"
     printf "${BLUE}${BOLD}%s %s %s %s${RESET}\n" \
       "Follow along on X" "($(fmt_link @ohmyzsh https://x.com/ohmyzsh))" \
       "or Bluesky" "($(fmt_link @ohmyz.sh https://bsky.app/profile/ohmyz.sh))"
