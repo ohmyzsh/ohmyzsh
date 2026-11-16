@@ -10,11 +10,33 @@ if [[ ! -f "$ZSH_CACHE_DIR/completions/_kubectl" ]]; then
   _comps[kubectl]=_kubectl
 fi
 
+# Generate the completion file in the background only if the file is missing
+# or empty, or if the kubectl binary changed since the last generation. Compare
+# the resolved path, modification time and size of the binary with a stamp.
+# Do not use `-nt`: package managers can keep the build time of a binary, so an
+# upgraded binary can look older than the completion file.
 zmodload -F zsh/files b:zf_mv
+zmodload -F zsh/stat b:zstat
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._kubectl"
-  zf_mv -f -- =( kubectl completion zsh 2> /dev/null ) "$ZSH_CACHE_DIR/completions/_kubectl"
-} &|
+  local completion_file="$ZSH_CACHE_DIR/completions/_kubectl"
+  local stamp_file="$ZSH_CACHE_DIR/completions/.kubectl.stamp"
+  local binary="${commands[kubectl]:A}" current_stamp cached_stamp
+  local -A binary_stat
+  zstat -H binary_stat -- "$binary" 2> /dev/null
+  current_stamp="$binary $binary_stat[mtime] $binary_stat[size]"
+
+  if [[ -s "$completion_file" && -r "$stamp_file" ]] \
+    && read -r cached_stamp < "$stamp_file" \
+    && [[ "$cached_stamp" == "$current_stamp" ]]; then
+    return
+  fi
+
+  () {
+    local TMPPREFIX="$ZSH_CACHE_DIR/completions/._kubectl"
+    zf_mv -f -- =( kubectl completion zsh 2> /dev/null ) "$completion_file" \
+      && print -r -- "$current_stamp" >| "$stamp_file"
+  } &|
+}
 
 # This command is used a LOT both below and in daily life
 alias k=kubectl
