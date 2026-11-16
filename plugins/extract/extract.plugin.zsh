@@ -97,6 +97,11 @@ EOF
         && tar --zstd -xvf "$full_path" \
         || zstdcat "$full_path" | tar xvf - ;;
       (*.tar) tar xvf "$full_path" ;;
+      # `tar cf - dir | compress > dir.tar.Z`: the plain `.Z` arm below only decompresses the
+      # stream back to `dir.tar`, so the combined form has to untar it in one step. `.taz` is the
+      # historic name for the same file, next to `.tgz`/`.tbz`/`.tlz`/`.txz`/`.tzst`. Matching is
+      # on the lowercased name, so `.tar.Z` lands here too.
+      (*.tar.z|*.taz) uncompress -c "$full_path" | tar xvf - ;;
       (*.tar.lz) (( $+commands[lzip] )) && tar xvf "$full_path" ;;
       (*.tar.lz4) lz4 -c -d "$full_path" | tar xvf - ;;
       (*.tar.lrz) (( $+commands[lrzuntar] )) && lrzuntar "$full_path" ;;
