@@ -96,6 +96,8 @@ plugins=(... git)
 | `gg`                   | `git gui citool`                                                                                                                |
 | `gga`                  | `git gui citool --amend`                                                                                                        |
 | `ghh`                  | `git help`                                                                                                                      |
+| `ghsr`                 | `git history reword`                                                                                                            |
+| `ghss`                 | `git history split`                                                                                                             |
 | `glgg`                 | `git log --graph`                                                                                                               |
 | `glgga`                | `git log --graph --decorate --all`                                                                                              |
 | `glgm`                 | `git log --graph --max-count=10`                                                                                                |
