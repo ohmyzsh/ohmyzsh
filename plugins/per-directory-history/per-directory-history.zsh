@@ -112,6 +112,9 @@ function _per-directory-history-change-directory() {
     #read history in new file
     if [[ -e $_per_directory_history_directory ]]; then
       fc -R $_per_directory_history_directory
+      # -p: push the new directory's history file as the active history context,
+      # so that the history is kept up to date on every directory change.
+      fc -p $_per_directory_history_directory
     fi
   fi
 }
@@ -153,6 +156,7 @@ function _per-directory-history-set-directory-history() {
   HISTSIZE=$original_histsize
   if [[ -e "$_per_directory_history_directory" ]]; then
     fc -R "$_per_directory_history_directory"
+    # -p: push the directory's history file as the active history context.
     fc -p "$_per_directory_history_directory"
   fi
 }
@@ -164,6 +168,7 @@ function _per-directory-history-set-global-history() {
   HISTSIZE=$original_histsize
   if [[ -e "$_per_directory_history_global" ]]; then
     fc -R "$_per_directory_history_global"
+    # -p: push the global history file as the active history context.
     fc -p "$_per_directory_history_global"
   fi
 }
