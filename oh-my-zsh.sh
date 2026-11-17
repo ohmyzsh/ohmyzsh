@@ -257,15 +257,39 @@ unset zcompdump_revision zcompdump_fpath zcompdump_refresh
 unset -f _omz_compdump_has_metadata
 
 # zcompile the completion dump file if the .zwc is older or missing.
-# Test that first so the lock directory and zrecompile are skipped when it's fresh.
+# Test that first to skip locking and compilation when it is fresh.
 if [[ ! "${ZSH_COMPDUMP}.zwc" -nt "$ZSH_COMPDUMP" ]]; then
-  # A shell killed during zrecompile leaves its lock, and then no shell compiles the dump again.
-  # zrecompile takes seconds, so a lock that is older than 2 minutes has no owner.
-  () { (( ! $# )) || command rm -rf -- "$@" } "${ZSH_COMPDUMP}.lock"(N/mm+2)
-  if command mkdir "${ZSH_COMPDUMP}.lock" 2>/dev/null; then
-    zrecompile -q -p "$ZSH_COMPDUMP"
-    command rm -rf "$ZSH_COMPDUMP.zwc.old" "${ZSH_COMPDUMP}.lock"
-  fi
+  () {
+    local lockdir="${ZSH_COMPDUMP}.lock" lockfile="${ZSH_COMPDUMP}.lockfile"
+    local create_fd lock_fd=
+
+    if zmodload zsh/system 2>/dev/null && zsystem supports flock; then
+      # Keep the file in place so concurrent shells lock the same inode.
+      if [[ ! -f "$lockfile" ]] &&
+         sysopen -w -m 600 -o creat,excl -u create_fd -- "$lockfile" 2>/dev/null; then
+        exec {create_fd}>&-
+      fi
+      [[ -f "$lockfile" ]] && zsystem flock -t 0 -f lock_fd -- "$lockfile" 2>/dev/null || return 0
+    fi
+
+    {
+      [[ ! "${ZSH_COMPDUMP}.zwc" -nt "$ZSH_COMPDUMP" ]] || return 0
+
+      # Older Oh My Zsh versions use the directory lock. Only recover it while holding the file lock.
+      if [[ -n "$lock_fd" ]]; then
+        local -a stale_lock=( "$lockdir"(N/ms+120) )
+        if (( ${#stale_lock} )); then
+          command rmdir -- "${stale_lock[@]}" 2>/dev/null
+        fi
+      fi
+      if command mkdir -- "$lockdir" 2>/dev/null; then
+        zrecompile -q -p "$ZSH_COMPDUMP"
+        command rm -rf -- "$ZSH_COMPDUMP.zwc.old" "$lockdir"
+      fi
+    } always {
+      [[ -z "$lock_fd" ]] || zsystem flock -u "$lock_fd"
+    }
+  }
 fi
 
 _omz_source() {
