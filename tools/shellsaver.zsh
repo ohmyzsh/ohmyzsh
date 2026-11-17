@@ -7,7 +7,7 @@
   unsetopt multibyte
 
   integer tick=0 width=96 height=28 resized=1 active=0 seconds_limit=0
-  integer mono=0 snapshot=0 scene_selected=0
+  integer mono=0 snapshot=0 scene_selected=0 alt_screen=0 console_mode=0
   local saved_tty='' key='' blank='' result='' scene=''
   local -a canvas inks palette
 
@@ -553,10 +553,19 @@ Nothing is installed or enabled automatically.'
   local capability
   for capability in smcup rmcup home clear civis cnorm sgr0 el; do
     if [[ -z ${terminfo[$capability]} ]]; then
-      print -u2 -r -- "omz shellsaver: terminal lacks $capability; try --snapshot"
+      if [[ $capability == smcup || $capability == rmcup ]]; then
+        if [[ -n ${terminfo[home]} && -n ${terminfo[clear]} && -n ${terminfo[civis]} && -n ${terminfo[cnorm]} && -n ${terminfo[el]} ]]; then
+          console_mode=1
+          break
+        fi
+      fi
+      print -u2 -r -- "omz shellsaver: terminal lacks $capability and no in-place console fallback is available; try --snapshot"
       exit 1
     fi
   done
+  if (( !console_mode )); then
+    alt_screen=1
+  fi
 
   if (( mono || ${+NO_COLOR} || ${terminfo[colors]:-0} < 8 )); then
     palette=( '' '' '' '' '' '' '' '' '' )
@@ -594,7 +603,11 @@ Nothing is installed or enabled automatically.'
     # Keep active set until both the screen and terminal modes are restored.
     trap '' INT TERM HUP QUIT TSTP WINCH
     (( active )) || return 0
-    print -rn -- "${terminfo[sgr0]}${terminfo[cnorm]}${terminfo[rmcup]}"
+    if (( console_mode )); then
+      print -rn -- "${terminfo[sgr0]}${terminfo[cnorm]}"
+    else
+      print -rn -- "${terminfo[sgr0]}${terminfo[cnorm]}${terminfo[rmcup]}"
+    fi
     command stty "$saved_tty" 2>/dev/null
     active=0
   }
@@ -627,7 +640,11 @@ Nothing is installed or enabled automatically.'
   {
     active=1
     command stty -echo -icanon -ixon min 1 time 0 || exit 1
-    print -rn -- "${terminfo[smcup]}${terminfo[civis]}"
+    if (( alt_screen )); then
+      print -rn -- "${terminfo[smcup]}${terminfo[civis]}"
+    else
+      print -rn -- "${terminfo[home]}${terminfo[clear]}${terminfo[civis]}"
+    fi
     float started=$EPOCHREALTIME deadline wait_for next_size_check=0
     while true; do
       # Zsh can defer WINCH while a timed read is active. Poll at 2 Hz as well.
@@ -638,6 +655,9 @@ Nothing is installed or enabled automatically.'
       tick=$(( (EPOCHREALTIME-started)*10 ))
       if (( seconds_limit && EPOCHREALTIME-started >= seconds_limit )); then break; fi
       deadline=$(( EPOCHREALTIME + 0.1 ))
+      if (( console_mode )); then
+        print -rn -- "${terminfo[home]}${terminfo[clear]}"
+      fi
       _zshell_scene
       _zshell_render
       print -rn -- "$result"
