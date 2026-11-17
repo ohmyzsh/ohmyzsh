@@ -112,6 +112,37 @@ plugins=(... hcloud)
 | hcst       | `hcloud server-type list`                 | List all server types                                         |
 | hcit       | `hcloud image list --type system`         | List all system images                                        |
 
+## Prompt function
+
+This plugin provides `hcloud_prompt_info` which can be added to your prompt to display the current Hetzner Cloud context.
+
+- If `HCLOUD_TOKEN` environment variable is set, it displays `HCLOUD_TOKEN` (indicating direct token usage)
+- Otherwise, it displays the active context name
+
+### Usage
+
+Add `$(hcloud_prompt_info)` to your `PROMPT` or `RPROMPT` in your `.zshrc`:
+
+```zsh
+RPROMPT='$(hcloud_prompt_info)'
+```
+
+### Theme variables
+
+| Variable                       | Default         | Description                                      |
+| :----------------------------- | :-------------- | :----------------------------------------------- |
+| `ZSH_THEME_HCLOUD_PREFIX`      | `<hcloud:`      | Prefix before the context name                   |
+| `ZSH_THEME_HCLOUD_SUFFIX`      | `>`             | Suffix after the context name                    |
+| `ZSH_THEME_HCLOUD_TOKEN_TEXT`  | `HCLOUD_TOKEN`  | Text shown when `HCLOUD_TOKEN` env var is set    |
+
+### Example with custom styling
+
+```zsh
+ZSH_THEME_HCLOUD_PREFIX="%{$fg[blue]%}hcloud:("
+ZSH_THEME_HCLOUD_SUFFIX=")%{$reset_color%}"
+RPROMPT='$(hcloud_prompt_info)'
+```
+
 ## Requirements
 
 This plugin requires the [Hetzner Cloud CLI](https://github.com/hetznercloud/cli) to be installed.
