@@ -86,8 +86,7 @@ print(unquote_plus(sys.stdin.read()))
     function pp_json() {
       ruby -e '
         require "json"
-        require "yaml"
-        puts JSON.parse(STDIN.read).to_yaml
+        puts JSON.pretty_generate(JSON.parse(STDIN.read), indent: "    ")
       '
     }
     function is_json() {
