@@ -5,12 +5,12 @@ function my_git_prompt() {
   STATUS=""
 
   # is branch ahead?
-  if $(echo "$(git log origin/$(git_current_branch)..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
+  if $(echo "$(git log @{upstream}..HEAD 2> /dev/null)" | grep '^commit' &> /dev/null); then
     STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_AHEAD"
   fi
 
   # is branch behind?
-  if $(echo "$(git log HEAD..origin/$(git_current_branch) 2> /dev/null)" | grep '^commit' &> /dev/null); then
+  if $(echo "$(git log HEAD..@{upstream} 2> /dev/null)" | grep '^commit' &> /dev/null); then
     STATUS="$STATUS$ZSH_THEME_GIT_PROMPT_BEHIND"
   fi
 
