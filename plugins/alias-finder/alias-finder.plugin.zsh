@@ -19,11 +19,15 @@ alias-finder() {
   zstyle -t ':omz:plugins:alias-finder' cheaper && cheaper=true
 
   # format cmd for grep
-  ## - replace newlines with spaces
+  ## - replace newlines and multiple spaces with one space
   ## - trim both ends
-  ## - replace multiple spaces with one space
   ## - add escaping character to special characters
-  cmd=$(echo -n "$cmd" | tr '\n' ' ' | xargs | tr -s '[:space:]' | sed 's/[].\|$(){}?+*^[]/\\&/g')
+  setopt localoptions extendedglob
+  cmd=${cmd//[[:space:]]##/ }
+  cmd=${cmd# }
+  cmd=${cmd% }
+  local esc_pattern='(#m)[][.\\|$(){}?+*^]' MATCH MBEGIN MEND
+  cmd=${cmd//${~esc_pattern}/\\$MATCH}
 
   if [[ $longer == true ]]; then
     wordEnd="" # remove wordEnd to find longer aliases
@@ -35,7 +39,7 @@ alias-finder() {
 
     # make filter to find only shorter results than current cmd
     if [[ $cheaper == true ]]; then
-      cmdLen=$(echo -n "$cmd" | wc -c)
+      cmdLen=${#cmd}
       if [[ $cmdLen -le 1 ]]; then
         return
       fi
