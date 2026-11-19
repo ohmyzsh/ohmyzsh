@@ -46,10 +46,10 @@ Encode a file's contents to base64 and save output to text file.
 - From parameter
 
   ```console
-  $ encodefile64 ohmyzsh.icn
-  ohmyzsh.icn's content encoded in base64 and saved as ohmyzsh.icn.txt
+  $ encodefile64 oh-my-zsh
+  oh-my-zsh's content encoded in base64 and saved as oh-my-zsh.txt
   $ ef64 "oh-my-zsh"
-  ohmyzsh.icn's content encoded in base64 and saved as ohmyzsh.icn.txt
+  oh-my-zsh's content encoded in base64 and saved as oh-my-zsh.txt
   ```
 
 ### Decoding
