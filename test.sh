@@ -1,3 +1,5 @@
 #!/usr/bin/zsh
 
-env TERM=vt100 zsh -ic 'source oh-my-zsh.sh; omz shellsaver aquarium --seconds 10'
+ZSH=/home/yaj/Desktop/ohmyzsh 
+source "$ZSH/oh-my-zsh.sh"
+omz shellsaver party --term --seconds 5
