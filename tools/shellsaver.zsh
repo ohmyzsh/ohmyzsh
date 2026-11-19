@@ -7,7 +7,7 @@
   unsetopt multibyte
 
   integer tick=0 width=96 height=28 resized=1 active=0 seconds_limit=0
-  integer mono=0 snapshot=0 scene_selected=0 alt_screen=0 fallback_mode=0
+  integer mono=0 snapshot=0 scene_selected=0 alt_screen=0 fallback_mode=0 term_mode=0
   integer color_count=0 linux_console=0
   local saved_tty='' key='' blank='' result='' scene=''
   local -a canvas inks palette
@@ -24,6 +24,7 @@ party           A rainbow terminal stage and a crowd of dancing shell fans.'
 
 Usage: omz shellsaver [aquarium|logo|hermit|party] [--mono] [--seconds N]
        omz shellsaver [aquarium|logo|hermit|party] --snapshot [FRAME]
+       omz shellsaver [aquarium|logo|hermit|party] --term [--seconds N]
        omz shellsaver --list
 '
     _zshell_list
@@ -33,6 +34,7 @@ Any key returns to the shell. Ctrl-C also exits safely.
 --mono          Use the terminal default foreground color.
 --seconds N     Exit automatically after 1-3600 seconds.
 --snapshot      Print a still at 96 columns x 28 rows (no terminal needed).
+--term          Force the ncurses-style fallback: clear, in-place redraw, restore stty.
 
 Requires Zsh 5.8+, stty, and a terminal in interactive mode.
 Uses the alternate screen when supported, otherwise clears and redraws in place.
@@ -56,6 +58,7 @@ Nothing is installed or enabled automatically.'
       --help|-h) _zshell_usage; exit 0 ;;
       --list) _zshell_list; exit 0 ;;
       --mono) mono=1 ;;
+      --term) term_mode=1 ;;
       --seconds)
         shift
         if [[ $1 != <1-3600> ]]; then
@@ -554,8 +557,11 @@ Nothing is installed or enabled automatically.'
   zmodload zsh/terminfo || exit 1
   zmodload zsh/datetime || exit 1
 
-  # Prefer a real alternate screen, or a terminfo/xterm-compatible terminal.
-  if [[ -n ${terminfo[smcup]} && -n ${terminfo[rmcup]} ]]; then
+  # Prefer a real alternate screen, unless --term explicitly requests the
+  # ncurses-style console fallback (notably useful on Linux TTYs).
+  if (( term_mode )); then
+    alt_screen=0 fallback_mode=1 linux_console=1
+  elif [[ -n ${terminfo[smcup]} && -n ${terminfo[rmcup]} ]]; then
     alt_screen=1
   elif command -v tput >/dev/null 2>&1 &&
        command tput smcup >/dev/null 2>&1 &&

@@ -260,6 +260,7 @@ Use `omz help` to discover the command, and Tab to complete scene names and opti
 
 ```zsh
 omz shellsaver aquarium --seconds 30  # Stop automatically after 30 seconds
+omz shellsaver party --term           # Force console/TTY fallback mode
 omz shellsaver logo --mono            # Use the terminal's foreground color
 omz shellsaver --list                 # List scenes (aquarium is the default)
 omz shellsaver --help                 # Show all scenes and options
