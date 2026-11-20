@@ -213,6 +213,15 @@ alias gc!='git commit --verbose --amend'
 alias gcn='git commit --verbose --no-edit'
 alias gcn!='git commit --verbose --no-edit --amend'
 alias gcf='git config --list'
+
+function gcar() {
+  if [[ $# == 0 ]]; then
+    git config remotes.all-remotes
+  else
+    git config remotes.all-remotes "${(j: :)@}"
+  fi
+}
+
 alias gcfu='git commit --fixup'
 alias gdct='git describe --tags $(git rev-list --tags --max-count=1)'
 alias gd='git diff'
@@ -337,6 +346,7 @@ is-at-least 2.30 "$git_version" \
   && alias gpsupf='git push --set-upstream origin $(git_current_branch) --force-with-lease --force-if-includes' \
   || alias gpsupf='git push --set-upstream origin $(git_current_branch) --force-with-lease'
 alias gpv='git push --verbose'
+alias gpar='git push all-remotes'
 alias gpoat='git push origin --all && git push origin --tags'
 alias gpod='git push origin --delete'
 alias ggpush='git push origin "$(git_current_branch)"'

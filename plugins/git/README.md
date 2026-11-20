@@ -79,6 +79,7 @@ plugins=(... git)
 | `gcss`                 | `git commit -S -s`                                                                                                              |
 | `gcssm`                | `git commit -S -s -m`                                                                                                           |
 | `gcf`                  | `git config --list`                                                                                                             |
+| `gcar`                 | `git config remotes.all-remotes`                                                                                                |
 | `gcfu`                 | `git commit --fixup`                                                                                                            |
 | `gdct`                 | `git describe --tags $(git rev-list --tags --max-count=1)`                                                                      |
 | `gd`                   | `git diff`                                                                                                                      |
@@ -147,6 +148,7 @@ plugins=(... git)
 | `gpsupf`               | On Git >= 2.30: `git push --set-upstream origin $(git_current_branch) --force-with-lease --force-if-includes`                   |
 | `gpsupf`               | On Git < 2.30: `git push --set-upstream origin $(git_current_branch) --force-with-lease`                                        |
 | `gpv`                  | `git push --verbose`                                                                                                            |
+| `gpar`                 | `git push all-remotes`                                                                                                          |
 | `gpoat`                | `git push origin --all && git push origin --tags`                                                                               |
 | `gpod`                 | `git push origin --delete`                                                                                                      |
 | `ggpush`               | `git push origin "$(git_current_branch)"`                                                                                       |
