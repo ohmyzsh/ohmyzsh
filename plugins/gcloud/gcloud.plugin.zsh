@@ -7,6 +7,7 @@ if [[ -z "${CLOUDSDK_HOME}" ]]; then
   search_locations=(
     "$HOME/google-cloud-sdk"
     "/usr/local/share/google-cloud-sdk"
+    "/usr/local/google-cloud-sdk"
     "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk"
     "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk"
     "/opt/homebrew/share/google-cloud-sdk"
