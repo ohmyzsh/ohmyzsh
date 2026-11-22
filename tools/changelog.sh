@@ -119,12 +119,13 @@ function parse-commit {
   }
 
   # Return truncated hash of the reverted commit
+  # (12 characters, to match the commit hashes from `git log --abbrev=12`)
   function commit:is-revert {
     local subject="$1" body="$2"
 
     if [[ "$subject" = Revert* && \
       "$body" =~ "This reverts commit ([^.]+)\." ]]; then
-      echo "${match[1]:0:7}"
+      echo "${match[1]:0:12}"
     else
       return 1
     fi
