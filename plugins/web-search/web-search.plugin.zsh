@@ -53,10 +53,11 @@ function web_search() {
 
   # search or go to main page depending on number of arguments passed
   if [[ $# -gt 1 ]]; then
-    # if search goes in the query string ==> space as +, otherwise %20
+    # if search goes in the query string ==> space as + and escape reserved
+    # characters like & and +, otherwise %20
     # see https://stackoverflow.com/questions/1634271/url-encoding-the-space-character-or-20
     local param="-P"
-    [[ "$urls[$1]" == *\?*= ]] && param=""
+    [[ "$urls[$1]" == *\?*= ]] && param="-r"
 
     # build search url:
     # join arguments passed with '+', then append to search engine URL
