@@ -621,9 +621,9 @@ Nothing is installed or enabled automatically.'
     trap '' INT TERM HUP QUIT TSTP WINCH
     (( active )) || return 0
     if (( alt_screen )); then
-      print -rn -- "${terminfo[sgr0]:-$'\\e[0m'}${terminfo[cnorm]:-$'\\e[?25h'}${terminfo[rmcup]:-}"
+      print -rn -- "${terminfo[sgr0]:-$'\e[0m'}${terminfo[cnorm]:-$'\e[?25h'}${terminfo[rmcup]:-}"
     elif (( fallback_mode )); then
-      print -rn -- $'\\e[2J\\e[H\\e[?25h\\e[0m'
+      print -rn -- $'\e[2J\e[H\e[?25h\e[0m'
     fi
     command stty "$saved_tty" 2>/dev/null
     active=0
@@ -646,9 +646,9 @@ Nothing is installed or enabled automatically.'
     resized=0
     if (( first || old_width != width || old_height != height )); then
       if (( fallback_mode )); then
-        print -rn -- $'\\e[2J\\e[H'
+        print -rn -- $'\e[2J\e[H'
       else
-        print -rn -- "${terminfo[clear]:-$'\\e[2J\\e[H'}"
+        print -rn -- "${terminfo[clear]:-$'\e[2J\e[H'}"
       fi
     fi
     return 0
@@ -669,7 +669,7 @@ Nothing is installed or enabled automatically.'
     if (( alt_screen )); then
       print -rn -- "${terminfo[smcup]}${terminfo[civis]:-}"
     else
-      print -rn -- $'\\e[2J\\e[H\\e[?25l'
+      print -rn -- $'\e[2J\e[H\e[?25l'
     fi
     float started=$EPOCHREALTIME deadline wait_for next_size_check=0
     while true; do
