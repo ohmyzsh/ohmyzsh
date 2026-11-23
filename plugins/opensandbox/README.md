@@ -34,8 +34,19 @@ are Running, it prints an error on stderr and exits with status 1.
 ## Completion
 
 `osb` ships its own Click-based completion. The plugin caches the output
-of `_OSB_COMPLETE=zsh_source osb` in `$ZSH_CACHE_DIR/completions/_osb`
+of `_OSB_COMPLETE=zsh_source osb` in `$ZSH_CACHE_DIR/completions/_osb_completion`
 on every shell start (uv-style, atomic move via `zf_mv`); `compinit`
 binds it through the file's `#compdef osb` header. On the very first run
-the file does not exist yet, so the plugin autoloads `_osb` and registers
-the binding once; later shells pick it up from `fpath`.
+the file does not exist yet, so the plugin autoloads it and registers the
+binding once; later shells pick it up from `fpath`.
+
+The plugin additionally wraps that generated completer (`_osb`) and adds
+live sandbox IDs with their state at the positions where the CLI expects
+a `SANDBOX_ID` (e.g. `osb terminal <ID>`, `osb sandbox kill <ID>`) — the
+generated completion offers nothing there. No subcommand or position
+knowledge of the CLI is duplicated: a subcommand that is not covered
+yields no IDs, never broken completion.
+
+> **Upstream:** native ID completion belongs in the CLI itself — tracked
+> in an [OpenSandbox issue](ISSUE_URL); once the CLI ships it, the
+> `_osb` bridge can be dropped and the plugin stays uv-style only.

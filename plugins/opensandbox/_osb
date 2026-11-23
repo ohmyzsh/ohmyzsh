@@ -1,0 +1,89 @@
+# _osb — sandbox-ID completion bridge for the OpenSandbox CLI (`osb`).
+# Subcommand/option completion comes 100% from the CLI-generated file
+# $ZSH_CACHE_DIR/completions/_osb_completion (opensandbox.plugin.zsh);
+# this completer only adds live sandbox IDs where the CLI expects a
+# SANDBOX_ID and emits no candidates there (verified against v1.2.1).
+# No CLI structure is duplicated: unknown subcommands yield no IDs,
+# never broken completion. Upstream: OpenSandbox issue (ISSUE_URL).
+
+_osb_sandbox_ids() {
+  # Fill `reply` with live sandboxes as "id:state" (_describe shows the
+  # state); silent on any error, at most one CLI call per 5 s (cached in
+  # $ZSH_CACHE_DIR/opensandbox/).
+  (( $+commands[osb] )) || return 0
+  [[ -n "${ZSH_CACHE_DIR:-}" ]] || return 0
+  local cache_base="$ZSH_CACHE_DIR/opensandbox"
+  local ids_file="$cache_base/ids" stamp_file="$cache_base/ids.stamp"
+  local -a pairs lines
+  local now age=999 stamp=""; now=$(date +%s 2>/dev/null)
+  [[ -f "$stamp_file" && -n "$now" ]] && { stamp=$(< "$stamp_file"); (( ${#stamp} )) && age=$(( now - stamp )); }
+  if (( age > 5 )) || [[ ! -f "$ids_file" ]]; then
+    mkdir -p -- "$cache_base" 2>/dev/null
+    local json=$(osb sandbox list -o json 2>/dev/null)
+    if [[ -n "$json" ]]; then
+      if (( $+commands[jq] )); then
+        pairs=("${(@f)$( jq -r '.items[] | "\(.id)\t\(.status.state)"' <<< "$json" 2>/dev/null )}")
+      elif (( $+commands[python3] )); then
+        pairs=("${(@f)$( python3 -c '
+import json, sys
+try:
+    data = json.load(sys.stdin)
+    for item in data.get("items", []):
+        sid = item.get("id", "")
+        state = item.get("status", {}).get("state", "")
+        if sid:
+            print(f"{sid}\t{state}")
+except Exception:
+    pass
+' <<< "$json" 2>/dev/null )}")
+      fi
+      [[ -n "${pairs[*]-}" ]] || pairs=()
+      (( ${#pairs} )) && [[ -z "${pairs[-1]}" ]] && unset "pairs[-1]"
+      (( ${#pairs} )) && printf '%s\n' "${pairs[@]}" >| "$ids_file" 2>/dev/null
+    fi
+    # Refresh the stamp even on failure: bounds the CLI call to 5 s.
+    [[ -n "$now" ]] && print -r -- "$now" >| "$stamp_file" 2>/dev/null
+  fi
+  [[ -f "$ids_file" ]] || return 0
+  lines=("${(@f)$(< "$ids_file")}")
+  (( ${#lines} )) || return 0
+  local entry state
+  for entry in "${lines[@]}"; do
+    state="${entry#*$'\t'}"
+    entry="${entry%%$'\t'*}"
+    [[ -n "$entry" ]] || continue
+    [[ "$state" != "$entry" ]] || state=""
+    reply+=("$entry${state:+:$state}")
+  done
+}
+
+_osb_prev_word_is_id_position() {
+  # True when the typed words are "osb <verb>" and <verb> takes a
+  # SANDBOX_ID first; unknown ID-taking subcommands are a no-op here.
+  local -a id_verbs
+  id_verbs=(terminal 'sandbox get' 'sandbox health' 'sandbox kill'
+    'sandbox pause' 'sandbox resume' 'sandbox renew' 'sandbox endpoint'
+    'sandbox metrics' 'command run' 'command status' 'command logs'
+    'command interrupt' 'command session create' 'command session delete'
+    'command session run' 'file cat' 'file chmod' 'file download'
+    'file info' 'file mkdir' 'file mv' 'file replace' 'file rm'
+    'file rmdir' 'file search' 'file upload' 'file write'
+    'snapshot create' 'egress get' 'egress patch'
+    'diagnostics context' 'diagnostics events' 'diagnostics logs'
+    'devops inspect' 'devops summary')
+  (( CURRENT > 2 )) || return 1
+  # Words typed so far (the empty current word is excluded).
+  local prefix="${(j: :)words[1,CURRENT-1]}"
+  local verb
+  for verb in "${id_verbs[@]}"; do
+    [[ "$prefix" == "osb $verb" ]] && return 0
+  done
+  return 1
+}
+
+_osb() {
+  # Delegate to the CLI-generated completion (auto-load on call loads it),
+  # then offer live sandbox IDs at ID positions.
+  (( $+functions[_osb_completion] || $+autoloads[_osb_completion] )) && _osb_completion
+  _osb_prev_word_is_id_position && _osb_sandbox_ids && _describe -t sandboxes 'Sandbox' reply
+}

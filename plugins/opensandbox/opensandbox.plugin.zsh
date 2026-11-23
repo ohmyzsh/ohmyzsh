@@ -89,14 +89,24 @@ except Exception:
 
 # If the completion file doesn't exist yet, we need to autoload it and
 # bind it. Otherwise, compinit will have already done that.
-if [[ ! -f "$ZSH_CACHE_DIR/completions/_osb" ]]; then
+# (File name follows the CLI's function name; the ID-bridge completer
+# lives in _osb, see below.)
+if [[ ! -f "$ZSH_CACHE_DIR/completions/_osb_completion" ]]; then
   typeset -g -A _comps
-  autoload -Uz _osb
-  _comps[osb]=_osb
+  autoload -Uz _osb_completion
+  _comps[osb]=_osb_completion
 fi
 
 zmodload -F zsh/files b:zf_mv
 () {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._osb"
-  zf_mv -f -- =( _OSB_COMPLETE=zsh_source osb 2> /dev/null ) "$ZSH_CACHE_DIR/completions/_osb"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._osb_completion"
+  zf_mv -f -- =( _OSB_COMPLETE=zsh_source osb 2> /dev/null ) "$ZSH_CACHE_DIR/completions/_osb_completion"
 } &|
+
+# Bind the ID-bridge completer over compinit's header-derived binding.
+# Explicit autoload: the wrapper lives in the plugin's fpath directory,
+# which compinit -i skips for users with group-writable checkouts.
+if (( $+functions[compdef] )); then
+  autoload -Uz _osb
+  compdef _osb osb
+fi
