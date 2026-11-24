@@ -43,9 +43,10 @@
 # vcs_info. `autoload` doesn't replace an already defined function, so this
 # wrapper survives a later `autoload -Uz vcs_info` in a theme or .zshrc, and
 # vcs_info's own `autoload -Uz VCS_INFO_formats`.
-if (( $+functions[VCS_INFO_formats] )); then
+# An autoload stub counts as not loaded yet, so it gets the wrapper too.
+if (( $+functions[VCS_INFO_formats] )) && [[ $functions[VCS_INFO_formats] != 'builtin autoload -X'* ]]; then
   () {
-    autoload -Uz +X regexp-replace 2>/dev/null || return 1
+    autoload -Uz +X regexp-replace 2>/dev/null || return 0
 
     # We use $tmp here because it's already a local variable in VCS_INFO_formats
     local PATCH='for tmp (base base-name branch misc revision subdir) hook_com[$tmp]="${hook_com[$tmp]//\%/%%}"'
