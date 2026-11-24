@@ -11,6 +11,7 @@ tldr-command-line() {
     args=(${${(Az)BUFFER}[1]} ${${(Az)BUFFER}[2]})
 
     BUFFER="tldr ${args[1]}"
+    zle end-of-line
 }
 
 zle -N tldr-command-line
