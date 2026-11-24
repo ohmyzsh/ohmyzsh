@@ -291,8 +291,12 @@ last_head=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
 # autostash on rebase (#7172)
 resetAutoStash=$(git config --bool rebase.autoStash 2>/dev/null)
 
+# Runs on every exit, including ctrl-c and closing the terminal
 _omz_upgrade_cleanup() {
-  trap '' INT
+  trap '' INT TERM HUP
+
+  # show the cursor again if the logo animation hid it
+  is_tty && printf '\033[?25h'
 
   # go back to HEAD previous to update
   git checkout -q "$last_head" --
@@ -302,11 +306,12 @@ _omz_upgrade_cleanup() {
     "") git config --unset rebase.autoStash ;;
     *) git config rebase.autoStash "$resetAutoStash" ;;
   esac
-
-  trap - INT
 }
 
-trap '_omz_upgrade_cleanup; printf "\033[?25h"; exit 130' INT
+trap _omz_upgrade_cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+trap 'exit 129' HUP
 git config rebase.autoStash true
 
 update_with_cooldown() {
@@ -332,10 +337,7 @@ perform_update() {
 }
 
 # checkout update branch
-if ! git checkout -q "$branch" --; then
-  _omz_upgrade_cleanup
-  exit 1
-fi
+git checkout -q "$branch" -- || exit 1
 # branch commit before update (used in changelog)
 last_commit=$(git rev-parse "$branch")
 
@@ -393,8 +395,6 @@ else
   ret=$?
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
 fi
-
-_omz_upgrade_cleanup
 
 # Exit with `1` if the update failed
 exit $ret
