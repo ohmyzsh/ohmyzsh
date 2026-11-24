@@ -1,24 +1,27 @@
 # Git version checking
 autoload -Uz is-at-least
 # Running `git version` forks on every startup, so cache the result for a day
-# in $ZSH_CACHE_DIR, keyed on the git command path, mtime, and exec path.
+# in $ZSH_CACHE_DIR, keyed on the resolved git binary's path and mtime.
 () {
-  local cache="$ZSH_CACHE_DIR/git-version" key exec_path
+  local cache="$ZSH_CACHE_DIR/git-version" git="${commands[git]:+${commands[git]:A}}" key magic
   local -a stat lines
-  zmodload -F zsh/stat b:zstat
-  zstat -A stat +mtime -- "$commands[git]" 2>/dev/null
-  exec_path="$(git --exec-path 2>/dev/null)"
-  key="$commands[git] $stat[1] $exec_path"
+  # Shims (scripts, or links to a non-git binary like mise) can dispatch to any git
+  [[ "${git:t:r}" = git ]] && read -r -k 2 -u 0 magic < "$git" 2>/dev/null
+  if [[ "${git:t:r}" = git && "$magic" != '#!' ]]; then
+    zmodload -F zsh/stat b:zstat
+    zstat -A stat +mtime -- "$git" 2>/dev/null
+    key="$git $stat[1]"
 
-  lines=("$cache"(Nm-1))
-  (( $#lines )) && lines=("${(@f)$(<"$cache")}")
-  if [[ "$lines[1]" = "$key" ]]; then
-    git_version="$lines[2]"
-    return
+    lines=("$cache"(Nm-1))
+    (( $#lines )) && lines=("${(@f)$(<"$cache")}")
+    if [[ "$lines[1]" = "$key" ]]; then
+      git_version="$lines[2]"
+      return
+    fi
   fi
 
   git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
-  [[ ! -w "$ZSH_CACHE_DIR" ]] || print -rl -- "$key" "$git_version" >| "$cache"
+  [[ -z "$key" || ! -w "$ZSH_CACHE_DIR" ]] || print -rl -- "$key" "$git_version" >| "$cache"
 }
 
 #
