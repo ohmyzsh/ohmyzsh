@@ -96,10 +96,11 @@ opcr --attach http://localhost:4096 "Explain this project's architecture"
 
 ## Completion
 
-Completion queries the installed OpenCode CLI on demand for commands and options,
-including through the aliases above. It falls back to Zsh's default completion when
-the CLI returns no candidates. No OpenCode process is started at shell startup,
-and no generated completion cache is needed.
+On the first completion, the plugin loads the Zsh script produced by
+`opencode --completions zsh` if the installed CLI supports it. Older releases
+provide live candidates on demand. Both work through the aliases above.
+If the CLI doesn't provide completion, Zsh uses its default. No OpenCode process
+starts at shell startup, and no generated completion cache is needed.
 
 ## Credits
 
