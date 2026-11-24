@@ -147,8 +147,8 @@ esac
 function omz_termsupport_cwd {
   setopt localoptions unset
   # Percent-encode the host and path names. Encoding forks a subshell each,
-  # so keep the result and only redo it when $HOST or $PWD changed.
-  local cache_key="$HOST:$PWD:${KONSOLE_PROFILE_NAME:+1}:${KONSOLE_DBUS_SESSION:+1}"
+  # so keep the result and only redo it when its inputs change.
+  local cache_key="$HOST:$PWD:${langinfo[CODESET]}:${KONSOLE_PROFILE_NAME:+1}:${KONSOLE_DBUS_SESSION:+1}"
   if [[ "$_omz_termsupport_cwd_key" != "$cache_key" ]]; then
     local URL_HOST URL_PATH
     URL_HOST="$(omz_urlencode -P "$HOST")" || return 1
