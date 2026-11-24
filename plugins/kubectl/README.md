@@ -31,6 +31,8 @@ plugins=(... kubectl)
 | kdelk    | `kubectl delete -k`                                     | Delete all resources defined in a kustomization directory                                        |
 | kge      | `kubectl get events --sort-by=".lastTimestamp"`         | Get events (sorted by timestamp)                                                                 |
 | kgew     | `kubectl get events --watch --sort-by=".lastTimestamp"` | Get events and watch as they occur (sorted by timestamp)                                         |
+| kg       | `kubectl get`                                           | Get one or more resources                                                                        |
+| kd       | `kubectl describe`                                      | Describe one or more resources in detail                                                         |
 |          |                                                         | **Pod management**                                                                               |
 | kgp      | `kubectl get pods`                                      | List all pods in ps output format                                                                |
 | kgpl     | `kgp -l`                                                | Get pods by label. Example: `kgpl "app=myapp" -n myns`                                           |
@@ -122,6 +124,10 @@ plugins=(... kubectl)
 | kepvc    | `kubectl edit pvc`                                      | Edit pvcs from the default editor                                                                |
 | kdpvc    | `kubectl describe pvc`                                  | Describe all pvcs                                                                                |
 | kdelpvc  | `kubectl delete pvc`                                    | Delete all pvcs matching passed arguments                                                        |
+|          |                                                         | **Endpoints management**                                                                         |
+| kged     | `kubectl get endpoints`                                 | List all endpoints                                                                               |
+| kgeda    | `kubectl get endpoints --all-namespaces`                | List all endpoints across all namespaces                                                         |
+| kded     | `kubectl describe endpoints`                            | Describe endpoints in detail                                                                     |
 |          |                                                         | **StatefulSets management**                                                                      |
 | kgss     | `kubectl get statefulset`                               | List the statefulsets in ps format                                                               |
 | kgssa    | `kubectl get statefulset --all-namespaces`              | List statefulsets across all namespaces                                                          |

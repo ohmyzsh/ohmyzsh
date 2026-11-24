@@ -47,6 +47,8 @@ alias kdelf='kubectl delete -f'
 alias kdelk='kubectl delete -k'
 alias kge='kubectl get events --sort-by=".lastTimestamp"'
 alias kgew='kubectl get events --sort-by=".lastTimestamp" --watch'
+alias kg='kubectl get'
+alias kd='kubectl describe'
 
 # Pod management.
 alias kgp='kubectl get pods'
@@ -167,6 +169,11 @@ alias kgpvcw='kgpvc --watch'
 alias kepvc='kubectl edit pvc'
 alias kdpvc='kubectl describe pvc'
 alias kdelpvc='kubectl delete pvc'
+
+# Endpoints management.
+alias kged='kubectl get endpoints'
+alias kgeda='kubectl get endpoints --all-namespaces'
+alias kded='kubectl describe endpoints'
 
 # Service account management.
 alias kdsa="kubectl describe sa"
