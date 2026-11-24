@@ -1,1 +1,0 @@
-encode64: support BSD base64 and quote arguments
