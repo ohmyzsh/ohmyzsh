@@ -107,7 +107,7 @@ EOF
       echo "\tlaunch|play|pause|stop|rewind|resume|quit"
       echo "\tmute|unmute\tMute or unmute $APP_NAME"
       echo "\tnext|previous\tPlay next or previous track"
-      echo "\tshuf|shuffle [on|off|toggle]\tSet shuffled playback. Default: toggle. Note: toggle doesn't support the MiniPlayer."
+      echo "\tshuf|shuffle [on|off|toggle]\tSet shuffled playback. Default: toggle."
       echo "\tvol [0-100|up|down]\tGet or set the volume. 0 to 100 sets the volume. 'up' / 'down' increases / decreases by 10 points. No argument displays current volume."
       echo "\tplaying|status\tShow what song is currently playing in Music."
       echo "\tplaylist [playlist name]\t Play specific playlist"
