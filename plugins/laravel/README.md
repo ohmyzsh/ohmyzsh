@@ -13,14 +13,19 @@ plugins=(... laravel)
 
 For Laravel 4 and later, completion reads the available commands from
 `artisan list --raw --no-ansi` in the current project, including custom commands.
-The legacy static completion is retained for Laravel 3, which does not support
-that command. No Laravel command runs when the plugin is loaded.
+The legacy static command-name completion is retained for Laravel 3, which does
+not support that command. Artisan runs only when completing a command name;
+command arguments use file completion without booting the application.
+No Laravel command runs when the plugin is loaded.
 
 ## Migrating from laravel4 or laravel5
 
 Replace `laravel4` or `laravel5` in your `plugins` array with `laravel`.
-The old plugin names still load `laravel`, with a deprecation notice.
-Their aliases remain available, including the version-specific commands below:
+The old plugin names still load `laravel`, with a deprecation notice, and retain
+their own version-specific aliases listed below. These aliases are available
+only while the corresponding legacy plugin is enabled. When switching to
+`laravel` alone, use `artisan` or the shared aliases instead; add any shortcuts
+you still need to your own configuration.
 
 | Alias | Command |
 |-------|---------|
