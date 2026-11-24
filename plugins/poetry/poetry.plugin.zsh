@@ -14,17 +14,34 @@ alias ppub='poetry publish'
 alias prm='poetry remove'
 alias prun='poetry run'
 alias psad='poetry self add'
-alias psh='poetry shell'
 alias pshw='poetry show'
 alias pslt='poetry show --latest'
 alias psup='poetry self update'
-alias psync='poetry install --sync'
 alias ptree='poetry show --tree'
 alias pup='poetry update'
 alias pvinf='poetry env info'
 alias pvoff='poetry config virtualenvs.create false'
 alias pvrm='poetry env remove'
 alias pvu='poetry env use'
+
+# Poetry 2.0 moved `poetry shell` to the poetry-plugin-shell plugin, so fall
+# back to activating the virtualenv in the current shell when it's missing.
+function psh {
+  if poetry shell --help &>/dev/null; then
+    poetry shell "$@"
+  else
+    eval "$(poetry env activate)"
+  fi
+}
+
+# Poetry 2.0 replaced `poetry install --sync` with `poetry sync`.
+function psync {
+  if poetry sync --help &>/dev/null; then
+    poetry sync "$@"
+  else
+    poetry install --sync "$@"
+  fi
+}
 
 # Return immediately if poetry is not found
 if (( ! $+commands[poetry] )); then
