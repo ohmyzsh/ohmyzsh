@@ -1,18 +1,11 @@
 # Laravel 4 plugin
 
-This plugin adds some aliases for common [Laravel 4](https://laravel.com/docs/4.2) commands.
-
-To use it, add `laravel4` to the plugins array in your zshrc file:
+This plugin is deprecated. Use the [laravel plugin](../laravel) instead:
 
 ```zsh
-plugins=(... laravel4)
+plugins=(... laravel)
 ```
 
-## Aliases
-
-| Alias     | Command                     | Description                         |
-|-----------|-----------------------------|-------------------------------------|
-| la4       | `php artisan`               | Main Artisan command                |
-| la4dump   | `php artisan dump-autoload` | Regenerate framework autoload files |
-| la4cache  | `php artisan cache:clear`   | Flush the application cache         |
-| la4routes | `php artisan routes`        | List all registered routes          |
+The `laravel` plugin includes the original `la4`, `la4dump`, `la4cache`, and
+`la4routes` aliases and provides completion for the commands available in your
+project. The `laravel4` plugin name still loads it for compatibility.
