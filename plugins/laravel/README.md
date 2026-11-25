@@ -80,3 +80,17 @@ zstyle ':omz:plugins:laravel' php 'herd php'
 | `paqr`  |  `php artisan queue:retry` |
 | `paqt`  |  `php artisan queue:table` |
 | `paqw`  |  `php artisan queue:work` |
+
+## Modules
+
+Aliases for [nWidart/laravel-modules](https://github.com/nWidart/laravel-modules).
+
+| Alias | Description |
+|:-:|:-:|
+| `pamol`  |  `php artisan module:list` |
+| `pamomk` |  `php artisan module:make` |
+| `pamoe`  |  `php artisan module:enable` |
+| `pamod`  |  `php artisan module:disable` |
+| `pamom`  |  `php artisan module:migrate` |
+| `pamomr` |  `php artisan module:migrate-rollback` |
+| `pamos`  |  `php artisan module:seed` |
