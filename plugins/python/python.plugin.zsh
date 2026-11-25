@@ -116,11 +116,13 @@ if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
         return
       done
 
-      # Search parent directories if recursive mode is enabled
+      # Search parent directories if recursive mode is enabled, stopping before $HOME
       if [[ "$PYTHON_AUTO_VRUN_RECURSIVE" == "true" ]]; then
         local search_dir="$PWD:h"
-        while [[ "$search_dir" != "/" && "$search_dir" != "." ]]; do
+        while [[ "$search_dir" != "/" && "$search_dir" != "." && "$search_dir" != "$HOME" ]]; do
           for file in "${search_dir}/"${^PYTHON_VENV_NAMES[@]}"/bin/activate"(N.); do
+            # the venv found is already active
+            [[ "${file:h:h:A}" == "${VIRTUAL_ENV:A}" ]] && return
             (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
             source $file > /dev/null 2>&1
             return
