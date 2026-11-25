@@ -38,7 +38,8 @@ plugins=(... conda)
 
 ## Completion
 
-Tab completion is available for the following commands by fetching the list of conda environments:
+Tab completion is available for the following commands, using the environment list conda keeps in
+`~/.conda/environments.txt`:
 
 - `cna`: completes environment names for `conda activate`
 - `cnrn`: completes environment names for `conda remove -y --all -n`

@@ -1,7 +1,3 @@
-if (( ! $+commands[conda] )); then
-  return
-fi
-
 cna()  { conda activate "$@"; }
 cnrn() { conda remove -y --all -n "$@"; }
 
@@ -28,12 +24,16 @@ alias cnua='conda update --all'
 alias cnuc='conda update conda'
 
 _omz_conda_envs() {
-  emulate -L zsh
-  local -a envs
-  envs=("${(@f)$(conda env list 2>/dev/null \
-    | sed -nE '/^#/d;/^[[:space:]]*$/d;s/^[[:space:]]*([^[:space:]]+).*/\1/p' \
-    | sed '/^base$/d')}")
-  (( ${#envs[@]} )) && compadd -Q -a envs
+  emulate -L zsh -o extended_glob
+  local envs_file="$HOME/.conda/environments.txt"
+  [[ -r "$envs_file" ]] || return 1
+
+  # Each line is an env prefix; named envs live under <dir>/envs/<name>.
+  # The root prefix (base) and envs created with -p have no name and are skipped.
+  local -aU envs
+  envs=(${(f)"$(<$envs_file)"})
+  envs=(${${(M)envs:#*/envs/[^/]##}:t})
+  (( ${#envs} )) && compadd -Q -a envs
 }
 
 if (( $+functions[compdef] )); then
