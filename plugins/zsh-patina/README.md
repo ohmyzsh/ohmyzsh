@@ -4,6 +4,9 @@ Initializes [zsh-patina](https://github.com/michel-kraemer/zsh-patina), a
 "blazingly fast Zsh plugin performing syntax highlighting of your command line
 while you type 🌈"
 
+The plugin also caches completions for the `zsh-patina` command in
+`$ZSH_CACHE_DIR/completions/_zsh-patina`, refreshed each time the plugin loads.
+
 To use it, add `zsh-patina` to the plugins array in your `.zshrc` file:
 
 ```zsh
