@@ -12,11 +12,11 @@ _omz_git_commit() {
   if [[ "$_type" == rev ]]; then
     _type=revert
   fi
-  local _scope _attention _message
+  local _scope _attention _message _body
   while [ $# -ne 0 ]; do
   case $1 in
     -s | --scope )
-      if [ -z $2 ]; then
+      if [ -z "$2" ]; then
         echo >&2 "Missing scope!"
         return 1
       fi
@@ -27,12 +27,20 @@ _omz_git_commit() {
       _attention="!"
       shift 1
       ;;
+    -b | --body )
+      if [ -z "$2" ]; then
+        echo >&2 "Missing body!"
+        return 1
+      fi
+      _body="$2"
+      shift 2
+      ;;
     * )
       _message="${_message} $1"
       shift 1
       ;;
   esac
   done
-  git commit -m "${_type}${_scope:+(${_scope})}${_attention}:${_message}"
+  git commit -m "${_type}${_scope:+(${_scope})}${_attention}:${_message}" ${_body:+-m} ${_body:+"$_body"}
 }
 _omz_git_commit "$@"
