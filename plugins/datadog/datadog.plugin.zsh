@@ -58,7 +58,6 @@
   # Windows only: control the service in the Service Control Manager
   if [[ "$OSTYPE" == (cygwin|msys)* ]]; then
     alias ddrs="$agent restart-service"
-    alias ddsp="$agent stop-service"
     alias ddst="$agent start-service"
   fi
 }

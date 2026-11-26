@@ -40,7 +40,6 @@ These aliases are only available on Windows:
 | Alias  | Command                     | Description                                              |
 | ------ | --------------------------- | -------------------------------------------------------- |
 | `ddrs` | `agent.exe restart-service` | Restart the Agent in the Windows Service Control Manager |
-| `ddsp` | `agent.exe stop-service`    | Stop the Agent in the Windows Service Control Manager    |
 | `ddst` | `agent.exe start-service`   | Start the Agent in the Windows Service Control Manager   |
 
 The base alias is `ddog` and not `dd`, because `dd` is a standard Unix command. The diagnose alias is `dddiag`

@@ -125,7 +125,7 @@ check_alias "windows" dds "${(q-)win_agent} status"
 check_alias "windows" ddc "${(q-)win_agent} check"
 check_alias "windows" ddrs "${(q-)win_agent} restart-service"
 check_alias "windows" ddst "${(q-)win_agent} start-service"
-check_alias "windows" ddsp "${(q-)win_agent} stop-service"
+check_alias "windows has no stop-service alias" ddsp ""
 check_alias "windows" ddgui "${(q-)win_agent} launch-gui"
 
 # Cygwin, with a custom install location
