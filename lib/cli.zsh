@@ -392,8 +392,8 @@ function _omz::plugin::enable {
 
   # Enable plugins awk script
   local awk_script="
-# if plugins=() is in oneline form, substitute ) with new plugins and go to the next line
-/^[ \t]*plugins=\([^#]+\).*\$/ {
+# if plugins=() is in oneline form (empty or not), substitute ) with new plugins and go to the next line
+/^[ \t]*plugins=\([^#]*\).*\$/ {
   sub(/\)/, \" $add_plugins&\")
   print \$0
   next
