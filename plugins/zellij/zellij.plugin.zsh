@@ -26,8 +26,8 @@ function zje  { command zellij edit "$@"; }
 # background when the zellij binary is newer than the cache. Write to a temp
 # file in the same directory and rename it, so a partial file is never loaded.
 _omz_zellij_gen_completion() {
-  local TMPPREFIX="$ZSH_CACHE_DIR/completions/_zellij"
-  zf_mv -f -- =( command zellij setup --generate-completion zsh 2>/dev/null ) "$TMPPREFIX"
+  local TMPPREFIX="$ZSH_CACHE_DIR/completions/._zellij"
+  zf_mv -f -- =( command zellij setup --generate-completion zsh 2>/dev/null ) "$ZSH_CACHE_DIR/completions/_zellij"
 }
 
 zmodload -F zsh/files b:zf_mv
