@@ -88,7 +88,7 @@ EOF
         tar --xz --help &> /dev/null \
         && tar --xz -xvf "$full_path" \
         || xzcat "$full_path" | tar xvf - } ;;
-      (*.tar.zma|*.tlz)
+      (*.tar.lzma|*.tar.zma|*.tlz)
         tar --lzma --help &> /dev/null \
         && tar --lzma -xvf "$full_path" \
         || lzcat "$full_path" | tar xvf - ;;
