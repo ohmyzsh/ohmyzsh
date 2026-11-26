@@ -23,7 +23,6 @@ plugins=(... datadog)
 | `ddcc`   | `datadog-agent configcheck` | Print all configurations loaded and resolved by the Agent |
 | `ddcfg`  | `datadog-agent config`      | Show or change the runtime configuration                  |
 | `dddiag` | `datadog-agent diagnose`    | Run the connectivity and installation diagnosis           |
-| `ddf`    | `datadog-agent flare`       | Collect a flare and send it to Datadog                    |
 | `ddh`    | `datadog-agent health`      | Print the current Agent health                            |
 | `ddhn`   | `datadog-agent hostname`    | Print the hostname that the Agent uses                    |
 | `ddl`    | `datadog-agent stream-logs` | Stream the logs that the Agent processes                  |
@@ -52,8 +51,10 @@ Usage example to troubleshoot an integration:
 ```zsh
 ddc nginx      # run the nginx check once and print its metrics
 dds            # make sure that the check shows under "Running Checks"
-ddf 1234567    # send a flare for support case 1234567
 ```
+
+The plugin does not add an alias for `flare`, because a flare sends files from your host to Datadog Support.
+Type the subcommand in full when you want to send one, for example `ddog flare 1234567`.
 
 ## Platform notes
 

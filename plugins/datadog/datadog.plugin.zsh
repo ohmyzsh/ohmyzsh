@@ -44,7 +44,6 @@
   alias ddcc="$agent configcheck"
   alias ddcfg="$agent config"
   alias dddiag="$agent diagnose"
-  alias ddf="$agent flare"
   alias ddh="$agent health"
   alias ddhn="$agent hostname"
   alias ddl="$agent stream-logs"
