@@ -96,7 +96,6 @@ check_alias "macos" dds "${mac_prefix}datadog-agent status"
 check_alias "macos has no flare alias" ddf ""
 check_alias "macos" ddc "${mac_prefix}datadog-agent check"
 check_alias "macos" ddgui "${mac_prefix}datadog-agent launch-gui"
-check_alias "macos has no Windows alias" ddst ""
 
 # macOS, without sudo: the aliases run the Agent directly
 parse_aliases "$(load_plugin darwin25.0 datadog-agent=/bin/echo)"
@@ -124,7 +123,7 @@ check_alias "windows" ddog "${(q-)win_agent}"
 check_alias "windows" dds "${(q-)win_agent} status"
 check_alias "windows" ddc "${(q-)win_agent} check"
 check_alias "windows" ddrs "${(q-)win_agent} restart-service"
-check_alias "windows" ddst "${(q-)win_agent} start-service"
+check_alias "windows has no start-service alias" ddst ""
 check_alias "windows has no stop-service alias" ddsp ""
 check_alias "windows" ddgui "${(q-)win_agent} launch-gui"
 
