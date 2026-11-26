@@ -1,14 +1,22 @@
 # fancy-ctrl-z
 
-Allows pressing <kbd>Ctrl</kbd>-<kbd>Z</kbd> is an empty prompt to bring to the
-foreground the only suspended job, or, if there are more than one such jobs, to
-switch between the two most recently suspended ones.
+Allows pressing <kbd>Ctrl</kbd>-<kbd>Z</kbd> is an empty prompt to bring back
+a background job to the foreground, or, if there are more than one such jobs and
+"flip-flop" behaviour is enabled, to switch between the two most recently
+suspended jobs.
 
 To use it, add `fancy-ctrl-z` to the `plugins` array in your `.zshrc` file:
 
 ```zsh
 plugins=(... fancy-ctrl-z)
 ```
+
+## Plugin options
+
+* Set `FANCY_CTRL_Z_FLIP_FLOP` to `1`, `true`, `on`, or `yes` to enable the
+  "flip-flop" behaviour, in which case it will **switch** between the two most
+  recently backgrounded jobs (e.g., code editor and a REPL) instead of always
+  bringing only the most recently backgrounded job to the foreground.
 
 ## Motivation
 

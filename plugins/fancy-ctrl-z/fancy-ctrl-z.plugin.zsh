@@ -1,3 +1,12 @@
+case "${(L)FANCY_CTRL_Z_FLIP_FLOP:-false}" in
+  (true|yes|on|1)
+    FANCY_CTRL_Z_FLIP_FLOP=1
+    ;;
+  *)
+    FANCY_CTRL_Z_FLIP_FLOP=0
+    ;;
+esac
+
 fancy-ctrl-z () {
   local -i hascmd=$(( ${#BUFFER} > 0 ))
   local -a sjobs=("${(@f)$(jobs -s)}")
@@ -9,6 +18,7 @@ fancy-ctrl-z () {
   local -i nsjobs="${#${(@)sjobs}}"
   local -i hassjob=$(( ${#sjobs[1]} > 0 ))
   local -i hassjobs=$(( nsjobs >= 2 ))
+  local -i isflipflop=$(( FANCY_CTRL_Z_FLIP_FLOP == 1 ))
   # Whether the ^Z action will result in a side effect to the terminal.
   local -i sideeffect=$(( hassjob || hassjobs || isverbose ))
 
@@ -19,18 +29,22 @@ fancy-ctrl-z () {
     zle push-input -w
   fi
 
-  if (( hassjobs )); then
-    # Multiple suspended jobs: foreground the second-to-last suspended job.
+  if (( hassjobs && isflipflop )); then
+    # Multiple suspended jobs: foreground the second-to-last suspended job, if
+    # flip-flop mode is enabled.
     BUFFER="fg %-"
     zle accept-line -w
-  elif (( hassjob )); then
-    # Single suspended job: foreground it.
-    # "fg %-" would result in an error as the only suspended job is the
-    # last one, which is referenced by "fg" or "fg %+".
+  elif (( hassjob || (hassjobs && !isflipflop) )); then
+    # Single suspended job or multiple suspended jobs without fli-flop:
+    # foreground it, or the most recently suspended one.
+    #
+    # The above "fg %-" would result in an error as in the "only one job" case,
+    # the suspended job is also the last one, which is referenced by "fg %+".
     BUFFER="fg %+"
     zle accept-line -w
   elif (( isverbose )); then
-    # No suspended jobs, but verbose mode, let show the "fg: no current job".
+    # No suspended jobs, but verbose mode, allow showing the
+    # "fg: no current job" error message.
     BUFFER="fg"
     zle accept-line -w
   fi
