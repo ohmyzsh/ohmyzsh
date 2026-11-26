@@ -54,11 +54,6 @@
   if [[ "$OSTYPE" == (cygwin|msys|darwin)* ]]; then
     alias ddgui="$agent launch-gui"
   fi
-
-  # Windows only: control the service in the Service Control Manager
-  if [[ "$OSTYPE" == (cygwin|msys)* ]]; then
-    alias ddrs="$agent restart-service"
-  fi
 }
 
 # COMPLETION FUNCTION

@@ -35,12 +35,6 @@ This alias is only available on macOS and Windows:
 | ------- | -------------------------- | --------------------------------------------------------- |
 | `ddgui` | `datadog-agent launch-gui` | Open the Agent GUI (Datadog Agent Manager) in the browser |
 
-These aliases are only available on Windows:
-
-| Alias  | Command                     | Description                                              |
-| ------ | --------------------------- | -------------------------------------------------------- |
-| `ddrs` | `agent.exe restart-service` | Restart the Agent in the Windows Service Control Manager |
-
 The base alias is `ddog` and not `dd`, because `dd` is a standard Unix command. The diagnose alias is `dddiag`
 and not `ddd`, because `ddd` is the GNU DDD debugger.
 
@@ -67,11 +61,12 @@ Type the subcommand in full when you want to send one, for example `ddog flare 1
   `sudo datadog-agent`, as the
   [macOS documentation](https://docs.datadoghq.com/agent/supported_platforms/osx/#commands) shows. With the
   older per-user install, the aliases run `datadog-agent` directly.
-- **Other systems**: the aliases run `datadog-agent` directly, without `sudo`. The macOS and Windows aliases
-  are not defined.
+- **Other systems**: the aliases run `datadog-agent` directly, without `sudo`. The `ddgui` alias is not
+  defined.
 
-The plugin does not control the Agent service on Linux (`systemctl`, `service`) or macOS (`launchctl`). Use
-the [`systemd` plugin](../systemd) on Linux.
+The plugin does not add aliases that start, stop, or restart the Agent service. On Linux (`systemctl`,
+`service`) and macOS (`launchctl`), use the service manager. You can use the [`systemd` plugin](../systemd) on
+Linux. On Windows, type the subcommand in full, for example `ddog restart-service`.
 
 ## Settings
 
