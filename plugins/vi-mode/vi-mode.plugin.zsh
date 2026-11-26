@@ -118,6 +118,15 @@ bindkey '^s' history-incremental-search-forward
 bindkey '^a' beginning-of-line
 bindkey '^e' end-of-line
 
+# Snapshot of the clipboard taken when the most recent push to it failed.
+# While the marker is set, put widgets compare the live clipboard against the
+# snapshot: unchanged means the clipboard is stale (it never received the
+# kill), so the internal CUTBUFFER is used instead. As soon as the clipboard
+# differs again - e.g. an external copy - it is trusted immediately, so
+# external copies are never lost for longer than the failure itself.
+typeset -g _OMZ_VI_CLIPBOARD_STALE=""
+typeset -g _OMZ_VI_CLIPBOARD_STALE_SET=""
+
 function wrap_clipboard_widgets() {
   # NB: Assume we are the first wrapper and that we only wrap native widgets
   # See zsh-autosuggestions.zsh for a more generic and more robust wrapper
@@ -132,13 +141,33 @@ function wrap_clipboard_widgets() {
       eval "
         function ${wrapped_name}() {
           zle .${widget}
-          printf %s \"\${CUTBUFFER}\" | clipcopy 2>/dev/null || true
+          # On a failed push, snapshot the clipboard so put widgets can tell
+          # stale content (which never received this kill) apart from later
+          # external copies.
+          if printf %s \"\${CUTBUFFER}\" | clipcopy 2>/dev/null; then
+            _OMZ_VI_CLIPBOARD_STALE_SET=\"\"
+          else
+            _OMZ_VI_CLIPBOARD_STALE=\"\$(clippaste 2>/dev/null)\"
+            _OMZ_VI_CLIPBOARD_STALE_SET=1
+          fi
         }
       "
     else
       eval "
         function ${wrapped_name}() {
-          CUTBUFFER=\"\$(clippaste 2>/dev/null || echo \$CUTBUFFER)\"
+          if [[ -n \"\${_OMZ_VI_CLIPBOARD_STALE_SET:-}\" ]]; then
+            # Last push failed. If the clipboard still matches the snapshot
+            # taken at the failure, it is stale: keep the internal CUTBUFFER.
+            # If it differs, an external copy arrived since - trust it again
+            # and clear the stale state.
+            local _clip=\"\$(clippaste 2>/dev/null)\"
+            if [[ \"\$_clip\" != \"\${_OMZ_VI_CLIPBOARD_STALE}\" ]]; then
+              CUTBUFFER=\"\$_clip\"
+              _OMZ_VI_CLIPBOARD_STALE_SET=\"\"
+            fi
+          else
+            CUTBUFFER=\"\$(clippaste 2>/dev/null || echo \$CUTBUFFER)\"
+          fi
           zle .${widget}
         }
       "
