@@ -295,17 +295,23 @@ function _omz::plugin::disable {
   fi
 
   # Remove plugins substitution awk script
+  # A match consumes the whitespace around the plugin, so adjacent plugins
+  # can't match in the same pass: repeat until the line stops changing.
   local awk_subst_plugins="\
-  gsub(/[ \t]+(${(j:|:)dis_plugins})[ \t]+/, \" \") # with spaces before or after
-  gsub(/[ \t]+(${(j:|:)dis_plugins})$/, \"\")       # with spaces before and EOL
-  gsub(/^(${(j:|:)dis_plugins})[ \t]+/, \"\")       # with BOL and spaces after
+  do {
+    prev = \$0
 
-  gsub(/\((${(j:|:)dis_plugins})[ \t]+/, \"(\")     # with parenthesis before and spaces after
-  gsub(/[ \t]+(${(j:|:)dis_plugins})\)/, \")\")     # with spaces before or parenthesis after
-  gsub(/\((${(j:|:)dis_plugins})\)/, \"()\")        # with only parentheses
+    gsub(/[ \t]+(${(j:|:)dis_plugins})[ \t]+/, \" \") # with spaces before or after
+    gsub(/[ \t]+(${(j:|:)dis_plugins})$/, \"\")       # with spaces before and EOL
+    gsub(/^(${(j:|:)dis_plugins})[ \t]+/, \"\")       # with BOL and spaces after
 
-  gsub(/^(${(j:|:)dis_plugins})\)/, \")\")          # with BOL and closing parenthesis
-  gsub(/\((${(j:|:)dis_plugins})$/, \"(\")          # with opening parenthesis and EOL
+    gsub(/\((${(j:|:)dis_plugins})[ \t]+/, \"(\")     # with parenthesis before and spaces after
+    gsub(/[ \t]+(${(j:|:)dis_plugins})\)/, \")\")     # with spaces before or parenthesis after
+    gsub(/\((${(j:|:)dis_plugins})\)/, \"()\")        # with only parentheses
+
+    gsub(/^(${(j:|:)dis_plugins})\)/, \")\")          # with BOL and closing parenthesis
+    gsub(/\((${(j:|:)dis_plugins})$/, \"(\")          # with opening parenthesis and EOL
+  } while (\$0 != prev)
 "
 
   # Disable plugins awk script
