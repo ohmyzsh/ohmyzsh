@@ -110,6 +110,23 @@ bindkey -M emacs '^[[1;5D' backward-word
 bindkey -M viins '^[[1;5D' backward-word
 bindkey -M vicmd '^[[1;5D' backward-word
 
+# [Keypad] - application mode (enabled above) makes the keypad send escape
+# sequences instead of characters, so map them back to the plain keys
+() {
+  local seq key
+  local -A keypad=(
+    '^[Op' '0' '^[Oq' '1' '^[Or' '2' '^[Os' '3' '^[Ot' '4'
+    '^[Ou' '5' '^[Ov' '6' '^[Ow' '7' '^[Ox' '8' '^[Oy' '9'
+    '^[On' '.' '^[Ol' ',' '^[Ok' '+' '^[Om' '-' '^[Oj' '*'
+    '^[Oo' '/' '^[OX' '=' '^[OM' '^M'
+  )
+  for seq key in "${(@kv)keypad}"; do
+    bindkey -M emacs -s "$seq" "$key"
+    bindkey -M viins -s "$seq" "$key"
+    bindkey -M vicmd -s "$seq" "$key"
+  done
+}
+
 
 bindkey '\ew' kill-region                             # [Esc-w] - Kill from the cursor to the mark
 bindkey -s '\el' '^q ls\n'                            # [Esc-l] - run command: ls
