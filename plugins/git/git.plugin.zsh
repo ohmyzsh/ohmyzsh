@@ -7,14 +7,16 @@ autoload -Uz is-at-least
   local -a stat lines
   # Shims (scripts, or links to a non-git binary like mise) can dispatch to any git
   [[ "${git:t:r}" = git ]] && read -r -k 2 -u 0 magic < "$git" 2>/dev/null
-  if [[ "${git:t:r}" = git && "$magic" != '#!' ]]; then
+  # Shell overrides can also dispatch to a different Git without changing the binary.
+  if (( ! $+functions[git] && ! $+aliases[git] )) \
+    && [[ "${git:t:r}" = git && "$magic" != '#!' ]]; then
     zmodload -F zsh/stat b:zstat
     zstat -A stat +mtime -- "$git" 2>/dev/null
     key="$git $stat[1]"
 
     lines=("$cache"(Nm-1))
     (( $#lines )) && lines=("${(@f)$(<"$cache")}")
-    if [[ "$lines[1]" = "$key" ]]; then
+    if [[ "$lines[1]" = "$key" && "$lines[2]" == <->.<->* ]]; then
       git_version="$lines[2]"
       return
     fi
