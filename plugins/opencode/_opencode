@@ -1,11 +1,18 @@
 #compdef opencode
 
-# Adapted from `opencode completion`, using the CLI's live Yargs completions.
-local -a reply
-reply=("${(@f)$(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" \
-  command opencode --get-yargs-completions "${words[@]}" < /dev/null 2> /dev/null)}")
+local completion
+if completion=$(command opencode --completions zsh < /dev/null 2> /dev/null) &&
+  [[ "$completion" == '#compdef opencode'$'\n'* ]]; then
+  # The generated script defines _opencode for later completion calls.
+  eval "$completion" && _opencode "$@"
+  return
+fi
 
-if [[ -n "${reply[1]}" ]]; then
+# Older releases provide live Yargs candidates rather than a completion script.
+if completion=$(COMP_CWORD="$((CURRENT-1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" \
+  command opencode --get-yargs-completions "${words[@]}" < /dev/null 2> /dev/null) &&
+  [[ -n "$completion" ]]; then
+  local -a reply=("${(@f)completion}")
   _describe 'values' reply
 else
   _default
