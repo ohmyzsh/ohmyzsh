@@ -44,6 +44,7 @@ plugins=(... jj)
 | jjgi   | `jj git init`                 |
 | jjgp   | `jj git push`                 |
 | jjgpa  | `jj git push --all`           |
+| jjgpb  | `jj git push --bookmark`      |
 | jjgpd  | `jj git push --deleted`       |
 | jjgpt  | `jj git push --tracked`       |
 | jjgrl  | `jj git remote list`          |
