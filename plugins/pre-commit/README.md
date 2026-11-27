@@ -15,7 +15,7 @@ plugins=(... pre-commit)
 | Alias | Command                                                | Description                                   |
 | ----- | ------------------------------------------------------ | --------------------------------------------- |
 | prc   | `prek` or `pre-commit`                                 | The pre-commit command                        |
-| prcau | `prek auto-update` or `pre-commit autoupdate`          | Update hooks automatically                    |
+| prcau | `prek autoupdate` or `pre-commit autoupdate`           | Update hooks automatically                    |
 | prcr  | `prek run` or `pre-commit run`                         | The pre-commit run command                    |
 | prcra | `prek run --all-files` or `pre-commit run --all-files` | Run pre-commit hooks on all files             |
 | prcrf | `prek run --files` or `pre-commit run --files`         | Run pre-commit hooks on a given list of files |
