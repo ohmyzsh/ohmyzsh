@@ -173,18 +173,19 @@ function _omz_git_prompt_status() {
 # - https://github.com/ohmyzsh/ohmyzsh/issues/12331
 # - https://github.com/ohmyzsh/ohmyzsh/issues/12360
 # TODO(2024-06-12): @mcornella remove workaround when CentOS 7 reaches EOL
+typeset -gA _OMZ_ASYNC_OUTPUT
 local _style
 if zstyle -t ':omz:alpha:lib:git' async-prompt \
   || { is-at-least 5.0.6 && zstyle -T ':omz:alpha:lib:git' async-prompt }; then
   function git_prompt_info() {
-    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}" ]]; then
-      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}"
+    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]-}" ]]; then
+      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]-}"
     fi
   }
 
   function git_prompt_status() {
-    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}" ]]; then
-      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}"
+    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]-}" ]]; then
+      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]-}"
     fi
   }
 
@@ -213,14 +214,14 @@ if zstyle -t ':omz:alpha:lib:git' async-prompt \
   precmd_functions=(_defer_async_git_register $precmd_functions)
 elif zstyle -s ':omz:alpha:lib:git' async-prompt _style && [[ $_style == "force" ]]; then
   function git_prompt_info() {
-    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}" ]]; then
-      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]}"
+    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]-}" ]]; then
+      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_info]-}"
     fi
   }
 
   function git_prompt_status() {
-    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}" ]]; then
-      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]}"
+    if [[ -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]-}" ]]; then
+      echo -n "${_OMZ_ASYNC_OUTPUT[_omz_git_prompt_status]-}"
     fi
   }
 
