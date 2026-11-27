@@ -1,6 +1,30 @@
 # Git version checking
 autoload -Uz is-at-least
-git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
+# Running `git version` forks on every startup, so cache the result for a day
+# in $ZSH_CACHE_DIR, keyed on the resolved git binary's path and mtime.
+() {
+  local cache="$ZSH_CACHE_DIR/git-version" git="${commands[git]:+${commands[git]:A}}" key magic
+  local -a stat lines
+  # Shims (scripts, or links to a non-git binary like mise) can dispatch to any git
+  [[ "${git:t:r}" = git ]] && read -r -k 2 -u 0 magic < "$git" 2>/dev/null
+  # Shell overrides can also dispatch to a different Git without changing the binary.
+  if (( ! $+functions[git] && ! $+aliases[git] )) \
+    && [[ "${git:t:r}" = git && "$magic" != '#!' ]]; then
+    zmodload -F zsh/stat b:zstat
+    zstat -A stat +mtime -- "$git" 2>/dev/null
+    key="$git $stat[1]"
+
+    lines=("$cache"(Nm-1))
+    (( $#lines )) && lines=("${(@f)$(<"$cache")}")
+    if [[ "$lines[1]" = "$key" && "$lines[2]" == <->.<->* ]]; then
+      git_version="$lines[2]"
+      return
+    fi
+  fi
+
+  git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
+  [[ -z "$key" || ! -w "$ZSH_CACHE_DIR" ]] || print -rl -- "$key" "$git_version" >| "$cache"
+}
 
 #
 # Functions Current
