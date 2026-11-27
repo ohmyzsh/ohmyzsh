@@ -247,17 +247,20 @@ function aws_profiles() {
     aws --no-cli-pager configure list-profiles 2> /dev/null
     return
   fi
-  local line words
-  # Only read the section headers, so the credentials never enter the shell
-  for line in "${(@f)$(command grep -h '^[[:space:]]*\[' -- "$config" "$creds" 2> /dev/null)}"; do
-    line=${line#*\[}  # drop up to the first [
-    line=${line%\]*}  # drop from the last ] (comments, CR)
-    words=(${=line})
-    if (( $#words == 1 )); then
-      print -r -- $words[1]  # [default], or [foo] in the credentials file
-    elif (( $#words == 2 )) && [[ $words[1] == profile ]]; then
-      print -r -- $words[2]
-    fi
+  local file line words
+  for file in "$config" "$creds"; do
+    # Only read the section headers, so the credentials never enter the shell
+    for line in "${(@f)$(command grep '^[[:space:]]*\[' -- "$file" 2> /dev/null)}"; do
+      line=${line#*\[}  # drop up to the first [
+      line=${line%\]*}  # drop from the last ] (comments, CR)
+      words=(${=line})
+      if (( $#words == 1 )); then
+        # [default], or any [foo] in the credentials file
+        [[ $file == $creds || $words[1] == default ]] && print -r -- $words[1]
+      elif (( $#words == 2 )) && [[ $words[1] == profile ]]; then
+        print -r -- $words[2]
+      fi
+    done
   done | command sort -u
 }
 
