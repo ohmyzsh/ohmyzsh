@@ -2,6 +2,6 @@
   "name": "ohmyzsh-installer-deploy",
   "private": true,
   "devDependencies": {
-    "vercel": "68.0.0"
+    "vercel": "66.6.0"
   }
 }
