@@ -167,7 +167,11 @@ check_deb_multiple() {
   printf '\037\235\220\150\312\260\141\363\106\001' \
     > "$test_dir/fixture.Z"
 
-  for extension in lzma Z; do
+  cp "$test_dir/plain" "$test_dir/sample.txt"
+  tar -cf "$test_dir/fixture.tar" -C "$test_dir" sample.txt
+  lzma -c "$test_dir/fixture.tar" > "$test_dir/fixture.tar.lzma"
+
+  for extension in lzma Z tar.lzma; do
     for mode in default target remove; do
       check_extract "$extension" "$mode"
     done

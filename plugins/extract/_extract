@@ -31,6 +31,7 @@ local -a exts=(
   tar.lrz
   tar.lz
   tar.lz4
+  tar.lzma
   tar.xz
   tar.zma
   tar.zst
