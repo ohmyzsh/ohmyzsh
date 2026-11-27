@@ -7,7 +7,8 @@
   unsetopt multibyte
 
   integer tick=0 width=96 height=28 resized=1 active=0 seconds_limit=0
-  integer mono=0 snapshot=0 scene_selected=0
+  integer mono=0 snapshot=0 scene_selected=0 alt_screen=0 fallback_mode=0 term_mode=0
+  integer color_count=0 linux_console=0
   local saved_tty='' key='' blank='' result='' scene=''
   local -a canvas inks palette
 
@@ -23,6 +24,7 @@ party           A rainbow terminal stage and a crowd of dancing shell fans.'
 
 Usage: omz shellsaver [aquarium|logo|hermit|party] [--mono] [--seconds N]
        omz shellsaver [aquarium|logo|hermit|party] --snapshot [FRAME]
+       omz shellsaver [aquarium|logo|hermit|party] --term [--seconds N]
        omz shellsaver --list
 '
     _zshell_list
@@ -32,8 +34,10 @@ Any key returns to the shell. Ctrl-C also exits safely.
 --mono          Use the terminal default foreground color.
 --seconds N     Exit automatically after 1-3600 seconds.
 --snapshot      Print a still at 96 columns x 28 rows (no terminal needed).
+--term          Force the ncurses-style fallback: clear, in-place redraw, restore stty.
 
-Requires Zsh 5.8+, stty, and an xterm-compatible terminal with an alternate screen.
+Requires Zsh 5.8+, stty, and a terminal in interactive mode.
+Uses the alternate screen when supported, otherwise clears and redraws in place.
 Nothing is installed or enabled automatically.'
   }
   case "${1-}" in
@@ -54,6 +58,7 @@ Nothing is installed or enabled automatically.'
       --help|-h) _zshell_usage; exit 0 ;;
       --list) _zshell_list; exit 0 ;;
       --mono) mono=1 ;;
+      --term) term_mode=1 ;;
       --seconds)
         shift
         if [[ $1 != <1-3600> ]]; then
@@ -517,14 +522,16 @@ Nothing is installed or enabled automatically.'
     fi
   }
 
-  # Render color runs rather than individual cells. One write per frame and no
-  # per-frame subprocesses; the final column stays unused to prevent autowrap.
+  # Render color runs at absolute cursor positions. The complete frame is
+  # accumulated in memory, so the terminal receives only one print operation.
   _zshell_render() {
-    integer row n
+    integer row n col
     local text colors ink run
-    result=${terminfo[home]}
+    result=''
     for (( row=1; row<=height; row++ )); do
+      result+=$'\e['$row$';1H'
       text=${canvas[$row]} colors=${inks[$row]}
+      col=1
       while [[ -n $colors ]]; do
         ink=${colors[1]}
         run=${colors%%[^$ink]*}
@@ -533,10 +540,9 @@ Nothing is installed or enabled automatically.'
         text=${text[$((n+1)),-1]}
         colors=${colors[$((n+1)),-1]}
       done
-      result+=${terminfo[el]}
-      (( row < height )) && result+=$'\r\n'
+      result+=${terminfo[el]:-$'\e[K'}
     done
-    result+=${terminfo[sgr0]}
+    result+=${terminfo[sgr0]:-$'\e[0m'}
   }
 
   if (( snapshot )); then
@@ -550,17 +556,35 @@ Nothing is installed or enabled automatically.'
   fi
   zmodload zsh/terminfo || exit 1
   zmodload zsh/datetime || exit 1
-  local capability
-  for capability in smcup rmcup home clear civis cnorm sgr0 el; do
-    if [[ -z ${terminfo[$capability]} ]]; then
-      print -u2 -r -- "omz shellsaver: terminal lacks $capability; try --snapshot"
-      exit 1
-    fi
-  done
 
-  if (( mono || ${+NO_COLOR} || ${terminfo[colors]:-0} < 8 )); then
+  # Prefer a real alternate screen, unless --term explicitly requests the
+  # ncurses-style console fallback (notably useful on Linux TTYs).
+  if (( term_mode )); then
+    alt_screen=0 fallback_mode=1 linux_console=1
+  elif [[ -n ${terminfo[smcup]} && -n ${terminfo[rmcup]} ]]; then
+    alt_screen=1
+  elif command -v tput >/dev/null 2>&1 &&
+       command tput smcup >/dev/null 2>&1 &&
+       command tput rmcup >/dev/null 2>&1; then
+    alt_screen=1
+  else
+    fallback_mode=1
+  fi
+  [[ $TERM == linux ]] && linux_console=1
+
+  color_count=${terminfo[colors]:-0}
+  if (( color_count == 0 )) && command -v tput >/dev/null 2>&1; then
+    color_count=$(command tput colors 2>/dev/null)
+  fi
+  [[ $color_count == <-> ]] || color_count=0
+  (( color_count )) || color_count=$([[ $TERM == linux ]] && print -n 8 || print -n 16)
+
+  if (( mono || ${+NO_COLOR} || color_count < 8 )); then
     palette=( '' '' '' '' '' '' '' '' '' )
-  elif (( ${terminfo[colors]} >= 256 )); then
+  elif (( color_count <= 16 || linux_console )); then
+    palette=( $'\e[34m' $'\e[36m' $'\e[35m' $'\e[33m' $'\e[31m'
+              $'\e[37m' $'\e[32m' $'\e[94m' $'\e[93m' )
+  elif (( color_count >= 256 )); then
     palette=( $'\e[38;5;60m' $'\e[38;5;159m' $'\e[38;5;183m'
               $'\e[38;5;222m' $'\e[38;5;210m' $'\e[38;5;230m'
               $'\e[38;5;72m' $'\e[38;5;110m' $'\e[38;5;137m' )
@@ -569,15 +593,18 @@ Nothing is installed or enabled automatically.'
               $'\e[37m' $'\e[32m' $'\e[36m' $'\e[33m' )
   fi
 
-  # Match the updater's exact truecolor and 256-color rainbow. The other
-  # scenes retain their own palettes, and monochrome always takes precedence.
-  if [[ $scene == logo ]] && (( !mono && !${+NO_COLOR} && ${terminfo[colors]:-0} >= 8 )); then
+  # Match the updater's exact truecolor and 256-color rainbow. On Linux or
+  # a 16-color terminal, all colors are explicitly reduced to ANSI 30-37/90-97.
+  if [[ $scene == logo ]] && (( !mono && !${+NO_COLOR} && color_count >= 8 )); then
     local -a rainbow
-    if [[ $COLORTERM == (truecolor|24bit) || $TERM == (iterm|tmux-truecolor|linux-truecolor|xterm-truecolor|screen-truecolor) ]]; then
+    if (( linux_console || color_count <= 16 )); then
+      rainbow=( $'\e[91m' $'\e[93m' $'\e[93m' $'\e[92m'
+                $'\e[94m' $'\e[95m' $'\e[95m' )
+    elif [[ $COLORTERM == (truecolor|24bit) || $TERM == (*truecolor*|iterm*) ]]; then
       rainbow=( $'\e[38;2;255;0;0m' $'\e[38;2;255;97;0m' $'\e[38;2;247;255;0m'
                 $'\e[38;2;0;255;30m' $'\e[38;2;77;0;255m' $'\e[38;2;168;0;255m'
                 $'\e[38;2;245;0;172m' )
-    elif (( ${terminfo[colors]} >= 256 )); then
+    elif (( color_count >= 256 )); then
       rainbow=( $'\e[38;5;196m' $'\e[38;5;202m' $'\e[38;5;226m'
                 $'\e[38;5;082m' $'\e[38;5;021m' $'\e[38;5;093m' $'\e[38;5;163m' )
     else
@@ -591,26 +618,38 @@ Nothing is installed or enabled automatically.'
 
   _zshell_cleanup() {
     # Ignore handled signals throughout restoration, including in child stty.
-    # Keep active set until both the screen and terminal modes are restored.
     trap '' INT TERM HUP QUIT TSTP WINCH
     (( active )) || return 0
-    print -rn -- "${terminfo[sgr0]}${terminfo[cnorm]}${terminfo[rmcup]}"
+    if (( alt_screen )); then
+      print -rn -- "${terminfo[sgr0]:-$'\e[0m'}${terminfo[cnorm]:-$'\e[?25h'}${terminfo[rmcup]:-}"
+    elif (( fallback_mode )); then
+      print -rn -- $'\e[2J\e[H\e[?25h\e[0m'
+    fi
     command stty "$saved_tty" 2>/dev/null
     active=0
   }
   _zshell_size() {
     local dimensions
     integer old_width=$width old_height=$height first=$resized
-    dimensions=$(command stty size 2>/dev/null) || return 1
-    local -a size=( ${=dimensions} )
-    (( ${#size} == 2 && size[1] > 0 && size[2] > 1 )) || return 1
-    height=$size[1] width=$((size[2]-1))
-    # Very large terminals retain a calm, bounded scene in the top-left corner.
+    dimensions=$(command stty size 2>/dev/null)
+    if [[ $dimensions == <->\ <-> ]]; then
+      local -a size=( ${=dimensions} )
+      height=$size[1] width=$((size[2]-1))
+    elif (( LINES > 1 && COLUMNS > 1 )); then
+      height=$LINES width=$((COLUMNS-1))
+    else
+      return 1
+    fi
     (( width > 180 )) && width=180
     (( height > 55 )) && height=55
+    (( width > 1 && height > 1 )) || return 1
     resized=0
     if (( first || old_width != width || old_height != height )); then
-      print -rn -- "${terminfo[clear]}"
+      if (( fallback_mode )); then
+        print -rn -- $'\e[2J\e[H'
+      else
+        print -rn -- "${terminfo[clear]:-$'\e[2J\e[H'}"
+      fi
     fi
     return 0
   }
@@ -627,7 +666,11 @@ Nothing is installed or enabled automatically.'
   {
     active=1
     command stty -echo -icanon -ixon min 1 time 0 || exit 1
-    print -rn -- "${terminfo[smcup]}${terminfo[civis]}"
+    if (( alt_screen )); then
+      print -rn -- "${terminfo[smcup]}${terminfo[civis]:-}"
+    else
+      print -rn -- $'\e[2J\e[H\e[?25l'
+    fi
     float started=$EPOCHREALTIME deadline wait_for next_size_check=0
     while true; do
       # Zsh can defer WINCH while a timed read is active. Poll at 2 Hz as well.

@@ -44,6 +44,7 @@ function _omz {
       '--mono[Use the default foreground color]' \
       '--seconds[Exit after a number of seconds]:seconds:' \
       '--snapshot[Print a plain-text still]::frame:' \
+      '--term[Force console/TTY fallback mode]' \
       '--help[Show Shellsaver help]'
     return
   fi
