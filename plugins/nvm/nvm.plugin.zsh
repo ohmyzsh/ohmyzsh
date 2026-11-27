@@ -50,6 +50,16 @@ function _omz_nvm_setup_autoload {
     zstyle -t ':omz:plugins:nvm' silent-autoload && nvm_silent="--silent"
 
     if [[ -n "$nvmrc_path" ]]; then
+      # Skip version resolution when an exact, unaliased version is already active.
+      local nvmrc_version="$(<"$nvmrc_path")"
+      if [[ "$nvmrc_version" == v<->.<->.<-> \
+        && ! -e "$NVM_DIR/alias/$nvmrc_version" \
+        && "${commands[node]-}" == "$NVM_DIR/versions/node/$nvmrc_version/bin/node" \
+        && -x "${commands[node]-}" ]] \
+        && (( ! $+functions[node] && ! $+aliases[node] )) \
+        && [[ "$nvmrc_version" == "$(command node --version 2>/dev/null)" ]]; then
+        return
+      fi
       local nvmrc_node_version=$(nvm version $(command cat "$nvmrc_path" | tr -dc '[:print:]'))
 
       if [[ "$nvmrc_node_version" = "N/A" ]]; then
