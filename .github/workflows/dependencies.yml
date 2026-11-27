@@ -11,6 +11,7 @@ jobs:
   check:
     name: Check for updates
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: github.repository == 'ohmyzsh/ohmyzsh'
     permissions:
       contents: write # this is needed to push commits and branches
@@ -30,6 +31,9 @@ jobs:
         with:
           client-id: ${{ secrets.OHMYZSH_CLIENT_ID }}
           private-key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
+          permission-contents: read
+          permission-issues: write
+          permission-pull-requests: write
       - name: Setup Python
         uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:

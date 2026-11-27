@@ -6,6 +6,8 @@ updates:
       interval: "weekly"
       day: "sunday"
     labels: []
+    cooldown:
+      default-days: 7
     groups:
       gha-minor:
         patterns:
@@ -19,8 +21,25 @@ updates:
       interval: "weekly"
       day: "sunday"
     labels: []
+    cooldown:
+      default-days: 7
     groups:
       py-minor:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+  - package-ecosystem: npm
+    directory: "/.github/workflows/installer"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+    labels: []
+    cooldown:
+      default-days: 7
+    groups:
+      npm-minor:
         patterns:
           - "*"
         update-types:

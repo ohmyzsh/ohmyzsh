@@ -14,13 +14,18 @@ on:
   push:
     branches: ["master"]
 
-# Declare default permissions as read only.
-permissions: read-all
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Permissions are granted only to the analysis job.
+permissions: {}
 
 jobs:
   analysis:
     name: Scorecard analysis
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       # Needed to upload the results to code-scanning dashboard.
       security-events: write
