@@ -1,13 +1,29 @@
 # juju plugin
 
-This plugin provides useful aliases and functions for [juju](https://juju.is/) (for TAB completion,
-refer to the [official repo](https://github.com/juju/juju/blob/develop/etc/bash_completion.d/juju)).
+This plugin provides useful aliases and functions for [juju](https://juju.is/), including
+zsh tab completion for juju commands, flags, models, controllers, applications, and units.
 
 To use this plugin, add `juju` to the plugins array in your zshrc file.
 
 ```zsh
 plugins=(... juju)
 ```
+
+## Completion
+
+Tab completion (`_juju`) covers subcommand names, command options, models,
+controllers, applications, units, and SAAS names, including:
+
+- flag values for `-m/--model`, `-c/--controller`, `-u/--unit`, `-a/--app`
+- position-aware name completion for single-positional commands (e.g. after
+  `juju config <app>`, options are offered instead of application names again)
+- `juju scp <unit>:/remote/path` completes the remote path by listing the
+  unit's filesystem via `juju ssh` (mirroring zsh's own ssh/scp completions);
+  this runs `juju ssh` on every TAB, so it can be disabled with
+  `zstyle ':completion:juju:scp:files' remote-access no` (falling back to
+  local file completion)
+- falling back to option completion whenever live model data (e.g.
+  `juju status`) is unavailable
 
 ## Aliases
 
