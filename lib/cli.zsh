@@ -190,14 +190,56 @@ function _omz::diagnose {
     codeset="$(locale charmap 2>/dev/null)"
   fi
 
+  local ret=0
+
   if [[ "${codeset:l}" = (utf-8|utf8) ]]; then
     _omz::log info "locale charmap is UTF-8"
   else
     _omz::log warn "your locale is not UTF-8 (charmap: ${codeset:-unknown})"
     _omz::log info "non-UTF-8 locales may cause glitches in completions and international characters"
     _omz::log info "consider setting a UTF-8 locale, e.g.: export LANG=C.UTF-8"
+    ret=1
+  fi
+
+  _omz::diagnose::plugins || ret=1
+  return $ret
+}
+
+function _omz::diagnose::plugins {
+  # Validate the plugins array: flag entries with no matching plugin folder,
+  # and suggest the closest plugin name (up to 2 typos) for each one.
+  setopt localoptions extendedglob nullglob
+
+  local plugin base found=0
+  local -a missing guesses
+  for plugin ($plugins); do
+    if [[ -f "$ZSH_CUSTOM/plugins/$plugin/$plugin.plugin.zsh" || -f "$ZSH_CUSTOM/plugins/$plugin/_$plugin" \
+       || -f "$ZSH/plugins/$plugin/$plugin.plugin.zsh" || -f "$ZSH/plugins/$plugin/_$plugin" ]]; then
+      (( ++found ))
+      continue
+    fi
+    missing+=("$plugin")
+  done
+
+  for plugin ($missing); do
+    guesses=()
+    for base ("$ZSH_CUSTOM/plugins" "$ZSH/plugins"); do
+      guesses+=("$base"/(#a1)${(b)plugin}(/:t) "$base"/(#a2)${(b)plugin}(/:t))
+    done
+    guesses=(${guesses:#$plugin})
+    if (( $#guesses )); then
+      _omz::log warn "plugin '$plugin' not found (did you mean '${guesses[1]}'?)" omz::diagnose
+    else
+      _omz::log warn "plugin '$plugin' not found" omz::diagnose
+    fi
+  done
+
+  if (( $#missing )); then
+    _omz::log info "$found of ${#plugins} plugins found" omz::diagnose
     return 1
   fi
+  (( $#plugins )) && _omz::log info "all ${#plugins} plugins found" omz::diagnose
+  return 0
 }
 
 function _omz::help {

@@ -562,7 +562,8 @@ omz diagnose
 
 It runs a few quick checks and tells you what to fix — for example, it will warn you when
 your locale is not UTF-8, which is a common cause of duplicated characters at the prompt
-(see the [FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#i-see-duplicate-typed-characters-after-i-complete-a-command)).
+(see the [FAQ](https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#i-see-duplicate-typed-characters-after-i-complete-a-command)),
+and it validates your `plugins=(...)` list, suggesting the closest name for any plugin it can't find.
 
 For a full report suitable for attaching to a bug report, use `omz_diagnostic_dump`.
 
