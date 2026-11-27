@@ -237,9 +237,10 @@ function _omz_diag_dump_one_big_text() {
   fi
   builtin echo
   builtin echo "Zsh compdump files:"
-  local dumpfile dumpfiles
-  command ls -lad $zdotdir/.zcompdump*
-  dumpfiles=( $zdotdir/.zcompdump*(N) )
+  local dumpfile
+  local -U dumpfiles
+  dumpfiles=( $zdotdir/.zcompdump*(N) ${ZSH_COMPDUMP:h}/.zcompdump*(N) )
+  (( $#dumpfiles )) && command ls -lad $dumpfiles
   if [[ $verbose -ge 2 ]]; then
     for dumpfile in $dumpfiles; do
       _omz_diag_dump_echo_file_w_header $dumpfile
