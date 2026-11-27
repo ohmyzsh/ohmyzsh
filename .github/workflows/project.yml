@@ -2,6 +2,8 @@ name: Project tracking
 on:
   issues:
     types: [opened, reopened]
+  # Board updates need an App token for fork PRs; no PR code is checked out or run.
+  # jactionlint ignore=dangerous-triggers
   pull_request_target:
     types: [opened, reopened, synchronize]
 
@@ -14,6 +16,10 @@ jobs:
   add-to-project:
     name: Add to project
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        shell: bash
     if: github.repository == 'ohmyzsh/ohmyzsh'
     steps:
       - name: Harden the runner (Audit all outbound calls)
@@ -26,13 +32,19 @@ jobs:
         with:
           client-id: ${{ secrets.OHMYZSH_CLIENT_ID }}
           private-key: ${{ secrets.OHMYZSH_APP_PRIVATE_KEY }}
+          permission-organization-projects: write
+          permission-issues: read
+          permission-pull-requests: read
       - name: Read project data
+        id: project
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           ORGANIZATION: ohmyzsh
           PROJECT_NUMBER: "1"
         run: |
           # Get Project data
+          # GraphQL variables must reach GitHub literally.
+          # shellcheck disable=SC2016
           gh api graphql -f query='
             query($org: String!, $number: Int!) {
               organization(login: $org){
@@ -48,19 +60,29 @@ jobs:
                   }
                 }
               }
-            }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+            }' -f org="$ORGANIZATION" -F number="$PROJECT_NUMBER" > project_data.json
 
           # Parse project data
-          cat >> "$GITHUB_ENV" <<EOF
-          PROJECT_ID=$(jq '.data.organization.projectV2.id' project_data.json)
-          PLUGIN_FIELD_ID=$(jq '.data.organization.projectV2.fields.nodes[] | select(.name == "Plugin") | .id' project_data.json)
-          THEME_FIELD_ID=$(jq '.data.organization.projectV2.fields.nodes[] | select(.name == "Theme") | .id' project_data.json)
-          EOF
+          PROJECT_ID=$(jq -er '.data.organization.projectV2.id' project_data.json)
+          PLUGIN_FIELD_ID=$(jq -er '.data.organization.projectV2.fields.nodes[] | select(.name == "Plugin") | .id' project_data.json)
+          THEME_FIELD_ID=$(jq -er '.data.organization.projectV2.fields.nodes[] | select(.name == "Theme") | .id' project_data.json)
+          for id in "$PROJECT_ID" "$PLUGIN_FIELD_ID" "$THEME_FIELD_ID"; do
+            [[ "$id" =~ ^[A-Za-z0-9_=/+-]+$ ]] || exit 1
+          done
+          {
+            echo "PROJECT_ID=$PROJECT_ID"
+            echo "PLUGIN_FIELD_ID=$PLUGIN_FIELD_ID"
+            echo "THEME_FIELD_ID=$THEME_FIELD_ID"
+          } >> "$GITHUB_OUTPUT"
       - name: Add to project
+        id: item
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           ISSUE_OR_PR_ID: ${{ github.event.issue.node_id || github.event.pull_request.node_id }}
+          PROJECT_ID: ${{ steps.project.outputs.PROJECT_ID }}
         run: |
+          # GraphQL variables must reach GitHub literally.
+          # shellcheck disable=SC2016
           item_id="$(gh api graphql -f query='
             mutation($project: ID!, $content: ID!) {
               addProjectV2ItemById(input: {projectId: $project, contentId: $content}) {
@@ -69,10 +91,12 @@ jobs:
                 }
               }
             }
-          ' -f project="$PROJECT_ID" -f content="$ISSUE_OR_PR_ID" --jq '.data.addProjectV2ItemById.item.id')"
+          ' -f project="$PROJECT_ID" -f content="$ISSUE_OR_PR_ID" --jq '.data.addProjectV2ItemById.item.id // error("missing project item ID")')"
 
-          echo "ITEM_ID=$item_id" >> $GITHUB_ENV
+          [[ "$item_id" =~ ^[A-Za-z0-9_=/+-]+$ ]] || exit 1
+          echo "ITEM_ID=$item_id" >> "$GITHUB_OUTPUT"
       - name: Classify Pull Request
+        id: classify
         if: github.event_name == 'pull_request_target'
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
@@ -109,12 +133,20 @@ jobs:
                 print "THEME=" theme
               }
             }
-          ' >> "$GITHUB_ENV"
+          ' >> "$GITHUB_OUTPUT"
       - name: Fill Pull Request fields in project
         if: github.event_name == 'pull_request_target'
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          PROJECT_ID: ${{ steps.project.outputs.PROJECT_ID }}
+          ITEM_ID: ${{ steps.item.outputs.ITEM_ID }}
+          PLUGIN_FIELD_ID: ${{ steps.project.outputs.PLUGIN_FIELD_ID }}
+          PLUGIN: ${{ steps.classify.outputs.PLUGIN }}
+          THEME_FIELD_ID: ${{ steps.project.outputs.THEME_FIELD_ID }}
+          THEME: ${{ steps.classify.outputs.THEME }}
         run: |
+          # GraphQL variables must reach GitHub literally.
+          # shellcheck disable=SC2016
           gh api graphql -f query='
             mutation (
               $project: ID!

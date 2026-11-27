@@ -19,6 +19,7 @@ jobs:
     name: Test installer
     if: github.repository == 'ohmyzsh/ohmyzsh'
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
     strategy:
       matrix:
         os:
@@ -42,6 +43,7 @@ jobs:
     name: Deploy installer in install.ohmyz.sh
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     environment: vercel
     needs:
       - test
@@ -53,8 +55,16 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          package-manager-cache: false
       - name: Install Vercel CLI
-        run: npm install -g vercel
+        working-directory: .github/workflows/installer
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Setup project and deploy
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -63,4 +73,4 @@ jobs:
         run: |
           cp tools/install.sh .github/workflows/installer/install.sh
           cd .github/workflows/installer
-          vc deploy --prod -t "$VERCEL_TOKEN"
+          ./node_modules/.bin/vercel deploy --prod -t "$VERCEL_TOKEN"

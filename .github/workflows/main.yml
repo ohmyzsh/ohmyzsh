@@ -21,6 +21,7 @@ jobs:
   tests:
     name: Run tests
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     if: github.repository == 'ohmyzsh/ohmyzsh'
     steps:
       - name: Harden the runner (Audit all outbound calls)

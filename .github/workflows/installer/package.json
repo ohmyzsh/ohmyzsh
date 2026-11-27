@@ -1,0 +1,7 @@
+{
+  "name": "ohmyzsh-installer-deploy",
+  "private": true,
+  "devDependencies": {
+    "vercel": "66.6.0"
+  }
+}
