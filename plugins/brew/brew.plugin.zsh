@@ -35,7 +35,7 @@ fi
 # (e.g. mtr) install executables to sbin, and brew doctor warns if it's
 # missing from PATH.
 if [[ -d "$HOMEBREW_PREFIX/sbin" ]]; then
-  if [[ ! "$PATH" == *"$HOMEBREW_PREFIX/sbin"* ]]; then
+  if (( ! ${path[(Ie)$HOMEBREW_PREFIX/sbin]} )); then
     export PATH="$HOMEBREW_PREFIX/sbin:$PATH"
   fi
 fi
