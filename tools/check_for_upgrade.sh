@@ -22,9 +22,13 @@ zstyle -s ':omz:update' mode update_mode || {
 # Cancel update if:
 # - the automatic update is disabled
 # - the current user doesn't have write permissions nor owns the $ZSH directory
+# - is run during IDE shell environment discovery, which uses interactive shells
+#   that nobody can respond to (VS Code and JetBrains markers)
 # - is not run from a tty
 if [[ "$update_mode" = disabled ]] \
    || [[ ! -w "$ZSH" || ! -O "$ZSH" ]] \
+   || [[ "${VSCODE_RESOLVING_ENVIRONMENT:-}" == 1 ]] \
+   || [[ "${INTELLIJ_ENVIRONMENT_READER:-}" == true ]] \
    || [[ ! -t 1 && ${POWERLEVEL9K_INSTANT_PROMPT:-off} == off ]]; then
   unset update_mode
   return

@@ -493,6 +493,12 @@ adding a line to your `~/.zshrc` file, **before Oh My Zsh is loaded**:
    zstyle ':omz:update' mode disabled
    ```
 
+Oh My Zsh tries to avoid running updates in shells that look interactive but
+where nobody can actually respond to an update prompt or wait on the network,
+such as IDE shell environment discovery. This detection is best-effort: if you
+still run into issues (e.g. timeouts at IDE startup), you'll need to disable
+updates conditionally in your `.zshrc` for the relevant contexts.
+
 NOTE: you can control how often Oh My Zsh checks for updates with the following setting:
 
 ```sh
