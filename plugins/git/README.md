@@ -208,6 +208,7 @@ plugins=(... git)
 | `gsb`                  | `git status --short -b`                                                                                                         |
 | `gsnut`                | `git status --untracked-files=no`                                                                                               |
 | `gsi`                  | `git submodule init`                                                                                                            |
+| `gsms`                 | `git submodule status`                                                                                                          |
 | `gsu`                  | `git submodule update`                                                                                                          |
 | `gsuri`                | `git submodule update --recursive --init`                                                                                       |
 | `gsd`                  | `git svn dcommit`                                                                                                               |
