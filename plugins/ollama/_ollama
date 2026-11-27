@@ -1,1 +1,122 @@
-ollama.plugin.zsh
+#compdef ollama
+
+# Based on https://gist.github.com/obeone/9313811fd61a7cbb843e0001a4434c58 by Grégoire Compagnon (@obeone),
+# adapted for Oh My Zsh by Konstantin Gredeskoul (@kigster)
+
+# Complete model names from 'ollama list', or running models from 'ollama ps'
+__ollama_models_from() {
+  local -a models
+  local output="$(ollama $1 2>/dev/null | sed 's/:/\\:/g')" # escape colons for _describe
+  if [[ -z "$output" ]]; then
+    _message "no models available or 'ollama $1' failed"
+    return 1
+  fi
+  models=("${(@f)$(echo "$output" | awk 'NR>1 {print $1}')}")
+  if [[ ${#models} -eq 0 ]]; then
+    _message "no models found"
+    return 1
+  fi
+  _describe 'model names' models
+}
+_ollama_models() { __ollama_models_from list }
+_ollama_running_models() { __ollama_models_from ps }
+
+_ollama() {
+  local -a commands
+
+  _arguments -C \
+    '(- *)'{-v,--version}'[Show version information]' \
+    '1: :->command' \
+    '*:: :->args'
+
+  case $state in
+    command)
+      commands=(
+        'serve:Start ollama'
+        'start:Start ollama (alias for serve)'
+        'create:Create a model'
+        'show:Show information for a model'
+        'run:Run a model'
+        'stop:Stop a running model'
+        'pull:Pull a model from a registry'
+        'push:Push a model to a registry'
+        'signin:Sign in to ollama.com'
+        'signout:Sign out from ollama.com'
+        'login:Sign in to ollama.com (alias for signin)'
+        'logout:Sign out from ollama.com (alias for signout)'
+        'list:List models'
+        'ls:List models (alias for list)'
+        'ps:List running models'
+        'cp:Copy a model'
+        'rm:Remove a model'
+        'launch:Launch an integration with ollama'
+        'help:Help about any command'
+      )
+      _describe -t commands 'ollama command' commands
+    ;;
+    args)
+      case $words[1] in
+        create)
+          _arguments \
+            '(-f --file)'{-f+,--file=}'[Name of the Modelfile]:file:_files' \
+            '(-q --quantize)'{-q+,--quantize=}'[Quantize model to this level]:level:' \
+            '--force[Continue local creation when validation fails]' \
+            '1:model name:'
+        ;;
+        show)
+          _arguments \
+            '--license[Show license of a model]' \
+            '--modelfile[Show Modelfile of a model]' \
+            '--parameters[Show parameters of a model]' \
+            '--system[Show system message of a model]' \
+            '--template[Show template of a model]' \
+            '(-v --verbose)'{-v,--verbose}'[Show detailed model information]' \
+            '1:model:_ollama_models'
+        ;;
+        run)
+          _arguments \
+            '--format=[Response format]:format:(json)' \
+            '--keepalive=[Duration to keep a model loaded]:duration:' \
+            '--think=[Enable thinking mode]:level:(true false high medium low)' \
+            '--hidethinking[Hide thinking output]' \
+            '--truncate[Truncate embedding inputs exceeding context length]' \
+            '--dimensions=[Truncate output embeddings to this dimension]:dimensions:' \
+            '--insecure[Use an insecure registry]' \
+            '--nowordwrap[Disable word wrap]' \
+            '--verbose[Show timings for response]' \
+            '1:model:_ollama_models' \
+            '2:prompt:'
+        ;;
+        stop)
+          _arguments '1:running model:_ollama_running_models'
+        ;;
+        pull|push)
+          _arguments \
+            '--insecure[Use an insecure registry]' \
+            '1:model:_ollama_models'
+        ;;
+        cp)
+          _arguments \
+            '1:source model:_ollama_models' \
+            '2:target model:'
+        ;;
+        rm)
+          _arguments '*:model:_ollama_models'
+        ;;
+        launch)
+          _arguments \
+            '(-m --model)'{-m+,--model=}'[Model to use]:model:_ollama_models' \
+            '--config[Configure the integration without launching it]' \
+            '--restore[Restore the integration configuration]' \
+            '(-y --yes)'{-y,--yes}'[Skip confirmation prompts]' \
+            '1:integration:'
+        ;;
+        help)
+          _describe -t commands 'ollama command' commands
+        ;;
+      esac
+    ;;
+  esac
+}
+
+_ollama "$@"

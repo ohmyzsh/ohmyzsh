@@ -1,18 +1,16 @@
 # Ollama
 
-This plugin provides command completion for Ollama executable.
+This plugin adds completion for [Ollama](https://ollama.com), the tool for running large language models locally.
 
-It has been adapted from the [Grégoire Compagnon's gist on Github](https://gist.github.com/obeone/9313811fd61a7cbb843e0001a4434c58#file-readme-md):
+To use it, add `ollama` to the plugins array in your zshrc file:
 
-It should work out the box if you add it to the plugins array.
+```zsh
+plugins=(... ollama)
+```
 
-## Port to oh-my-zsh
+It completes `ollama` subcommands, their flags, and model names (from `ollama list`, or `ollama ps` for `ollama stop`).
 
-© Konstantin Gredeskoul
+## Credits
 
-A very simple port was made by...
-
-* [https://kig.re](Konstantin's Blog @ https://kig.re)
-* [https://github.com/kigster](Konstantin's Github Page)
-
-And distributede under the same license as oh-my-zsh.
+Adapted from [Grégoire Compagnon's gist](https://gist.github.com/obeone/9313811fd61a7cbb843e0001a4434c58)
+by [Konstantin Gredeskoul](https://github.com/kigster).
