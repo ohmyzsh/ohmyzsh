@@ -1,3 +1,4 @@
+unalias cna cnrn 2>/dev/null
 cna()  { conda activate "$@"; }
 cnrn() { conda remove -y --all -n "$@"; }
 
