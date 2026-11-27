@@ -28,8 +28,8 @@ plugins=(... conda)
 | `cnle`   | `conda list --export`                   | Export the list of installed packages in the current environment                |
 | `cnles`  | `conda list --explicit > spec-file.txt` | Export the list of installed packages in the current environment to a spec file |
 | `cnr`    | `conda remove`                          | Remove given package                                                            |
-| `cnrn`   | `conda remove -y -all -n`               | Remove all packages in the specified environment                                |
-| `cnrp`   | `conda remove -y -all -p`               | Remove all packages in the specified prefix                                     |
+| `cnrn`   | `conda remove -y --all -n`              | Remove all packages in the specified environment                                |
+| `cnrp`   | `conda remove -y --all -p`              | Remove all packages in the specified prefix                                     |
 | `cnry`   | `conda remove -y`                       | Remove given package without confirmation                                       |
 | `cnsr`   | `conda search`                          | Search conda repositories for package                                           |
 | `cnu`    | `conda update`                          | Update conda package manager                                                    |
