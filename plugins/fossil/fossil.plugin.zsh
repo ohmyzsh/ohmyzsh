@@ -1,7 +1,7 @@
 _FOSSIL_PROMPT=""
 
 # Prefix at the very beginning of the prompt, before the branch name
-ZSH_THEME_FOSSIL_PROMPT_PREFIX="%{$fg_bold[blue]%}fossil:("
+ZSH_THEME_FOSSIL_PROMPT_PREFIX="%{$fg_bold[blue]%}fossil:(%{$fg_bold[red]%}"
 
 # At the very end of the prompt
 ZSH_THEME_FOSSIL_PROMPT_SUFFIX="%{$fg_bold[blue]%})"
