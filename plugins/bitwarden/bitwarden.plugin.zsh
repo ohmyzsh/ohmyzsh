@@ -35,7 +35,8 @@
       zmodload -F zsh/files b:zf_mv || return
       local temp_file
       temp_file=$(mktemp "${cache_file:h}/.$completion.XXXXXXXX") || return
-      if command "$cli" "$@" >| "$temp_file" && [[ -s "$temp_file" ]] &&
+      if command "$cli" "$@" </dev/null >| "$temp_file" 2>/dev/null &&
+        [[ -s "$temp_file" ]] &&
         zf_mv -f -- "$temp_file" "$cache_file"; then
         return
       fi
