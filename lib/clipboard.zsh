@@ -16,6 +16,10 @@
 # - doitclient (for SSH) http://www.chiark.greenend.org.uk/~sgtatham/doit/
 # - win32yank (Windows)
 # - tmux (if $TMUX is set)
+# - OSC 52 (when no clipboard tool is available, e.g. over SSH or in a container)
+#
+# Set ZSH_CLIPBOARD_OSC52 to "always" to copy through OSC 52 even if a
+# clipboard tool is available, or to "never" to disable the fallback.
 #
 # Defines two functions, clipcopy and clippaste, based on the detected platform.
 ##
@@ -48,6 +52,22 @@
 #   # Paste to a file
 #   clippaste > file.txt
 #
+function _has_osc52_clipboard() {
+  [[ -n "${TTY:-}" ]] && [[ -w "${TTY}" ]] && (( ${+commands[base64]} ))
+}
+
+function _clipcopy_osc52() {
+  emulate -L zsh
+  local content
+  content=$(cat "${1:-/dev/stdin}" | base64 | tr -d '\n') || return 1
+  print -rn -- $'\e]52;c;'"${content}"$'\e\\' > /dev/tty
+}
+
+function _clippaste_osc52() {
+  print 'clippaste: OSC 52 is write-only and no other clipboard tool was found' >&2
+  return 1
+}
+
 function detect-clipboard() {
   emulate -L zsh
 
@@ -57,9 +77,15 @@ function detect-clipboard() {
   elif [[ "${OSTYPE}" == (cygwin|msys)* ]]; then
     function clipcopy() { cat "${1:-/dev/stdin}" > /dev/clipboard; }
     function clippaste() { cat /dev/clipboard; }
+  elif (( $+commands[clip.exe] )) && (( $+commands[powershell.exe] )); then
+    function clipcopy() { cat "${1:-/dev/stdin}" | clip.exe; }
+    function clippaste() {
+      setopt localoptions pipefail
+      powershell.exe -noprofile -command Get-Clipboard | tr -d '\r'
+    }
   elif [ -n "${WAYLAND_DISPLAY:-}" ] && (( ${+commands[wl-copy]} )) && (( ${+commands[wl-paste]} )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | wl-copy &>/dev/null &|; }
-    function clippaste() { wl-paste; }
+    function clippaste() { wl-paste --no-newline; }
   elif [ -n "${DISPLAY:-}" ] && (( ${+commands[xsel]} )); then
     function clipcopy() { cat "${1:-/dev/stdin}" | xsel --clipboard --input; }
     function clippaste() { xsel --clipboard --output; }
@@ -79,11 +105,11 @@ function detect-clipboard() {
     function clipcopy() { cat "${1:-/dev/stdin}" | termux-clipboard-set; }
     function clippaste() { termux-clipboard-get; }
   elif [ -n "${TMUX:-}" ] && (( ${+commands[tmux]} )); then
-    function clipcopy() { tmux load-buffer "${1:--}"; }
+    function clipcopy() { tmux load-buffer -w "${1:--}"; }
     function clippaste() { tmux save-buffer -; }
-  elif [[ $(uname -r) = *icrosoft* ]]; then
-    function clipcopy() { cat "${1:-/dev/stdin}" | clip.exe; }
-    function clippaste() { powershell.exe -noprofile -command Get-Clipboard; }
+  elif [[ "${ZSH_CLIPBOARD_OSC52:-}" != never ]] && _has_osc52_clipboard; then
+    function clipcopy() { _clipcopy_osc52 "$@"; }
+    function clippaste() { _clippaste_osc52; }
   else
     function _retry_clipboard_detection_or_fail() {
       local clipcmd="${1}"; shift
@@ -98,10 +124,14 @@ function detect-clipboard() {
     function clippaste() { _retry_clipboard_detection_or_fail clippaste "$@"; }
     return 1
   fi
+
+  if [[ "${ZSH_CLIPBOARD_OSC52:-}" == always ]] && _has_osc52_clipboard; then
+    function clipcopy() { _clipcopy_osc52 "$@"; }
+  fi
 }
 
-# Detect at startup. A non-zero exit here indicates that the dummy clipboards were set,
-# which is not really an error. If the user calls them, they will attempt to redetect
-# (for example, perhaps the user has now installed xclip) and then either print an error
-# or proceed successfully.
-detect-clipboard || true
+function clipcopy clippaste {
+  unfunction clipcopy clippaste
+  detect-clipboard || true # let one retry
+  "$0" "$@"
+}

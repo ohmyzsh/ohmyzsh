@@ -16,15 +16,19 @@
 #   ZSH=~/.zsh sh install.sh
 #
 # Respects the following environment variables:
+#   ZDOTDIR - path to Zsh dotfiles directory (default: unset). See [1][2]
+#             [1] https://zsh.sourceforge.io/Doc/Release/Parameters.html#index-ZDOTDIR
+#             [2] https://zsh.sourceforge.io/Doc/Release/Files.html#index-ZDOTDIR_002c-use-of
 #   ZSH     - path to the Oh My Zsh repository folder (default: $HOME/.oh-my-zsh)
 #   REPO    - name of the GitHub repo to install from (default: ohmyzsh/ohmyzsh)
 #   REMOTE  - full remote URL of the git repo to install (default: GitHub via HTTPS)
 #   BRANCH  - branch to check out immediately after install (default: master)
 #
 # Other options:
-#   CHSH       - 'no' means the installer will not change the default shell (default: yes)
-#   RUNZSH     - 'no' means the installer will not run zsh after the install (default: yes)
-#   KEEP_ZSHRC - 'yes' means the installer will not replace an existing .zshrc (default: no)
+#   CHSH                   - 'no' means the installer will not change the default shell (default: yes)
+#   RUNZSH                 - 'no' means the installer will not run zsh after the install (default: yes)
+#   KEEP_ZSHRC             - 'yes' means the installer will not replace an existing .zshrc (default: no)
+#   OVERWRITE_CONFIRMATION - 'no' means the installer will not ask for confirmation to overwrite the existing .zshrc (default: yes)
 #
 # You can also pass some arguments to the install script to set some these options:
 #   --skip-chsh: has the same behavior as setting CHSH to 'no'
@@ -45,16 +49,49 @@ USER=${USER:-$(id -u -n)}
 # $HOME is defined at the time of login, but it could be unset. If it is unset,
 # a tilde by itself (~) will not be expanded to the current user's home directory.
 # POSIX: https://pubs.opengroup.org/onlinepubs/009696899/basedefs/xbd_chap08.html#tag_08_03
-HOME="${HOME:-$(getent passwd $USER 2>/dev/null | cut -d: -f6)}"
-# macOS does not have getent, but this works even if $HOME is unset
-HOME="${HOME:-$(eval echo ~$USER)}"
+if [ -z "$HOME" ]; then
+  HOME=$(getent passwd "$USER" 2>/dev/null | cut -d: -f6)
+
+  # macOS does not have getent; fall back to tilde expansion, but only if
+  # $USER is a safe username. The eval below would otherwise expand any shell
+  # metacharacters in $USER and allow command injection (CWE-78).
+  case "$USER" in
+    *[![:alnum:]_.-]*|'')
+      ;;
+    *)
+      resolved_home=$(eval echo ~"$USER")
+      # Unknown users are not expanded and produce a literal "~username".
+      [ "$resolved_home" = "~$USER" ] || HOME=$resolved_home
+      ;;
+  esac
+
+  case "$HOME" in
+    /*) ;;
+    *)
+      echo "Error: unable to determine the current user's home directory." >&2
+      echo "Set HOME explicitly and rerun the installer." >&2
+      exit 1
+      ;;
+  esac
+fi
 
 
 # Track if $ZSH was provided
 custom_zsh=${ZSH:+yes}
 
-# Default settings
+# Use $zdot to keep track of where the directory is for zsh dotfiles
+# To check if $ZDOTDIR was provided, explicitly check for $ZDOTDIR
+zdot="${ZDOTDIR:-$HOME}"
+
+# Default value for $ZSH
+# a) if $ZDOTDIR is supplied and not $HOME: $ZDOTDIR/ohmyzsh
+# b) otherwise, $HOME/.oh-my-zsh
+if [ -n "$ZDOTDIR" ] && [ "$ZDOTDIR" != "$HOME" ]; then
+  ZSH="${ZSH:-$ZDOTDIR/ohmyzsh}"
+fi
 ZSH="${ZSH:-$HOME/.oh-my-zsh}"
+
+# Default settings
 REPO=${REPO:-ohmyzsh/ohmyzsh}
 REMOTE=${REMOTE:-https://github.com/${REPO}.git}
 BRANCH=${BRANCH:-master}
@@ -63,6 +100,7 @@ BRANCH=${BRANCH:-master}
 CHSH=${CHSH:-yes}
 RUNZSH=${RUNZSH:-yes}
 KEEP_ZSHRC=${KEEP_ZSHRC:-no}
+OVERWRITE_CONFIRMATION=${OVERWRITE_CONFIRMATION:-yes}
 
 
 command_exists() {
@@ -72,6 +110,10 @@ command_exists() {
 user_can_sudo() {
   # Check if sudo is installed
   command_exists sudo || return 1
+  # Termux can't run sudo, so we can detect it and exit the function early.
+  case "$PREFIX" in
+  *com.termux*) return 1 ;;
+  esac
   # The following command has 3 parts:
   #
   # 1. Run `sudo` with `-v`. Does the following:
@@ -148,18 +190,29 @@ supports_hyperlinks() {
 
   # If $TERM_PROGRAM is set, these terminals support hyperlinks
   case "$TERM_PROGRAM" in
-  Hyper|iTerm.app|terminology|WezTerm) return 0 ;;
+  ghostty|Hyper|iTerm.app|terminology|vscode|WezTerm) return 0 ;;
   esac
 
-  # kitty supports hyperlinks
-  if [ "$TERM" = xterm-kitty ]; then
+  # These termcap entries support hyperlinks
+  case "$TERM" in
+  alacritty|alacritty-direct|xterm-ghostty|xterm-kitty) return 0 ;;
+  esac
+
+  # xfce4-terminal supports hyperlinks
+  if [ "$COLORTERM" = "xfce4-terminal" ]; then
     return 0
   fi
 
-  # Windows Terminal or Konsole also support hyperlinks
-  if [ -n "$WT_SESSION" ] || [ -n "$KONSOLE_VERSION" ]; then
+  # Windows Terminal also supports hyperlinks
+  if [ -n "$WT_SESSION" ]; then
     return 0
   fi
+
+  # Konsole supports hyperlinks, but it's an opt-in setting that can't be detected
+  # https://github.com/ohmyzsh/ohmyzsh/issues/10964
+  # if [ -n "$KONSOLE_VERSION" ]; then
+  #   return 0
+  # fi
 
   return 1
 }
@@ -185,7 +238,7 @@ supports_truecolor() {
 fmt_link() {
   # $1: text, $2: url, $3: fallback mode
   if supports_hyperlinks; then
-    printf '\033]8;;%s\a%s\033]8;;\a\n' "$2" "$1"
+    printf '\033]8;;%s\033\\%s\033]8;;\033\\\n' "$2" "$1"
     return
   fi
 
@@ -267,7 +320,7 @@ setup_ohmyzsh() {
   }
 
   ostype=$(uname)
-  if [ -z "${ostype%CYGWIN*}" ] && git --version | grep -q msysgit; then
+  if [ -z "${ostype%CYGWIN*}" ] && git --version | grep -Eq 'msysgit|windows'; then
     fmt_error "Windows/MSYS Git is not supported on Cygwin"
     fmt_error "Make sure the Cygwin git package is installed and is first on the \$PATH"
     exit 1
@@ -305,13 +358,32 @@ setup_zshrc() {
   echo "${FMT_BLUE}Looking for an existing zsh config...${FMT_RESET}"
 
   # Must use this exact name so uninstall.sh can find it
-  OLD_ZSHRC=~/.zshrc.pre-oh-my-zsh
-  if [ -f ~/.zshrc ] || [ -h ~/.zshrc ]; then
+  OLD_ZSHRC="$zdot/.zshrc.pre-oh-my-zsh"
+  if [ -f "$zdot/.zshrc" ] || [ -h "$zdot/.zshrc" ]; then
     # Skip this if the user doesn't want to replace an existing .zshrc
     if [ "$KEEP_ZSHRC" = yes ]; then
-      echo "${FMT_YELLOW}Found ~/.zshrc.${FMT_RESET} ${FMT_GREEN}Keeping...${FMT_RESET}"
+      echo "${FMT_YELLOW}Found ${zdot}/.zshrc.${FMT_RESET} ${FMT_GREEN}Keeping...${FMT_RESET}"
       return
     fi
+    
+    if [ "$OVERWRITE_CONFIRMATION" != "no" ]; then
+      # Ask user for confirmation before backing up and overwriting
+      echo "${FMT_YELLOW}Found ${zdot}/.zshrc."
+      echo "The existing .zshrc will be backed up to .zshrc.pre-oh-my-zsh if overwritten."
+      echo "Make sure your .zshrc contains the following minimal configuration if you choose not to overwrite it:${FMT_RESET}"
+      echo "----------------------------------------"
+      cat "$ZSH/templates/minimal.zshrc"
+      echo "----------------------------------------"
+      printf '%sDo you want to overwrite it with the Oh My Zsh template? [Y/n]%s ' \
+        "$FMT_YELLOW" "$FMT_RESET"
+      read -r opt
+      case $opt in
+        [Yy]*|"") ;;
+        [Nn]*) echo "Overwrite skipped. Existing .zshrc will be kept."; return ;;
+        *) echo "Invalid choice. Overwrite skipped. Existing .zshrc will be kept."; return ;;
+      esac
+    fi
+
     if [ -e "$OLD_ZSHRC" ]; then
       OLD_OLD_ZSHRC="${OLD_ZSHRC}-$(date +%Y-%m-%d_%H-%M-%S)"
       if [ -e "$OLD_OLD_ZSHRC" ]; then
@@ -321,19 +393,24 @@ setup_zshrc() {
       fi
       mv "$OLD_ZSHRC" "${OLD_OLD_ZSHRC}"
 
-      echo "${FMT_YELLOW}Found old ~/.zshrc.pre-oh-my-zsh." \
+      echo "${FMT_YELLOW}Found old .zshrc.pre-oh-my-zsh." \
         "${FMT_GREEN}Backing up to ${OLD_OLD_ZSHRC}${FMT_RESET}"
     fi
-    echo "${FMT_YELLOW}Found ~/.zshrc.${FMT_RESET} ${FMT_GREEN}Backing up to ${OLD_ZSHRC}${FMT_RESET}"
-    mv ~/.zshrc "$OLD_ZSHRC"
+    echo "${FMT_GREEN}Backing up to ${OLD_ZSHRC}${FMT_RESET}"
+    mv "$zdot/.zshrc" "$OLD_ZSHRC"
   fi
 
-  echo "${FMT_GREEN}Using the Oh My Zsh template file and adding it to ~/.zshrc.${FMT_RESET}"
+  echo "${FMT_GREEN}Using the Oh My Zsh template file and adding it to $zdot/.zshrc.${FMT_RESET}"
 
-  # Replace $HOME path with '$HOME' in $ZSH variable in .zshrc file
-  omz=$(echo "$ZSH" | sed "s|^$HOME/|\$HOME/|")
-  sed "s|^export ZSH=.*$|export ZSH=\"${omz}\"|" "$ZSH/templates/zshrc.zsh-template" > ~/.zshrc-omztemp
-  mv -f ~/.zshrc-omztemp ~/.zshrc
+  # Modify $ZSH variable in .zshrc directory to use the literal $ZDOTDIR or $HOME
+  omz="$ZSH"
+  if [ -n "$ZDOTDIR" ] && [ "$ZDOTDIR" != "$HOME" ]; then
+    omz=$(echo "$omz" | sed "s|^$ZDOTDIR/|\$ZDOTDIR/|")
+  fi
+  omz=$(echo "$omz" | sed "s|^$HOME/|\$HOME/|")
+
+  sed "s|^export ZSH=.*$|export ZSH=\"${omz}\"|" "$ZSH/templates/zshrc.zsh-template" > "$zdot/.zshrc-omztemp"
+  mv -f "$zdot/.zshrc-omztemp" "$zdot/.zshrc"
 
   echo
 }
@@ -365,8 +442,8 @@ EOF
     "$FMT_YELLOW" "$FMT_RESET"
   read -r opt
   case $opt in
-    y*|Y*|"") ;;
-    n*|N*) echo "Shell change skipped."; return ;;
+    [Yy]*|"") ;;
+    [Nn]*) echo "Shell change skipped."; return ;;
     *) echo "Invalid choice. Shell change skipped."; return ;;
   esac
 
@@ -401,9 +478,9 @@ EOF
 
   # We're going to change the default shell, so back up the current one
   if [ -n "$SHELL" ]; then
-    echo "$SHELL" > ~/.shell.pre-oh-my-zsh
+    echo "$SHELL" > "$zdot/.shell.pre-oh-my-zsh"
   else
-    grep "^$USER:" /etc/passwd | awk -F: '{print $7}' > ~/.shell.pre-oh-my-zsh
+    grep "^$USER:" /etc/passwd | awk -F: '{print $7}' > "$zdot/.shell.pre-oh-my-zsh"
   fi
 
   echo "Changing your shell to $zsh..."
@@ -418,13 +495,16 @@ EOF
   # be prompted for the password either way, so this shouldn't cause any issues.
   #
   if user_can_sudo; then
-    sudo -k chsh -s "$zsh" "$USER"  # -k forces the password prompt
+    sudo -k >/dev/null 2>&1 || true # -k forces the password prompt when supported
+    sudo chsh -s "$zsh" "$USER"
+    chsh_status=$?
   else
     chsh -s "$zsh" "$USER"          # run chsh normally
+    chsh_status=$?
   fi
 
   # Check if the shell change was successful
-  if [ $? -ne 0 ]; then
+  if [ "$chsh_status" -ne 0 ]; then
     fmt_error "chsh command unsuccessful. Change your default shell manually."
   else
     export SHELL="$zsh"
@@ -445,12 +525,14 @@ print_success() {
   printf '\n'
   printf '\n'
   printf "%s %s %s\n" "Before you scream ${FMT_BOLD}${FMT_YELLOW}Oh My Zsh!${FMT_RESET} look over the" \
-    "$(fmt_code "$(fmt_link ".zshrc" "file://$HOME/.zshrc" --text)")" \
+    "$(fmt_code "$(fmt_link ".zshrc" "file://$zdot/.zshrc" --text)")" \
     "file to select plugins, themes, and options."
   printf '\n'
-  printf '%s\n' "• Follow us on Twitter: $(fmt_link @ohmyzsh https://twitter.com/ohmyzsh)"
-  printf '%s\n' "• Join our Discord community: $(fmt_link "Discord server" https://discord.gg/ohmyzsh)"
-  printf '%s\n' "• Get stickers, t-shirts, coffee mugs and more: $(fmt_link "Planet Argon Shop" https://shop.planetargon.com/collections/oh-my-zsh)"
+  printf '%s\n' "${FMT_YELLOW}★${FMT_RESET} Enjoying Oh My Zsh? Star us on $(fmt_link GitHub https://github.com/ohmyzsh/ohmyzsh)"
+  printf '%s\n' "• Follow along on X ($(fmt_link @ohmyzsh https://x.com/ohmyzsh)) or Bluesky ($(fmt_link @ohmyz.sh https://bsky.app/profile/ohmyz.sh))"
+  printf '%s\n' "• Questions or ideas? Join the community on $(fmt_link Discord https://discord.gg/ohmyzsh)"
+  printf '%s\n' "• Help support the project: sponsor us on $(fmt_link "Open Collective" https://opencollective.com/ohmyzsh),"
+  printf '%s\n' "  or grab stickers, shirts, and swag from $(fmt_link CommitGoods https://commitgoods.com/ohmyzsh)"
   printf '%s\n' $FMT_RESET
 }
 
@@ -459,12 +541,13 @@ main() {
   if [ ! -t 0 ]; then
     RUNZSH=no
     CHSH=no
+    OVERWRITE_CONFIRMATION=no
   fi
 
   # Parse arguments
   while [ $# -gt 0 ]; do
     case $1 in
-      --unattended) RUNZSH=no; CHSH=no ;;
+      --unattended) RUNZSH=no; CHSH=no; OVERWRITE_CONFIRMATION=no ;;
       --skip-chsh) CHSH=no ;;
       --keep-zshrc) KEEP_ZSHRC=yes ;;
     esac
@@ -498,6 +581,11 @@ EOF
       echo "You'll need to remove it if you want to reinstall."
     fi
     exit 1
+  fi
+
+  # Create ZDOTDIR folder structure if it doesn't exist
+  if [ -n "$ZDOTDIR" ]; then
+    mkdir -p "$ZDOTDIR"
   fi
 
   setup_ohmyzsh

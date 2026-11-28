@@ -185,7 +185,7 @@ Result is stored as `$reply[REPLY]` (`$` isn't needed before `REPLY` because
 of arithmetic context inside `[]`). The returned array might be different from
 input arguments as `n-list` can process them via incremental search or uniq
 mode. `$REPLY` is the index in that possibly processed array. If `$REPLY`
-equals `-1` it means that no selection have been made (user quitted via `q`
+equals `-1` it means that no selection have been made (user quit via `q`
 key).
 
 To set up entries that can be jumped to with `[`,`]` keys add their indices to

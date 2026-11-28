@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 # Zsh Theme Chooser by fox (fox91 at anche dot no)
 # This program is free software. It comes without any warranty, to

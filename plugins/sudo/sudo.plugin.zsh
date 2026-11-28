@@ -96,7 +96,7 @@ sudo-command-line() {
     LBUFFER="${WHITESPACE}${LBUFFER}"
 
     # Redisplay edit buffer (compatibility with zsh-syntax-highlighting)
-    zle redisplay
+    zle && zle redisplay # only run redisplay if zle is enabled
   }
 }
 

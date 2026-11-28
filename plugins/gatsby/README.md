@@ -1,6 +1,6 @@
 # gatsby autocomplete plugin
 
-* Adds autocomplete options for all gatsby commands.
+Adds autocomplete options for all gatsby commands.
 
 ## Requirements
 

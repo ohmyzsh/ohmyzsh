@@ -5,8 +5,8 @@
 # If they are not set yet, they will be
 # overwritten with their default values
 
-default fastfile_dir        "${HOME}/.fastfile"
-default fastfile_var_prefix "§"
+fastfile_dir="${fastfile_dir:-${HOME}/.fastfile}"
+fastfile_var_prefix="${fastfile_var_prefix:-§}"
 
 ###########################
 # Impl

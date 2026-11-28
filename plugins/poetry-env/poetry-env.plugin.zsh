@@ -1,0 +1,41 @@
+_togglePoetryShell() {
+  # Determine if currently in a Poetry-managed directory
+  local in_poetry_dir=0
+  local in_active_poetry_dir=0
+  if [[ -f "$PWD/pyproject.toml" && -f "$PWD/poetry.lock" ]]; then
+    in_poetry_dir=1
+  fi
+
+  # Deactivate when leaving the active project or entering a nested project
+  if [[ $poetry_active -eq 1 ]]; then
+    local project_dir="${poetry_dir%/}"
+    if [[ "$PWD" == "$project_dir" || "$PWD" == "$project_dir"/* ]]; then
+      in_active_poetry_dir=1
+    fi
+
+    if [[ $in_active_poetry_dir -eq 0 ]] ||
+      { [[ $in_poetry_dir -eq 1 ]] && [[ "$PWD" != "$poetry_dir" ]]; }; then
+      export poetry_active=0
+      unset poetry_dir
+      (( $+functions[deactivate] )) && deactivate
+    fi
+  fi
+
+  # Activate the environment if in a Poetry directory and no environment is currently active
+  if [[ $in_poetry_dir -eq 1 ]] && [[ $poetry_active -ne 1 ]]; then
+    local venv_dir=$(poetry env info --path 2>/dev/null)
+    # Handle case where poetry returns "." for in-project virtual environments
+    if [[ "$venv_dir" == "." ]]; then
+      venv_dir="$PWD/.venv"
+    fi
+    # Only proceed if venv_dir is set and the activate script exists
+    if [[ -n "$venv_dir" && -f "${venv_dir}/bin/activate" ]]; then
+      export poetry_active=1
+      export poetry_dir="$PWD"
+      source "${venv_dir}/bin/activate"
+    fi
+  fi
+}
+autoload -U add-zsh-hook
+add-zsh-hook chpwd _togglePoetryShell
+_togglePoetryShell # Initial call to check the current directory at shell startup

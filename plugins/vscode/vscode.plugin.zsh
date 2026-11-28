@@ -1,8 +1,9 @@
-# VS Code (stable / insiders) / VSCodium zsh plugin
+# VS Code (stable / insiders) / VSCodium / Cursor zsh plugin
 # Authors:
 #   https://github.com/MarsiBarsi (original author)
 #   https://github.com/babakks
 #   https://github.com/SteelShot
+#   https://github.com/AliSajid
 
 # Verify if any manual user choice of VS Code exists first.
 if [[ -n "$VSCODE" ]] && ! which $VSCODE &>/dev/null; then
@@ -18,12 +19,21 @@ if [[ -z "$VSCODE" ]]; then
     VSCODE=code-insiders
   elif which codium &>/dev/null; then
     VSCODE=codium
+  elif which cursor &>/dev/null; then
+    VSCODE=cursor
   else
     return
   fi
 fi
 
-alias vsc="$VSCODE ."
+function vsc {
+  if (( $# )); then
+    $VSCODE $@
+  else
+    $VSCODE .
+  fi
+}
+
 alias vsca="$VSCODE --add"
 alias vscd="$VSCODE --diff"
 alias vscg="$VSCODE --goto"
@@ -31,6 +41,7 @@ alias vscn="$VSCODE --new-window"
 alias vscr="$VSCODE --reuse-window"
 alias vscw="$VSCODE --wait"
 alias vscu="$VSCODE --user-data-dir"
+alias vscp="$VSCODE --profile"
 
 alias vsced="$VSCODE --extensions-dir"
 alias vscie="$VSCODE --install-extension"

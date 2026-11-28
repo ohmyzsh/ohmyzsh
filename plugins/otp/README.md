@@ -16,7 +16,9 @@ Provided aliases:
   email address). Then the OTP key needs to be pasted, followed by a CTRL+D character
   inserted on an empty line.
 
-- `ot`: generates a MFA code based on the given key and copies it to the clipboard 
+- `ot`: generates a MFA code based on the given key and copies it to the clipboard
   (on Linux it relies on xsel, on MacOS X it uses pbcopy instead).
 
-The plugin uses `$HOME/.otp` to store its internal files.
+The plugin stores its internal files in `$OTP_HOME`, which can be set in your zshrc.
+If `$OTP_HOME` is not set it defaults to either `$HOME/.otp` or `$XDG_DATA_HOME/otp`,
+depending on whether `~/.otp` already exists, or whether `$XDG_DATA_HOME` is set.

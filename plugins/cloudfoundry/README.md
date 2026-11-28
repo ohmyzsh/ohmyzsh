@@ -50,7 +50,7 @@ Alternatively, seek out the [online documentation][3]. And don't forget, there a
 
 ## Contributors
 
-Contributed to `oh_my_zsh` by [benwilcock][2].  
+Contributed to `oh_my_zsh` by [benwilcock][2].
 
 [1]: https://docs.cloudfoundry.org/cf-cli/install-go-cli.html
 [2]: https://github.com/benwilcock

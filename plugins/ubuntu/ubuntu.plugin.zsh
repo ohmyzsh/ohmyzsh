@@ -1,11 +1,22 @@
-(( $+commands[apt] )) && APT=apt || APT=apt-get
+# Detect available package manager (prefer apt-fast > apt > apt-get)
+if (( $+commands[apt-fast] )); then
+    APT=apt-fast
+elif (( $+commands[apt] )); then
+    APT=apt
+else
+    APT=apt-get
+fi
 
 alias acs='apt-cache search'
 
 alias afs='apt-file search --regexp'
 
 # These are apt/apt-get only
-alias ags="$APT source"
+if (( $+commands[apt] )); then
+    alias ags="apt source"
+else
+    alias ags="apt-get source"
+fi
 
 alias acp='apt-cache policy'
 

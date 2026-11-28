@@ -1,5 +1,5 @@
-# python command
-alias py='python3'
+# set python command if 'py' not installed
+builtin which py > /dev/null || alias py='python3'
 
 # Find python file
 alias pyfind='find . -name "*.py"'
@@ -29,7 +29,7 @@ function pyuserpaths() {
 
     # Get minor release version.
     # The patch version is variable length, truncate it.
-    version=${(M)${"$($python -V 2>&1)":7}#[^.]##.[^.]##}
+    version=${(M)${"$($python -V 2>&1)":7}##[^.]##.[^.]##}
 
     # Add version specific path, if:
     # - it exists in the filesystem
@@ -43,19 +43,34 @@ function pyuserpaths() {
 # Grep among .py files
 alias pygrep='grep -nr --include="*.py"'
 
-# Run proper IPython regarding current virtualenv (if any)
-alias ipython="python3 -c 'import IPython; IPython.terminal.ipapp.launch_new_instance()'"
-
 # Share local directory as a HTTP server
 alias pyserver="python3 -m http.server"
 
 
-## venv utilities
+## venv settings
+: ${PYTHON_VENV_NAME:=venv}
+
+# Array of possible virtual environment names to look for, in order
+# -U for removing duplicates
+typeset -gaU PYTHON_VENV_NAMES
+[[ -n "$PYTHON_VENV_NAMES" ]] || PYTHON_VENV_NAMES=($PYTHON_VENV_NAME venv .venv)
 
 # Activate a the python virtual environment specified.
-# If none specified, use 'venv'.
+# If none specified, use the first existing in $PYTHON_VENV_NAMES.
 function vrun() {
-  local name="${1:-venv}"
+  if [[ -z "$1" ]]; then
+    local name
+    for name in $PYTHON_VENV_NAMES; do
+      local venvpath="${name:P}"
+      if [[ -d "$venvpath" ]]; then
+        vrun "$name"
+        return $?
+      fi
+    done
+    echo >&2 "Error: no virtual environment found in current directory"
+  fi
+
+  local name="${1:-$PYTHON_VENV_NAME}"
   local venvpath="${name:P}"
 
   if [[ ! -d "$venvpath" ]]; then
@@ -72,12 +87,51 @@ function vrun() {
   echo "Activated virtual environment ${name}"
 }
 
-# Create a new virtual environment, with default name 'venv'.
+# Create a new virtual environment using the specified name.
+# If none specified, use $PYTHON_VENV_NAME
 function mkv() {
-  local name="${1:-venv}"
+  local name="${1:-$PYTHON_VENV_NAME}"
   local venvpath="${name:P}"
 
   python3 -m venv "${name}" || return
   echo >&2 "Created venv in '${venvpath}'"
   vrun "${name}"
 }
+
+if [[ "$PYTHON_AUTO_VRUN" == "true" ]]; then
+  # Automatically activate venv when changing dir
+  function auto_vrun() {
+    # deactivate if we're on a different dir than VIRTUAL_ENV states
+    # we don't deactivate subdirectories!
+    if (( $+functions[deactivate] )) && [[ $PWD != ${VIRTUAL_ENV:h}* ]]; then
+      deactivate > /dev/null 2>&1
+    fi
+
+    if [[ $PWD != ${VIRTUAL_ENV:h} ]]; then
+      local file
+      for file in "${^PYTHON_VENV_NAMES[@]}"/bin/activate(N.); do
+        # make sure we're not in a venv already
+        (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
+        source $file > /dev/null 2>&1
+        return
+      done
+
+      # Search parent directories if recursive mode is enabled, stopping before $HOME
+      if [[ "$PYTHON_AUTO_VRUN_RECURSIVE" == "true" ]]; then
+        local search_dir="$PWD:h"
+        while [[ "$search_dir" != "/" && "$search_dir" != "." && "$search_dir" != "$HOME" ]]; do
+          for file in "${search_dir}/"${^PYTHON_VENV_NAMES[@]}"/bin/activate"(N.); do
+            # the venv found is already active
+            [[ "${file:h:h:A}" == "${VIRTUAL_ENV:A}" ]] && return
+            (( $+functions[deactivate] )) && deactivate > /dev/null 2>&1
+            source $file > /dev/null 2>&1
+            return
+          done
+          search_dir="${search_dir:h}"
+        done
+      fi
+    fi
+  }
+  add-zsh-hook chpwd auto_vrun
+  auto_vrun
+fi

@@ -32,10 +32,12 @@ alias te="$EMACS_PLUGIN_LAUNCHER -nw"
 # same than M-x eval but from outside Emacs.
 alias eeval="$EMACS_PLUGIN_LAUNCHER --eval"
 # create a new X frame
-alias eframe='emacsclient --alternate-editor "" --create-frame'
+alias eframe='emacsclient --alternate-editor="" --create-frame'
 
 # Emacs ANSI Term tracking
-if [[ -n "$INSIDE_EMACS" ]]; then
+local excluded_terms=(vterm ghostel)
+local current_term="${INSIDE_EMACS%%,*}"
+if [[ -n "$INSIDE_EMACS" ]] && (( ! ${excluded_terms[(Ie)$current_term]} )); then
   chpwd_emacs() { print -P "\033AnSiTc %d"; }
   print -P "\033AnSiTc %d"    # Track current working directory
   print -P "\033AnSiTu %n"    # Track username
@@ -60,7 +62,7 @@ function efile {
 }
 
 # Write to standard output the directory of the file
-# opened in the the current buffer
+# opened in the current buffer
 function ecd {
   local file
   file="$(efile)" || return $?

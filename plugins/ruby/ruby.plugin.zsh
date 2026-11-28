@@ -2,7 +2,7 @@
 alias sgem='sudo gem'
 
 # Find ruby file
-alias rfind='find . -name "*.rb" | xargs grep -n'
+alias rfind='find . -name "*.rb" -print0 | xargs -0 grep -n'
 
 # Shorthand Ruby
 alias rb="ruby"
@@ -23,4 +23,4 @@ alias gel="gem lock"
 alias geo="gem open"
 alias geoe="gem open -e"
 alias rrun="ruby -e"
-alias rserver="ruby -e httpd . -p 8080" # requires webrick
+alias rserver="ruby -run -e httpd . -p 8080" # requires webrick

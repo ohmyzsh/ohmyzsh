@@ -31,6 +31,7 @@ _1st_arguments=(
   'reject:add reject rule'
   'reload:reloads firewall'
   'reset:reset firewall'
+  'route:add route rule'
   'show:show firewall report'
   'status:show firewall status'
   'version:display version information'
@@ -43,6 +44,7 @@ _arguments -C \
   '1:: :->cmds' \
   '2:: :->subcmds' \
   '3:: :->subsubcmds' \
+  '4:: :->subsubsubcmds' \
 && return 0
 
 local rules
@@ -83,6 +85,17 @@ case "$state" in
           'raw' 'builtins' 'before-rules' 'user-rules' 'after-rules' 'logging-rules' 'listening' 'added' \
         && ret=0
         ;;
+      (route)
+        _values 'route' \
+          'delete[delete route rule]' \
+          'insert[insert route rule at NUM]' \
+          'prepend[prepend route rule]' \
+          'allow[add allow route rule]' \
+          'deny[add deny route rule]' \
+          'reject[add reject route rule]' \
+          'limit[add limit route rule]' \
+        && ret=0
+        ;;
       (delete)
         rules="$(_ufw_delete_rules)"
         if [[ -n "$rules" ]] ; then
@@ -108,6 +121,37 @@ case "$state" in
         _values 'default-direction' \
           'incoming' 'outgoing' \
         && ret=0
+        ;;
+      (route)
+        case "$line[2]" in
+          (delete|prepend)
+            _values 'route-action' \
+              'allow[route allow rule]' \
+              'deny[route deny rule]' \
+              'reject[route reject rule]' \
+              'limit[route limit rule]' \
+            && ret=0
+            ;;
+          (insert)
+            _message 'route rule number'
+            ;;
+        esac
+        ;;
+    esac
+    ;;
+  (subsubsubcmds)
+    case "$line[1]" in
+      (route)
+        case "$line[2]" in
+          (insert)
+            _values 'route-action' \
+              'allow[route allow rule]' \
+              'deny[route deny rule]' \
+              'reject[route reject rule]' \
+              'limit[route limit rule]' \
+            && ret=0
+            ;;
+        esac
         ;;
     esac
 esac

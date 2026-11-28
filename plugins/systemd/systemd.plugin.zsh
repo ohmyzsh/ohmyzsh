@@ -67,22 +67,33 @@ power_commands=(
   suspend
 )
 
+if ! [[ -v ZSH_SYSTEMD_SUDO ]]; then
+  ZSH_SYSTEMD_SUDO="sudo"
+fi
+
 for c in $user_commands; do
   alias "sc-$c"="systemctl $c"
   alias "scu-$c"="systemctl --user $c"
 done
 
-for c in $sudo_commands; do
-  alias "sc-$c"="sudo systemctl $c"
-  alias "scu-$c"="systemctl --user $c"
-done
+# Avoids leading space in alias when using polkit
+if [[ -n "${ZSH_SYSTEMD_SUDO}" ]]; then
+  for c in $sudo_commands; do
+    alias "sc-$c"="$ZSH_SYSTEMD_SUDO systemctl $c"
+    alias "scu-$c"="systemctl --user $c"
+  done
+else
+  for c in $sudo_commands; do
+    alias "sc-$c"="systemctl $c"
+    alias "scu-$c"="systemctl --user $c"
+  done
+fi
 
 for c in $power_commands; do
   alias "sc-$c"="systemctl $c"
 done
 
 unset c user_commands sudo_commands power_commands
-
 
 # --now commands
 alias sc-enable-now="sc-enable --now"
@@ -93,6 +104,13 @@ alias scu-enable-now="scu-enable --now"
 alias scu-disable-now="scu-disable --now"
 alias scu-mask-now="scu-mask --now"
 
+# --failed commands
+alias scu-failed='systemctl --user --failed'
+alias sc-failed='systemctl --failed'
+
+# --full commands
+alias sc-edit-full="sc-edit --full"
+alias scu-edit-full="scu-edit --full"
 
 function systemd_prompt_info {
   local unit
@@ -106,6 +124,8 @@ function systemd_prompt_info {
     fi
 
     if systemctl is-active "$unit" &>/dev/null; then
+      echo -n "$ZSH_THEME_SYSTEMD_PROMPT_ACTIVE"
+    elif systemctl --user is-active "$unit" &>/dev/null; then
       echo -n "$ZSH_THEME_SYSTEMD_PROMPT_ACTIVE"
     else
       echo -n "$ZSH_THEME_SYSTEMD_PROMPT_NOTACTIVE"

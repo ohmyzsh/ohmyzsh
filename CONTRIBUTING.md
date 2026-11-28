@@ -20,6 +20,7 @@ you would make is not already covered.
   - [Getting started](#getting-started)
   - [You have a solution](#you-have-a-solution)
   - [You have an addition](#you-have-an-addition)
+- [A note on AI-assisted contributions](#a-note-on-ai-assisted-contributions)
 - [Use the Search, Luke](#use-the-search-luke)
 - [Commit Guidelines](#commit-guidelines)
   - [Format](#format)
@@ -35,13 +36,13 @@ you would make is not already covered.
 Please be so kind as to [search](#use-the-search-luke) for any open issue already covering
 your problem.
 
-If you find one, comment on it so we can know there are more people experiencing it.
+If you find one, comment on it, so we know more people are experiencing it.
 
 If not, look at the [Troubleshooting](https://github.com/ohmyzsh/ohmyzsh/wiki/Troubleshooting)
 page for instructions on how to gather data to better debug your problem.
 
 Then, you can go ahead and create an issue with as much detail as you can provide.
-It should include the data gathered as indicated above, along with:
+It should include the data gathered as indicated above, along with the following:
 
 1. How to reproduce the problem
 2. What the correct behavior should be
@@ -57,7 +58,7 @@ We will do our very best to help you.
 Please be so kind as to [search](#use-the-search-luke) for any open issue already covering
 your suggestion.
 
-If you find one, comment on it so we can know there are more people supporting it.
+If you find one, comment on it, so we know more people are supporting it.
 
 If not, you can go ahead and create an issue. Please copy to anyone relevant (e.g. plugin
 maintainers) by mentioning their GitHub handle (starting with `@`) in your message.
@@ -84,7 +85,7 @@ your [problem](#you-have-a-problem), and any pending/merged/rejected PR covering
 
 If the solution is already reported, try it out and +1 the pull request if the
 solution works ok. On the other hand, if you think your solution is better, post
-it with a reference to the other one so we can have both solutions to compare.
+it with reference to the other one so we can have both solutions to compare.
 
 If not, then go ahead and submit a PR. Please copy to anyone relevant (e.g. plugin
 maintainers) by mentioning their GitHub handle (starting with `@`) in your message.
@@ -113,17 +114,41 @@ This has become an issue for two opposing reasons:
 - Some users want to have their personal aliases in Oh My Zsh.
 - Some users don't want any aliases at all and feel that there are too many.
 
-Because of this, from now on we're requiring that new aliases follow these conditions:
+Because of this, from now on, we require that new aliases follow these conditions:
 
 1. They will be used by many people, not just a few.
 2. The aliases will be used many times and for common tasks.
 3. Prefer one generic alias over many specific ones.
 4. When justifying the need for an alias, talk about workflows where you'll use it,
    preferably in combination with other aliases.
-5. If there exists a command with the same name, look for a different alias name.
+5. If a command with the same name exists, look for a different alias name.
 
 This list is not exhaustive! Please remember that your alias will be in the machines of many people,
 so it should be justified why they should have it.
+
+## A note on AI-assisted contributions
+
+We'll admit it: AI tools can be pretty helpful for coding tasks, and we're not here to gatekeep how you get your work done. We use these tools ourselves! 🤖
+
+But here's the thing—Oh My Zsh is maintained by a small team of volunteers who do this in their spare time. We already have hundreds of pending PRs, and we want to make sure we're spending our limited time effectively.
+
+If you used AI tools meaningfully in your contribution (code generation, agentic coding assistants, etc.), please mention it in your PR description. Basic autocomplete doesn't count, but if an AI wrote substantial parts of your code, just let us know.
+
+**Examples of good disclosure:**
+- "Used ChatGPT to help generate the initial regex pattern for parsing git status output"
+- "Claude assisted with writing the unit tests for this feature"  
+- "Generated with Gemini and then reviewed/tested manually"
+- Or simply: "AI-assisted" in your PR description
+
+Here's what we're looking for:
+
+- **You understand your code**: You should be able to explain what your contribution does and how it works. We want to collaborate with humans who are invested in the project.
+- **Context matters**: Tell us what problem you're solving, how you tested it, and link to relevant docs. Small, incremental changes work better than massive generated overhauls.
+- **Quality over quantity**: We'd rather have one thoughtful, well-tested contribution than ten AI-generated PRs that need extensive review.
+
+The disclosure helps us know how much guidance to offer. If we're just reviewing AI output that you can't explain or improve, that changes the dynamic—and frankly, it's not a great use of anyone's time.
+
+As always, we reserve the right to decline any contribution. PRs that appear to be unreviewed AI output, or code the contributor can't explain, may be closed without extensive feedback.
 
 ----
 
@@ -214,7 +239,7 @@ type(scope)!: subject
   ```
 
 - `subject`: a brief description of the changes. This will be displayed in the changelog. If you need
-  to specify other details you can use the commit body but it won't be visible.
+  to specify other details, you can use the commit body, but it won't be visible.
 
   Formatting tricks: the commit subject may contain:
 
@@ -231,9 +256,9 @@ type(scope)!: subject
 
 ### Style
 
-Try to keep the first commit line short. This is harder to do using this commit style but try to be
-concise and if you need more space, you can use the commit body. Try to make sure that the commit
-subject is clear and precise enough that users will know what change by just looking at the changelog.
+Try to keep the first commit line short. It's harder to do using this commit style but try to be
+concise, and if you need more space, you can use the commit body. Try to make sure that the commit
+subject is clear and precise enough that users will know what changed by just looking at the changelog.
 
 ----
 

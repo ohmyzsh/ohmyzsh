@@ -1,17 +1,5 @@
 # ---------------------------------------------------------- #
 # Aliases and functions for juju (https://juju.is)           #
-# ---------------------------------------------------------- #
-
-# Load TAB completions
-# You need juju's bash completion script installed. By default bash-completion's
-# location will be used (i.e. pkg-config --variable=completionsdir bash-completion).
-completion_file="$(pkg-config --variable=completionsdir bash-completion 2>/dev/null)/juju" || \
-  completion_file="/usr/share/bash-completion/completions/juju"
-[[ -f "$completion_file" ]] && source "$completion_file"
-unset completion_file
-
-# ---------------------------------------------------------- #
-# Aliases (in alphabetic order)                              #
 #                                                            #
 # Generally,                                                 #
 #   - `!` means --force --no-wait -y                         #
@@ -47,6 +35,7 @@ alias jdlr='juju debug-log --ms --replay'
 alias jcon='juju consume'
 alias jeb='juju export-bundle'
 alias jex='juju expose'
+alias junex='juju unexpose'
 alias jh='juju help'
 alias jkc='juju kill-controller -y -t 0'
 alias jm='juju models'
@@ -98,7 +87,7 @@ jaddr() {
   elif [[ $# -eq 2 ]]; then
     # Get unit address
     juju status "$1/$2" --format=json \
-      | jq -r ".applications.\"$1\".units.\"$1/$2\".address"
+      | jq -r ".applications.\"$1\".units.\"$1/$2\" | .address // .\"public-address\""
   else
     echo "Invalid number of arguments."
     echo "Usage:   jaddr <app-name> [<unit-number>]"
@@ -132,6 +121,7 @@ jclean() {
   fi
 
   echo
+  local controller
   for controller in ${=controllers}; do
     timeout 2m juju destroy-controller --destroy-all-models --destroy-storage --force --no-wait -y $controller
     timeout 2m juju kill-controller -y -t 0 $controller 2>/dev/null
@@ -163,10 +153,46 @@ jreld() {
   juju run "relation-get -r $relid - $2" --unit $2/$3
 }
 
-# Watch juju status, with optional interval (default: 5 sec)
+# Return Juju current controller
+jcontroller() {
+  local file="${JUJU_DATA:-$HOME/.local/share/juju}/controllers.yaml"
+  [[ -f "$file" ]] || return 1
+
+  local controller="$(awk '/current-controller/ {print $2}' "$file")"
+  [[ -z "$controller" ]] && return 1
+
+  echo $controller
+  return 0
+}
+
+# Return Juju current model
+jmodel() {
+  local file="${JUJU_DATA:-$HOME/.local/share/juju}/models.yaml"
+  [[ -f "$file" ]] || return 1
+
+  local yqbin="$(whereis yq | awk '{print $2}')"
+
+  if [[ -z "$yqbin" ]]; then
+    echo "--"
+    return 1
+  fi
+
+  local controller="$(jcontroller)"
+  local model="$(yq e ".controllers.[\"${controller}\"].current-model" < "${file}" | cut -d/ -f2)"
+
+  if [[ -z "$model" || $model == "null" ]]; then
+    echo "--"
+    return 1
+  fi
+
+  echo $model
+  return 0
+}
+
+# Watch juju status, with optional interval (default: 1 sec)
 wjst() {
-  local interval="${1:-5}"
+  command -v juju >/dev/null 2>&1 || return 1
+  local interval="${1:-1}"
   shift $(( $# > 0 ))
   watch -n "$interval" --color juju status --relations --color "$@"
 }
-

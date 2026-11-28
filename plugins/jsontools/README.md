@@ -8,6 +8,17 @@ To use it, add `jsontools` to the plugins array in your zshrc file:
 plugins=(... jsontools)
 ```
 
+## Requirements
+
+The plugin uses one of these tools to process JSON data, in the following order:
+
+- `node`
+- `python3`
+- `ruby`
+
+Any of these must be in `$PATH` before the plugin is loaded, otherwise the plugin exits
+prematurely and the functions will not be available.
+
 ## Usage
 
 Usage is simple... just take your json data and pipe it into the appropriate jsontool:
@@ -19,7 +30,7 @@ Usage is simple... just take your json data and pipe it into the appropriate jso
 
 ### Supports NDJSON (Newline Delimited JSON)
 
-The plugin also supports [NDJSON](http://ndjson.org/) input, which means all functions
+The plugin also supports [NDJSON](https://github.com/ndjson/ndjson-spec) input, which means all functions
 have an alternative function that reads and processes the input line by line. These
 functions have the same name except using `ndjson` instead of `json`:
 
