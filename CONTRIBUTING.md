@@ -18,6 +18,7 @@ you would make is not already covered.
   - [You have a suggestion](#you-have-a-suggestion)
 - [Submitting Pull Requests](#submitting-pull-requests)
   - [Getting started](#getting-started)
+  - [Writing your PR description](#writing-your-pr-description)
   - [You have a solution](#you-have-a-solution)
   - [You have an addition](#you-have-an-addition)
 - [A note on AI-assisted contributions](#a-note-on-ai-assisted-contributions)
@@ -77,6 +78,42 @@ If you create your own PR, please make sure you do it right. Also be so kind as 
 any issue that would be solved in the PR description body,
 [for instance](https://help.github.com/articles/closing-issues-via-commit-messages/)
 _"Fixes #XXXX"_ for issue number XXXX.
+
+### Writing your PR description
+
+Use the [PR template](.github/PULL_REQUEST_TEMPLATE.md) to help people understand
+the purpose of your change before they reach the submission checklist. Keep answers
+short and proportional to the change; a sentence or two per section is often enough.
+
+Oh My Zsh should make the command line more delightful. Tell us whose day your
+change makes easier, clearer, or more enjoyable, and how. Scratching your own itch
+is a welcome starting point! Your change doesn't need to help everyone, but explain
+why it would be useful to others and belongs in the shared project. Link relevant
+requests or examples when you have them; otherwise, explain the expected benefit
+without claiming demand you haven't seen.
+
+For user-facing changes, include screenshots, a GIF, or a short video showing
+before/after behavior. For a new feature, demonstrate it in use. Label the examples,
+keep terminal text readable, and remove private information. For low-level or other
+non-visual changes, explain why a visual wouldn't be useful. If a demo is needed
+but you can't capture it yet, say so rather than marking it inapplicable.
+
+Describe the checks actually run and their results, relevant environment versions,
+and any testing gaps. Distinguish automated or agent-run checks from testing you
+personally performed. For documentation-only changes, describe what you checked.
+Only check the personal-testing item after you've done that testing yourself.
+
+For features and enhancements, tell us how you'll help users discover and use them.
+A plugin README update, a usage example, or sharing your demo are good ways to help.
+Be clear about what's included in the PR and what's planned for later.
+
+**For coding agents:** read these guidelines and the PR template before drafting a
+PR. Keep the description grounded in available evidence. Don't invent user requests,
+test results, or demo links, and don't claim personal testing or confirmation on the
+contributor's behalf. Leave unconfirmed checklist items unchecked and identify
+missing testing or demos. Don't commit the contributor to follow-up work they
+haven't agreed to. Disclose meaningful AI assistance in the template's "Other notes"
+section, following the [AI contribution guidance](#a-note-on-ai-assisted-contributions).
 
 ### You have a solution
 
