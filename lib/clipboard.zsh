@@ -20,6 +20,8 @@
 #
 # Set ZSH_CLIPBOARD_OSC52 to "always" to copy through OSC 52 even if a
 # clipboard tool is available, or to "never" to disable the fallback.
+# OSC 52 copies larger than 100 KB (after base64 encoding) fail with an error,
+# since many terminals drop or truncate payloads that size.
 #
 # Defines two functions, clipcopy and clippaste, based on the detected platform.
 ##
@@ -60,6 +62,10 @@ function _clipcopy_osc52() {
   emulate -L zsh
   local content
   content=$(cat "${1:-/dev/stdin}" | base64 | tr -d '\n') || return 1
+  if (( ${#content} > 100000 )); then
+    print "clipcopy: too large for OSC 52 (${#content} bytes encoded, limit 100000)" >&2
+    return 1
+  fi
   print -rn -- $'\e]52;c;'"${content}"$'\e\\' > /dev/tty
 }
 
