@@ -67,7 +67,7 @@ Delete this section if it isn't needed. -->
 condition doesn't apply. Mark other inapplicable items with "N/A" and a brief
 reason rather than claiming checks you haven't performed. -->
 
-- [ ] The PR title clearly describes the change.
+- [ ] The PR title follows the [commit conventions](https://github.com/ohmyzsh/ohmyzsh/blob/master/CONTRIBUTING.md#commit-guidelines) and clearly describes the change.
 - [ ] I've searched for existing PRs and confirmed this isn't a duplicate.
 - [ ] I've read and followed the [contribution guidelines](https://github.com/ohmyzsh/ohmyzsh/blob/master/CONTRIBUTING.md).
 - [ ] My code follows the [code style guide](https://github.com/ohmyzsh/ohmyzsh/wiki/Code-Style-Guide).
