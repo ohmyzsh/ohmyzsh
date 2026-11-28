@@ -59,6 +59,8 @@ alias mvncist='mvn clean install -DskipTests'
 alias mvncisto='mvn clean install -DskipTests --offline'
 alias mvncom='mvn compile'
 alias mvncp='mvn clean package'
+alias mvncpst='mvn clean package -DskipTests'
+alias mvncpsto='mvn clean package -DskipTests --offline'
 alias mvnct='mvn clean test'
 alias mvncv='mvn clean verify'
 alias mvncvst='mvn clean verify -DskipTests'
@@ -347,6 +349,13 @@ function listMavenCompletions {
   )
 }
 
-compctl -K listMavenCompletions mvn mvnw
-compctl -K listMavenCompletions mvn-color
-compctl -K listMavenCompletions mvn-or-mvnw
+# Completion, via compsys so that tools built on it (fzf-tab, etc.) can take over.
+_mvn() {
+  local -a commands
+  listMavenCompletions
+  # _describe splits entries on `:`, so escape it to keep goals like `dependency:tree`.
+  commands=("${(@)reply//:/\\:}")
+  _describe -t mvn-commands 'mvn command' commands
+}
+
+compdef _mvn mvn mvnw mvn-color mvn-or-mvnw

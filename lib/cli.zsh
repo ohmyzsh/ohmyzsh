@@ -24,6 +24,7 @@ function _omz {
   local -a cmds subcmds
   cmds=(
     'changelog:Print the changelog'
+    'diagnose:Run configuration diagnostics'
     'help:Usage information'
     'plugin:Manage plugins'
     'pr:Manage Oh My Zsh Pull Requests'
@@ -176,12 +177,36 @@ function _omz::log {
 
 ## User-facing commands
 
+function _omz::diagnose {
+  # Check the runtime locale: non-UTF-8 charsets are known to cause glitches
+  # such as duplicated characters at the prompt after completions.
+  # https://github.com/ohmyzsh/ohmyzsh/wiki/FAQ#i-see-duplicate-typed-characters-after-i-complete-a-command
+  #
+  # `lib/functions.zsh` loads the zsh/langinfo module at startup, so the
+  # CODESET parameter is already available without any subprocess; only fall
+  # back to `locale charmap` when that module is unavailable (zsh built without it).
+  local codeset="${langinfo[CODESET]:-}"
+  if [[ -z "$codeset" ]] && (( $+commands[locale] )); then
+    codeset="$(locale charmap 2>/dev/null)"
+  fi
+
+  if [[ "${codeset:l}" = (utf-8|utf8) ]]; then
+    _omz::log info "locale charmap is UTF-8"
+  else
+    _omz::log warn "your locale is not UTF-8 (charmap: ${codeset:-unknown})"
+    _omz::log info "non-UTF-8 locales may cause glitches in completions and international characters"
+    _omz::log info "consider setting a UTF-8 locale, e.g.: export LANG=C.UTF-8"
+    return 1
+  fi
+}
+
 function _omz::help {
   cat >&2 <<EOF
 Usage: omz <command> [options]
 
 Available commands:
 
+  diagnose            Run configuration diagnostics
   help                Print this help message
   changelog           Print the changelog
   plugin <command>    Manage plugins
@@ -270,17 +295,23 @@ function _omz::plugin::disable {
   fi
 
   # Remove plugins substitution awk script
+  # A match consumes the whitespace around the plugin, so adjacent plugins
+  # can't match in the same pass: repeat until the line stops changing.
   local awk_subst_plugins="\
-  gsub(/[ \t]+(${(j:|:)dis_plugins})[ \t]+/, \" \") # with spaces before or after
-  gsub(/[ \t]+(${(j:|:)dis_plugins})$/, \"\")       # with spaces before and EOL
-  gsub(/^(${(j:|:)dis_plugins})[ \t]+/, \"\")       # with BOL and spaces after
+  do {
+    prev = \$0
 
-  gsub(/\((${(j:|:)dis_plugins})[ \t]+/, \"(\")     # with parenthesis before and spaces after
-  gsub(/[ \t]+(${(j:|:)dis_plugins})\)/, \")\")     # with spaces before or parenthesis after
-  gsub(/\((${(j:|:)dis_plugins})\)/, \"()\")        # with only parentheses
+    gsub(/[ \t]+(${(j:|:)dis_plugins})[ \t]+/, \" \") # with spaces before or after
+    gsub(/[ \t]+(${(j:|:)dis_plugins})$/, \"\")       # with spaces before and EOL
+    gsub(/^(${(j:|:)dis_plugins})[ \t]+/, \"\")       # with BOL and spaces after
 
-  gsub(/^(${(j:|:)dis_plugins})\)/, \")\")          # with BOL and closing parenthesis
-  gsub(/\((${(j:|:)dis_plugins})$/, \"(\")          # with opening parenthesis and EOL
+    gsub(/\((${(j:|:)dis_plugins})[ \t]+/, \"(\")     # with parenthesis before and spaces after
+    gsub(/[ \t]+(${(j:|:)dis_plugins})\)/, \")\")     # with spaces before or parenthesis after
+    gsub(/\((${(j:|:)dis_plugins})\)/, \"()\")        # with only parentheses
+
+    gsub(/^(${(j:|:)dis_plugins})\)/, \")\")          # with BOL and closing parenthesis
+    gsub(/\((${(j:|:)dis_plugins})$/, \"(\")          # with opening parenthesis and EOL
+  } while (\$0 != prev)
 "
 
   # Disable plugins awk script
@@ -367,8 +398,8 @@ function _omz::plugin::enable {
 
   # Enable plugins awk script
   local awk_script="
-# if plugins=() is in oneline form, substitute ) with new plugins and go to the next line
-/^[ \t]*plugins=\([^#]+\).*\$/ {
+# if plugins=() is in oneline form (empty or not), substitute ) with new plugins and go to the next line
+/^[ \t]*plugins=\([^#]*\).*\$/ {
   sub(/\)/, \" $add_plugins&\")
   print \$0
   next

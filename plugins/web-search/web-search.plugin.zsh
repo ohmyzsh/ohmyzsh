@@ -24,7 +24,6 @@ function web_search() {
     wolframalpha    "https://www.wolframalpha.com/input/?i="
     archive         "https://web.archive.org/web/*/"
     scholar         "https://scholar.google.com/scholar?q="
-    ask             "https://www.ask.com/web?q="
     youtube         "https://www.youtube.com/results?search_query="
     deepl           "https://www.deepl.com/translator#auto/auto/"
     dockerhub       "https://hub.docker.com/search?q="
@@ -54,10 +53,11 @@ function web_search() {
 
   # search or go to main page depending on number of arguments passed
   if [[ $# -gt 1 ]]; then
-    # if search goes in the query string ==> space as +, otherwise %20
+    # if search goes in the query string ==> space as + and escape reserved
+    # characters like & and +, otherwise %20
     # see https://stackoverflow.com/questions/1634271/url-encoding-the-space-character-or-20
     local param="-P"
-    [[ "$urls[$1]" == *\?*= ]] && param=""
+    [[ "$urls[$1]" == *\?*= ]] && param="-r"
 
     # build search url:
     # join arguments passed with '+', then append to search engine URL
@@ -89,7 +89,6 @@ alias stackoverflow='web_search stackoverflow'
 alias wolframalpha='web_search wolframalpha'
 alias archive='web_search archive'
 alias scholar='web_search scholar'
-alias ask='web_search ask'
 alias youtube='web_search youtube'
 alias deepl='web_search deepl'
 alias dockerhub='web_search dockerhub'

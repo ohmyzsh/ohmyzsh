@@ -1,6 +1,6 @@
 # conda plugin
 
-The conda plugin provides [aliases](#aliases) for `conda`, usually installed via [anaconda](https://www.anaconda.com/) or [miniconda](https://docs.conda.io/en/latest/miniconda.html).
+The conda plugin provides [aliases](#aliases) and [completion](#completion) for `conda`, usually installed via [anaconda](https://www.anaconda.com/) or [miniconda](https://docs.conda.io/en/latest/miniconda.html).
 
 To use it, add `conda` to the plugins array in your zshrc file:
 
@@ -28,10 +28,18 @@ plugins=(... conda)
 | `cnle`   | `conda list --export`                   | Export the list of installed packages in the current environment                |
 | `cnles`  | `conda list --explicit > spec-file.txt` | Export the list of installed packages in the current environment to a spec file |
 | `cnr`    | `conda remove`                          | Remove given package                                                            |
-| `cnrn`   | `conda remove -y -all -n`               | Remove all packages in the specified environment                                |
-| `cnrp`   | `conda remove -y -all -p`               | Remove all packages in the specified prefix                                     |
+| `cnrn`   | `conda remove -y --all -n`              | Remove all packages in the specified environment                                |
+| `cnrp`   | `conda remove -y --all -p`              | Remove all packages in the specified prefix                                     |
 | `cnry`   | `conda remove -y`                       | Remove given package without confirmation                                       |
 | `cnsr`   | `conda search`                          | Search conda repositories for package                                           |
 | `cnu`    | `conda update`                          | Update conda package manager                                                    |
 | `cnua`   | `conda update --all`                    | Update all installed packages                                                   |
 | `cnuc`   | `conda update conda`                    | Update conda package manager                                                    |
+
+## Completion
+
+Tab completion is available for the following commands, using the environment list conda keeps in
+`~/.conda/environments.txt`:
+
+- `cna`: completes environment names for `conda activate`
+- `cnrn`: completes environment names for `conda remove -y --all -n`

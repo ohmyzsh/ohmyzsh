@@ -2,6 +2,8 @@
 # P.C. Shyamshankar <sykora@lucentbeing.com>
 # Copied from https://github.com/sykora/etc/blob/master/zsh/functions/spectrum/
 
+autoload -Uz is-at-least
+
 typeset -AHg FX FG BG
 
 FX=(
@@ -18,7 +20,16 @@ FX=(
 () {
   setopt localoptions noksharrays
   local -a codes fg bg
+  local code
   codes=({000..255})
+  # ${a:^b} array zipping needs zsh 5.0.6
+  if ! is-at-least 5.0.6; then
+    for code in $codes; do
+      FG[$code]="%{"$'\e'"[38;5;${code}m%}"
+      BG[$code]="%{"$'\e'"[48;5;${code}m%}"
+    done
+    return
+  fi
   fg=( "%{"$'\e'"[38;5;"${^codes}"m%}" )
   bg=( "%{"$'\e'"[48;5;"${^codes}"m%}" )
   FG=( ${codes:^fg} )

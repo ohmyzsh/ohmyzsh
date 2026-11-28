@@ -263,9 +263,9 @@ _dotenv_check_syntax() {
   local filename="$1"
 
   if (( $# == 2 )); then
-    printf '%s' "$2" | zsh -fn /dev/stdin
+    printf '%s' "$2" | command zsh -fn /dev/stdin
   else
-    zsh -fn -- "$filename"
+    command zsh -fn -- "$filename"
   fi || {
     echo "dotenv: error when sourcing '$filename' file" >&2
     return 1

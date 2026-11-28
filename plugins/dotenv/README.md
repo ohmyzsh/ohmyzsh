@@ -100,7 +100,7 @@ takes preference, _i.e._ the .env file will never be sourced.
 ## Named Pipe (FIFO) Support
 
 The plugin supports `.env` files provided as UNIX named pipes (FIFOs) in addition to regular files.
-This is useful when secrets managers like [1Password Environments](https://developer.1password.com/docs/environment/)
+This is useful when secrets managers like [1Password Environments](https://developer.1password.com/docs/environments/)
 mount `.env` files as named pipes to inject secrets on-the-fly without writing them to disk.
 
 No additional configuration is required — the plugin automatically detects and sources named pipes.

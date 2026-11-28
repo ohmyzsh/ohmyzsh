@@ -34,6 +34,8 @@ virtual environments:
   `<venv-name>/bin/activate`, and automatically deactivate it when navigating out of it (keeps venv activated
   in subdirectories).
   - To enable the feature, set `PYTHON_AUTO_VRUN=true` before sourcing oh-my-zsh.
+  - To also search parent directories (useful for monorepos), set `PYTHON_AUTO_VRUN_RECURSIVE=true` as well.
+    The search stops before `$HOME`, so a venv in your home directory is not activated in every folder under it.
   - The plugin activates the first existing virtual environment, in order, appearing in `$PYTHON_VENV_NAMES`.
     The default virtual environment name is `venv`. To use a different name, set
     `PYTHON_VENV_NAME=<venv-name>`. For example: `PYTHON_VENV_NAME=".venv"`
@@ -44,6 +46,7 @@ You can set these variables in your `.zshrc` file, before Oh My Zsh is sourced.
 For example:
 
 ```sh
+PYTHON_AUTO_VRUN=true
 PYTHON_VENV_NAME=".venv"
 PYTHON_VENV_NAMES=($PYTHON_VENV_NAME venv)
 ...
@@ -51,6 +54,14 @@ plugins=(... python)
 source "$ZSH/oh-my-zsh.sh"
 ```
 
+
+## `$PYTHON_AUTO_VRUN`
+
+**Default**: `false`.
+
+Enable automatic activation of virtual environments when entering a directory containing
+`<venv-name>/bin/activate`, and automatically deactivate it when navigating out of it.
+Set to `true` to enable this feature.
 
 ## `$PYTHON_VENV_NAME`
 

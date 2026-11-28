@@ -44,6 +44,7 @@ plugins=(... jj)
 | jjgi   | `jj git init`                 |
 | jjgp   | `jj git push`                 |
 | jjgpa  | `jj git push --all`           |
+| jjgpb  | `jj git push --bookmark`      |
 | jjgpd  | `jj git push --deleted`       |
 | jjgpt  | `jj git push --tracked`       |
 | jjgrl  | `jj git remote list`          |
@@ -70,7 +71,7 @@ plugins=(... jj)
 
 ## Prompt usage
 
-Because `jj` has a very powerful [template syntax](https://martinvonz.github.io/jj/latest/templates/), this
+Because `jj` has a very powerful [template syntax](https://docs.jj-vcs.dev/latest/templates/), this
 plugin only exposes a convenience function `jj_prompt_template` to read information from the current change.
 It is basically the same as `jj log --no-graph -r @ -T $1`:
 

@@ -45,9 +45,12 @@ plugins=(... extract)
 | `tar.lrz`         | Tarball with lrzip compression          |
 | `tar.lz`          | Tarball with lzip compression           |
 | `tar.lz4`         | Tarball with lz4 compression            |
+| `tar.lzma`        | Tarball with lzma compression           |
 | `tar.xz`          | Tarball with lzma2 compression          |
 | `tar.zma`         | Tarball with lzma compression           |
 | `tar.zst`         | Tarball with zstd compression           |
+| `tar.Z`           | Tarball with compress (LZW) compression |
+| `taz`             | Tarball with compress (LZW) compression |
 | `tbz`             | Tarball with bzip compression           |
 | `tbz2`            | Tarball with bzip2 compression          |
 | `tgz`             | Tarball with gzip compression           |

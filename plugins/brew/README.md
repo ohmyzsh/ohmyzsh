@@ -59,7 +59,7 @@ ensures the `bdr` alias runs without warnings.
 | `bsra`   | `bsr --all`                             | Run all stopped services.                                             |
 | `bu`     | `brew update`                           | Update brew and all installed formulae.                               |
 | `bubo`   | `brew update && brew outdated`          | Update Homebrew data, then list outdated formulae and casks.          |
-| `bubu`   | `bubo && bup`                           | Do the last two operations above.                                     |
+| `bubu`   | `bu && bup`                             | Update Homebrew data, then upgrade outdated, unpinned brews.          |
 | `bugbc`  | `brew upgrade --greedy && brew cleanup` | Upgrade outdated formulae and casks (greedy), then run cleanup.       |
 | `bup`    | `brew upgrade`                          | Upgrade outdated, unpinned brews.                                     |
 | `buz`    | `brew uninstall --zap`                  | Remove all files associated with a cask.                              |

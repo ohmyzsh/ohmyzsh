@@ -1,20 +1,15 @@
-# Laravel4 basic command completion
-_laravel4_get_command_list () {
-	php artisan --no-ansi | sed "1,/Available commands/d" | awk '/^ +[a-z]+/ { print $1 }'
-}
+print -Pru2 -- \
+  '%F{yellow}[oh-my-zsh] The %Blaravel4%b plugin is deprecated.' \
+  'Use %Blaravel%b instead.%f'
 
-_laravel4 () {
-  if [ -f artisan ]; then
-    compadd `_laravel4_get_command_list`
-  fi
-}
+source "${0:A:h:h}/laravel/laravel.plugin.zsh"
 
-compdef _laravel4 artisan
-compdef _laravel4 la4
+# Keep compatibility aliases scoped to users of this legacy plugin.
+zstyle -s ':omz:plugins:laravel' php _omz_laravel_php || _omz_laravel_php=php
+alias la4="$_omz_laravel_php artisan"
+alias la4dump="$_omz_laravel_php artisan dump-autoload"
+alias la4cache="$_omz_laravel_php artisan cache:clear"
+alias la4routes="$_omz_laravel_php artisan routes"
+unset _omz_laravel_php
 
-#Alias
-alias la4='php artisan'
-
-alias la4dump='php artisan dump-autoload'
-alias la4cache='php artisan cache:clear'
-alias la4routes='php artisan routes'
+compdef _artisan la4

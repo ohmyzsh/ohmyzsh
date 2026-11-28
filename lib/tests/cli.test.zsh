@@ -7,16 +7,20 @@ run_awk() {
   (( ! DEBUG )) || set -xv
 
   local awk_subst_plugins="\
-    gsub(/[ \t]+(${(j:|:)dis_plugins})[ \t]+/, \" \") # with spaces before or after
-    gsub(/[ \t]+(${(j:|:)dis_plugins})$/, \"\")       # with spaces before and EOL
-    gsub(/^(${(j:|:)dis_plugins})[ \t]+/, \"\")       # with BOL and spaces after
+    do {
+      prev = \$0
 
-    gsub(/\((${(j:|:)dis_plugins})[ \t]+/, \"(\")     # with parenthesis before and spaces after
-    gsub(/[ \t]+(${(j:|:)dis_plugins})\)/, \")\")     # with spaces before or parenthesis after
-    gsub(/\((${(j:|:)dis_plugins})\)/, \"()\")        # with only parentheses
+      gsub(/[ \t]+(${(j:|:)dis_plugins})[ \t]+/, \" \") # with spaces before or after
+      gsub(/[ \t]+(${(j:|:)dis_plugins})$/, \"\")       # with spaces before and EOL
+      gsub(/^(${(j:|:)dis_plugins})[ \t]+/, \"\")       # with BOL and spaces after
 
-    gsub(/^(${(j:|:)dis_plugins})\)/, \")\")          # with BOL and closing parenthesis
-    gsub(/\((${(j:|:)dis_plugins})$/, \"(\")          # with opening parenthesis and EOL
+      gsub(/\((${(j:|:)dis_plugins})[ \t]+/, \"(\")     # with parenthesis before and spaces after
+      gsub(/[ \t]+(${(j:|:)dis_plugins})\)/, \")\")     # with spaces before or parenthesis after
+      gsub(/\((${(j:|:)dis_plugins})\)/, \"()\")        # with only parentheses
+
+      gsub(/^(${(j:|:)dis_plugins})\)/, \")\")          # with BOL and closing parenthesis
+      gsub(/\((${(j:|:)dis_plugins})$/, \"(\")          # with opening parenthesis and EOL
+    } while (\$0 != prev)
   "
     # Disable plugins awk script
     local awk_script="
@@ -166,4 +170,35 @@ run_awk_and_test \
 z)" \
 "plugins=(
   git
+)"
+
+run_awk_and_test \
+  "it should delete two adjacent plugins among others in oneline format" \
+  "docker kubectl" \
+  "plugins=(git docker kubectl npm)" \
+  "plugins=(git npm)"
+
+run_awk_and_test \
+  "it should delete three adjacent plugins among others in oneline format" \
+  "docker kubectl aws" \
+  "plugins=(git docker kubectl aws npm)" \
+  "plugins=(git npm)"
+
+run_awk_and_test \
+  "it should delete every plugin of a long oneline list" \
+  "git docker kubectl aws npm z" \
+  "plugins=(git docker kubectl aws npm z)" \
+  "plugins=()"
+
+run_awk_and_test \
+  "it should delete adjacent plugins sharing a line in multiline format" \
+  "docker kubectl aws" \
+"plugins=(
+  git
+  docker kubectl aws
+  npm
+)" \
+"plugins=(
+  git
+  npm
 )"

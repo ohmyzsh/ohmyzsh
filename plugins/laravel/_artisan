@@ -8,12 +8,30 @@
 #  - Adds aliases and autocompletion for bob
 
 local curcontext="$curcontext" state line _opts _bundles ret=1
+local php_command command_list
+local -a artisan_commands
+
 _arguments -C \
     '1: :->cmds' \
     '*:: :->args' && ret=0
 
 case $state in
     cmds)
+
+    # Boot the application only to discover command names, not file arguments.
+    # Laravel 3 falls back to the static command names below.
+    zstyle -s ':omz:plugins:laravel' php php_command || php_command=php
+    if [[ -f artisan ]] && command_list=$(
+        "${(@Q)${(z)php_command}}" artisan list --raw --no-ansi 2>/dev/null
+    ); then
+        artisan_commands=("${(@f)command_list}")
+        artisan_commands=(${artisan_commands[@]%%[[:space:]]*})
+    fi
+
+    if (( ${#artisan_commands} )); then
+        compadd -- "${artisan_commands[@]}"
+        return $?
+    fi
 
     _values "Artisan command" \
         'session\:install[Create a session table]' \
@@ -24,16 +42,8 @@ case $state in
         ret=0
         ;;
     args)
-        case $line[1] in
-            migrate)
-                _values \
-                    'install[Create the Laravel migration table' \
-                    'make[Create a migration]' \
-                    'rollback[Roll back to the last migration operation]' \
-                    'reset[Roll back all migrations that have ever run]'
-                ret=0
-                ;;
-        esac
+        _files
+        return $?
         ;;
 esac
 

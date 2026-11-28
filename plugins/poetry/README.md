@@ -28,11 +28,11 @@ plugins=(... poetry)
 | prm   | `poetry remove`                                    | Remove packages from `pyproject.toml` and uninstall them                                |
 | prun  | `poetry run`                                       | Executes the given command inside the project’s virtualenv                              |
 | psad  | `poetry self add`                                  | Add the Poetry plugin and install dependencies to make it work                          |
-| psh   | `poetry shell`                                     | Spawns a shell within the virtual environment. If one doesn’t exist, it will be created |
+| psh   | `poetry shell`                                     | Spawns a shell within the virtual environment. With Poetry 2.0+ and no shell plugin, activates it with `poetry env activate` |
 | pshw  | `poetry show`                                      | List all the available dependencies                                                     |
 | pslt  | `poetry show --latest`                             | List latest version of the dependencies                                                |
 | psup  | `poetry self update`                               | Update Poetry to the latest version (default) or to the specified version               |
-| psync | `poetry install --sync`                            | Synchronize your environment with the `poetry.lock`                                     |
+| psync | `poetry sync`                                      | Synchronize your environment with the `poetry.lock` (`poetry install --sync` before Poetry 2.0) |
 | ptree | `poetry show --tree`                               | List the dependencies as tree                                                           |
 | pup   | `poetry update`                                    | Get the latest versions of the dependencies and to update the `poetry.lock`             |
 | pvinf | `poetry env info`                                  | Get basic information about the currently activated virtualenv                          |

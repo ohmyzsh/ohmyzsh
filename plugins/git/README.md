@@ -21,7 +21,7 @@ plugins=(... git)
 | `gapa`                 | `git add --patch`                                                                                                               |
 | `gau`                  | `git add --update`                                                                                                              |
 | `gav`                  | `git add --verbose`                                                                                                             |
-| `gwip`                 | `git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"` |
+| `gwip`                 | `git add -A; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"` |
 | `gam`                  | `git am`                                                                                                                        |
 | `gama`                 | `git am --abort`                                                                                                                |
 | `gamc`                 | `git am --continue`                                                                                                             |
@@ -208,6 +208,7 @@ plugins=(... git)
 | `gsb`                  | `git status --short -b`                                                                                                         |
 | `gsnut`                | `git status --untracked-files=no`                                                                                               |
 | `gsi`                  | `git submodule init`                                                                                                            |
+| `gsms`                 | `git submodule status`                                                                                                          |
 | `gsu`                  | `git submodule update`                                                                                                          |
 | `gsuri`                | `git submodule update --recursive --init`                                                                                       |
 | `gsd`                  | `git svn dcommit`                                                                                                               |

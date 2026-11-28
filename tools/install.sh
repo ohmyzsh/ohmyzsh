@@ -528,6 +528,7 @@ print_success() {
     "$(fmt_code "$(fmt_link ".zshrc" "file://$zdot/.zshrc" --text)")" \
     "file to select plugins, themes, and options."
   printf '\n'
+  printf '%s\n' "${FMT_YELLOW}★${FMT_RESET} Enjoying Oh My Zsh? Star us on $(fmt_link GitHub https://github.com/ohmyzsh/ohmyzsh)"
   printf '%s\n' "• Follow along on X ($(fmt_link @ohmyzsh https://x.com/ohmyzsh)) or Bluesky ($(fmt_link @ohmyz.sh https://bsky.app/profile/ohmyz.sh))"
   printf '%s\n' "• Questions or ideas? Join the community on $(fmt_link Discord https://discord.gg/ohmyzsh)"
   printf '%s\n' "• Help support the project: sponsor us on $(fmt_link "Open Collective" https://opencollective.com/ohmyzsh),"

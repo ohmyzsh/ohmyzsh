@@ -53,4 +53,20 @@ alias paqr="$_omz_laravel_php artisan queue:retry"
 alias paqt="$_omz_laravel_php artisan queue:table"
 alias paqw="$_omz_laravel_php artisan queue:work"
 
+# Modules (nWidart/laravel-modules)
+alias pamol="$_omz_laravel_php artisan module:list"
+alias pamomk="$_omz_laravel_php artisan module:make"
+alias pamoe="$_omz_laravel_php artisan module:enable"
+alias pamod="$_omz_laravel_php artisan module:disable"
+alias pamom="$_omz_laravel_php artisan module:migrate"
+alias pamomr="$_omz_laravel_php artisan module:migrate-rollback"
+alias pamos="$_omz_laravel_php artisan module:seed"
+
 unset _omz_laravel_php
+
+# Also load completion when reached through a legacy plugin name.
+if (( ! ${fpath[(Ie)${0:A:h}]} )); then
+  fpath+=("${0:A:h}")
+fi
+autoload -Uz _artisan
+compdef _artisan artisan

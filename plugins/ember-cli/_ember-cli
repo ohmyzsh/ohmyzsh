@@ -40,7 +40,7 @@ case $state in
           'new' \
           'serve' \
           'test' \
-          'vesion' && ret=0
+          'version' && ret=0
         ;;
       addon)
         _arguments \
