@@ -34,7 +34,8 @@ function fossil_prompt_info() {
 }
 
 function _fossil_prompt () {
-  if [ -z "$_FOSSIL_PROMPT" ]; then
+  # Re-check each time, in case the theme rebuilds its prompt in precmd
+  if [ -z "$_FOSSIL_PROMPT" ] || [[ "$PROMPT$RPROMPT" != *fossil_prompt_info* ]]; then
     # Use substitutions to work out what other plugins and themes have
     # done ahead of us so we don't duplicate their work.
     #
@@ -44,13 +45,15 @@ function _fossil_prompt () {
     # aren't in a directory that's a checkout for both a Git repo and a
     # Fossil repo.
     #
-    # Otherwise, don't guess about where the user wants our prompt info
-    # placed.  They can edit their theme to place it manually.
+    # Otherwise, add it to the right prompt, as before.
     if [ "${PROMPT/fossil_prompt_info//}" = "$PROMPT" ]; then
       PROMPT="${PROMPT/git_prompt_info/git_prompt_info)\$(fossil_prompt_info}"
     fi
     if [ "${RPROMPT/fossil_prompt_info//}" = "$RPROMPT" ]; then
       RPROMPT="${RPROMPT/git_prompt_info/git_prompt_info)\$(fossil_prompt_info}"
+    fi
+    if [[ "$PROMPT$RPROMPT" != *fossil_prompt_info* ]]; then
+      RPROMPT+='$(fossil_prompt_info)'
     fi
 
     _FOSSIL_PROMPT="1"
