@@ -1,5 +1,5 @@
 ###########################
-# Settings 
+# Settings
 
 # These can be overwritten any time.
 # If they are not set yet, they will be

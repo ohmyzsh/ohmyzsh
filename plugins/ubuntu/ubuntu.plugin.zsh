@@ -1,11 +1,22 @@
-(( $+commands[apt] )) && APT=apt || APT=apt-get
+# Detect available package manager (prefer apt-fast > apt > apt-get)
+if (( $+commands[apt-fast] )); then
+    APT=apt-fast
+elif (( $+commands[apt] )); then
+    APT=apt
+else
+    APT=apt-get
+fi
 
 alias acs='apt-cache search'
 
 alias afs='apt-file search --regexp'
 
 # These are apt/apt-get only
-alias ags="$APT source"
+if (( $+commands[apt] )); then
+    alias ags="apt source"
+else
+    alias ags="apt-get source"
+fi
 
 alias acp='apt-cache policy'
 
@@ -14,6 +25,9 @@ alias agli='apt list --installed'
 
 # List available updates only
 alias aglu='apt list --upgradable'
+
+alias acsp='apt-cache showpkg'
+compdef _acsp acsp='apt-cache showpkg'
 
 # superuser operations ######################################################
 
@@ -50,7 +64,7 @@ alias mydeb='time dpkg-buildpackage -rfakeroot -us -uc'
 # Usage: aar ppa:xxxxxx/xxxxxx [packagename]
 # If packagename is not given as 2nd argument the function will ask for it and guess the default by taking
 # the part after the / from the ppa name which is sometimes the right name for the package you want to install
-aar() {
+function aar() {
 	if [ -n "$2" ]; then
 		PACKAGE=$2
 	else
@@ -73,7 +87,7 @@ aar() {
 #   apt-history rollback
 #   apt-history list
 # Based On: https://linuxcommando.blogspot.com/2008/08/how-to-show-apt-log-history.html
-apt-history () {
+function apt-history() {
   case "$1" in
     install)
       zgrep --no-filename 'install ' $(ls -rt /var/log/dpkg*)
@@ -102,7 +116,7 @@ apt-history () {
 }
 
 # Kernel-package building shortcut
-kerndeb () {
+function kerndeb() {
   # temporarily unset MAKEFLAGS ( '-j3' will fail )
   MAKEFLAGS=$( print - $MAKEFLAGS | perl -pe 's/-j\s*[\d]+//g' )
   print '$MAKEFLAGS set to '"'$MAKEFLAGS'"

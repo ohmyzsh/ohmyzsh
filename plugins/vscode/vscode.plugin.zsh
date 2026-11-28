@@ -1,18 +1,39 @@
-# VScode zsh plugin
+# VS Code (stable / insiders) / VSCodium / Cursor zsh plugin
 # Authors:
 #   https://github.com/MarsiBarsi (original author)
 #   https://github.com/babakks
+#   https://github.com/SteelShot
+#   https://github.com/AliSajid
 
-# Use the stable VS Code release, unless the Insiders version is the only
-# available installation
-if ! which code > /dev/null && which code-insiders > /dev/null; then
-  : ${VSCODE:=code-insiders}
-else
-  : ${VSCODE:=code}
+# Verify if any manual user choice of VS Code exists first.
+if [[ -n "$VSCODE" ]] && ! which $VSCODE &>/dev/null; then
+  echo "'$VSCODE' flavour of VS Code not detected."
+  unset VSCODE
 fi
 
-# Define aliases
-alias vsc="$VSCODE ."
+# Otherwise, try to detect a flavour of VS Code.
+if [[ -z "$VSCODE" ]]; then
+  if which code &>/dev/null; then
+    VSCODE=code
+  elif which code-insiders &>/dev/null; then
+    VSCODE=code-insiders
+  elif which codium &>/dev/null; then
+    VSCODE=codium
+  elif which cursor &>/dev/null; then
+    VSCODE=cursor
+  else
+    return
+  fi
+fi
+
+function vsc {
+  if (( $# )); then
+    $VSCODE $@
+  else
+    $VSCODE .
+  fi
+}
+
 alias vsca="$VSCODE --add"
 alias vscd="$VSCODE --diff"
 alias vscg="$VSCODE --goto"
@@ -20,6 +41,7 @@ alias vscn="$VSCODE --new-window"
 alias vscr="$VSCODE --reuse-window"
 alias vscw="$VSCODE --wait"
 alias vscu="$VSCODE --user-data-dir"
+alias vscp="$VSCODE --profile"
 
 alias vsced="$VSCODE --extensions-dir"
 alias vscie="$VSCODE --install-extension"

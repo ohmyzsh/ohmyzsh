@@ -1,6 +1,6 @@
-alias -g HED='HANAMI_ENV=development'
-alias -g HEP='HANAMI_ENV=production'
-alias -g HET='HANAMI_ENV=test'
+alias HED='HANAMI_ENV=development '
+alias HEP='HANAMI_ENV=production '
+alias HET='HANAMI_ENV=test '
 
 alias hc='hanami console'
 alias hd='hanami destroy'

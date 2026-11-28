@@ -9,7 +9,7 @@
 # zstyle ':completion::complete:salt(|-call):modules:'                use-cache true
 # zstyle ':completion::complete:salt(|-cp|-call|-run|-key):salt_dir:' use-cache true
 #
-# cache validation can be controled with the style cache-ttl.
+# cache validation can be controlled with the style cache-ttl.
 # it expects two arguments: number (days|hours|weeks|months)
 # to invalidate the minion cache after four days:
 # zstyle ':completion::complete:salt(|-cp|-call):minions:'            cache-ttl 4 days
@@ -145,7 +145,7 @@ _master_options=(
     '(-v --verbose)'{-v,--verbose}'[Turn on command verbosity, display jid and active job queries]'
     '--hide-timeout[Hide minions that timeout]'
     '(-b --batch --batch-size)'{-b,--batch,--batch-size}'[Execute the salt job in batch mode, pass number or percentage to batch.]:Batch Size:'
-    '(-a --auth --eauth --extrenal-auth)'{-a,--auth,--eauth,--external-auth}'[Specify an external authentication system to use.]:eauth:'
+    '(-a --auth --eauth --external-auth)'{-a,--auth,--eauth,--external-auth}'[Specify an external authentication system to use.]:eauth:'
     '(-T --make-token)'{-T,--make-token}'[Generate and save an authentication token for re-use.]'
     '--return[Set an alternative return method.]:Returners:_path_files -W "$salt_dir/returners" -g "[^_]*.py(\:r)"'
     '(-d --doc --documentation)'{-d,--doc,--documentation}'[Return the documentation for the specified module]'

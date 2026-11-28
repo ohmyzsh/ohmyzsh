@@ -1,9 +1,6 @@
-# get the node.js version
+# get the nvm-controlled node.js version
 function nvm_prompt_info() {
-  [[ -f "$NVM_DIR/nvm.sh" ]] || return
-  local nvm_prompt
-  nvm_prompt=$(node -v 2>/dev/null)
-  [[ "${nvm_prompt}x" == "x" ]] && return
-  nvm_prompt=${nvm_prompt:1}
-  echo "${ZSH_THEME_NVM_PROMPT_PREFIX}${nvm_prompt}${ZSH_THEME_NVM_PROMPT_SUFFIX}"
+  which nvm &>/dev/null || return
+  local nvm_prompt=${$(nvm current)#v}
+  echo "${ZSH_THEME_NVM_PROMPT_PREFIX}${nvm_prompt:gs/%/%%}${ZSH_THEME_NVM_PROMPT_SUFFIX}"
 }

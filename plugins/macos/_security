@@ -1,0 +1,90 @@
+#compdef security
+
+local -a _1st_arguments
+_1st_arguments=(
+  'help:Show all commands, or show usage for a command'
+  'list-keychains:Display or manipulate the keychain search list'
+  'default-keychain:Display or set the default keychain'
+  'login-keychain:Display or set the login keychain'
+  'create-keychain:Create keychains and add them to the search list'
+  'delete-keychain:Delete keychains and remove them from the search list'
+  'lock-keychain:Lock the specified keychain'
+  'lock-keychain:Unlock the specified keychain'
+  'set-keychain-settings:Set settings for a keychain'
+  'set-keychain-password:Set password for a keychain'
+  'show-keychain-info:Show the settings for keychain'
+  'dump-keychain:Dump the contents of one or more keychains'
+  'create-keypair:Create an asymmetric key pair'
+  'add-generic-password:Add a generic password item'
+  'add-internet-password:Add an internet password item'
+  'add-certificates:Add certificates to a keychain'
+  'find-generic-password:Find a generic password item'
+  'delete-generic-password:Delete a generic password item'
+  'find-internet-password:Find an internet password item'
+  'delete-internet-password:Delete an internet password item'
+  'find-certificate:Find a certificate item'
+  'find-identity:Find an identity certificate + private key'
+  'delete-certificate:Delete a certificate from a keychain'
+  'set-identity-preference:Set the preferred identity to use for a service'
+  'get-identity-preference:Get the preferred identity to use for a service'
+  'create-db:Create a db using the DL'
+  'export:Export items from a keychain'
+  'import:Import items into a keychain'
+  'cms:Encode or decode CMS messages'
+  'install-mds:MDS database'
+  'add-trusted-cert:Add trusted certificates:'
+  'remove-trusted-cert:Remove trusted certificates:'
+  'dump-trust-settings:Display contents of trust settings'
+  'user-trust-settings-enable:Display or manipulate user-level trust settings'
+  'trust-settings-export:Export trust settings'
+  'trust-settings-import:Import trust settings'
+  'verify-cert:Verify certificates:'
+  'authorize:Perform authorization operations'
+  'authorizationdb:Make changes to the authorization policy database'
+  'execute-with-privileges:Execute tool with privileges'
+  'leaks:Run /usr/bin/leaks on this process'
+  'error:Display a descriptive message for the given error codes:'
+  'create-filevaultmaster-keychain:"Create a keychain containing a key pair for FileVault recovery use'
+)
+_arguments '*:: :->command'
+
+if (( CURRENT == 1 )); then
+  _describe -t commands "security command" _1st_arguments
+  return
+fi
+
+case "$words[1]" in
+  find-(generic|internet)-password)
+    _values \
+      'Usage: find-[internet/generic]-password [-a account] [-s server] [options...] [-g] [keychain...]' \
+      '-a[Match "account" string]' \
+      '-c[Match "creator" (four-character code)]' \
+      '-C[Match "type" (four-character code)]' \
+      '-D[Match "kind" string]' \
+      '-G[Match "value" string (generic attribute)]' \
+      '-j[Match "comment" string]' \
+      '-l[Match "label" string]' \
+      '-s[Match "service" string]' \
+      '-g[Display the password for the item found]' \
+      '-w[Display only the password on stdout]' ;;
+  add-(generic|internet)-password)
+    _values \
+      'Usage: add-[internet/generic]-password [-a account] [-s server] [-w password] [options...] [-A|-T appPath] [keychain]]' \
+      '-a[Specify account name (required)]' \
+      '-c[Specify item creator (optional four-character code)]' \
+      '-C[Specify item type (optional four-character code)]' \
+      '-d[Specify security domain string (optional)]' \
+      '-D[Specify kind (default is "Internet password")]' \
+      '-j[Specify comment string (optional)]' \
+      '-l[Specify label (if omitted, server name is used as default label)]' \
+      '-p[Specify path string (optional)]' \
+      '-P[Specify port number (optional)]' \
+      '-r[Specify protocol (optional four-character SecProtocolType, e.g. "http", "ftp ")]' \
+      '-s[Specify server name (required)]' \
+      '-t[Specify authentication type (as a four-character SecAuthenticationType, default is "dflt")]' \
+      '-w[Specify password to be added]' \
+      '-A[Allow any application to access this item without warning (insecure, not recommended!)]' \
+      '-T[Specify an application which may access this item (multiple -T options are allowed)]' \
+      '-U[Update item if it already exists (if omitted, the item cannot already exist) ]' \
+      'utils)]' ;;
+esac

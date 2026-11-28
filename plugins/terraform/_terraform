@@ -1,358 +1,545 @@
 #compdef terraform
+compdef _terraform terraform
 
-local -a _terraform_cmds opt_args
-_terraform_cmds=(
-    'apply:Builds or changes infrastructure'
-    'console:Interactive console for Terraform interpolations'
-    'destroy:Destroy Terraform-managed infrastructure'
-    'fmt:Rewrites config files to canonical format'
-    'get:Download and install modules for the configuration'
-    'graph:Create a visual graph of Terraform resources'
-    'import:Import existing infrastructure into Terraform'
-    'init:Initialize a Terraform working directory'
-    'output:Read an output from a state file'
-    'plan:Generate and show an execution plan'
-    'providers:Prints a tree of the providers used in the configuration'
-    'push:Upload this Terraform module to Atlas to run'
-    'refresh:Update local state file against real resources'
-    'show:Inspect Terraform state or plan'
+(( ${+functions[_terraform_commands]} )) || _terraform_commands() {
+  local -a _terraform_cmds
+  _terraform_cmds=(
+    'apply:Create or update infrastructure'
+    'console:Try Terraform expressions at an interactive command prompt'
+    'destroy:Destroy previously-created infrastructure'
+    'fmt:Reformat your configuration in the standard style'
+    'force-unlock:Release a stuck lock on the current workspace'
+    'get:Install or upgrade remote Terraform modules'
+    'graph:Generate a Graphviz graph of the steps in an operation'
+    'import:Associate existing infrastructure with a Terraform resource'
+    'init:Prepare your working directory for other commands'
+    'login:Obtain and save credentials for a remote host'
+    'logout:Remove locally-stored credentials for a remote host'
+    'metadata:Metadata related commands'
+    'output:Show output values from your root module'
+    'plan:Show changes required by the current configuration'
+    'providers:Show the providers required for this configuration'
+    'refresh:Update the state to match remote systems'
+    'show:Show the current state or a saved plan'
     'state:Advanced state management'
-    'taint:Manually mark a resource for recreation'
-    'untaint:Manually unmark a resource as tainted'
-    'validate:Validates the Terraform files'
-    'version:Prints the Terraform version'
+    'taint:Mark a resource instance as not fully functional'
+    'test:Execute integration tests for Terraform modules'
+    'untaint:Remove the '\''tainted'\'' state from a resource instance'
+    'validate:Check whether the configuration is valid'
+    'version:Show the current Terraform version'
     'workspace:Workspace management'
-    '0.12upgrade:Rewrites pre-0.12 module source code for v0.12'
-)
+  )
+  if (( CURRENT == 1 )); then
+    _describe -t commands 'terraform commands' _terraform_cmds
+    return
+  fi
 
-__012upgrade() {
+  local curcontext="${curcontext}"
+  cmd="${${_terraform_cmds[(r)$words[1]:*]%%:*}}"
+  curcontext="${curcontext%:*:*}:terraform-${cmd}:"
+
+  local __chdir="${opt_args[-chdir]:-.}"
+
+  if (( ${+functions[_terraform_$cmd]} )); then
+    "_terraform_${cmd}"
+  else
+    _message "no more options"
+  fi
+}
+
+(( ${+functions[_terraform_apply]} )) || _terraform_apply() {
   _arguments \
-    '-yes[Skip the initial introduction messages and interactive confirmation. This can be used to run this command in batch from a script.]' \
-    '-force[ Override the heuristic that attempts to detect if a configuration is already written for v0.12 or later.  Some of the transformations made by this command are not idempotent, so re-running against the same module may change the meanings expressions in the module.]'
+    '-auto-approve[Skip interactive approval of plan before applying.]' \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-compact-warnings[If Terraform produces any warnings that are not accompanied by errors, show them in a more compact form that includes only the summary messages.]' \
+    '-destroy[Destroy Terraform-managed infrastructure. The command "terraform destroy" is a convenience alias for this option.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-input=[(true) Ask for input for variables if not directly set.]:input:(true false)' \
+    '-no-color[If specified, output won'\''t contain any color.]' \
+    '-parallelism=[(10) Limit the number of parallel resource operations.]:parallelism:' \
+    '-refresh=[(true) Skip checking for external changes to remote objects while creating the plan. This can potentially make planning faster, but at the expense of possibly planning against a stale record of the remote system state.]:refresh:(true false)' \
+    '*-replace=[(resource) Force replacement of a particular resource instance using its resource address. If applying would'\''ve normally produced an update or no-op action for this instance, Terraform will replace it instead. You can use this option multiple times to replace more than one object.]:resource:__terraform_state_resources' \
+    '-state=[(terraform.tfstate) Path to read and save state (unless state-out is specified).]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*-target=[(resource) Limit the operation to only the given module, resource, or resource instance and all of its dependencies. You can use this option multiple times to include more than one object. This is for exceptional use only.]:target:__terraform_state_resources' \
+    '*-var=[(for=bar) Set a value for one of the input variables in the root module of the configuration. Use this option more than once to set more than one variable.]:var:' \
+    '*-var-file=[(foo) Load variable values from the given file, in addition to the default files terraform.tfvars and *.auto.tfvars. Use this option more than once to include more than one variables file.]:file:_files -W __chdir -g "*.tfvars{,.json}"' \
+    ':plan:_files -W __chdir -'
 }
 
-__apply() {
-    _arguments \
-        '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
-        '-auto-approve[Skip interactive approval of plan before applying.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
-        '-lock-timeout=[(0s) Duration to retry a state lock.]' \
-        '-input=[(true) Ask for input for variables if not directly set.]' \
-        '-no-color[If specified, output wil be colorless.]' \
-        '-parallelism=[(10) Limit the number of parallel resource operations.]' \
-        '-refresh=[(true) Update state prior to checking for differences. This has no effect if a plan file is given to apply.]' \
-        '-state=[(terraform.tfstate) Path to read and save state (unless state-out is specified).]' \
-        '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
-        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
-}
-
-__console() {
-    _arguments \
-        '-state=[(terraform.tfstate) Path to read state.]' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
-}
-
-__destroy() {
-    _arguments \
-        '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
-        '-auto-approve[Skip interactive approval before destroying.]' \
-        '-force[Deprecated: same as auto-approve.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
-        '-lock-timeout=[(0s) Duration to retry a state lock.]' \
-        '-no-color[If specified, output will contain no color.]' \
-        '-parallelism=[(10) Limit the number of concurrent operations.]' \
-        '-refresh=[(true) Update state prior to checking for differences. This has no effect if a plan file is given to apply.]' \
-        '-state=[(terraform.tfstate) Path to read and save state (unless state-out is specified).]' \
-        '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
-        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
-}
-
-__fmt() {
-    _arguments \
-        '-list=[(true) List files whose formatting differs (always false if using STDIN)]' \
-        '-write=[(true) Write result to source file instead of STDOUT (always false if using STDIN or -check)]' \
-        '-diff=[(false) Display diffs of formatting changes]' \
-        '-check=[(false) Check if the input is formatted. Exit status will be 0 if all input is properly formatted and non-zero otherwise.]'
-}
-
-__get() {
-    _arguments \
-        '-update=[(false) If true, modules already downloaded will be checked for updates and updated if necessary.]' \
-        '-no-color[If specified, output will contain no color.]'
-}
-
-__graph() {
-    _arguments \
-        '-draw-cycles[Highlight any cycles in the graph with colored edges. This helps when diagnosing cycle errors.]' \
-        '-no-color[If specified, output will contain no color.]' \
-        '-type=[(plan) Type of graph to output. Can be: plan, plan-destroy, apply, validate, input, refresh.]'
-}
-
-__import() {
-    _arguments \
-        '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
-        '-config=[(path) Path to a directory of Terraform configuration files to use to configure the provider. Defaults to pwd. If no config files are present, they must be provided via the input prompts or env vars.]' \
-        '-allow-missing-config[Allow import when no resource configuration block exists.]' \
-        '-input=[(true) Ask for input for variables if not directly set.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
-        '-lock-timeout=[(0s) Duration to retry a state lock.]' \
-        '-no-color[If specified, output will contain no color.]' \
-        '-provider=[(provider) Specific provider to use for import. This is used for specifying aliases, such as "aws.eu". Defaults to the normal provider prefix of the resource being imported.]' \
-        '-state=[(PATH) Path to the source state file. Defaults to the configured backend, or "terraform.tfstate"]' \
-        '-state-out=[(PATH) Path to the destination state file to write to. If this is not specified, the source state file will be used. This can be a new or existing path.]' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times. This is only useful with the "-config" flag.]' \
-        '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]'
-}
-
-__init() {
-    _arguments \
-        '-backend=[(true) Configure the backend for this configuration.]' \
-        '-backend-config=[This can be either a path to an HCL file with key/value assignments (same format as terraform.tfvars) or a 'key=value' format. This is merged with what is in the configuration file. This can be specified multiple times. The backend type must be in the configuration itself.]' \
-        '-force-copy[Suppress prompts about copying state data. This is equivalent to providing a "yes" to all confirmation prompts.]' \
-        '-from-module=[Copy the contents of the given module into the target directory before initialization.]' \
-        '-get=[(true) Download any modules for this configuration.]' \
-        '-get-plugins=[(true) Download any missing plugins for this configuration.]' \
-        '-input=[(true) Ask for input if necessary. If false, will error if input was required.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
-        '-lock-timeout=[(0s) Duration to retry a state lock.]' \
-        '-no-color[If specified, output will contain no color.]' \
-        '-plugin-dir[Directory containing plugin binaries. This overrides all default search paths for plugins, and prevents the automatic installation of plugins. This flag can be used multiple times.]' \
-        '-reconfigure[Reconfigure the backend, ignoring any saved configuration.]' \
-        '-upgrade=[(false) If installing modules (-get) or plugins (-get-plugins), ignore previously-downloaded objects and install the latest version allowed within configured constraints.]' \
-        '-verify-plugins=[(true) Verify the authenticity and integrity of automatically downloaded plugins.]'
-}
-
-__output() {
-    _arguments \
-        '-state=[(path) Path to the state file to read. Defaults to "terraform.tfstate".]' \
-        '-no-color[ If specified, output will contain no color.]' \
-        '-module=[(name) If specified, returns the outputs for a specific module]' \
-        '-json[If specified, machine readable output will be printed in JSON format]'
-}
-
-__plan() {
-    _arguments \
-        '-destroy[() If set, a plan will be generated to destroy all resources managed by the given configuration and state.]' \
-        '-detailed-exitcode[() Return detailed exit codes when the command exits. This will change the meaning of exit codes to: 0 - Succeeded, diff is empty (no changes); 1 - Errored, 2 - Succeeded; there is a diff]' \
-        '-input=[(true) Ask for input for variables if not directly set.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
-        '-lock-timeout=[(0s) Duration to retry a state lock.]' \
-        '-module-depth=[(n) Specifies the depth of modules to show in the output. This does not affect the plan itself, only the output shown. By default, this is -1, which will expand all.]' \
-        '-no-color[() If specified, output will contain no color.]' \
-        '-out=[(path) Write a plan file to the given path. This can be used as input to the "apply" command.]' \
-        '-parallelism=[(10) Limit the number of concurrent operations.]' \
-        '-refresh=[(true) Update state prior to checking for differences.]' \
-        '-state=[(statefile) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]' \
-        '-target=[(resource) Resource to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]' \
-}
-
-__providers() {
-    _arguments \
-
-}
-
-__push() {
-    _arguments \
-        '-atlas-address=[(url) An alternate address to an Atlas instance. Defaults to https://atlas.hashicorp.com.]' \
-        '-upload-modules=[(true) If true (default), then the modules being used are all locked at their current checkout and uploaded completely to Atlas. This prevents Atlas from running terraform get for you.]' \
-        '-name=[(name) Name of the infrastructure configuration in Atlas. The format of this is: "username/name" so that you can upload configurations not just to your account but to other accounts and organizations. This setting can also be set in the configuration in the Atlas section.]' \
-        '-no-color[Disables output with coloring]' \
-        '-overwrite=[(foo) Marks a specific variable to be updated on Atlas. Normally, if a variable is already set in Atlas, Terraform will not send the local value (even if it is different). This forces it to send the local value to Atlas. This flag can be repeated multiple times.]' \
-        '-token=[(token) Atlas API token to use to authorize the upload. If blank or unspecified, the ATLAS_TOKEN environmental variable will be used.]' \
-        '-var=[("foo=bar") Set the value of a variable for the Terraform configuration.]' \
-        '-var-file=[(foo) Set the value of variables using a variable file.]' \
-        '-vcs=[(true) If true (default), then Terraform will detect if a VCS is in use, such as Git, and will only upload files that are committed to version control. If no version control system is detected, Terraform will upload all files in path (parameter to the command).]'
-}
-
-__refresh() {
-    _arguments \
-        '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
-        '-input=[(true) Ask for input for variables if not directly set.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
-        '-lock-timeout=[(0s) Duration to retry a state lock.]' \
-        '-no-color[If specified, output will not contain any color.]' \
-        '-state=[(path) Path to read and save state (unless state-out is specified). Defaults to "terraform.tfstate".]' \
-        '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]' \
-        '-target=[(resource) A Resource Address to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__statelist' \
-        '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-        '-var-file=[(path) Set variables in the Terraform configuration from a file. If "terraform.tfvars" is present, it will be automatically loaded if this flag is not specified.]'
-}
-
-__show() {
-    _arguments \
-        '-module-depth=[(n) The maximum depth to expand modules. By default this is zero, which will not expand modules at all.]' \
-        '-no-color[If specified, output will not contain any color.]'
-}
-
-__state() {
-    local -a __state_cmds
-    __state_cmds=(
-      'list:List resources in the state'
-      'mv:Move an item in the state'
-      'pull:Pull current state and output to stdout'
-      'push:Update remote state from a local state file'
-      'rm:Remove instances from the state' 
-      'show:Show a resource in the state'
-    )
-    _describe -t state "state commands" __state_cmds
-}
-
-__state_list() {
+(( ${+functions[_terraform_console]} )) || _terraform_console() {
   _arguments \
-    '-state=[(path) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]' \
-    '-id=[(id) Filters the results to include only instances whose resource types have an attribute named id whose value equals the given id string.]' \
-    "*:address:__statelist" 
+    '-state=[(terraform.tfstate) Legacy option for the local backend only. See the local backend'\''s documentation for more information.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-plan[Create a new plan (as if running "terraform plan") and then evaluate expressions against its planned state, instead of evaluating against the current state. You can use this to inspect the effects of configuration changes that haven'\''t been applied yet.]' \
+    '*-var=[(for=bar) Set a variable in the Terraform configuration. This flag can be set multiple times.]:var:' \
+    '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -W __chdir -g "*.tfvars{,.json}"'
 }
 
-__state_mv() {
+(( ${+functions[_terraform_destroy]} )) || _terraform_destroy() {
   _arguments \
-    "-dry-run[If set, prints out what would've been moved but doesn't actually move anything.]" \
-    "-backup=[(path) Path where Terraform should write the backup for the original state. This can't be disabled. If not set, Terraform will write it to the same path as the statefile with a \".backup\" extension.]:file:_files" \
-    "-backup-out=[(path) Path where Terraform should write the backup for the destination state. This can't be disabled. If not set, Terraform will write it to the same path as the destination state file with a backup extension. This only needs to be specified if -state-out is set to a different path than -state.]:file:_files" \
-    "-lock=[(true|false) Lock the state files when locking is supported.]:lock:(true false)" \
-    "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
-    '-state=[(path) Path to the source state file. Defaults to the configured backend, or "terraform.tfstate"]:file:_files' \
-    "-state-out=[(path) Path to the destination state file to write to. If this isn't specified, the source state file will be used. This can be a new or existing path.]:file:_files" \
-    "::" \
-    ":source:__statelist" \
-    ":destination: " 
+    '-auto-approve[Skip interactive approval of plan before applying.]' \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-compact-warnings[If Terraform produces any warnings that are not accompanied by errors, show them in a more compact form that includes only the summary messages.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-input=[(true) Ask for input for variables if not directly set.]:input:(true false)' \
+    '-no-color[If specified, output won'\''t contain any color.]' \
+    '-parallelism=[(10) Limit the number of parallel resource operations.]:parallelism:' \
+    '-refresh=[(true) Update state prior to checking for differences. This has no effect if a plan file is given to apply.]:refresh:(true false)' \
+    '-state=[(terraform.tfstate) Path to read and save state (unless state-out is specified).]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*-target=[(resource) Limit the operation to only the given module, resource, or resource instance and all of its dependencies. You can use this option multiple times to include more than one object. This is for exceptional use only.]:target:__terraform_state_resources' \
+    '*-var=[(for=bar) Set a value for one of the input variables in the root module of the configuration. Use this option more than once to set more than one variable.]:var:' \
+    '*-var-file=[(foo) Load variable values from the given file, in addition to the default files terraform.tfvars and *.auto.tfvars. Use this option more than once to include more than one variables file.]:file:_files -W __chdir -g "*.tfvars{,.json}"'
 }
 
-__state_push() {
+(( ${+functions[_terraform_fmt]} )) || _terraform_fmt() {
   _arguments \
-    "-force[Write the state even if lineages don't match or the remote serial is higher.]" \
-    '-lock=[(true|false) Lock the state file when locking is supported.]:lock:(true false)' \
-    "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
-    "::" \
-    ":destination:_files"
+    '-list=[(true) Don'\''t list files whose formatting differs (always disabled if using STDIN)]:list:(true false)' \
+    '-write=[(true) Don'\''t write to source files (always disabled if using STDIN or -check)]:write:(true false)' \
+    '-diff[Display diffs of formatting changes]' \
+    '-check[Check if the input is formatted. Exit status will be 0 if all input is properly formatted and non-zero otherwise.]' \
+    '-no-color[If specified, output won'\''t contain any color.]' \
+    '-recursive[Also process files in subdirectories. By default, only the given directory (or current directory) is processed.]' \
+    '*:targets:_files -W __chdir -'
 }
 
-__state_rm() {
+(( ${+functions[_terraform_force-unlock]} )) || _terraform_force-unlock() {
   _arguments \
-    "-dry-run[If set, prints out what would've been removed but doesn't actually remove anything.]" \
-    "-backup=[(path) Path where Terraform should write the backup for the original state.]:file:_files" \
-    "-lock=[(true|false) Lock the state files when locking is supported.]:lock:(true false)" \
-    "-lock-timeout=[(seconds) Duration to retry a state lock.]" \
-    '-state=[(path) Path to the state file to update. Defaults to the current workspace state.]:file:_files' \
-    "*:address:__statelist" 
+    '-force[Don'\''t ask for input for unlock confirmation.]' \
+    ':lock_id:'
 }
 
-
-__state_show() {
+(( ${+functions[_terraform_get]} )) || _terraform_get() {
   _arguments \
-    '-state=[(path) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]' \
-    "*:address:__statelist" 
+    '-update[Check already-downloaded modules for available updates and install the newest versions available.]' \
+    '-no-color[Disable text coloring in the output.]' \
+    '-test-directory=[(tests) Set the Terraform test directory, defaults to "tests".]:test_directory:_files -W __chdir -/'
 }
 
-__statelist() {
-  compadd $(terraform state list $opt_args[-state])
+(( ${+functions[_terraform_graph]} )) || _terraform_graph() {
+  _arguments \
+    '-draw-cycles[Highlight any cycles in the graph with colored edges. This helps when diagnosing cycle errors. This option is supported only when illustrating a real evaluation graph, selected using the -type=TYPE option.]' \
+    '-module-depth=[(-1) (deprecated) In prior versions of Terraform, specified the depth of modules to show in the output.]:module_depth:' \
+    '-plan=[Render graph using the specified plan file instead of the configuration in the current directory. Implies -type=apply.]:plan:_files -W __chdir -' \
+    '-type=[(plan) Type of operation graph to output. Can be: plan, plan-refresh-only, plan-destroy, or apply. By default Terraform just summarizes the relationships between the resources in your configuration, without any particular operation in mind. Full operation graphs are more detailed but therefore often harder to read.]:type:(plan plan-refresh-only plan-destroy apply)'
 }
 
-__taint() {
-    _arguments \
-        '-allow-missing[If specified, the command will succeed (exit code 0) even if the resource is missing.]' \
-        '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
-        '-lock=[(true) Lock the state file when locking is supported.]' \
-        '-lock-timeout=[(0s) Duration to retry a state lock.]' \
-        '-module=[(path)  The module path where the resource lives. By default this will be root. Child modules can be specified by names. Ex. "consul" or "consul.vpc" (nested modules).]' \
-        '-no-color[If specified, output will not contain any color.]' \
-        '-state=[(path) Path to read and save state (unless state-out is  specified). Defaults to "terraform.tfstate".]' \
-        '-state-out=[(path) Path to write updated state file. By default, the "-state" path will be used.]' \
-        "*:address:__statelist" 
+(( ${+functions[_terraform_import]} )) || _terraform_import() {
+  _arguments \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-config=[(path) Path to a directory of Terraform configuration files to use to configure the provider. Defaults to pwd. If no config files are present, they must be provided via the input prompts or env vars.]:config:_files -W __chdir -/' \
+    '-input=[(true) Disable interactive input prompts.]:input:(true false)' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-no-color[If specified, output will contain no color.]' \
+    '-state=[(PATH) Path to the source state file. Defaults to the configured backend, or "terraform.tfstate"]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(PATH) Path to the destination state file to write to. If this is not specified, the source state file will be used. This can be a new or existing path.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*-var=[(for=bar) Set a variable in the Terraform configuration. This flag can be set multiple times. This is only useful with the "-config" flag.]:var:' \
+    '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -W __chdir -g "*.tfvars{,.json}"' \
+    ':addr:' \
+    ':id:'
 }
 
-__untaint() {
-    _arguments \
+(( ${+functions[_terraform_init]} )) || _terraform_init() {
+  _arguments \
+    '-backend=[(true) Disable backend or Terraform Cloud initialization for this configuration and use what was previously initialized instead.]:backend:(true false)' \
+    '-backend-config=[Configuration to be merged with what is in the configuration file'\''s '\''backend'\'' block. This can be either a path to an HCL file with key/value assignments (same format as terraform.tfvars) or a '\''key=value'\'' format, and can be specified multiple times. The backend type must be in the configuration itself.]:backend_config:_files -W __chdir -' \
+    '-force-copy[Suppress prompts about copying state data. This is equivalent to providing a "yes" to all confirmation prompts.]' \
+    '-from-module=[Copy the contents of the given module into the target directory before initialization.]:from_module:_files -W __chdir -/' \
+    '-get=[(true) Disable downloading modules for this configuration.]:get:(true false)' \
+    '-input=[(true) Disable interactive prompts. Note that some actions may require interactive prompts and will error if input is disabled.]:input:(true false)' \
+    '-lock=[(true) Don'\''t hold a state lock during backend migration. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-no-color[If specified, output will contain no color.]' \
+    '-plugin-dir[Directory containing plugin binaries. This overrides all default search paths for plugins, and prevents the automatic installation of plugins. This flag can be used multiple times.]:plugin_dir:_files -W __chdir -/' \
+    '-reconfigure[Reconfigure the backend, ignoring any saved configuration.]' \
+    '-migrate-state[Reconfigure a backend, and attempt to migrate any existing state.]' \
+    '-upgrade[Install the latest module and provider versions allowed within configured constraints, overriding the default behavior of selecting exactly the version recorded in the dependency lockfile.]' \
+    '-lockfile=[Set a dependency lockfile mode. Currently only "readonly" is valid.]:lockfile:( readonly )' \
+    '-ignore-remote-version[A rare option used for Terraform Cloud and the remote backend only. Set this to ignore checking that the local and remote Terraform versions use compatible state representations, making an operation proceed even when there is a potential mismatch. See the documentation on configuring Terraform with Terraform Cloud for more information.]' \
+    '-test-directory=[(tests) Set the Terraform test directory, defaults to "tests".]:test_directory:_files -W __chdir -/'
+}
+
+(( ${+functions[_terraform_login]} )) || _terraform_login() {
+  _arguments \
+    ':hostname:'
+}
+
+(( ${+functions[_terraform_logout]} )) || _terraform_logout() {
+  _arguments \
+    ':hostname:'
+}
+
+(( ${+functions[_terraform_metadata]} )) || _terraform_metadata() {
+  _arguments \
+    '*::terraform metadata command:_terraform_metadata_commands'
+}
+
+(( ${+functions[_terraform_metadata_commands]} )) || _terraform_metadata_commands() {
+  local -a _metadata_cmds
+  _metadata_cmds=(
+    'functions:Show signatures and descriptions for the available functions'
+  )
+  if (( CURRENT == 1 )); then
+    _describe -t commands "terraform metadata commands" _metadata_cmds
+    return
+  fi
+
+  local curcontext="${curcontext}"
+  cmd="${${_metadata_cmds[(r)$words[1]:*]%%:*}}"
+  curcontext="${curcontext%:*:*}:terraform-metadata-${cmd}:"
+
+  if (( ${+functions[_terraform_metadata_$cmd]} )); then
+    "_terraform_metadata_${cmd}"
+  else
+    _message "no more options"
+  fi
+}
+
+(( ${+functions[_terraform_metadata_functions]} )) || _terraform_metadata_functions() {
+  _arguments \
+    '-json[]'
+}
+
+(( ${+functions[_terraform_output]} )) || _terraform_output() {
+  _arguments \
+    '-state=[(path) Path to the state file to read. Defaults to "terraform.tfstate". Ignored when remote state is used.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-no-color[If specified, output will contain no color.]' \
+    '-json[If specified, machine readable output will be printed in JSON format]' \
+    '-raw[For value types that can be automatically converted to a string, will print the raw string directly, rather than a human-oriented representation of the value.]' \
+    ':name:'
+}
+
+(( ${+functions[_terraform_plan]} )) || _terraform_plan() {
+  _arguments \
+    '-compact-warnings[If Terraform produces any warnings that are not accompanied by errors, show them in a more compact form that includes only the summary messages.]' \
+    '-destroy[Select the "destroy" planning mode, which creates a plan to destroy all objects currently managed by this Terraform configuration instead of the usual behavior.]' \
+    '-detailed-exitcode[Return detailed exit codes when the command exits. This will change the meaning of exit codes to: 0 - Succeeded, diff is empty (no changes); 1 - Errored, 2 - Succeeded; there is a diff]' \
+    '-input=[(true) Ask for input for variables if not directly set.]:input:(true false)' \
+    '-generate-config-out=[(path) (Experimental) If import blocks are present in configuration, instructs Terraform to generate HCL for any imported resources not already present. The configuration is written to a new file at PATH, which must not already exist. Terraform may still attempt to write configuration if the plan errors.]:generate_config_out:' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-no-color[If specified, output will contain no color.]' \
+    '-out=[(path) Write a plan file to the given path. This can be used as input to the "apply" command.]:out:' \
+    '-parallelism=[(10) Limit the number of concurrent operations.]:parallelism:' \
+    '-refresh=[(true) Skip checking for external changes to remote objects while creating the plan. This can potentially make planning faster, but at the expense of possibly planning against a stale record of the remote system state.]:refresh:(true false)' \
+    '-refresh-only[Select the "refresh only" planning mode, which checks whether remote objects still match the outcome of the most recent Terraform apply but does not propose any actions to undo any changes made outside of Terraform.]' \
+    '*-replace=[(resource) Force replacement of a particular resource instance using its resource address. If the plan would'\''ve normally produced an update or no-op action for this instance, Terraform will plan to replace it instead. You can use this option multiple times to replace more than one object.]:replace:__terraform_state_resources' \
+    '-state=[(statefile) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*-target=[(resource) Limit the planning operation to only the given module, resource, or resource instance and all of its dependencies. You can use this option multiple times to include more than one object. This is for exceptional use only.]:target:__terraform_state_resources' \
+    '*-var=[(for=bar) Set a value for one of the input variables in the root module of the configuration. Use this option more than once to set more than one variable.]:var:' \
+    '*-var-file=[(foo) Load variable values from the given file, in addition to the default files terraform.tfvars and *.auto.tfvars. Use this option more than once to include more than one variables file.]:file:_files -W __chdir -g "*.tfvars{,.json}"'
+}
+
+(( ${+functions[_terraform_providers]} )) || _terraform_providers() {
+  _arguments \
+    '-test-directory=[(path) Set the Terraform test directory, defaults to "tests".]:test_directory:_files -W __chdir -/' \
+    '*::terraform providers command:_terraform_providers_commands'
+}
+
+(( ${+functions[_terraform_providers_commands]} )) || _terraform_providers_commands() {
+  local -a _providers_cmds
+  _providers_cmds=(
+    'lock:Write out dependency locks for the configured providers'
+    'mirror:Save local copies of all required provider plugins'
+    'schema:Show schemas for the providers used in the configuration'
+  )
+  if (( CURRENT == 1 )); then
+    _describe -t commands "terraform providers commands" _providers_cmds
+    return
+  fi
+
+  local curcontext="${curcontext}"
+  cmd="${${_providers_cmds[(r)$words[1]:*]%%:*}}"
+  curcontext="${curcontext%:*:*}:terraform-providers-${cmd}:"
+
+  if (( ${+functions[_terraform_providers_$cmd]} )); then
+    "_terraform_providers_${cmd}"
+  else
+    _message "no more options"
+  fi
+}
+
+(( ${+functions[_terraform_providers_lock]} )) || _terraform_providers_lock() {
+  _arguments \
+    '-fs-mirror=[(dir) Consult the given filesystem mirror directory instead of the origin registry for each of the given providers.]:fs_mirror:_files -W __chdir -/' \
+    '-net-mirror=[(url) Consult the given network mirror (given as a base URL) instead of the origin registry for each of the given providers.]:net_mirror:' \
+    '*-platform=[(os_arch) Choose a target platform to request package checksums for.]:platform:' \
+    '*:provider:'
+}
+
+(( ${+functions[_terraform_providers_mirror]} )) || _terraform_providers_mirror() {
+  _arguments \
+    '*-platform=[(os_arch) Choose which target platform to build a mirror for.]:platform:' \
+    '::' \
+    ':target_dir:_files -W __chdir -/'
+}
+
+(( ${+functions[_terraform_providers_schema]} )) || _terraform_providers_schema() {
+  _arguments \
+    '-json[]'
+}
+
+(( ${+functions[_terraform_refresh]} )) || _terraform_refresh() {
+  _arguments \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]::backupfile:_files -W __chdir -g "*.backup"' \
+    '-compact-warnings[If Terraform produces any warnings that are not accompanied by errors, show them in a more compact form that includes only the summary messages.]' \
+    '-input=[(true) Ask for input for variables if not directly set.]:input:(true false)' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-no-color[If specified, output will not contain any color.]' \
+    '-parallelism=[(10) Limit the number of parallel resource operations.]:parallelism:' \
+    '-state=[(path) Path to read and save state (unless state-out is specified). Defaults to "terraform.tfstate".]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to write state to that is different than "-state". This can be used to preserve the old state.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*-target=[(resource) A Resource Address to target. Operation will be limited to this resource and its dependencies. This flag can be used multiple times.]:target:__terraform_state_resources' \
+    '*-var=[(for=bar) Set a variable in the Terraform configuration. This flag can be set multiple times.]:var:' \
+    '*-var-file=[(foo) Set variables in the Terraform configuration from a file. If "terraform.tfvars" or any ".auto.tfvars" files are present, they will be automatically loaded.]:file:_files -W __chdir -g "*.tfvars{,.json}"'
+}
+
+(( ${+functions[_terraform_show]} )) || _terraform_show() {
+  _arguments \
+    '-json[If specified, output the Terraform plan or state in a machine-readable form.]' \
+    '-no-color[If specified, output will not contain any color.]' \
+    ':path:_files -W __chdir -g "*.tfstate"'
+}
+
+(( ${+functions[_terraform_state]} )) || _terraform_state() {
+  _arguments \
+    '*::terraform state command:_terraform_state_commands'
+}
+
+(( ${+functions[_terraform_state_commands]} )) || _terraform_state_commands() {
+  local -a _state_cmds
+  _state_cmds=(
+    'list:List resources in the state'
+    'mv:Move an item in the state'
+    'pull:Pull current state and output to stdout'
+    'push:Update remote state from a local state file'
+    'replace-provider:Replace provider in the state'
+    'rm:Remove instances from the state'
+    'show:Show a resource in the state'
+  )
+  if (( CURRENT == 1 )); then
+    _describe -t commands "terraform state commands" _state_cmds
+    return
+  fi
+
+  local curcontext="${curcontext}"
+  cmd="${${_state_cmds[(r)$words[1]:*]%%:*}}"
+  curcontext="${curcontext%:*:*}:terraform-state-${cmd}:"
+
+  if (( ${+functions[_terraform_state_$cmd]} )); then
+    "_terraform_state_${cmd}"
+  else
+    _message "no more options"
+  fi
+}
+
+(( ${+functions[_terraform_state_list]} )) || _terraform_state_list() {
+  _arguments \
+    '-state=[(statefile) Path to a Terraform state file to use to look up Terraform-managed resources. By default, Terraform will consult the state of the currently-selected workspace.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-id=[(id) Filters the results to include only instances whose resource types have an attribute named id whose value equals the given id string.]:id:' \
+    '*:address:__terraform_state_resources'
+}
+
+(( ${+functions[_terraform_state_mv]} )) || _terraform_state_mv() {
+  _arguments \
+    '-dry-run[If set, prints out what would'\''ve been moved but doesn'\''t actually move anything.]' \
+    '-backup=[(PATH) Path where Terraform should write the backup for the original state. This can"t be disabled. If not set, Terraform will write it to the same path as the statefile with a ".backup" extension.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-backup-out=[(PATH) Path where Terraform should write the backup for the destination state. This can"t be disabled. If not set, Terraform will write it to the same path as the destination state file with a backup extension. This only needs to be specified if -state-out is set to a different path than -state.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-ignore-remote-version[A rare option used for the remote backend only. See the remote backend documentation for more information.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(path) Path to the source state file. Defaults to the configured backend, or "terraform.tfstate"]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to the destination state file to write to. If this isn"t specified, the source state file will be used. This can be a new or existing path.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '::' \
+    ':source:__terraform_state_resources' \
+    ':destination: '
+}
+
+(( ${+functions[_terraform_state_push]} )) || _terraform_state_push() {
+  _arguments \
+    '-force[Write the state even if lineages don'\''t match or the remote serial is higher.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '::' \
+    ':destination:_files'
+}
+
+(( ${+functions[_terraform_state_replace-provider]} )) || _terraform_state_replace-provider() {
+  _arguments \
+    '-auto-approve[Skip interactive approval.]' \
+    '-backup=[(PATH) Path where Terraform should write the backup for the state file. This can"t be disabled. If not set, Terraform will write it to the same path as the state file with a ".backup" extension.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(PATH) Path to the source state file. Defaults to the configured backend, or "terraform.tfstate"]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '::' \
+    ':from_provider_fqn:' \
+    ':to_provider_fqn:'
+}
+
+(( ${+functions[_terraform_state_rm]} )) || _terraform_state_rm() {
+  _arguments \
+    '-dry-run[If set, prints out what would'\''ve been removed but doesn'\''t actually remove anything.]' \
+    '-backup=[(PATH) Path where Terraform should write the backup for the original state.]::backupfile:_files -W __chdir -g "*.backup"' \
+    '-ignore-remote-version[Continue even if remote and local Terraform versions are incompatible. This may result in an unusable workspace, and should be used with extreme caution.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(PATH) Path to the state file to update. Defaults to the current workspace state.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*:address:__terraform_state_resources'
+}
+
+(( ${+functions[_terraform_state_show]} )) || _terraform_state_show() {
+  _arguments \
+    '-state=[(statefile) Path to a Terraform state file to use to look up Terraform-managed resources. By default it will use the state "terraform.tfstate" if it exists.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    "*:address:__terraform_state_resources"
+}
+
+(( ${+functions[__terraform_state_resources]} )) || __terraform_state_resources() {
+  local resource
+  local -a resources
+  terraform -chdir="${__chdir}" state list -state="${opt_args[-state]}" 2>/dev/null | while read -r resource; do
+    resources+=( "${resource}" )
+  done
+  compadd "${@}" - "${resources[@]}"
+}
+
+(( ${+functions[_terraform_taint]} )) || _terraform_taint() {
+  _arguments \
     '-allow-missing[If specified, the command will succeed (exit code 0) even if the resource is missing.]' \
-    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]' \
-    '-lock=[(true) Lock the state file when locking is supported.]' \
-    '-lock-timeout=[(0s) Duration to retry a state lock.]' \
-    '-module=[(path)  The module path where the resource lives. By default this will be root. Child modules can be specified by names. Ex. "consul" or "consul.vpc" (nested modules).]' \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-ignore-remote-version[A rare option used for the remote backend only. See the remote backend documentation for more information.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(path) Path to read and save state (unless state-out is  specified). Defaults to "terraform.tfstate".]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to write updated state file. By default, the "-state" path will be used.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '*:address:__terraform_state_resources'
+}
+
+(( ${+functions[_terraform_test]} )) || _terraform_test() {
+  _arguments \
+    '-cloud-run=[(source) If specified, Terraform will execute this test run remotely using Terraform Cloud. You must specify the source of a module registered in a private module registry as the argument to this flag. This allows Terraform to associate the cloud run with the correct Terraform Cloud module and organization.]:cloud_run:' \
+    '*-filter=[(testfile) If specified, Terraform will only execute the test files specified by this flag. You can use this option multiple times to execute more than one test file.]:testfile:_files -W __chdir -g "*.tftest.hcl"' \
+    '-json[If specified, machine readable output will be printed in JSON format]' \
+    '-no-color[If specified, machine readable output will be printed in JSON format]' \
+    '-test-directory=[(path) Set the Terraform test directory, defaults to "tests".]:test_directory:_files -W __chdir -/' \
+    '*-var=[(for=bar) Set a value for one of the input variables in the root module of the configuration. Use this option more than once to set more than one variable.]:var:' \
+    '*-var-file=[(foo) Load variable values from the given file, in addition to the default files terraform.tfvars and *.auto.tfvars. Use this option more than once to include more than one variables file.]:file:_files -W __chdir -g "*.tfvars{,.json}"' \
+    '-verbose[Print the plan or state for each test run block as it executes.]' \
+}
+
+(( ${+functions[_terraform_untaint]} )) || _terraform_untaint() {
+  _arguments \
+    '-allow-missing[If specified, the command will succeed (exit code 0) even if the resource is missing.]' \
+    '-backup=[(path) Path to backup the existing state file before modifying. Defaults to the "-state-out" path with ".backup" extension. Set to "-" to disable backup.]:backupfile:_files -W __chdir -g "*.backup"' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(path) Path to read and save state (unless state-out is  specified). Defaults to "terraform.tfstate".]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '-state-out=[(path) Path to write updated state file. By default, the "-state" path will be used.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    ':name:__terraform_state_resources'
+}
+
+(( ${+functions[_terraform_validate]} )) || _terraform_validate() {
+  _arguments \
+    '-json[Produce output in a machine-readable JSON format, suitable for use in text editor integrations and other automated systems.]' \
     '-no-color[If specified, output will not contain any color.]' \
-    '-state=[(path) Path to read and save state (unless state-out is  specified). Defaults to "terraform.tfstate".]' \
-    '-state-out=[(path) Path to write updated state file. By default, the "-state" path will be used.]'
+    '-no-tests[If specified, Terraform will not validate test files.]' \
+    '-test-directory=[(path) Set the Terraform test directory, defaults to "tests".]:test_directory:_files -W __chdir -/' \
+    ':dir:_files -W __chdir -/'
 }
 
-__validate() {
-    _arguments \
-    '-check-variables=[(true) If set to true (default), the command will check whether all required variables have been specified.]' \
-    '-no-color[If specified, output will not contain any color.]' \
-    '-var[("foo=bar") Set a variable in the Terraform configuration. This flag can be set multiple times.]' \
-    '-var-file=[(path) Set variables in the Terraform configuration from a file. If "terraform.tfvars" is present, it will be automatically loaded if this flag is not specified.]'
+(( ${+functions[_terraform_version]} )) || _terraform_version() {
+  _arguments \
+    '-json[Output the version information as a JSON object.]' \
+    '::'
 }
 
-__workspace() {
-    local -a __workspace_cmds
-    __workspace_cmds=(
-        'delete:Delete a workspace'
-        'list:List Workspaces'
-        'new:Create a new workspace'
-        'select:Select a workspace'
-        'show:Show the name of the current workspace'
-    )
-    _describe -t workspace "workspace commands" __workspace_cmds
+(( ${+functions[_terraform_workspace]} )) || _terraform_workspace() {
+  _arguments \
+    '*::terraform workspace command:_terraform_workspace_commands'
 }
 
-_arguments '*:: :->command'
+(( ${+functions[_terraform_workspace_commands]} )) || _terraform_workspace_commands() {
+  local -a _workspace_cmds
+  _workspace_cmds=(
+    'delete:Delete a workspace'
+    'list:List Workspaces'
+    'new:Create a new workspace'
+    'select:Select a workspace'
+    'show:Show the name of the current workspace'
+  )
+  if (( CURRENT == 1 )); then
+    _describe -t commands "terraform workspace commands" _workspace_cmds
+    return
+  fi
 
-if (( CURRENT == 1 )); then
-  _describe -t commands "terraform command" _terraform_cmds
-  return
+  local curcontext="${curcontext}"
+  cmd="${${_workspace_cmds[(r)$words[1]:*]%%:*}}"
+  curcontext="${curcontext%:*:*}:terraform-workspace-${cmd}:"
+
+  if (( ${+functions[_terraform_workspace_$cmd]} )); then
+    "_terraform_workspace_${cmd}"
+  else
+    _message "no more options"
+  fi
+}
+
+(( ${+functions[_terraform_workspace_delete]} )) || _terraform_workspace_delete() {
+  _arguments \
+    '-force[Remove a workspace even if it is managing resources. Terraform can no longer track or manage the workspace'\''s infrastructure.]' \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '::' \
+    ':name:__terraform_workspaces'
+}
+
+(( ${+functions[_terraform_workspace_list]} )) || _terraform_workspace_list() {
+  _arguments
+}
+
+(( ${+functions[_terraform_workspace_new]} )) || _terraform_workspace_new() {
+  _arguments \
+    '-lock=[(true) Don'\''t hold a state lock during the operation. This is dangerous if others might concurrently run commands against the same workspace.]:lock:(true false)' \
+    '-lock-timeout=[(0s) Duration to retry a state lock.]:lock_timeout:' \
+    '-state=[(path) Copy an existing state file into the new workspace.]:statefile:_files -W __chdir -g "*.tfstate"' \
+    '::' \
+    ':name:'
+}
+
+(( ${+functions[_terraform_workspace_select]} )) || _terraform_workspace_select() {
+  _arguments \
+    '-or-create=[(false) Create the Terraform workspace if it doesn'\''t exist.]:or_create:(true false)' \
+    '::' \
+    ':name:__terraform_workspaces'
+}
+
+(( ${+functions[_terraform_workspace_show]} )) || _terraform_workspace_show() {
+  _arguments
+}
+
+(( ${+functions[__terraform_workspaces]} )) || __terraform_workspaces() {
+  local workspace
+  local -a workspaces
+  terraform -chdir="${__chdir}" workspace list | while read -r workspace; do
+    if [[ -z "${workspace}" ]]; then
+      continue
+    fi
+    workspaces+=( "${workspace#[ *] }" )
+  done
+  compadd "${@}" - "${workspaces[@]}"
+}
+
+_terraform() {
+  _arguments \
+    '-chdir=[(DIR) Switch to a different working directory before executing the given subcommand.]:chdir:_files -W __chdir -/' \
+    '-help[Show this help output, or the help for a specified subcommand.]' \
+    '-version[An alias for the "version" subcommand.]' \
+    '*::terraform command:_terraform_commands'
+}
+
+# don't run the completion function when being source-ed or eval-ed
+if [ "${funcstack[1]}" = '_terraform' ]; then
+  _terraform
 fi
-
-local -a _command_args
-case "$words[1]" in
-  0.12upgrade)
-    __012upgrade ;;
-  apply)
-    __apply ;;
-  console)
-    __console;;
-  destroy)
-    __destroy ;;
-  fmt)
-    __fmt;;
-  get)
-    __get ;;
-  graph)
-    __graph ;;
-  import)
-    __import;;
-  init)
-    __init ;;
-  output)
-    __output ;;
-  plan)
-    __plan ;;
-  providers)
-    __providers ;;
-  push)
-    __push ;;
-  refresh)
-    __refresh ;;
-  show)
-    __show ;;
-  state)
-    test $CURRENT -lt 3 && __state
-    [[ $words[2] = "list" ]] && __state_list
-    [[ $words[2] = "mv" ]] && __state_mv
-    [[ $words[2] = "push" ]] && __state_push
-    [[ $words[2] = "rm" ]] && __state_rm
-    [[ $words[2] = "show" ]] && __state_show
-    ;;
-  taint)
-    __taint ;;
-  untaint)
-    __untaint ;;
-  validate)
-    __validate ;;
-  workspace)
-    test $CURRENT -lt 3 && __workspace ;;
-esac

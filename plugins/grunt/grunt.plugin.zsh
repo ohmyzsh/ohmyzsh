@@ -23,7 +23,7 @@
 #
 # Enable caching:
 #
-#   If you want to use the cache, set the followings in your .zshrc:
+#   If you want to use the cache, set the following in your .zshrc:
 #
 #     zstyle ':completion:*' use-cache yes
 #
@@ -82,7 +82,7 @@ function __grunt() {
         update_msg=' (cache updated)'
     fi
 
-    # Make optioins completion.
+    # Make options completion.
     if [[ ${#__grunt_opts} -gt 0 ]]; then
         opts+=("${__grunt_opts[@]}")
     fi
@@ -161,7 +161,7 @@ function __grunt_update_cache() {
     fi
 
     if [[ $is_updating -ne 0 ]]; then
-        # Update caceh.
+        # Update cache.
         __grunt_version=$version
         __grunt_gruntfile=$gruntfile
         is_updating=1

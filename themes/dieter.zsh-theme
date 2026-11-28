@@ -6,7 +6,7 @@
 # The exit code visual cues will only display once.
 # (i.e. they will be reset, even if you hit enter a few times on empty command prompts)
 
-typeset -A host_repr
+typeset -g -A host_repr
 
 # translate hostnames into shortened, colorcoded strings
 host_repr=('dieter-ws-a7n8x-arch' "%{$fg_bold[green]%}ws" 'dieter-p4sci-arch' "%{$fg_bold[blue]%}p4")

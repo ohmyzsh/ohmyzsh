@@ -1,6 +1,6 @@
 #compdef port
 
-local subcmds 
+local subcmds
 
 # we cache the list of ports
 # we shall use some cache policy to avoid problems with new ports
@@ -31,8 +31,8 @@ subcmds=(
 'file'
 'help'
 'info'
-'install' 
-'installed' 
+'install'
+'installed'
 'list'
 'livecheck'
 'location'
@@ -43,6 +43,7 @@ subcmds=(
 'provides'
 'rdependents'
 'rdeps'
+'reclaim'
 'rpmpackage'
 'search'
 'selfupdate'
@@ -50,7 +51,7 @@ subcmds=(
 'test'
 'unarchive'
 'uninstall'
-'upgrade' 
+'upgrade'
 'variants'
 'version'
 )

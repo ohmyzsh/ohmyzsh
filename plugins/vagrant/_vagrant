@@ -47,6 +47,7 @@ _box_arguments=(
     'help:COMMAND List subcommands'
     'list:Lists all installed boxes'
     'outdated:Checks if a box has newer version'
+    'prune:Removes old versions of installed boxes'
     'remove:NAME Removes a box from the system'
     'repackage:NAME PROVIDER VERSION Repackages an installed box into a `.box` file'
     'update:Updates box to a newer version, if available'
@@ -64,12 +65,12 @@ __task_list ()
 
 __box_list ()
 {
-    _wanted application expl 'command' compadd $(command vagrant box list | sed -e 's/ /\\ /g')
+    _wanted application expl 'command' compadd $(command vagrant box list | sed -e 's/  *(.*)//g;s/ /\\ /g')
 }
 
 __vm_list ()
 {
-    _wanted application expl 'command' compadd $(command grep "${VAGRANT_CWD:-.}/Vagrantfile" -oe '^[^#]*\.vm\.define *[:"]\([a-zA-Z0-9_-]\+\)' 2>/dev/null | awk '{print substr($2, 2)}')
+    _wanted application expl 'command' compadd $(command grep "${VAGRANT_CWD:-.}/Vagrantfile" -oe '^[^#]*\.vm\.define *[:"]\([a-zA-Z0-9\._-]\+\)' 2>/dev/null | awk '{print substr($2, 2)}')
     _wanted application expl 'command' compadd $(command ls "${VAGRANT_CWD:-.}/.vagrant/machines/" 2>/dev/null)
 }
 
@@ -126,7 +127,7 @@ case $state in
       (box)
           __vagrant-box
       ;;
-      (up|provision|port|package|destroy|reload|ssh|ssh-config|halt|resume|status)
+      (up|provision|port|package|destroy|reload|ssh|ssh-config|halt|resume|status|suspend|rdp)
       _arguments ':feature:__vm_list'
     esac
   ;;

@@ -1,3 +1,4 @@
+# systemctl aliases
 user_commands=(
   cat
   get-default
@@ -14,7 +15,8 @@ user_commands=(
   list-units
   show
   show-environment
-  status)
+  status
+)
 
 sudo_commands=(
   add-requires
@@ -28,8 +30,6 @@ sudo_commands=(
   emergency
   enable
   halt
-  hibernate
-  hybrid-sleep
   import-environment
   isolate
   kexec
@@ -38,10 +38,8 @@ sudo_commands=(
   list-machines
   load
   mask
-  poweroff
   preset
   preset-all
-  reboot
   reenable
   reload
   reload-or-restart
@@ -54,18 +52,50 @@ sudo_commands=(
   set-property
   start
   stop
-  suspend
   switch-root
   try-reload-or-restart
   try-restart
   unmask
-  unset-environment)
+  unset-environment
+)
 
-for c in $user_commands; do; alias sc-$c="systemctl $c"; done
-for c in $sudo_commands; do; alias sc-$c="sudo systemctl $c"; done
-for c in $user_commands; do; alias scu-$c="systemctl --user $c"; done
-for c in $sudo_commands; do; alias scu-$c="systemctl --user $c"; done
+power_commands=(
+  hibernate
+  hybrid-sleep
+  poweroff
+  reboot
+  suspend
+)
 
+if ! [[ -v ZSH_SYSTEMD_SUDO ]]; then
+  ZSH_SYSTEMD_SUDO="sudo"
+fi
+
+for c in $user_commands; do
+  alias "sc-$c"="systemctl $c"
+  alias "scu-$c"="systemctl --user $c"
+done
+
+# Avoids leading space in alias when using polkit
+if [[ -n "${ZSH_SYSTEMD_SUDO}" ]]; then
+  for c in $sudo_commands; do
+    alias "sc-$c"="$ZSH_SYSTEMD_SUDO systemctl $c"
+    alias "scu-$c"="systemctl --user $c"
+  done
+else
+  for c in $sudo_commands; do
+    alias "sc-$c"="systemctl $c"
+    alias "scu-$c"="systemctl --user $c"
+  done
+fi
+
+for c in $power_commands; do
+  alias "sc-$c"="systemctl $c"
+done
+
+unset c user_commands sudo_commands power_commands
+
+# --now commands
 alias sc-enable-now="sc-enable --now"
 alias sc-disable-now="sc-disable --now"
 alias sc-mask-now="sc-mask --now"
@@ -74,17 +104,33 @@ alias scu-enable-now="scu-enable --now"
 alias scu-disable-now="scu-disable --now"
 alias scu-mask-now="scu-mask --now"
 
+# --failed commands
+alias scu-failed='systemctl --user --failed'
+alias sc-failed='systemctl --failed'
+
+# --full commands
+alias sc-edit-full="sc-edit --full"
+alias scu-edit-full="scu-edit --full"
+
 function systemd_prompt_info {
   local unit
-  for unit in $@; do
+  for unit in "$@"; do
     echo -n "$ZSH_THEME_SYSTEMD_PROMPT_PREFIX"
-    [[ -n "$ZSH_THEME_SYSTEMD_PROMPT_CAPS" ]] && echo -n "${(U)unit}:" || echo -n "$unit:"
-    if systemctl is-active $unit &>/dev/null; then
-        echo -n "$ZSH_THEME_SYSTEMD_PROMPT_ACTIVE" 
+
+    if [[ -n "$ZSH_THEME_SYSTEMD_PROMPT_CAPS" ]]; then
+      echo -n "${(U)unit:gs/%/%%}:"
     else
-        echo -n "$ZSH_THEME_SYSTEMD_PROMPT_NOTACTIVE"
+      echo -n "${unit:gs/%/%%}:"
     fi
+
+    if systemctl is-active "$unit" &>/dev/null; then
+      echo -n "$ZSH_THEME_SYSTEMD_PROMPT_ACTIVE"
+    elif systemctl --user is-active "$unit" &>/dev/null; then
+      echo -n "$ZSH_THEME_SYSTEMD_PROMPT_ACTIVE"
+    else
+      echo -n "$ZSH_THEME_SYSTEMD_PROMPT_NOTACTIVE"
+    fi
+
     echo -n "$ZSH_THEME_SYSTEMD_PROMPT_SUFFIX"
   done
 }
-

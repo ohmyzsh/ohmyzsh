@@ -1,8 +1,30 @@
 #!/usr/bin/env zsh
 
-0="${(%):-%N}" # this gives immunity to functionargzero being unset
-export ZNT_REPO_DIR="${0%/*}"
+#
+# No plugin manager is needed to use this file. All that is needed is adding:
+#   source {where-znt-is}/zsh-navigation-tools.plugin.zsh
+#
+# to ~/.zshrc.
+#
+
+# According to the standard:
+# https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html
+0="${${ZERO:-${0:#$ZSH_ARGZERO}}:-${(%):-%N}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+
+export ZNT_REPO_DIR="${0:h}"
 export ZNT_CONFIG_DIR="$HOME/.config/znt"
+
+#
+# Update FPATH if:
+# 1. Not loading with a plugin manager
+# 2. Not having fpath already updated
+#
+
+if [[ ${zsh_loaded_plugins[-1]} != */zsh-navigation-tools && -z ${fpath[(r)${0:h}]} ]]
+then
+    fpath+=( "${0:h}" )
+fi
 
 #
 # Copy configs

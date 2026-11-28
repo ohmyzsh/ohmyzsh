@@ -7,7 +7,7 @@ alias ygl="yum grouplist"                   # list package groups
 alias yli="yum list installed"              # print all installed packages
 alias ymc="yum makecache"                   # rebuilds the yum package list
 
-alias yu="sudo yum update"                  # upgrate packages
+alias yu="sudo yum update"                  # upgrade packages
 alias yi="sudo yum install"                 # install package
 alias ygi="sudo yum groupinstall"           # install package group
 alias yr="sudo yum remove"                  # remove package

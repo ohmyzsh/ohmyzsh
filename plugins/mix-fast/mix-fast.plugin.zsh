@@ -12,7 +12,7 @@ _mix_does_task_list_need_generating () {
 }
 
 _mix_generate () {
-  mix help | grep -v 'iex -S' | tail -n +2 | cut -d " " -f 2 > .mix_tasks
+  mix help | grep '^mix [^ ]' | sed -E "s/mix ([^ ]*) *# (.*)/\1:\2/" > .mix_tasks
 }
 
 _mix () {
@@ -21,7 +21,8 @@ _mix () {
       echo "\nGenerating .mix_tasks..." > /dev/stderr
       _mix_generate
     fi
-    compadd `cat .mix_tasks`
+    local tasks=(${(f)"$(cat .mix_tasks)"})
+    _describe 'tasks' tasks
   fi
 }
 

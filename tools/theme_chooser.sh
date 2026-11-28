@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/env zsh
 
 # Zsh Theme Chooser by fox (fox91 at anche dot no)
 # This program is free software. It comes without any warranty, to
@@ -25,6 +25,7 @@ function theme_preview() {
     print "$fg[blue]${(l.((${COLUMNS}-${#THEME_NAME}-5))..─.)}$reset_color $THEME_NAME $fg[blue]───$reset_color"
     source "$THEMES_DIR/$THEME"
     cols=$(tput cols)
+    (exit 1)
     print -P "$PROMPT                                                                                      $RPROMPT"
 }
 

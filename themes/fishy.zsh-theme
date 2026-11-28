@@ -1,16 +1,23 @@
 # ZSH Theme emulating the Fish shell's default prompt.
 
 _fishy_collapsed_wd() {
-  echo $(pwd | perl -pe '
-   BEGIN {
-      binmode STDIN,  ":encoding(UTF-8)";
-      binmode STDOUT, ":encoding(UTF-8)";
-   }; s|^$ENV{HOME}|~|g; s|/([^/.])[^/]*(?=/)|/$1|g; s|/\.([^/])[^/]*(?=/)|/.$1|g
-')
+  local i pwd
+  pwd=("${(s:/:)PWD/#$HOME/~}")
+  if (( $#pwd > 1 )); then
+    for i in {1..$(($#pwd-1))}; do
+      if [[ "$pwd[$i]" = .* ]]; then
+        pwd[$i]="${${pwd[$i]}[1,2]}"
+      else
+        pwd[$i]="${${pwd[$i]}[1]}"
+      fi
+    done
+  fi
+  echo "${(j:/:)pwd}"
 }
 
 local user_color='green'; [ $UID -eq 0 ] && user_color='red'
-PROMPT='%n@%m %{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}%(!.#.>) '
+local host_color='white'; [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] && host_color='yellow'
+PROMPT='%{$fg[$user_color]%}%n%{$reset_color%}@%{$fg[$host_color]%}%m %{$fg[$user_color]%}$(_fishy_collapsed_wd)%{$reset_color%}%(!.#.>) '
 PROMPT2='%{$fg[red]%}\ %{$reset_color%}'
 
 local return_status="%{$fg_bold[red]%}%(?..%?)%{$reset_color%}"

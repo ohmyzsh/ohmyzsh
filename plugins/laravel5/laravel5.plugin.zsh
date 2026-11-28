@@ -1,20 +1,15 @@
-# Laravel5 basic command completion
-_laravel5_get_command_list () {
-	php artisan --raw --no-ansi list | sed "s/[[:space:]].*//g"
-}
+print -Pru2 -- \
+  '%F{yellow}[oh-my-zsh] The %Blaravel5%b plugin is deprecated.' \
+  'Use %Blaravel%b instead.%f'
 
-_laravel5 () {
-  if [ -f artisan ]; then
-    compadd `_laravel5_get_command_list`
-  fi
-}
+source "${0:A:h:h}/laravel/laravel.plugin.zsh"
 
-compdef _laravel5 artisan
-compdef _laravel5 la5
+# Keep compatibility aliases scoped to users of this legacy plugin.
+zstyle -s ':omz:plugins:laravel' php _omz_laravel_php || _omz_laravel_php=php
+alias la5="$_omz_laravel_php artisan"
+alias la5cache="$_omz_laravel_php artisan cache:clear"
+alias la5routes="$_omz_laravel_php artisan route:list"
+alias la5vendor="$_omz_laravel_php artisan vendor:publish"
+unset _omz_laravel_php
 
-#Alias
-alias la5='php artisan'
-
-alias la5cache='php artisan cache:clear'
-alias la5routes='php artisan route:list'
-alias la5vendor='php artisan vendor:publish'
+compdef _artisan la5

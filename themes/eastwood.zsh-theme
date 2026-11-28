@@ -1,5 +1,5 @@
 # RVM settings
-if [[ -s ~/.rvm/scripts/rvm ]] ; then 
+if [[ -s ~/.rvm/scripts/rvm ]] ; then
   RPS1="%{$fg[yellow]%}rvm:%{$reset_color%}%{$fg[red]%}\$(~/.rvm/bin/rvm-prompt)%{$reset_color%} $EPS1"
 else
   if which rbenv &> /dev/null; then
@@ -16,7 +16,8 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 git_custom_status() {
   local cb=$(git_current_branch)
   if [ -n "$cb" ]; then
-    echo "$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX$(git_current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+    cb="${cb//\%/%%}"
+    echo "$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX${cb}$ZSH_THEME_GIT_PROMPT_SUFFIX"
   fi
 }
 

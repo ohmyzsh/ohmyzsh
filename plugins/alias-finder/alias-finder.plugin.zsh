@@ -1,44 +1,71 @@
 alias-finder() {
-  local cmd="" exact="" longer="" wordStart="" wordEnd="" multiWordEnd=""
-  for i in $@; do
-    case $i in
+  local c="" cmd=" " exact="" longer="" cheaper="" wordEnd="'?$" finder="" filter="" cmdLen=""
+
+  # build command and options
+  for c in "$@"; do
+    case $c in
+      # TODO: Remove backward compatibility (other than zstyle form)
+      # set options if exist
       -e|--exact) exact=true;;
       -l|--longer) longer=true;;
-      *)
-        if [[ -z $cmd ]]; then
-          cmd=$i
-        else
-          cmd="$cmd $i"
-        fi
-        ;;
+      -c|--cheaper) cheaper=true;;
+      # concatenate cmd
+      *) cmd="$cmd$c " ;;
     esac
   done
-  cmd=$(sed 's/[].\|$(){}?+*^[]/\\&/g' <<< $cmd) # adds escaping for grep
-  if (( $(wc -l <<< $cmd) == 1 )); then
-    while [[ $cmd != "" ]]; do
-      if [[ $longer = true ]]; then
-        wordStart="'{0,1}"
-      else
-        wordEnd="$"
-        multiWordEnd="'$"
-      fi
-      if [[ $cmd == *" "* ]]; then
-        local finder="'$cmd$multiWordEnd"
-      else
-        local finder=$wordStart$cmd$wordEnd
-      fi
-      alias | grep -E "=$finder"
-      if [[ $exact = true || $longer = true ]]; then
-        break
-      else
-        cmd=$(sed -E 's/ {0,1}[^ ]*$//' <<< $cmd) # removes last word
-      fi
-    done
+
+  zstyle -t ':omz:plugins:alias-finder' longer && longer=true
+  zstyle -t ':omz:plugins:alias-finder' exact && exact=true
+  zstyle -t ':omz:plugins:alias-finder' cheaper && cheaper=true
+
+  # format cmd for grep
+  ## - replace newlines and multiple spaces with one space
+  ## - trim both ends
+  ## - add escaping character to special characters
+  setopt localoptions extendedglob
+  cmd=${cmd//[[:space:]]##/ }
+  cmd=${cmd# }
+  cmd=${cmd% }
+  local esc_pattern='(#m)[][.\\|$(){}?+*^]' MATCH MBEGIN MEND
+  cmd=${cmd//${~esc_pattern}/\\$MATCH}
+
+  if [[ $longer == true ]]; then
+    wordEnd="" # remove wordEnd to find longer aliases
   fi
+
+  # find with alias and grep, removing last word each time until no more words
+  while [[ $cmd != "" ]]; do
+    finder="'?$cmd$wordEnd"
+
+    # make filter to find only shorter results than current cmd
+    if [[ $cheaper == true ]]; then
+      cmdLen=${#cmd}
+      if [[ $cmdLen -le 1 ]]; then
+        return
+      fi
+
+      filter="^'?.{1,$((cmdLen - 1))}'?=" # some aliases is surrounded by single quotes
+    fi
+
+    if (( $+commands[rg] )); then
+      alias | rg "$filter" | rg "=$finder"
+    else
+      alias | grep -E "$filter" | grep -E "=$finder"
+    fi
+
+    if [[ $exact == true ]]; then
+      break # because exact case is only one
+    elif [[ $longer == true ]]; then
+      break # because above grep command already found every longer aliases during first cycle
+    fi
+
+    cmd=$(sed -E 's/ {0,}[^ ]*$//' <<< "$cmd") # remove last word
+  done
 }
 
 preexec_alias-finder() {
-  if [[ $ZSH_ALIAS_FINDER_AUTOMATIC = true ]]; then
+  # TODO: Remove backward compatibility (other than zstyle form)
+  zstyle -t ':omz:plugins:alias-finder' autoload && alias-finder $1 || if [[ $ZSH_ALIAS_FINDER_AUTOMATIC = true ]]; then
     alias-finder $1
   fi
 }

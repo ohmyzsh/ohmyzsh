@@ -1,0 +1,379 @@
+#compdef go
+
+__go_packages() {
+  local gopaths
+  declare -a gopaths
+  gopaths=("${(s/:/)$(go env GOPATH)}")
+  gopaths+=("$(go env GOROOT)")
+  for p in $gopaths; do
+    _path_files -W "$p/src" -/
+  done
+}
+
+__go_identifiers() {
+  local tmpl_path="${functions_source[$0]:h}/templates"
+  compadd $(godoc -templates "$tmpl_path" ${words[-2]} 2> /dev/null)
+}
+
+__go_tool_commands() {
+  local -a tools tool_commands
+  local -A command_seen short_count
+  local tool command
+
+  tools=("${(@f)$(go tool 2>/dev/null)}")
+
+  # Go 1.24+ lists module tools by package path, but also accepts unique
+  # default binary names for those tools.
+  for tool in "${tools[@]}"; do
+    [[ -n $tool ]] || continue
+
+    (( command_seen[$tool]++ ))
+
+    if [[ $tool == */* ]]; then
+      command=${tool:t}
+
+      if [[ $command == v[0-9]* && ${command#v} != *[^0-9]* ]] && (( ${command#v} > 1 )); then
+        command=${${tool%/$command}:t}
+      fi
+
+      (( short_count[$command]++ ))
+    fi
+  done
+
+  for tool in "${tools[@]}"; do
+    [[ -n $tool ]] || continue
+
+    tool_commands+=("$tool")
+
+    if [[ $tool == */* ]]; then
+      command=${tool:t}
+
+      if [[ $command == v[0-9]* && ${command#v} != *[^0-9]* ]] && (( ${command#v} > 1 )); then
+        command=${${tool%/$command}:t}
+      fi
+
+      if (( short_count[$command] == 1 && ! command_seen[$command] )); then
+        tool_commands+=("$command")
+      fi
+    fi
+  done
+
+  _values "go tool" "${tool_commands[@]}"
+}
+
+_go() {
+  typeset -a commands build_flags
+  commands+=(
+    'build[compile packages and dependencies]'
+    'clean[remove object files]'
+    'doc[run godoc on package sources]'
+    'env[print Go environment information]'
+    'fix[run go tool fix on packages]'
+    'fmt[run gofmt on package sources]'
+    'generate[generate Go files by processing source]'
+    'get[download and install packages and dependencies]'
+    'help[display help]'
+    'install[compile and install packages and dependencies]'
+    'list[list packages]'
+    'mod[modules maintenance]'
+    'run[compile and run Go program]'
+    'test[test packages]'
+    'tool[run specified go tool]'
+    'version[print Go version]'
+    'vet[run go tool vet on packages]'
+    'work[workspace maintenance]'
+  )
+  if (( CURRENT == 2 )); then
+    # explain go commands
+    _values 'go tool commands' ${commands[@]}
+    return
+  fi
+  build_flags=(
+    '-C[change to dir before running the command]:directory:_path_files -/'
+    '-a[force rebuilding of packages that are already up-to-date]'
+    '-n[print the commands but do not run them]'
+    '-p[number of parallel builds]:number'
+    '-race[enable data race detection]'
+    '-msan[enable interoperation with memory sanitizer]'
+    '-asan[enable interoperation with address sanitizer]'
+    '-cover[enable code coverage instrumentation]'
+    '-covermode[set the mode for coverage analysis]:mode:(set count atomic)'
+    '-coverpkg[apply coverage analysis to matching packages]:pattern'
+    '-v[print the names of packages as they are compiled]'
+    '-work[print temporary directory name and keep it]'
+    '-x[print the commands]'
+    '-asmflags[arguments to pass on each go tool asm invocation]:flags'
+    '-buildmode[build mode to use]:mode:(archive c-archive c-shared default shared exe pie plugin)'
+    '-buildvcs[stamp binaries with version control information]:mode:(true false auto)'
+    '-compiler[name of compiler to use]:name:(gccgo gc)'
+    '-gccgoflags[arguments to pass on each gccgo compiler/linker invocation]:flags'
+    '-gcflags[arguments to pass on each go tool compile invocation]:flags'
+    '-installsuffix[suffix to use in the package installation directory]:suffix'
+    '-json[emit build output in JSON suitable for automated processing]'
+    '-ldflags[arguments to pass on each go tool link invocation]:flags'
+    '-linkshared[build code that will be linked against shared libraries]'
+    '-mod[module download mode to use]:mode:(readonly vendor mod)'
+    '-modcacherw[leave newly-created directories in the module cache read-write]'
+    '-modfile[read and write an alternate go.mod file]:file:_files -g "*.mod"'
+    '-overlay[read a JSON config file that provides an overlay for build operations]:file:_files -g "*.json"'
+    '-pgo[specify the file path of a profile for profile-guided optimization]:file:_files'
+    '-pkgdir[install and load all packages from dir]:directory:_path_files -/'
+    '-tags[list of build tags to consider satisfied]:tags'
+    '-trimpath[remove all file system paths from the resulting executable]'
+    '-toolexec[program to use to invoke toolchain programs]:command'
+  )
+
+  case ${words[2]} in
+  doc)
+    _arguments -s -w \
+      "-c[symbol matching honors case (paths not affected)]" \
+      "-cmd[show symbols with package docs even if package is a command]" \
+      "-u[show unexported symbols as well as exported]" \
+      "2:importpaths:__go_packages" \
+      ":next identifiers:__go_identifiers"
+    ;;
+  clean)
+    _arguments -s -w \
+      "-i[remove the corresponding installed archive or binary (what 'go install' would create)]" \
+      "-n[print the remove commands it would execute, but not run them]" \
+      "-r[apply recursively to all the dependencies of the packages named by the import paths]" \
+      "-x[print remove commands as it executes them]" \
+      "*:importpaths:__go_packages"
+    ;;
+  fix|fmt|vet)
+    _alternative ':importpaths:__go_packages' ':files:_path_files -g "*.go"'
+    ;;
+  install)
+    _arguments -s -w : ${build_flags[@]} \
+      '*:importpaths:__go_packages'
+    ;;
+  get)
+    _arguments -s -w : \
+      ${build_flags[@]} \
+      "-t[consider modules needed to build tests of packages]" \
+      "-u[update modules providing dependencies to newer minor or patch releases]" \
+      "-u=[update modules providing dependencies to patch releases]:mode:(patch)" \
+      "-tool[add a matching tool line to go.mod for each listed package]" \
+      "*:importpaths:__go_packages"
+    ;;
+  build)
+    _arguments -s -w : \
+      ${build_flags[@]} \
+      "-o[output file]:file:_files" \
+      "*:args:{ _alternative ':importpaths:__go_packages' ':files:_path_files -g \"*.go\"' }"
+    ;;
+  test)
+    _arguments -s -w : \
+      ${build_flags[@]} \
+      "-c[do not run, compile the test binary]" \
+      "-i[do not run, install dependencies]" \
+      "-v[print test output]" \
+      "-x[print the commands]" \
+      "-short[use short mode]" \
+      "-parallel[number of parallel tests]:number" \
+      "-cpu[values of GOMAXPROCS to use]:number list" \
+      "-run[run tests and examples matching regexp]:regexp" \
+      "-bench[run benchmarks matching regexp]:regexp" \
+      "-benchmem[print memory allocation stats]" \
+      "-benchtime[run each benchmark until taking this long]:duration" \
+      "-blockprofile[write goroutine blocking profile to file]:file" \
+      "-blockprofilerate[set sampling rate of goroutine blocking profile]:number" \
+      "-timeout[kill test after that duration]:duration" \
+      "-cpuprofile[write CPU profile to file]:file:_files" \
+      "-memprofile[write heap profile to file]:file:_files" \
+      "-memprofilerate[set heap profiling rate]:number" \
+      "*:args:{ _alternative ':importpaths:__go_packages' ':files:_path_files -g \"*.go\"' }"
+    ;;
+  list)
+    _arguments -s -w : \
+      "-f[alternative format for the list]:format" \
+      "-json[print data in json format]" \
+      "-compiled[set CompiledGoFiles to the Go source files presented to the compiler]" \
+      "-deps[iterate over not just the named packages but also all their dependencies]" \
+      "-e[change the handling of erroneous packages]" \
+      "-export[set the Export field to the name of a file containing up-to-date export information for the given package]" \
+      "-find[identify the named packages but not resolve their dependencies]" \
+      "-test[report not only the named packages but also their test binaries]" \
+      "-m[list modules instead of packages]" \
+      "-u[adds information about available upgrades]" \
+      "-versions[set the Module's Versions field to a list of all known versions of that module]:number" \
+      "*:importpaths:__go_packages"
+    ;;
+  mod)
+    local -a mod_commands
+    mod_commands+=(
+      'download[download modules to local cache]'
+      'edit[edit go.mod from tools or scripts]'
+      'graph[print module requirement graph]'
+      'init[initialize new module in current directory]'
+      'tidy[add missing and remove unused modules]'
+      'vendor[make vendored copy of dependencies]'
+      'verify[verify dependencies have expected content]'
+      'why[explain why packages or modules are needed]'
+    )
+
+    if (( CURRENT == 3 )); then
+      _values 'go mod commands' ${mod_commands[@]} "help[display help]"
+      return
+    fi
+
+    case ${words[3]} in
+    help)
+      _values 'go mod commands' ${mod_commands[@]}
+      ;;
+    download)
+      _arguments -s -w : \
+        "-json[print a sequence of JSON objects standard output]" \
+        "*:flags"
+      ;;
+    edit)
+      _arguments -s -w : \
+        "-fmt[reformat the go.mod file]" \
+        "-module[change the module's path]" \
+        "-replace[=old{@v}=new{@v} add a replacement of the given module path and version pair]:name" \
+        "-dropreplace[=old{@v}=new{@v} drop a replacement of the given module path and version pair]:name" \
+        "-go[={version} set the expected Go language version]:number" \
+        "-print[print the final go.mod in its text format]" \
+        "-json[print the final go.mod file in JSON format]" \
+        "*:flags"
+      ;;
+    graph)
+      ;;
+    init)
+      ;;
+    tidy)
+      _arguments -s -w : \
+        "-v[print information about removed modules]" \
+        "*:flags"
+      ;;
+    vendor)
+      _arguments -s -w : \
+        "-v[print the names of vendored]" \
+        "*:flags"
+      ;;
+    verify)
+      ;;
+    why)
+      _arguments -s -w : \
+        "-m[treats the arguments as a list of modules and finds a path to any package in each of the modules]" \
+        "-vendor[exclude tests of dependencies]" \
+        "*:importpaths:__go_packages"
+      ;;
+    esac
+    ;;
+  work)
+    local -a work_commands
+    work_commands+=(
+      'edit[edit go.work from tools or scripts]'
+      'init[initialize workspace file]'
+      'sync[sync workspace build list to modules]'
+      'use[add modules to workspace file]'
+      'vendor[make vendored copy of dependencies]'
+    )
+
+    if (( CURRENT == 3 )); then
+      _values 'go work commands' ${work_commands[@]} "help[display help]"
+      return
+    fi
+
+    case ${words[3]} in
+    help)
+      _values 'go work commands' ${work_commands[@]}
+      ;;
+    edit)
+      _arguments -s -w : \
+        "-fmt[reformat the go.work file]" \
+        "-godebug[=key=value add a godebug key=value line]:key=value" \
+        "-dropgodebug[=key drop an existing godebug line]:key" \
+        "-use[=path add a use directive]:directory:_path_files -/" \
+        "-dropuse[=path drop a use directive]:directory:_path_files -/" \
+        "-replace[=old{@v}=new{@v} add a replacement of the given module path and version pair]:name" \
+        "-dropreplace[=old{@v} drop a replacement of the given module path and version pair]:name" \
+        "-go[={version} set the expected Go language version]:number" \
+        "-toolchain[=name set the Go toolchain to use]:name" \
+        "-print[print the final go.work in its text format]" \
+        "-json[print the final go.work file in JSON format]" \
+        "1:go.work file:_files -g 'go.work'"
+      ;;
+    init)
+      _arguments -s -w : \
+        "*:module directories:_path_files -/"
+      ;;
+    sync)
+      ;;
+    use)
+      _arguments -s -w : \
+        "-r[search recursively for modules in the argument directories]" \
+        "*:module directories:_path_files -/"
+      ;;
+    vendor)
+      _arguments -s -w : \
+        "-e[attempt to proceed despite errors encountered while loading packages]" \
+        "-v[print the names of vendored modules and packages]" \
+        "-o[create the vendor directory at the given path]:output directory:_path_files -/" \
+        "*:flags"
+      ;;
+    esac
+    ;;
+  help)
+    _values "${commands[@]}" \
+      'environment[show Go environment variables available]' \
+      'gopath[GOPATH environment variable]' \
+      'packages[description of package lists]' \
+      'remote[remote import path syntax]' \
+      'testflag[description of testing flags]' \
+      'testfunc[description of testing functions]'
+    ;;
+  version)
+    _arguments -s -w : \
+      "-m[print module version information]" \
+      "-v[report unrecognized files]" \
+      "-json[print module version information in JSON format]" \
+      "*:file:_files"
+    ;;
+  run)
+    _arguments -s -w : \
+      ${build_flags[@]} \
+      '*:file:_files -g "*.go"'
+    ;;
+  tool)
+    if (( CURRENT == 3 )); then
+        __go_tool_commands
+        return
+    fi
+    case ${words[3]} in
+    [568]g)
+        _arguments -s -w : \
+            '-I[search for packages in DIR]:includes:_path_files -/' \
+            '-L[show full path in file:line prints]' \
+            '-S[print the assembly language]' \
+            '-V[print the compiler version]' \
+            '-e[no limit on number of errors printed]' \
+            '-h[panic on an error]' \
+            '-l[disable inlining]' \
+            '-m[print optimization decisions]' \
+            '-o[file specify output file]:file' \
+            '-p[assumed import path for this code]:importpath' \
+            '-u[disable package unsafe]' \
+            "*:file:_files -g '*.go'"
+        ;;
+    [568]l)
+        local O=${words[3]%l}
+        _arguments -s -w : \
+            '-o[file specify output file]:file' \
+            '-L[search for packages in DIR]:includes:_path_files -/' \
+            "*:file:_files -g '*.[ao$O]'"
+        ;;
+    dist)
+        _values "dist tool" banner bootstrap clean env install version
+        ;;
+    *)
+        # use files by default
+        _files
+        ;;
+    esac
+    ;;
+  esac
+}
+
+_go "$@"

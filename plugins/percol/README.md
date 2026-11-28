@@ -1,20 +1,23 @@
-## percol
+# percol
 
-Provides some useful function to make [percol](https://github.com/mooz/percol) work with zsh history and [jump plugin](https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/jump/jump.plugin.zsh)
+Provides some useful function to make [percol](https://github.com/mooz/percol) work with zsh history and
+the [jump plugin](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/jump), optionally.
 
-### Requirements
+To use it, add `percol` to the plugins array in your zshrc:
 
-```shell
-pip install percol
+```zsh
+plugins=(... percol)
 ```
 
-And [jump](https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/jump/jump.plugin.zsh) for `oh-my-zsh` is a optional requirement.
+## Requirements
 
-### Usage
+- `percol`: install with `pip install percol`.
 
-For default
+- (_Optional_) [`jump`](https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/jump) plugin: needs to be
+  enabled before the `percol` plugin.
 
-- `^-r` bind to `percol_select_history`.You can use it to grep your history with percol.
+## Usage
 
-- `^-b` bind to `percol_select_marks`.You can use it to grep your bookmarks with percol.
+- <kbd>CTRL-R</kbd> (bound to `percol_select_history`): you can use it to grep your history with percol.
 
+- <kbd>CTRL-B</kbd> (bound to `percol_select_marks`): you can use it to grep your jump bookmarks with percol.

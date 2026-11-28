@@ -19,6 +19,7 @@ if it's found, or the mvn command otherwise.
 | `mvn!`               | `mvn -f <root>/pom.xml`                         |
 | `mvnag`              | `mvn archetype:generate`                        |
 | `mvnboot`            | `mvn spring-boot:run`                           |
+| `mvnqdev`            | `mvn quarkus:dev`                               |
 | `mvnc`               | `mvn clean`                                     |
 | `mvncd`              | `mvn clean deploy`                              |
 | `mvnce`              | `mvn clean eclipse:clean eclipse:eclipse`       |
@@ -29,13 +30,18 @@ if it's found, or the mvn command otherwise.
 | `mvncisto`           | `mvn clean install -DskipTests --offline`       |
 | `mvncom`             | `mvn compile`                                   |
 | `mvncp`              | `mvn clean package`                             |
+| `mvncpst`            | `mvn clean package -DskipTests`                 |
+| `mvncpsto`           | `mvn clean package -DskipTests --offline`       |
 | `mvnct`              | `mvn clean test`                                |
 | `mvncv`              | `mvn clean verify`                              |
 | `mvncvst`            | `mvn clean verify -DskipTests`                  |
-| `mvnd`               | `mvn deploy`                                    |
+| `mvnv`               | `mvn verify`                                    |
+| `mvnvst`             | `mvn verify -DskipTests`                        |
+| `mvndp`              | `mvn deploy`                                    |
 | `mvndocs`            | `mvn dependency:resolve -Dclassifier=javadoc`   |
 | `mvndt`              | `mvn dependency:tree`                           |
 | `mvne`               | `mvn eclipse:eclipse`                           |
+| `mvnfmt`             | `mvn fmt:format`                                |
 | `mvnjetty`           | `mvn jetty:run`                                 |
 | `mvnp`               | `mvn package`                                   |
 | `mvns`               | `mvn site`                                      |

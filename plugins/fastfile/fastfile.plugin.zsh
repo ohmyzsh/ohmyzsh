@@ -5,8 +5,8 @@
 # If they are not set yet, they will be
 # overwritten with their default values
 
-default fastfile_dir        "${HOME}/.fastfile/"
-default fastfile_var_prefix "§"
+fastfile_dir="${fastfile_dir:-${HOME}/.fastfile}"
+fastfile_var_prefix="${fastfile_var_prefix:-§}"
 
 ###########################
 # Impl
@@ -18,7 +18,7 @@ default fastfile_var_prefix "§"
 #    1. name - The name of the shortcut (default: name of the file)
 #    2. file - The file or directory to make the shortcut for
 # STDOUT:
-#    => fastfle_print
+#    => fastfile_print
 #
 function fastfile() {
     test "$2" || 2="."
@@ -44,7 +44,7 @@ function fastfile() {
 #   The path to the shortcut file
 #
 function fastfile_resolv() {
-    echo "${fastfile_dir}${1}"
+    echo "${fastfile_dir}/${1}"
 }
 
 #
@@ -75,14 +75,14 @@ function fastfile_print() {
 # List all shortcuts
 #
 # STDOUT:
-#    (=> fastfle_print) for each shortcut
+#    (=> fastfile_print) for each shortcut
 #
 function fastfile_ls() {
-    for f in "${fastfile_dir}"/*; do
-        file=`basename "$f"` # To enable simpler handeling of spaces in file names
-        varkey=`echo "$file" | tr " " "_"`
+    for f in "${fastfile_dir}"/*(N); do
+        file=$(basename "$f") # To enable simpler handling of spaces in file names
+        varkey=$(echo "$file" | tr " " "_")
 
-        # Special format for colums
+        # Special format for columns
         echo "${fastfile_var_prefix}${varkey}|->|$(fastfile_get "$file")"
     done | column -t -s "|"
 }
@@ -93,20 +93,21 @@ function fastfile_ls() {
 # Arguments:
 #    1. name - The name of the shortcut (default: name of the file)
 # STDOUT:
-#    => fastfle_print
+#    => fastfile_print
 #
 function fastfile_rm() {
     fastfile_print "$1"
     rm "$(fastfile_resolv "$1")"
+    unalias "${fastfile_var_prefix}${1}"
 }
 
 #
 # Generate the aliases for the shortcuts
 #
 function fastfile_sync() {
-    for f in "${fastfile_dir}"/*; do
-        file=`basename "$f"` # To enable simpler handeling of spaces in file names
-        varkey=`echo "$file" | tr " " "_"`
+    for f in "${fastfile_dir}"/*(N); do
+        file=$(basename "$f") # To enable simpler handling of spaces in file names
+        varkey=$(echo "$file" | tr " " "_")
 
         alias -g "${fastfile_var_prefix}${varkey}"="'$(fastfile_get "$file")'"
     done

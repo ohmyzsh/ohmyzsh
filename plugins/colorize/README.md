@@ -38,6 +38,14 @@ Pygments offers multiple styles. By default, the `default` style is used, but yo
 ZSH_COLORIZE_STYLE="colorful"
 ```
 
+### Chroma Formatter Settings
+
+Chroma supports terminal output in 8 color, 256 color, and true-color. If you need to change the default terminal output style from the standard 8 color output, set the `ZSH_COLORIZE_CHROMA_FORMATTER` environment variable:
+
+```
+ZSH_COLORIZE_CHROMA_FORMATTER=terminal256
+```
+
 ## Usage
 
 * `ccat <file> [files]`: colorize the contents of the file (or files, if more than one are provided).

@@ -13,7 +13,7 @@ _pip_all() {
 }
 
 _pip_installed() {
-  installed_pkgs=(`pip freeze | cut -d '=' -f 1`)
+  installed_pkgs=($($service freeze | cut -d '=' -f 1))
 }
 
 local -a _1st_arguments

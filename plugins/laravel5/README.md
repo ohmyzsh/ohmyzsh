@@ -1,18 +1,13 @@
 # Laravel 5 plugin
 
-This plugin adds some aliases for common [Laravel 5](https://laravel.com/docs) commands.
-
-To use it, add `laravel5` to the plugins array in your zshrc file:
+This plugin is deprecated. Use the [laravel plugin](../laravel) instead:
 
 ```zsh
-plugins=(... laravel5)
+plugins=(... laravel)
 ```
 
-## Aliases
-
-| Alias     | Command                      | Description                                        |
-|-----------|------------------------------|----------------------------------------------------|
-| la5       | `php artisan`                | Main Artisan command                               |
-| la5cache  | `php artisan cache:clear`    | Flush the application cache                        |
-| la5routes | `php artisan route:list`     | List all registered routes                         |
-| la5vendor | `php artisan vendor:publish` | Publish any publishable assets from vendor package |
+This compatibility loader sources `laravel` for shared aliases and completion,
+then adds the original `la5`, `la5cache`, `la5routes`, and `la5vendor` aliases.
+These version-specific aliases are only available while `laravel5` is enabled.
+When switching to `laravel` alone, use `artisan` or the shared aliases, or define
+any shortcuts you still need in your own configuration.

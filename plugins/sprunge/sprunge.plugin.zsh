@@ -1,7 +1,3 @@
-# Contributed and SLIGHTLY modded by Matt Parnell/ilikenwf <parwok -at- gmail>
-# Created by the blogger at the URL below...I don't know where to find his/her name
-# Original found at https://www.shellperson.net/sprunge-pastebin-script/
-
 sprunge() {
   if [[ "$1" = --help ]]; then
     fmt -s >&2 << EOF

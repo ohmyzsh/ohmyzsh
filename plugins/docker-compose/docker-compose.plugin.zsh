@@ -1,26 +1,33 @@
-# Authors:
-# https://github.com/tristola
+# Support Compose v2 as docker CLI plugin
 #
-# Docker-compose related zsh aliases
+# This tests that the (old) docker-compose command is in $PATH and that
+# it resolves to an existing executable file if it's a symlink.
+[[ -x "${commands[docker-compose]:A}" ]] && dccmd='docker-compose' || dccmd='docker compose'
 
-# Aliases ###################################################################
+alias dco="$dccmd"
+alias dcb="$dccmd build"
+alias dcc="$dccmd config"
+alias dce="$dccmd exec"
+alias dcps="$dccmd ps"
+alias dcrestart="$dccmd restart"
+alias dcrm="$dccmd rm"
+alias dcr="$dccmd run"
+alias dcstop="$dccmd stop"
+alias dcup="$dccmd up"
+alias dcupb="$dccmd up --build"
+alias dcupd="$dccmd up -d"
+alias dcupdb="$dccmd up -d --build"
+alias dcupw="$dccmd up --watch"
+alias dcupwb="$dccmd up --watch --build"
+alias dcdn="$dccmd down"
+alias dcl="$dccmd logs"
+alias dclf="$dccmd logs -f"
+alias dclF="$dccmd logs -f --tail 0"
+alias dcpull="$dccmd pull"
+alias dcstart="$dccmd start"
+alias dck="$dccmd kill"
+alias dcv="$dccmd version"
+alias dcsts="$dccmd stats"
+alias dci="$dccmd images"
 
-# Use dco as alias for docker-compose, since dc on *nix is 'dc - an arbitrary precision calculator'
-# https://www.gnu.org/software/bc/manual/dc-1.05/html_mono/dc.html
-
-alias dco='docker-compose'
-
-alias dcb='docker-compose build'
-alias dce='docker-compose exec'
-alias dcps='docker-compose ps'
-alias dcrestart='docker-compose restart'
-alias dcrm='docker-compose rm'
-alias dcr='docker-compose run'
-alias dcstop='docker-compose stop'
-alias dcup='docker-compose up'
-alias dcupd='docker-compose up -d'
-alias dcdn='docker-compose down'
-alias dcl='docker-compose logs'
-alias dclf='docker-compose logs -f'
-alias dcpull='docker-compose pull'
-alias dcstart='docker-compose start'
+unset dccmd

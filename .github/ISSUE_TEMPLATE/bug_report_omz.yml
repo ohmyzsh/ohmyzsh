@@ -1,0 +1,77 @@
+name: Report a bug in Oh My Zsh
+description: Create a report to help us improve Oh My Zsh
+labels: ['Bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Self Check
+        - **Make sure this bug only happens with Oh My Zsh enabled**.
+        - Look for similar errors in existing [GitHub Issues](https://github.com/ohmyzsh/ohmyzsh/issues?q=is%3Aissue) (open or closed).
+        - Try reaching out on the [Discord server](https://discord.gg/ohmyzsh) for help.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Describe the bug
+      description: A clear description of what the bug is.
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Steps to reproduce
+      description: |
+        Steps to reproduce the problem.
+      placeholder: |
+        For example:
+        1. Enable plugin '...'
+        2. Run command '...' or try to complete command '...'
+        3. See error
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: Expected behavior
+      description: A brief description of what should happen.
+  - type: textarea
+    attributes:
+      label: Screenshots and recordings
+      description: |
+        If applicable, add screenshots to help explain your problem. You can also record an asciinema session: https://asciinema.org/
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: OS / Linux distribution
+      placeholder: Windows 10, Ubuntu 20.04, Arch Linux, macOS 10.15...
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: Zsh version
+      description: Run `echo $ZSH_VERSION` to check.
+      placeholder: "5.6"
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: Oh My Zsh version
+      description: Run `omz version` to check.
+      placeholder: master (bf303965)
+  - type: input
+    validations:
+      required: true
+    attributes:
+      label: Terminal emulator
+      placeholder: iTerm2, GNOME Terminal, Terminal.app...
+  - type: dropdown
+    attributes:
+      label: If using WSL on Windows, which version of WSL
+      description: Run `wsl -l -v` to check.
+      options:
+        - WSL1
+        - WSL2
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here. This can be themes, plugins, custom settings...

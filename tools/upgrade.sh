@@ -1,23 +1,228 @@
+#!/usr/bin/env zsh
+set +u # disable nounset
 
-# Use colors, but only if connected to a terminal, and that terminal
-# supports them.
+local ret=0 # exit code
+
+# Protect against running with shells other than zsh
+if [ -z "$ZSH_VERSION" ]; then
+  exec zsh "$0" "$@"
+fi
+
+# Protect against unwanted sourcing
+case "$ZSH_EVAL_CONTEXT" in
+  *:file) echo "error: this file should not be sourced" && return 1 ;;
+esac
+
+zmodload zsh/datetime
+
+# Define "$ZSH" if not defined -- in theory this should be `export`ed by the calling script
+if [[ -z "$ZSH" ]]; then
+  ZSH="${0:a:h:h}"
+fi
+
+cd "$ZSH"
+
+verbose_mode="default"
+interactive=false
+cooldown_days=0
+
+while getopts "v:ic:" opt; do
+  case $opt in
+    v)
+      if [[ $OPTARG == default || $OPTARG == minimal || $OPTARG == silent ]]; then
+        verbose_mode=$OPTARG
+      else
+        echo "[oh-my-zsh] update verbosity '$OPTARG' is not valid"
+        echo "[oh-my-zsh] valid options are 'default', 'minimal' and 'silent'"
+      fi
+      ;;
+    i) interactive=true ;;
+    c)
+      if [[ $OPTARG == <-> ]]; then
+        cooldown_days=$OPTARG
+      else
+        echo "[oh-my-zsh] update cooldown '$OPTARG' is not valid"
+        echo "[oh-my-zsh] valid options are a non-negative integer (days)"
+      fi
+      ;;
+  esac
+done
+
+# Use colors, but only if connected to a terminal
+# and that terminal supports them.
+
+# The [ -t 1 ] check only works when the function is not called from
+# a subshell (like in `$(...)` or `(...)`, so this hack redefines the
+# function at the top level to always return false when stdout is not
+# a tty.
 if [ -t 1 ]; then
+  is_tty() {
+    true
+  }
+else
+  is_tty() {
+    false
+  }
+fi
+
+# This function uses the logic from supports-hyperlinks[1][2], which is
+# made by Kat Marchán (@zkat) and licensed under the Apache License 2.0.
+# [1] https://github.com/zkat/supports-hyperlinks
+# [2] https://crates.io/crates/supports-hyperlinks
+#
+# Copyright (c) 2021 Kat Marchán
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+supports_hyperlinks() {
+  # $FORCE_HYPERLINK must be set and be non-zero (this acts as a logic bypass)
+  if [ -n "$FORCE_HYPERLINK" ]; then
+    [ "$FORCE_HYPERLINK" != 0 ]
+    return $?
+  fi
+
+  # If stdout is not a tty, it doesn't support hyperlinks
+  is_tty || return 1
+
+  # DomTerm terminal emulator (domterm.org)
+  if [ -n "$DOMTERM" ]; then
+    return 0
+  fi
+
+  # VTE-based terminals above v0.50 (Gnome Terminal, Guake, ROXTerm, etc)
+  if [ -n "$VTE_VERSION" ]; then
+    [ $VTE_VERSION -ge 5000 ]
+    return $?
+  fi
+
+  # If $TERM_PROGRAM is set, these terminals support hyperlinks
+  case "$TERM_PROGRAM" in
+  ghostty|Hyper|iTerm.app|terminology|vscode|WezTerm) return 0 ;;
+  esac
+
+  # These termcap entries support hyperlinks
+  case "$TERM" in
+  alacritty|alacritty-direct|xterm-ghostty|xterm-kitty) return 0 ;;
+  esac
+
+  # xfce4-terminal supports hyperlinks
+  if [ "$COLORTERM" = "xfce4-terminal" ]; then
+    return 0
+  fi
+
+  # Windows Terminal also supports hyperlinks
+  if [ -n "$WT_SESSION" ]; then
+    return 0
+  fi
+
+  # Konsole supports hyperlinks, but it's an opt-in setting that can't be detected
+  # https://github.com/ohmyzsh/ohmyzsh/issues/10964
+  # if [ -n "$KONSOLE_VERSION" ]; then
+  #   return 0
+  # fi
+
+  return 1
+}
+
+# Adapted from code and information by Anton Kochkov (@XVilka)
+# Source: https://gist.github.com/XVilka/8346728
+supports_truecolor() {
+  case "$COLORTERM" in
+  truecolor|24bit) return 0 ;;
+  esac
+
+  case "$TERM" in
+  iterm           |\
+  tmux-truecolor  |\
+  linux-truecolor |\
+  xterm-truecolor |\
+  screen-truecolor) return 0 ;;
+  esac
+
+  return 1
+}
+
+fmt_link() {
+  # $1: text, $2: url, $3: fallback mode
+  if supports_hyperlinks; then
+    printf '\033]8;;%s\033\\%s\033]8;;\033\\\n' "$2" "$1"
+    return
+  fi
+
+  case "$3" in
+  --text) printf '%s\n' "$1" ;;
+  --url|*) fmt_underline "$2" ;;
+  esac
+}
+
+fmt_underline() {
+  is_tty && printf '\033[4m%s\033[24m\n' "$*" || printf '%s\n' "$*"
+}
+
+setopt typeset_silent
+typeset -a RAINBOW
+
+if is_tty; then
+  if supports_truecolor; then
+    RAINBOW=(
+      "$(printf '\033[38;2;255;0;0m')"
+      "$(printf '\033[38;2;255;97;0m')"
+      "$(printf '\033[38;2;247;255;0m')"
+      "$(printf '\033[38;2;0;255;30m')"
+      "$(printf '\033[38;2;77;0;255m')"
+      "$(printf '\033[38;2;168;0;255m')"
+      "$(printf '\033[38;2;245;0;172m')"
+    )
+  else
+    RAINBOW=(
+      "$(printf '\033[38;5;196m')"
+      "$(printf '\033[38;5;202m')"
+      "$(printf '\033[38;5;226m')"
+      "$(printf '\033[38;5;082m')"
+      "$(printf '\033[38;5;021m')"
+      "$(printf '\033[38;5;093m')"
+      "$(printf '\033[38;5;163m')"
+    )
+  fi
+
   RED=$(printf '\033[31m')
   GREEN=$(printf '\033[32m')
   YELLOW=$(printf '\033[33m')
   BLUE=$(printf '\033[34m')
   BOLD=$(printf '\033[1m')
-  RESET=$(printf '\033[m')
-else
-  RED=""
-  GREEN=""
-  YELLOW=""
-  BLUE=""
-  BOLD=""
-  RESET=""
+  RESET=$(printf '\033[0m')
 fi
 
-cd "$ZSH"
+# Update upstream remote to ohmyzsh org
+git remote -v | while read remote url extra; do
+  case "$url" in
+  git://github.com/robbyrussell/oh-my-zsh(|.git))
+    # Update out-of-date "unauthenticated git protocol on port 9418" to https
+    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git" ;;
+  https://github.com/robbyrussell/oh-my-zsh(|.git))
+    git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git" ;;
+  git@github.com:robbyrussell/oh-my-zsh(|.git))
+    git remote set-url "$remote" "git@github.com:ohmyzsh/ohmyzsh.git" ;;
+  https://github.com/ohmyzsh/ohmyzsh(|.git)) ;;
+  git@github.com:ohmyzsh/ohmyzsh(|.git)) ;;
+  *) continue ;;
+  esac
+
+  # If we reach this point we have found the proper ohmyzsh upstream remote. If we don't,
+  # we'll only update from the set remote if `oh-my-zsh.remote` has been set to a remote,
+  # as when installing from a fork.
+  git config --local oh-my-zsh.remote "$remote"
+  break
+done
 
 # Set git-config values known to fix git errors
 # Line endings (#4069)
@@ -28,34 +233,115 @@ git config fsck.zeroPaddedFilemode ignore
 git config fetch.fsck.zeroPaddedFilemode ignore
 git config receive.fsck.zeroPaddedFilemode ignore
 # autostash on rebase (#7172)
-resetAutoStash=$(git config --bool rebase.autoStash 2>&1)
+resetAutoStash=$(git config --bool rebase.autoStash 2>/dev/null)
 git config rebase.autoStash true
 
-# Update upstream remote to ohmyzsh org
-remote=$(git remote -v | awk '/https:\/\/github\.com\/robbyrussell\/oh-my-zsh\.git/{ print $1; exit }')
-if [ -n "$remote" ]; then
-  git remote set-url "$remote" "https://github.com/ohmyzsh/ohmyzsh.git"
-fi
+local ret=0
 
-printf "${BLUE}%s${NORMAL}\n" "Updating Oh My Zsh"
-if git pull --rebase --stat origin master
-then
-  printf '%s' "$GREEN"
-  printf '%s\n' '         __                                     __   '
-  printf '%s\n' '  ____  / /_     ____ ___  __  __   ____  _____/ /_  '
-  printf '%s\n' ' / __ \/ __ \   / __ `__ \/ / / /  /_  / / ___/ __ \ '
-  printf '%s\n' '/ /_/ / / / /  / / / / / / /_/ /    / /_(__  ) / / / '
-  printf '%s\n' '\____/_/ /_/  /_/ /_/ /_/\__, /    /___/____/_/ /_/  '
-  printf '%s\n' '                        /____/                       '
-  printf "${BLUE}%s\n" "Hooray! Oh My Zsh has been updated and/or is at the current version."
-  printf "${BLUE}${BOLD}%s${RESET}\n" "To keep up on the latest news and updates, follow us on twitter: https://twitter.com/ohmyzsh"
-  printf "${BLUE}${BOLD}%s${RESET}\n" "Get your Oh My Zsh swag at: https://shop.planetargon.com/collections/oh-my-zsh"
+# repository settings
+remote=${"$(git config --local oh-my-zsh.remote)":-origin}
+branch=${"$(git config --local oh-my-zsh.branch)":-master}
+
+update_with_cooldown() {
+  local cutoff_epoch cooldown_ref
+
+  cutoff_epoch=$(( EPOCHSECONDS - cooldown_days * 86400 ))
+  LANG= git fetch --quiet $remote $branch || return $?
+
+  cooldown_ref=$(git log --first-parent --format="%H %ct" FETCH_HEAD \
+    | awk -v c="$cutoff_epoch" '$2 <= c { print $1; exit }')
+
+  [[ -n "$cooldown_ref" ]] || return 0
+
+  LANG= git merge --ff-only --quiet "$cooldown_ref"
+}
+
+perform_update() {
+  if (( cooldown_days > 0 )); then
+    update_with_cooldown
+  else
+    LANG= git pull --quiet --rebase $remote $branch
+  fi
+}
+
+# repository state
+last_head=$(git symbolic-ref --quiet --short HEAD || git rev-parse HEAD)
+# checkout update branch
+git checkout -q "$branch" -- || exit 1
+# branch commit before update (used in changelog)
+last_commit=$(git rev-parse "$branch")
+
+# Update Oh My Zsh
+if [[ $verbose_mode != silent ]]; then
+  printf "${BLUE}%s${RESET}\n" "Updating Oh My Zsh"
+fi
+if perform_update; then
+  # Check if it was really updated or not
+  if [[ "$(git rev-parse HEAD)" = "$last_commit" ]]; then
+    if (( cooldown_days > 0 )); then
+      head_ct=$(git log -1 --format=%ct HEAD)
+      age_days=$(( (EPOCHSECONDS - head_ct) / 86400 ))
+      (( age_days < 0 )) && age_days=0
+      message="Oh My Zsh is already at a version ${age_days} days old."
+    else
+      message="Oh My Zsh is already at the latest version."
+    fi
+  else
+    message="Hooray! Oh My Zsh has been updated!"
+
+    # Save the commit prior to updating
+    git config oh-my-zsh.lastVersion "$last_commit"
+
+    # Print changelog to the terminal
+    if [[ $interactive == true && $verbose_mode == default ]]; then
+      ZSH="$ZSH" command zsh -f "$ZSH/tools/changelog.sh" HEAD "$last_commit"
+    fi
+
+    if [[ $verbose_mode != silent ]]; then
+      printf "${BLUE}%s \`${BOLD}%s${RESET}${BLUE}\`${RESET}\n" "You can see the changelog with" "omz changelog"
+    fi
+  fi
+
+  if [[ $verbose_mode == default ]]; then
+    printf '%s         %s__      %s           %s        %s       %s     %s__   %s\n'      $RAINBOW $RESET
+    printf '%s  ____  %s/ /_    %s ____ ___  %s__  __  %s ____  %s_____%s/ /_  %s\n'      $RAINBOW $RESET
+    printf '%s / __ \\%s/ __ \\  %s / __ `__ \\%s/ / / / %s /_  / %s/ ___/%s __ \\ %s\n'  $RAINBOW $RESET
+    printf '%s/ /_/ /%s / / / %s / / / / / /%s /_/ / %s   / /_%s(__  )%s / / / %s\n'      $RAINBOW $RESET
+    printf '%s\\____/%s_/ /_/ %s /_/ /_/ /_/%s\\__, / %s   /___/%s____/%s_/ /_/  %s\n'    $RAINBOW $RESET
+    printf '%s    %s        %s           %s /____/ %s       %s     %s          %s\n'      $RAINBOW $RESET
+    printf '\n'
+    printf "${BLUE}%s${RESET}\n\n" "$message"
+    printf "${YELLOW}${BOLD}★${RESET} ${BLUE}${BOLD}%s %s${RESET}\n" \
+      "Enjoying Oh My Zsh? Star us on" \
+      "$(fmt_link GitHub https://github.com/ohmyzsh/ohmyzsh)"
+    printf "${BLUE}${BOLD}%s %s %s %s${RESET}\n" \
+      "Follow along on X" "($(fmt_link @ohmyzsh https://x.com/ohmyzsh))" \
+      "or Bluesky" "($(fmt_link @ohmyz.sh https://bsky.app/profile/ohmyz.sh))"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" \
+      "Questions or ideas? Join the community on" \
+      "$(fmt_link Discord https://discord.gg/ohmyzsh)"
+    printf "${BLUE}${BOLD}%s %s,${RESET}\n" \
+      "Help support the project: sponsor us on" \
+      "$(fmt_link "Open Collective" https://opencollective.com/ohmyzsh)"
+    printf "${BLUE}${BOLD}%s %s${RESET}\n" \
+      "or grab stickers, shirts, and swag from" \
+      "$(fmt_link CommitGoods https://commitgoods.com/ohmyzsh)"
+  elif [[ $verbose_mode == minimal ]]; then
+    printf "${BLUE}%s${RESET}\n" "$message"
+  fi
 else
+  ret=$?
   printf "${RED}%s${RESET}\n" 'There was an error updating. Try again later?'
 fi
+
+# go back to HEAD previous to update
+git checkout -q "$last_head" --
 
 # Unset git-config values set just for the upgrade
 case "$resetAutoStash" in
   "") git config --unset rebase.autoStash ;;
   *) git config rebase.autoStash "$resetAutoStash" ;;
 esac
+
+# Exit with `1` if the update failed
+exit $ret

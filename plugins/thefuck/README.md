@@ -2,6 +2,12 @@
 
 [The Fuck](https://github.com/nvbn/thefuck) plugin — magnificent app which corrects your previous console command.
 
+To use it, add thefuck to the plugins array of your zshrc file:
+
+```zsh
+plugins=(... thefuck)
+```
+
 ## Usage
 Press `ESC` twice to correct previous console command.
 

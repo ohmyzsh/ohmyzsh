@@ -16,3 +16,17 @@ You can also try to color other pages by prefixing the respective command with `
 ```zsh
 colored git help clone
 ```
+
+## Customization
+
+The plugin declares global associative array `less_termcap`, which maps termcap capabilities to escape
+sequences for the `less` pager. This mapping can be further customized by the user after the plugin is
+loaded. Check out sources for more.
+
+For example: `less_termcap[md]` maps to `LESS_TERMCAP_md` which is the escape sequence that tells `less`
+how to print something in bold. It's currently shown in bold red, but if you want to change it, you
+can redefine `less_termcap[md]` in your zshrc file, after OMZ is sourced:
+
+```zsh
+less_termcap[md]="${fg_bold[blue]}" # this tells less to print bold text in bold blue
+```

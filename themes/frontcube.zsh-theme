@@ -1,7 +1,7 @@
 
 PROMPT='
 %{$fg_bold[gray]%}%~%{$fg_bold[blue]%}%{$fg_bold[blue]%} % %{$reset_color%}
-%{$fg[green]%}➞  %{$reset_color%'
+%{$fg[green]%}➞  %{$reset_color%}'
 
 RPROMPT='$(git_prompt_info) $(ruby_prompt_info)'
 

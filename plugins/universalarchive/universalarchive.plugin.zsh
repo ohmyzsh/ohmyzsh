@@ -1,0 +1,80 @@
+function ua() {
+  local usage=\
+"Archive files and directories using a given compression algorithm.
+
+Usage:   $0 <format> <files>
+Example: $0 tbz PKGBUILD
+
+Supported archive formats are:
+7z, bz2, gz, lzma, lzo, rar, tar, tbz (tar.bz2), tgz (tar.gz),
+tlz (tar.lzma), txz (tar.xz), tZ (tar.Z), xz, Z, zip, and zst."
+
+  if [[ $# -lt 2 ]]; then
+    print -u2 -- "$usage"
+    return 1
+  fi
+
+  local ext="$1"
+  local input="${2:a}"
+
+  shift
+
+  if [[ ! -e "$input" ]]; then
+    print -u2 -- "$input not found"
+    return 1
+  fi
+
+  # generate output file name
+  local output
+  if [[ $# -gt 1 ]]; then
+    output="${input:h:t}"
+  elif [[ -f "$input" ]]; then
+    output="${input:r:t}"
+  elif [[ -d "$input" ]]; then
+    output="${input:t}"
+  fi
+
+  # if output file exists, generate a random name
+  if [[ -f "${output}.${ext}" ]]; then
+    output=$(mktemp "${output}_XXX") && rm "$output" || return 1
+  fi
+
+  # add extension
+  output="${output}.${ext}"
+
+  # safety check
+  if [[ -f "$output" ]]; then
+    print -u2 -- "output file '$output' already exists. Aborting"
+    return 1
+  fi
+
+  case "$ext" in
+    7z)
+      if (( $+commands[7zz] )); then
+        7zz u "${output}" "${@}"
+      elif (( $+commands[7z] )); then
+        7z u "${output}" "${@}"
+      elif (( $+commands[7za] )); then
+        7za u "${output}" "${@}"
+      else
+        echo "ua: cannot create 7z files: install 7zz, 7z or 7za" >&2
+        return 1
+      fi ;;
+    bz2)          bzip2 -vcf                  "${@}" > "${output}" ;;
+    gz)           gzip -vcf                   "${@}" > "${output}" ;;
+    lzma)         lzma -vc -T0                "${@}" > "${output}" ;;
+    lzo)          lzop -vc                    "${@}" > "${output}" ;;
+    rar)          rar a                       "${output}"   "${@}" ;;
+    tar)          tar -cvf                    "${output}"   "${@}" ;;
+    tbz|tar.bz2)  tar -cvjf                   "${output}"   "${@}" ;;
+    tgz|tar.gz)   tar -cvzf                   "${output}"   "${@}" ;;
+    tlz|tar.lzma) XZ_OPT=-T0 tar --lzma -cvf  "${output}"   "${@}" ;;
+    txz|tar.xz)   XZ_OPT=-T0 tar -cvJf        "${output}"   "${@}" ;;
+    tZ|tar.Z)     tar -cvZf                   "${output}"   "${@}" ;;
+    xz)           xz -vc -T0                  "${@}" > "${output}" ;;
+    Z)            compress -vcf               "${@}" > "${output}" ;;
+    zip)          zip -rull                   "${output}"   "${@}" ;;
+    zst)          zstd -c -T0                 "${@}" > "${output}" ;;
+    *) print -u2 -- "$usage"; return 1 ;;
+  esac
+}

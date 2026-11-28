@@ -1,0 +1,169 @@
+#compdef lpass
+
+_lpass() {
+    local cmd has_color has_sync has_interactive
+  	if (( CURRENT > 2)); then
+        cmd=${words[2]}
+        # Set the context for the subcommand.
+        curcontext="${curcontext%:*:*}:lpass-$cmd"
+        # Narrow the range of words we are looking at to exclude `lpass'
+        (( CURRENT-- ))
+        shift words
+        # Run the completion for the subcommand
+        case "${cmd}" in
+            login)
+                _arguments : \
+                  '--trust[Cause subsequent logins to not require multifactor authentication.]' \
+                  '--plaintext-key[Save plaintext decryption key to the hard disk]' \
+                  '--force[Do not ask on saving plaintext key]'
+                has_color=1
+            ;;
+
+            logout)
+                _arguments : '--force[Force confirmation]'
+                has_color=1
+            ;;
+            show)
+                _arguments : \
+                  '(-c --clip)'{-c,--clip}'[Copy output to clipboard]' \
+                  '(-x --expand-multi)'{-x,---expand-multi}'[Show the requested information from all of the matching sites]' \
+                  '(--all --username --password --url --notes --field= --id --name --attach=)'{--all,--username,--password,--url,--notes,--field=,--id,--name,--attach=}'[Output the specific field]' \
+                  '(--basic-regexp,--fixed-string)'{-G,--basic-regexp}'[Find a site by substring or regular expression]' \
+                  '--format=[Format output with printf-style placeholders]'
+                _lpass_complete_uniqenames
+                has_color=1
+                has_sync=1
+            ;;
+
+            ls)
+                _arguments : \
+                  '(-l --long)'{-l,--long}'[Also list the last modification time and username]' \
+                  '-u[List username]' \
+                  '-m[List modification time]' \
+                  '--format=[Format output with printf-style placeholders]'
+      				  _lpass_complete_groups
+                has_color=1
+                has_sync=1
+      			;;
+            mv)
+                _lpass_complete_uniqenames
+                _lpass_complete_groups
+                has_color=1
+            ;;
+            duplicate|rm)
+                _lpass_complete_uniqenames
+                has_color=1
+                has_sync=1
+            ;;
+            add)
+                _arguments : '(--username --password --url --notes --field=)'{--username,--password,--url,--notes,--field=}'[Add field]'
+                _lpass_complete_uniqenames
+                has_color=1
+                has_sync=1
+                has_interactive=1
+            ;;
+            edit)
+                _arguments : '(--name --username --password --url --notes --field=)'{--name,--username,--password,--url,--notes,--field=}'[Update field]'
+                _lpass_complete_uniqenames
+                has_color=1
+                has_sync=1
+                has_interactive=1
+            ;;
+            generate)
+                _arguments : \
+                  '(-c --clip)'{-c,--clip}'[Copy output to clipboard]' \
+                  '--username=[USERNAME]' \
+                  '--url=[URL]' \
+                  '--no-symbols[Do not use symbols]'
+                has_sync=1
+            ;;
+            status)
+               _arguments : '(-q --quiet)'{-q,--quiet}'[Suppress output to stdout]'
+                has_color=1
+            ;;
+            sync)
+                _arguments : '(-b --background)'{-b,--background}'[Run sync in background]'
+                has_color=1
+            ;;
+            export)
+                _arguments : '--fields=[Field list]'
+                has_color=1
+                has_sync=1
+            ;;
+            import)
+              if ((CURRENT < 3)); then
+                _files
+              fi
+            ;;
+        esac
+
+        if [ -n "$has_sync" ] || [ -n "$has_color" ] || [ -n "$has_interactive" ]; then
+            local -a generic_options
+            if [ "$has_sync" -eq 1 ]; then
+                generic_options+=('--sync=[Synchronize local cache with server: auto | now | no]')
+            fi
+            if [ "$has_color" -eq 1 ]; then
+                generic_options+=('--color=[Color: auto | never | always]')
+            fi
+            if [ "$has_interactive" -eq 1 ]; then
+                generic_options+=("--non-interactive[Use standard input instead of $EDITOR]")
+            fi
+            _arguments $generic_options
+        fi
+    else
+        local -a subcommands
+        subcommands=(
+          "login:Authenticate with the LastPass server and initialize a local cache"
+          "logout:Remove the local cache and stored encryption keys"
+          "passwd:Change your LastPass password"
+          "show:Display a password or selected field"
+          "ls:List names in groups in a tree structure"
+          "mv:Move the specified entry to a new group"
+          "add:Add a new entry"
+          "edit:Edit the selected field"
+          "generate:Create a randomly generated password"
+          "duplicate:Create a duplicate entry of the one specified"
+          "rm:Remove the specified entry"
+          "status:Show current login status"
+          "sync:Synchronize local cache with server"
+          "export:Dump all account information including passwords as unencrypted csv to stdout"
+          "import:Upload accounts from an unencrypted CSV file to the server"
+          "share:Manipulate shared folders (only enterprise or premium user)"
+        )
+        _describe -t commands 'lpass' subcommands
+        _arguments : \
+          '(-h --help)'{-h,--help}'[show help]' \
+          '(-v --version)'{-v,--version}'[show version]'
+
+    fi
+}
+
+_lpass_complete_uniqenames(){
+  local -a entries
+  while read i;  do
+    if [ -n "$i" ]; then
+      entries+=("$i")
+    fi
+  done < <(lpass ls --sync auto --format "%an" --color=never)
+  compadd -a entries
+}
+
+
+_lpass_complete_groups() {
+  local -a entries
+  while read i;  do
+    if [ -n "$i" ]; then
+      entries+=("$i")
+    fi
+  done < <(lpass ls --sync auto --format "%aN" --color=never | grep -E "\/$")
+  compadd -a entries
+}
+
+_lpass
+# Local Variables:
+# mode: Shell-Script
+# sh-indentation: 2
+# indent-tabs-mode: nil
+# sh-basic-offset: 2
+# End:
+# vim: ft=zsh sw=2 ts=2 et

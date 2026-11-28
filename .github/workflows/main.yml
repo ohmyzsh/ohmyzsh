@@ -7,24 +7,31 @@ on:
     branches:
       - master
   push:
-    branches: 
+    branches:
       - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
 
 jobs:
   tests:
     name: Run tests
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
+    if: github.repository == 'ohmyzsh/ohmyzsh'
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@aebdcf6156ab6691adf63218240e476564a1ed4c # v2.23.0
+        with:
+          egress-policy: audit
+
       - name: Set up git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Install zsh
-        if: runner.os == 'Linux'
         run: sudo apt-get update; sudo apt-get install zsh
-      - name: Test installer
-        run: sh ./tools/install.sh
       - name: Check syntax
         run: |
           for file in ./oh-my-zsh.sh \
@@ -34,3 +41,31 @@ jobs:
                       ./themes/*.zsh-theme; do
             zsh -n "$file" || return 1
           done
+
+  collisions:
+    name: Check alias collisions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up git repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.14'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r .github/workflows/alias_collision/requirements.txt
+      - name: Run unit tests
+        run: |
+          cd .github/workflows/alias_collision/
+          python -m pytest
+      - name: Checkout target branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: ohmyzsh-target-branch
+          ref: master
+      - name: Check for alias collisions on target branch
+        run: python .github/workflows/alias_collision/check_alias_collision.py ohmyzsh-target-branch/plugins --known-collisions-output-path known_alias_collisions.json
+      - name: Compare known collisions to new collisions on source branch
+        run: python .github/workflows/alias_collision/check_alias_collision.py plugins --known-collisions known_alias_collisions.json

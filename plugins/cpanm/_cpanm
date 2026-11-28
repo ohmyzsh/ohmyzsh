@@ -36,7 +36,7 @@ arguments=(
   '--reinstall[Reinstall the distribution even if you already have the latest version installed]'
   '--interactive[Turn on interactive configure]'
 
-  '--scandeps[Scan the depencencies of given modules and output the tree in a text format]'
+  '--scandeps[Scan the dependencies of given modules and output the tree in a text format]'
   '--format[Specify what format to display the scanned dependency tree]:scandeps format:(tree json yaml dists)'
 
   '--save-dists[Specify the optional directory path to copy downloaded tarballs]'
