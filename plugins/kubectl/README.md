@@ -123,6 +123,10 @@ plugins=(... kubectl)
 | kepvc    | `kubectl edit pvc`                                      | Edit pvcs from the default editor                                                                |
 | kdpvc    | `kubectl describe pvc`                                  | Describe all pvcs                                                                                |
 | kdelpvc  | `kubectl delete pvc`                                    | Delete all pvcs matching passed arguments                                                        |
+|          |                                                         | **Endpoints management**                                                                         |
+| kged     | `kubectl get endpoints`                                 | List all endpoints                                                                               |
+| kgeda    | `kubectl get endpoints --all-namespaces`                | List all endpoints across all namespaces                                                         |
+| kded     | `kubectl describe endpoints`                            | Describe endpoints in detail                                                                     |
 |          |                                                         | **StatefulSets management**                                                                      |
 | kgss     | `kubectl get statefulset`                               | List the statefulsets in ps format                                                               |
 | kgssa    | `kubectl get statefulset --all-namespaces`              | List statefulsets across all namespaces                                                          |
