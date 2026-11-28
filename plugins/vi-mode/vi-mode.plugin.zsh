@@ -43,12 +43,32 @@ function _vi-mode-set-cursor-shape-for-keymap() {
   printf $'\e[%d q' "${_shape}"
 }
 
-function _visual-mode {
-  typeset -g VI_KEYMAP=visual
-  _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
-  zle .visual-mode
-}
-zle -N visual-mode _visual-mode
+autoload -Uz is-at-least
+if is-at-least 5.3; then
+  # Visual mode doesn't change $KEYMAP, it only activates the region, so
+  # zle-keymap-select never runs when it starts or ends
+  function _vi-mode-zle-line-pre-redraw() {
+    if [[ "$KEYMAP" = vicmd ]] && (( REGION_ACTIVE )); then
+      [[ "$VI_KEYMAP" != visual ]] || return 0
+      typeset -g VI_KEYMAP=visual
+    elif [[ "$VI_KEYMAP" = visual ]]; then
+      typeset -g VI_KEYMAP=$KEYMAP
+    else
+      return 0
+    fi
+    _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
+  }
+  autoload -Uz add-zle-hook-widget
+  add-zle-hook-widget zle-line-pre-redraw _vi-mode-zle-line-pre-redraw
+else
+  # zle-line-pre-redraw needs zsh 5.3
+  function _visual-mode {
+    typeset -g VI_KEYMAP=visual
+    _vi-mode-set-cursor-shape-for-keymap "$VI_KEYMAP"
+    zle .visual-mode
+  }
+  zle -N visual-mode _visual-mode
+fi
 
 function _vi-mode-should-reset-prompt() {
   # If $VI_MODE_RESET_PROMPT_ON_MODE_CHANGE is unset (default), dynamically
