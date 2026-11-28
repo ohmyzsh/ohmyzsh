@@ -6,7 +6,6 @@
 # Sessions
 alias cl='claude'
 alias clc='claude --continue'
-alias clr='claude --resume'
 alias clw='claude --worktree'
 alias clp='claude --print'
 

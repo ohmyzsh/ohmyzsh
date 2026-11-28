@@ -131,12 +131,15 @@
         'disable:disable an enabled plugin'
         'update:update a plugin'
         'details:show a plugin'"'"'s components'
+        'configure:show or set a plugin'"'"'s options'
+        'restore-set-aside:restore options set aside by a marketplace switch'
         'marketplace:manage marketplaces'
         'init:scaffold a new plugin'
         'validate:validate a plugin or marketplace'
         'eval:run eval cases'
         'tag:create a release git tag'
         'prune:remove auto-installed dependencies'
+        'test:run a mod'"'"'s tests'
       )
       _describe -t commands 'plugin command' cmds ;;
     args)
@@ -152,7 +155,23 @@
           _arguments '1:plugin:_claude_plugins disabled' ;;
         disable)
           _arguments '1:plugin:_claude_plugins enabled' ;;
-        validate|tag|eval)
+        configure)
+          _arguments '--json[output as JSON]' \
+            '--values-stdin[read option values from stdin as JSON]' \
+            '1:plugin:_claude_plugins installed' ;;
+        restore-set-aside)
+          _arguments '--discard[delete what is set aside instead]' \
+            '1:plugin:_claude_plugins installed' ;;
+        eval)
+          _arguments \
+            '--eval-dir[directory below the plugin holding eval cases]:directory:' \
+            '--trust-plugin[skip the first-run trust prompt]' \
+            '--case[filter cases by name glob]:glob:' \
+            '*--tag[filter cases by tag]:tag:' \
+            '--model[model for all cases]:model:_claude_models' \
+            '--json=[print the run result as JSON]::file:_files -g "*.json"' \
+            '1:path or plugin:_files' ;;
+        validate|tag|test)
           _arguments '1:path:_files' ;;
         marketplace)
           _arguments -C '1: :->mcmd' '*:: :->margs' && return
@@ -192,7 +211,7 @@ _claude() {
     'logs:print a background session'"'"'s output'
     'mcp:configure MCP servers'
     'plugin:manage plugins'
-    'project:manage project state'
+    'purge:delete a project'"'"'s Claude Code data'
     'respawn:restart background sessions on the current version'
     'rm:delete a background session'
     'setup-token:set up a long-lived auth token'
@@ -223,6 +242,7 @@ _claude() {
     '--dangerously-skip-permissions[bypass all permission checks]' \
     '--allow-dangerously-skip-permissions[make bypass mode available]' \
     '--permission-prompts[who answers permission prompts with --print]:target:(host none)' \
+    '--permission-prompt-tool[MCP tool that answers permission prompts with --print]:tool:' \
     '*--add-dir[extra directory to allow tool access to]:directory:_directories' \
     '*'{--allowedTools,--allowed-tools}'[tools to allow]:tools:' \
     '*'{--disallowedTools,--disallowed-tools}'[tools to deny]:tools:' \
@@ -256,6 +276,7 @@ _claude() {
     '(--no-chrome)--chrome[enable Claude in Chrome]' \
     '(--chrome)--no-chrome[disable Claude in Chrome]' \
     '--ide[connect to the IDE on startup]' \
+    '--desktop[open in the Claude Desktop app instead]' \
     '--brief[enable the SendUserMessage tool]' \
     '--bare[minimal mode: no hooks, plugins, memory or CLAUDE.md]' \
     '--safe-mode[disable all customizations]' \
@@ -295,9 +316,13 @@ _claude() {
             critique\:"get feedback on your rules"
             defaults\:"print the default rules"
             reset\:"reset to shipped defaults"))' && ret=0 ;;
-        project)
-          _arguments '1:project command:((purge\:"delete all state for a project"))' \
-            '2:project path:_directories' && ret=0 ;;
+        purge)
+          _arguments \
+            '(1)--all[delete data for every project]' \
+            '--dry-run[list what would be deleted]' \
+            '(-i --interactive)'{-i,--interactive}'[ask before deleting each item]' \
+            '(-y --yes)'{-y,--yes}'[skip confirmation prompt]' \
+            '(--all)1:project path:_directories' && ret=0 ;;
         install)
           _arguments '1:target:(stable latest)' && ret=0 ;;
         agents)

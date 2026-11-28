@@ -17,7 +17,6 @@ If `claude` is not on `$PATH` the plugin does nothing, silently.
 | ------- | ------------------------- | --------------------------------------------- |
 | `cl`    | `claude`                  | Start an interactive session                  |
 | `clc`   | `claude --continue`       | Continue the most recent session here         |
-| `clr`   | `claude --resume`         | Resume by session id, or open the picker      |
 | `clw`   | `claude --worktree`       | Start in a new git worktree                   |
 | `clp`   | `claude --print`          | One-shot prompt, print and exit               |
 | `clbg`  | `claude --bg`             | Start a session in the background             |
@@ -46,7 +45,7 @@ Static:
 - values for `--model`, `--effort`, `--permission-mode`, `--output-format`,
   `--input-format`, `--setting-sources` and `--scope`
 - subcommands of `mcp`, `plugin`, `plugin marketplace`, `auth`, `auto-mode` and
-  `project`
+  `purge`
 
 Live:
 
@@ -66,7 +65,7 @@ and everything else still works.
 ## Maintenance
 
 `claude` can't generate its own completion, so the flag list is written by hand
-against `claude --help` (2.1.281). When a new flag shows up, add it to the
+against `claude --help` (2.1.332). When a new flag shows up, add it to the
 `_arguments` call in `_claude`. After editing, reload with:
 
 ```zsh
