@@ -34,18 +34,26 @@ function fossil_prompt_info() {
 }
 
 function _fossil_prompt () {
-  local current=`echo $PROMPT $RPROMPT | grep fossil`
-
-  if [ "$_FOSSIL_PROMPT" = "" -o "$current" = "" ]; then
-    local _prompt=${PROMPT}
-    local _rprompt=${RPROMPT}
-
-    local is_prompt=`echo $PROMPT | grep git`
-
-    if [ "$is_prompt" = "" ]; then
-      RPROMPT="$_rprompt"'$(fossil_prompt_info)'
-    else
-      PROMPT="$_prompt"'$(fossil_prompt_info) '
+  # Re-check each time, in case the theme rebuilds its prompt in precmd
+  if [ -z "$_FOSSIL_PROMPT" ] || [[ "$PROMPT$RPROMPT" != *fossil_prompt_info* ]]; then
+    # Use substitutions to work out what other plugins and themes have
+    # done ahead of us so we don't duplicate their work.
+    #
+    # If $fossil_prompt_info isn't in the prompt strings already but we
+    # can find $git_prompt_info, put it immediately afterward so that
+    # one or the other appears in the prompt.  We're gambling that you
+    # aren't in a directory that's a checkout for both a Git repo and a
+    # Fossil repo.
+    #
+    # Otherwise, add it to the right prompt, as before.
+    if [ "${PROMPT/fossil_prompt_info//}" = "$PROMPT" ]; then
+      PROMPT="${PROMPT/git_prompt_info/git_prompt_info)\$(fossil_prompt_info}"
+    fi
+    if [ "${RPROMPT/fossil_prompt_info//}" = "$RPROMPT" ]; then
+      RPROMPT="${RPROMPT/git_prompt_info/git_prompt_info)\$(fossil_prompt_info}"
+    fi
+    if [[ "$PROMPT$RPROMPT" != *fossil_prompt_info* ]]; then
+      RPROMPT+='$(fossil_prompt_info)'
     fi
 
     _FOSSIL_PROMPT="1"
