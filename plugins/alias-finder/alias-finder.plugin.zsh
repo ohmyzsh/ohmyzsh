@@ -65,9 +65,20 @@ alias-finder() {
 
 preexec_alias-finder() {
   # TODO: Remove backward compatibility (other than zstyle form)
-  zstyle -t ':omz:plugins:alias-finder' autoload && alias-finder $1 || if [[ $ZSH_ALIAS_FINDER_AUTOMATIC = true ]]; then
-    alias-finder $1
+  zstyle -t ':omz:plugins:alias-finder' autoload || [[ $ZSH_ALIAS_FINDER_AUTOMATIC = true ]] || return
+
+  # $3 has aliases expanded, so `k get pods` can suggest `kgp`
+  local -a words=(${(z)1}) found=(${(f)"$(alias-finder $3)"}) keep
+  local used=${aliases[$words[1]]} line
+
+  # If an alias was typed, only suggest aliases that cover more of the command
+  if [[ -n "$used" ]]; then
+    for line in $found; do
+      (( ${#${(Q)line#*=}} > ${#used} )) && keep+=("$line")
+    done
+    found=($keep)
   fi
+  (( $#found )) && print -rl -- $found
 }
 
 autoload -U add-zsh-hook

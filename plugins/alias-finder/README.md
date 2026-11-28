@@ -58,6 +58,8 @@ Running the shortest `gs` shell alias that it found:
 
 ![image](https://github.com/ohmyzsh/ohmyzsh/assets/19378/39642750-fb10-4f1a-b7f9-f36789eeb01b)
 
+It also looks through aliases you type, suggesting only ones that cover more of the command. With the kubectl plugin, `k get pods` suggests `kgp`, while `kgp` on its own suggests nothing.
+
 
 ### Options
 
