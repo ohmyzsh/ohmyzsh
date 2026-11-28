@@ -152,6 +152,9 @@ function _per-directory-history-preexec() {
   # Save the command also to the history file that is not the active one, so
   # that both the global and the per-directory histories always receive every
   # command, whichever history is active (see issue #11198).
+  if [[ -z "$1" ]]; then
+      return 0
+  fi
   if [[ -o hist_ignore_space ]] && [[ "$1" == \ * ]]; then
       return 0
   fi
@@ -163,16 +166,22 @@ function _per-directory-history-preexec() {
     inactive_history="$_per_directory_history_global"
   fi
 
-  # Append the command in an isolated history context, so the active history
-  # is not disturbed. fc -p pushes a new history list and fc -P pops it after
-  # the command was appended to the inactive history file.
-  fc -p "$inactive_history" "$HISTSIZE" "$SAVEHIST"
-  print -Sr -- "$1"
-  fc -AI "$inactive_history"
-  # prevent the isolated history context from being written when it is popped
-  HISTFILE=
-  SAVEHIST=0
-  fc -P
+  # Append the line directly. Do not fc -p the inactive file: that re-reads
+  # the whole history on every command (~22ms at the default 10k lines,
+  # ~250ms at 100k). A nested fc -p would also disturb the plugin's already
+  # pushed active history context.
+  mkdir -p "${inactive_history:h}"
+  if [[ -o extended_history ]]; then
+    zmodload -F zsh/datetime p:EPOCHSECONDS 2>/dev/null
+    integer ts=${EPOCHSECONDS:-$(date +%s)}
+    local nl=$'\n'
+    local repl=$'\\\n'
+    local escaped="${1//\\/\\\\}"
+    escaped="${escaped//$nl/$repl}"
+    print -r -- ": ${ts}:0;$escaped" >> "$inactive_history"
+  else
+    print -r -- "$1" >> "$inactive_history"
+  fi
 }
 
 function _per-directory-history-precmd() {
