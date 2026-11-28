@@ -15,7 +15,7 @@
 # To customize symbols (e.g MLH_AT_SYMBOL), simply set them as environment variables
 # for example in your ~/.zshrc file, like this:
 # MLH_AT_SYMBOL=" at "
-# 
+#
 # Settings *must* be set before sourcing oh-my-zsh.sh the .zshrc file.
 #
 # To easily discover colors and their codes, type `spectrum_ls` in the terminal
@@ -45,6 +45,10 @@ fi
 
 if [ -z "$MLH_SHELL_SYMBOL" ]; then
   MLH_SHELL_SYMBOL="$ "
+fi
+
+if [ -z "$MLH_SHELL_SYMBOL_ROOT" ]; then
+  MLH_SHELL_SYMBOL_ROOT="# "
 fi
 
 # colors
@@ -83,7 +87,11 @@ exit_code() {
 }
 
 prompt_end() {
-  printf "\n$MLH_SHELL_SYMBOL"
+  if [ "$UID" -eq 0 ]; then
+    printf "\n$MLH_SHELL_SYMBOL_ROOT"
+  else
+    printf "\n$MLH_SHELL_SYMBOL"
+  fi
 }
 
 # Set git_prompt_info text

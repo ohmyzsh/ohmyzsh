@@ -24,7 +24,7 @@ Also provides the following aliases:
 * **cfc:** Copies the compiled JS to your clipboard. Very useful when you want
            to run the code in a JS console.
 
-* **cfp:** Compiles from your currently copied clipboard. Useful when you want 
+* **cfp:** Compiles from your currently copied clipboard. Useful when you want
            to compile large/multi-line snippets
 
 * **cfpc:** Paste coffeescript from clipboard, compile to JS, then copy the

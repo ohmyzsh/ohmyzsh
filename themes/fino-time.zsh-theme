@@ -12,6 +12,7 @@
 # Also borrowing from http://stevelosh.com/blog/2010/02/my-extravagant-zsh-prompt/
 
 function virtualenv_info {
+    [ $CONDA_DEFAULT_ENV ] && echo "($CONDA_DEFAULT_ENV) "
     [ $VIRTUAL_ENV ] && echo '('`basename $VIRTUAL_ENV`') '
 }
 

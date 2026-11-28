@@ -15,11 +15,17 @@ if [[ $DISABLE_MAGIC_FUNCTIONS != true ]]; then
   done
 fi
 
-## jobs
-setopt long_list_jobs
+setopt multios              # enable redirect to multiple streams: echo >file1 >file2
+setopt long_list_jobs       # show long list format job notifications
+setopt interactivecomments  # recognize comments
 
-env_default 'PAGER' 'less'
-env_default 'LESS' '-R'
+# define pager depending on what is available (less or more)
+if (( ${+commands[less]} )); then
+  env_default 'PAGER' 'less'
+  env_default 'LESS' '-R'
+elif (( ${+commands[more]} )); then
+  env_default 'PAGER' 'more'
+fi
 
 ## super user alias
 alias _='sudo '
@@ -30,6 +36,3 @@ if (( $+commands[ack-grep] )); then
 elif (( $+commands[ack] )); then
   alias afind='ack -il'
 fi
-
-# recognize comments
-setopt interactivecomments

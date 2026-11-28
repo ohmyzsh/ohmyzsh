@@ -23,9 +23,10 @@ def get_tagname_or_hash():
         return hash_
     return None
 
-# Re-use method from https://github.com/magicmonty/bash-git-prompt to get stashs count
+# Re-use method from https://github.com/magicmonty/bash-git-prompt to get stash count
+# Use `--git-common-dir` to avoid problems with git worktrees, which don't have individual stashes
 def get_stash():
-    cmd = Popen(['git', 'rev-parse', '--git-dir'], stdout=PIPE, stderr=PIPE)
+    cmd = Popen(['git', 'rev-parse', '--git-common-dir'], stdout=PIPE, stderr=PIPE)
     so, se = cmd.communicate()
     stash_file = '%s%s' % (so.decode('utf-8').rstrip(), '/logs/refs/stash')
 
@@ -35,7 +36,6 @@ def get_stash():
     except IOError:
         return 0
 
-
 # `git status --porcelain --branch` can collect all information
 # branch, remote_branch, untracked, staged, changed, conflicts, ahead, behind
 po = Popen(['git', 'status', '--porcelain', '--branch'], env=dict(os.environ, LANG="C"), stdout=PIPE, stderr=PIPE)
@@ -44,7 +44,7 @@ if po.returncode != 0:
     sys.exit(0)  # Not a git repository
 
 # collect git status information
-untracked, staged, changed, conflicts = [], [], [], []
+untracked, staged, changed, deleted, conflicts = [], [], [], [], []
 ahead, behind = 0, 0
 status = [(line[0], line[1], line[2:]) for line in stdout.decode('utf-8').splitlines()]
 for st in status:
@@ -75,13 +75,15 @@ for st in status:
     else:
         if st[1] == 'M':
             changed.append(st)
+        if st[1] == 'D':
+            deleted.append(st)
         if st[0] == 'U':
             conflicts.append(st)
         elif st[0] != ' ':
             staged.append(st)
 
 stashed = get_stash()
-if not changed and not staged and not conflicts and not untracked:
+if not changed and not deleted and not staged and not conflicts and not untracked:
     clean = 1
 else:
     clean = 0
@@ -95,6 +97,7 @@ out = ' '.join([
     str(len(changed)),
     str(len(untracked)),
     str(stashed),
-    str(clean)
+    str(clean),
+    str(len(deleted))
 ])
 print(out, end='')

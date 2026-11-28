@@ -1,5 +1,10 @@
 if (( ! $+commands[brew] )); then
-  if [[ -x /opt/homebrew/bin/brew ]]; then
+  if [[ -n "$BREW_LOCATION" ]]; then
+    if [[ ! -x "$BREW_LOCATION" ]]; then
+      echo "[oh-my-zsh] $BREW_LOCATION is not executable"
+      return
+    fi
+  elif [[ -x /opt/homebrew/bin/brew ]]; then
     BREW_LOCATION="/opt/homebrew/bin/brew"
   elif [[ -x /usr/local/bin/brew ]]; then
     BREW_LOCATION="/usr/local/bin/brew"
@@ -10,30 +15,75 @@ if (( ! $+commands[brew] )); then
   else
     return
   fi
+
+  # Only add Homebrew installation to PATH, MANPATH, and INFOPATH if brew is
+  # not already on the path, to prevent duplicate entries. This aligns with
+  # the behavior of the brew installer.sh post-install steps.
+  eval "$("$BREW_LOCATION" shellenv)"
+  unset BREW_LOCATION
 fi
 
 if [[ -z "$HOMEBREW_PREFIX" ]]; then
-  if [[ -z $BREW_LOCATION ]]; then
-    eval "$(brew shellenv)"
-  else
-    eval "$("$BREW_LOCATION" shellenv)"
+  # Maintain compatibility with potential custom user profiles, where we had
+  # previously relied on always sourcing shellenv. OMZ plugins should not rely
+  # on this to be defined due to out of order processing.
+  export HOMEBREW_PREFIX="$(brew --prefix)"
+fi
+
+# Add Homebrew sbin to PATH if it exists and is not already in PATH.
+# Homebrew's shellenv only adds bin directories, not sbin. Some formulae
+# (e.g. mtr) install executables to sbin, and brew doctor warns if it's
+# missing from PATH.
+if [[ -d "$HOMEBREW_PREFIX/sbin" ]]; then
+  if [[ ! "$PATH" == *"$HOMEBREW_PREFIX/sbin"* ]]; then
+    export PATH="$HOMEBREW_PREFIX/sbin:$PATH"
   fi
 fi
 
-unset BREW_LOCATION
+if [[ -d "$HOMEBREW_PREFIX/share/zsh/site-functions" ]]; then
+  fpath+=("$HOMEBREW_PREFIX/share/zsh/site-functions")
+fi
 
+alias ba='brew autoremove'
+alias bcfg='brew config'
+alias bci='brew info --cask'
+alias bcin='brew install --cask'
+alias bcl='brew list --cask'
+alias bcn='brew cleanup'
+alias bco='brew outdated --cask'
+alias bcrin='brew reinstall --cask'
 alias bcubc='brew upgrade --cask && brew cleanup'
 alias bcubo='brew update && brew outdated --cask'
+alias bcup='brew upgrade --cask'
+alias bdr='brew doctor'
+alias bfu='brew upgrade --formula'
+alias bi='brew install'
+alias bih='brew install --HEAD'
+alias bl='brew list'
+alias bo='brew outdated'
+alias br='brew reinstall'
 alias brewp='brew pin'
 alias brewsp='brew list --pinned'
-alias bubc='brew upgrade && brew cleanup'
+alias brh='brew reinstall --HEAD'
+alias bs='brew search'
+alias bsl='brew services list'
+alias bsoff='brew services stop'
+alias bsoffa='bsoff --all'
+alias bson='brew services start'
+alias bsona='bson --all'
+alias bsr='brew services run'
+alias bsra='bsr --all'
+alias bu='brew update'
 alias bubo='brew update && brew outdated'
-alias bubu='bubo && bubc'
-alias buf='brew upgrade --formula'
+alias bubu='bu && bup'
+alias bubug='bubo && bugbc'
+alias bugbc='brew upgrade --greedy && brew cleanup'
+alias bup='brew upgrade'
+alias buz='brew uninstall --zap'
 
 function brews() {
   local formulae="$(brew leaves | xargs brew deps --installed --for-each)"
-  local casks="$(brew list --cask)"
+  local casks="$(brew list --cask 2>/dev/null)"
 
   local blue="$(tput setaf 4)"
   local bold="$(tput bold)"

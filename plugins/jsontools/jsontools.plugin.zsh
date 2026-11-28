@@ -22,14 +22,17 @@ fi
 # Define json tools for each method
 case "$JSONTOOLS_METHOD" in
   node)
-    # node doesn't make it easy to deal with stdin, so we pass it as an argument with xargs -0
+    # Read stdin directly so input is not limited by command-line argument size.
     function pp_json() {
-      xargs -0 node -e 'console.log(JSON.stringify(JSON.parse(process.argv[1]), null, 4));'
+      node -e '
+        const input = require("fs").readFileSync(0, "utf8");
+        console.log(JSON.stringify(JSON.parse(input), null, 4));
+      '
     }
     function is_json() {
-      xargs -0 node -e '
+      node -e '
         try {
-          json = JSON.parse(process.argv[1]);
+          JSON.parse(require("fs").readFileSync(0, "utf8"));
           console.log("true");
           process.exit(0);
         } catch (e) {
@@ -39,10 +42,14 @@ case "$JSONTOOLS_METHOD" in
       '
     }
     function urlencode_json() {
-      xargs -0 node -e "console.log(encodeURIComponent(process.argv[1]))"
+      node -e '
+        console.log(encodeURIComponent(require("fs").readFileSync(0, "utf8")));
+      '
     }
     function urldecode_json() {
-      xargs -0 node -e "console.log(decodeURIComponent(process.argv[1]))"
+      node -e '
+        console.log(decodeURIComponent(require("fs").readFileSync(0, "utf8")));
+      '
     }
   ;;
   python3)
@@ -79,8 +86,7 @@ print(unquote_plus(sys.stdin.read()))
     function pp_json() {
       ruby -e '
         require "json"
-        require "yaml"
-        puts JSON.parse(STDIN.read).to_yaml
+        puts JSON.pretty_generate(JSON.parse(STDIN.read), indent: "    ")
       '
     }
     function is_json() {

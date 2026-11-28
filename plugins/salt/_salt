@@ -9,7 +9,7 @@
 # zstyle ':completion::complete:salt(|-call):modules:'                use-cache true
 # zstyle ':completion::complete:salt(|-cp|-call|-run|-key):salt_dir:' use-cache true
 #
-# cache validation can be controled with the style cache-ttl.
+# cache validation can be controlled with the style cache-ttl.
 # it expects two arguments: number (days|hours|weeks|months)
 # to invalidate the minion cache after four days:
 # zstyle ':completion::complete:salt(|-cp|-call):minions:'            cache-ttl 4 days

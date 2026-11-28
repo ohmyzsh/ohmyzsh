@@ -1,6 +1,6 @@
 # Dnote Plugin
 
-This plugin adds auto-completion for [Dnote](https://dnote.io) project.
+This plugin adds auto-completion for [Dnote](https://www.getdnote.com/), a simple command line notebook.
 
 To use it, add `dnote` to the plugins array in your zshrc file:
 

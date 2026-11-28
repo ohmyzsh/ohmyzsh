@@ -24,7 +24,7 @@ unset _omz_emoji_plugin_dir
 
 # This is a combining character that can be placed after any other character to surround
 # it in a "keycap" symbol.
-# The digits 0-9 are already in the emoji table as keycap_digit_<N>, keycap_ten, etc. 
+# The digits 0-9 are already in the emoji table as keycap_digit_<N>, keycap_ten, etc.
 # It's unclear whether this should be in the $emoji array, because those characters are all ones
 # which can be displayed on their own.
 
@@ -63,9 +63,9 @@ function random_emoji() {
   [[ $list_size -eq 0 ]] && return 1
   local random_index=$(( ( RANDOM % $list_size ) + 1 ))
   local name=${names[$random_index]}
-  if [[ "$group" == "flags" ]]; then 
+  if [[ "$group" == "flags" ]]; then
     echo ${emoji_flags[$name]}
-  else 
+  else
     echo ${emoji[$name]}
   fi
 }
@@ -86,22 +86,22 @@ function display_emoji() {
   # terminals treat these emoji chars as single-width.
   local counter=1
   for i in $names; do
-    if [[ "$group" == "flags" ]]; then 
+    if [[ "$group" == "flags" ]]; then
       printf '%s  ' "$emoji_flags[$i]"
-    else 
-      printf '%s  ' "$emoji[$i]" 
+    else
+      printf '%s  ' "$emoji[$i]"
     fi
     # New line every 20 emoji, to avoid weirdnesses
     if (($counter % 20 == 0)); then
-      printf "\n" 
+      printf "\n"
     fi
     let counter=$counter+1
   done
   print
   for i in $names; do
-    if [[ "$group" == "flags" ]]; then 
+    if [[ "$group" == "flags" ]]; then
       echo "${emoji_flags[$i]}  = $i"
-    else 
+    else
       echo "${emoji[$i]}  = $i"
     fi
   done

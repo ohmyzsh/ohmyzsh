@@ -10,9 +10,10 @@ plugins=(... ufw)
 
 Some of the commands include:
 
-* `allow <port>/<optional: protocol>` add an allow rule 
+* `allow <port>/<optional: protocol>` add an allow rule
 * `default` set default policy
 * `delete <port>/<optional: protocol>` delete RULE
 * `deny <port>/<optional: protocol>` add deny rule
 * `disable` disables the firewall
 * `enable` enables the firewall
+* `route` add route rule

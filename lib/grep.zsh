@@ -10,7 +10,7 @@ else
     }
 
     # Ignore these folders (if the necessary grep flags are available)
-    EXC_FOLDERS="{.bzr,CVS,.git,.hg,.svn,.idea,.tox}"
+    EXC_FOLDERS="{.bzr,CVS,.git,.hg,.svn,.idea,.tox,.venv,venv}"
 
     # Check for --exclude-dir, otherwise check for --exclude. If --exclude
     # isn't available, --color won't be either (they were released at the same
@@ -24,8 +24,8 @@ else
     if [[ -n "$GREP_OPTIONS" ]]; then
         # export grep, egrep and fgrep settings
         alias grep="grep $GREP_OPTIONS"
-        alias egrep="egrep $GREP_OPTIONS"
-        alias fgrep="fgrep $GREP_OPTIONS"
+        alias egrep="grep -E"
+        alias fgrep="grep -F"
 
         # write to cache file if cache directory is writable
         if [[ -w "$ZSH_CACHE_DIR" ]]; then

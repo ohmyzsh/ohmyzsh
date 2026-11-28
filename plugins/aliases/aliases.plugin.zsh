@@ -4,7 +4,7 @@
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 eval '
-  function acs(){
+  function als(){
     (( $+commands[python3] )) || {
       echo "[error] No python executable detected"
       return

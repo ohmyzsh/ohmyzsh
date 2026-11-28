@@ -29,11 +29,24 @@ plugins=(... vi-mode)
   VI_MODE_SET_CURSOR=true
   ```
 
+  See [Cursor Styles](#cursor-styles) for controlling how the cursor looks in different modes
+
 - `MODE_INDICATOR`: controls the string displayed when the shell is in normal mode.
   See [Mode indicators](#mode-indicators) for details.
 
 - `INSERT_MODE_INDICATOR`: controls the string displayed when the shell is in insert mode.
   See [Mode indicators](#mode-indicators) for details.
+
+- `VI_MODE_DISABLE_CLIPBOARD`: If set, disables clipboard integration on yank/paste
+
+Clipboard integration keeps put widgets (`p`/`P`) in sync with the system
+clipboard, but only while the last copy to the clipboard actually succeeded.
+If that copy failed — no `xclip`/`xsel`, Wayland without `wl-clipboard`, a dead
+X forwarding over SSH — the clipboard no longer mirrors what you killed inside
+the line editor, so puts use the internal kill buffer instead of the stale
+clipboard contents. After a failed push, puts keep using the kill buffer only
+while the clipboard still holds exactly what it held when the push failed; a
+new external copy is picked up again immediately.
 
 ## Mode indicators
 
@@ -42,15 +55,49 @@ hasn't been defined by theme, *Insert mode* is not displayed by default.
 
 You can change these indicators by setting the `MODE_INDICATOR` (*Normal mode*) and
 `INSERT_MODE_INDICATORS` (*Insert mode*) variables.
-This settings support Prompt Expansion sequences. For example:
+These settings support Prompt Expansion sequences. For example:
 
 ```zsh
 MODE_INDICATOR="%F{white}+%f"
 INSERT_MODE_INDICATOR="%F{yellow}+%f"
 ```
 
-You can also use the `vi_mode_prompt_info` function in your prompt, which will display
-this mode indicator.
+### Adding mode indicators to your prompt
+
+`Vi-mode` by default will add mode indicators to `RPROMPT` **unless** that is defined by
+a preceding plugin.
+
+If `PROMPT` or `RPROMPT` is not defined to your liking, you can add mode info manually. The `vi_mode_prompt_info` function is available to insert mode indicator information.
+
+Here are some examples:
+
+```bash
+source $ZSH/oh-my-zsh.sh
+
+PROMPT="$PROMPT\$(vi_mode_prompt_info)"
+RPROMPT="\$(vi_mode_prompt_info)$RPROMPT"
+```
+
+Note the `\$` here, which importantly prevents interpolation at the time of defining, but allows it to be executed for each prompt update event.
+
+## Cursor Styles
+
+You can control the cursor style used in each active vim mode by changing the values of the following variables.
+
+```zsh
+# defaults
+VI_MODE_CURSOR_NORMAL=2
+VI_MODE_CURSOR_VISUAL=6
+VI_MODE_CURSOR_INSERT=6
+VI_MODE_CURSOR_OPPEND=0
+```
+
+- 0, 1 - Blinking block
+- 2 - Solid block
+- 3 - Blinking underline
+- 4 - Solid underline
+- 5 - Blinking line
+- 6 - Solid line
 
 ## Key bindings
 
@@ -108,10 +155,37 @@ NOTE: this used to be bound to `v`. That is now the default (`visual-mode`).
 - `c{motion}`   : Delete {motion} text and start insert
 - `cc`          : Delete line and start insert
 - `C`           : Delete to the end of the line and start insert
+- `P`           : Insert the contents of the clipboard before the cursor
+- `p`           : Insert the contents of the clipboard after the cursor
 - `r{char}`     : Replace the character under the cursor with {char}
 - `R`           : Enter replace mode: Each character replaces existing one
 - `x`           : Delete `count` characters under and after the cursor
 - `X`           : Delete `count` characters before the cursor
+
+NOTE: delete/kill commands (`dd`, `D`, `c{motion}`, `C`, `x`,`X`) and yank commands
+(`y`, `Y`) will copy to the clipboard. Contents can then be put back using paste commands
+(`P`, `p`).
+
+## Text objects
+
+Standard text objects are supported with `i` ("inside") and `a` ("around"), e.g., for words; thus, you can select the word the cursor is in with `viw`, or delete the current word, including surrounding spaces, with `daw`.
+
+For other text objects, you can rely on the built-in functionality of Zsh and enable it accordingly.
+For example, for quoted strings, you can copy the commented snippet of <https://sourceforge.net/p/zsh/code/ci/master/tree/Functions/Zle/select-quoted>: place this in your `.zsrhc` file, e.g., after sourcing oh-my-zsh:
+
+```sh
+autoload -U select-quoted
+zle -N select-quoted
+for m in visual viopp; do
+    for c in {a,i}{\',\",\`}; do
+        bindkey -M $m $c select-quoted
+    done
+done
+```
+
+Now, in normal mode, you can select everything inside a double-quoted string with `vi"`.
+Note that this works even if you're not already inside a quoted string.
+For example, you can replace everything inside a single-quoted string in the current line, from wherever the cursor is, with `ci'`.
 
 ## Known issues
 

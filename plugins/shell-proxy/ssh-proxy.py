@@ -22,7 +22,8 @@ if parsed.scheme not in proxy_protocols:
 
 def make_argv():
     yield "nc"
-    if sys.platform == 'linux':
+    if sys.platform in {'linux', 'cygwin'}:
+        # caveats: the built-in netcat of most linux distributions and cygwin support proxy type
         # caveats: macOS built-in netcat command not supported proxy-type
         yield "-X" # --proxy-type
         # Supported protocols are 4 (SOCKS v4), 5 (SOCKS v5) and connect (HTTP proxy).

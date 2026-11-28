@@ -23,7 +23,7 @@ colorize_check_requirements() {
     if [[ ${available_tools[(Ie)$ZSH_COLORIZE_TOOL]} -eq 0 ]]; then
         echo "ZSH_COLORIZE_TOOL '$ZSH_COLORIZE_TOOL' not recognized. Available options are 'pygmentize' and 'chroma'." >&2
         return 1
-    elif (( $+commands["$ZSH_COLORIZE_TOOL"] )); then
+    elif ! (( $+commands[$ZSH_COLORIZE_TOOL] )); then
         echo "Package '$ZSH_COLORIZE_TOOL' is not installed!" >&2
         return 1
     fi
@@ -42,12 +42,12 @@ colorize_cat() {
         ZSH_COLORIZE_STYLE="emacs"
     fi
 
-    # Use stdin if no arguments have been passed.
-    if [ $# -eq 0 ]; then
+    # Use stdin if stdin is not attached to a terminal.
+    if [ ! -t 0 ]; then
         if [[ "$ZSH_COLORIZE_TOOL" == "pygmentize" ]]; then
             pygmentize -O style="$ZSH_COLORIZE_STYLE" -g
         else
-            chroma --style="$ZSH_COLORIZE_STYLE" --formatter="${ZSH_COLORIZE_CHROMA_FORMATTER:-terminal}"
+            chroma --style="$ZSH_COLORIZE_STYLE" --formatter="${ZSH_COLORIZE_CHROMA_FORMATTER:-terminal}" "$@"
         fi
         return $?
     fi
@@ -90,6 +90,7 @@ colorize_less() {
         # (e.g. when not scrolled to the bottom) while already the next file will be displayed.
         local LESSOPEN="| zsh -c 'source \"$ZSH_COLORIZE_PLUGIN_PATH\"; \
         ZSH_COLORIZE_TOOL=$ZSH_COLORIZE_TOOL ZSH_COLORIZE_STYLE=$ZSH_COLORIZE_STYLE \
+        ZSH_COLORIZE_CHROMA_FORMATTER=$ZSH_COLORIZE_CHROMA_FORMATTER \
         colorize_cat %s 2> /dev/null'"
 
         # LESSCLOSE will be set to prevent any errors by executing a user script

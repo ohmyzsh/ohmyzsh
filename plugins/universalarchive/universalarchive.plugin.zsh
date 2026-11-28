@@ -49,7 +49,17 @@ tlz (tar.lzma), txz (tar.xz), tZ (tar.Z), xz, Z, zip, and zst."
   fi
 
   case "$ext" in
-    7z)           7z u                        "${output}"   "${@}" ;;
+    7z)
+      if (( $+commands[7zz] )); then
+        7zz u "${output}" "${@}"
+      elif (( $+commands[7z] )); then
+        7z u "${output}" "${@}"
+      elif (( $+commands[7za] )); then
+        7za u "${output}" "${@}"
+      else
+        echo "ua: cannot create 7z files: install 7zz, 7z or 7za" >&2
+        return 1
+      fi ;;
     bz2)          bzip2 -vcf                  "${@}" > "${output}" ;;
     gz)           gzip -vcf                   "${@}" > "${output}" ;;
     lzma)         lzma -vc -T0                "${@}" > "${output}" ;;
