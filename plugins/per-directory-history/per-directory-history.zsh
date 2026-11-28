@@ -92,43 +92,95 @@ bindkey -M vicmd $PER_DIRECTORY_HISTORY_TOGGLE per-directory-history-toggle-hist
 
 _per_directory_history_directory="$HISTORY_BASE${PWD:A}/history"
 _per_directory_history_global="$HISTFILE"
+# history file of the currently active history context, empty until the
+# first history context switch
+_per_directory_history_active=""
+
+# Switch the active history to the file given as argument: commands that were
+# not written yet are appended to the previously active history file, and the
+# new file is read in if it exists. The base history is prevented from
+# rewriting the global history file when the history contexts are destroyed
+# (on exit), so both history files are only ever appended to by this plugin.
+function _per-directory-history-switch-history() {
+  local original_histsize=$HISTSIZE
+  local original_savehist=$SAVEHIST
+
+  if [[ -n "$_per_directory_history_active" ]]; then
+    # append the commands that were not written yet to the outgoing history
+    fc -AI "$_per_directory_history_active"
+    # pop the outgoing history context without writing it again
+    HISTFILE=
+    SAVEHIST=0
+    fc -P
+  else
+    # append the commands entered so far to the global history, and prevent
+    # the base history from rewriting the global history file on exit
+    fc -AI "$_per_directory_history_global"
+    SAVEHIST=0
+  fi
+
+  # start the new active history; the file is read in if it exists
+  fc -p "$1"
+  HISTSIZE=$original_histsize
+  SAVEHIST=$original_savehist
+  _per_directory_history_active="$1"
+}
 
 function _per-directory-history-change-directory() {
   _per_directory_history_directory="$HISTORY_BASE${PWD:A}/history"
   mkdir -p ${_per_directory_history_directory:h}
   if [[ $_per_directory_history_is_global == false ]]; then
-    #save to the global history
-    fc -AI "$_per_directory_history_global"
-    #save history to previous file
-    local prev="$HISTORY_BASE${OLDPWD:A}/history"
-    mkdir -p ${prev:h}
-    fc -AI $prev
-
-    #discard previous directory's history
-    local original_histsize=$HISTSIZE
-    HISTSIZE=0
-    HISTSIZE=$original_histsize
-
-    #read history in new file
-    if [[ -e $_per_directory_history_directory ]]; then
-      fc -R $_per_directory_history_directory
-    fi
+    # switch the active history to the new directory's history
+    _per-directory-history-switch-history "$_per_directory_history_directory"
   fi
 }
 
 function _per-directory-history-addhistory() {
-  # respect hist_ignore_space
+  # zsh itself adds the accepted command to the active history, so it does
+  # not need to be added again with print -S here: doing so would store the
+  # command twice (visible as duplicated entries when hist_ignore_dups is
+  # not set). This hook only rejects commands that must not be saved at all:
+  # a zshaddhistory hook returning 1 is the documented way to keep a command
+  # out of the history, so hist_ignore_space is honored by returning 1.
   if [[ -o hist_ignore_space ]] && [[ "$1" == \ * ]]; then
-      true
+      return 1
+  fi
+  return 0
+}
+
+function _per-directory-history-preexec() {
+  # Save the command also to the history file that is not the active one, so
+  # that both the global and the per-directory histories always receive every
+  # command, whichever history is active (see issue #11198).
+  if [[ -z "$1" ]]; then
+      return 0
+  fi
+  if [[ -o hist_ignore_space ]] && [[ "$1" == \ * ]]; then
+      return 0
+  fi
+
+  local inactive_history
+  if [[ $_per_directory_history_is_global == true ]]; then
+    inactive_history="$_per_directory_history_directory"
   else
-      print -Sr -- "${1%%$'\n'}"
-      # instantly write history if set options require it.
-      if [[ -o share_history ]] || \
-         [[ -o inc_append_history ]] || \
-         [[ -o inc_append_history_time ]]; then
-          fc -AI "$_per_directory_history_global"
-          fc -AI $_per_directory_history_directory
-      fi
+    inactive_history="$_per_directory_history_global"
+  fi
+
+  # Append the line directly. Do not fc -p the inactive file: that re-reads
+  # the whole history on every command (~22ms at the default 10k lines,
+  # ~250ms at 100k). A nested fc -p would also disturb the plugin's already
+  # pushed active history context.
+  mkdir -p "${inactive_history:h}"
+  if [[ -o extended_history ]]; then
+    zmodload -F zsh/datetime p:EPOCHSECONDS 2>/dev/null
+    integer ts=${EPOCHSECONDS:-$(date +%s)}
+    local nl=$'\n'
+    local repl=$'\\\n'
+    local escaped="${1//\\/\\\\}"
+    escaped="${escaped//$nl/$repl}"
+    print -r -- ": ${ts}:0;$escaped" >> "$inactive_history"
+  else
+    print -r -- "$1" >> "$inactive_history"
   fi
 }
 
@@ -147,33 +199,20 @@ function _per-directory-history-precmd() {
 }
 
 function _per-directory-history-set-directory-history() {
-  fc -AI "$_per_directory_history_global"
-  local original_histsize=$HISTSIZE
-  HISTSIZE=0
-  HISTSIZE=$original_histsize
-  if [[ -e "$_per_directory_history_directory" ]]; then
-    fc -R "$_per_directory_history_directory"
-    fc -p "$_per_directory_history_directory"
-  fi
+  _per-directory-history-switch-history "$_per_directory_history_directory"
 }
 
 function _per-directory-history-set-global-history() {
-  fc -AI $_per_directory_history_directory
-  local original_histsize=$HISTSIZE
-  HISTSIZE=0
-  HISTSIZE=$original_histsize
-  if [[ -e "$_per_directory_history_global" ]]; then
-    fc -R "$_per_directory_history_global"
-    fc -p "$_per_directory_history_global"
-  fi
+  _per-directory-history-switch-history "$_per_directory_history_global"
 }
 
 mkdir -p ${_per_directory_history_directory:h}
 
-#add functions to the exec list for chpwd and zshaddhistory
+#add functions to the exec list for chpwd, zshaddhistory, preexec and precmd
 autoload -U add-zsh-hook
 add-zsh-hook chpwd _per-directory-history-change-directory
 add-zsh-hook zshaddhistory _per-directory-history-addhistory
+add-zsh-hook preexec _per-directory-history-preexec
 add-zsh-hook precmd _per-directory-history-precmd
 
 # set initialized flag to false
